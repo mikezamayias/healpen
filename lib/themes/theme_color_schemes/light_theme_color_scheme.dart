@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+
+/// The [ColorScheme] for the light theme.
+/// Generated from https://m3.material.io/theme-builder#/custom
+const ColorScheme lightThemeColorScheme = ColorScheme(
+  brightness: Brightness.light,
+  primary: Color(0xFF00639A),
+  onPrimary: Color(0xFFFFFFFF),
+  primaryContainer: Color(0xFFCEE5FF),
+  onPrimaryContainer: Color(0xFF001D32),
+  secondary: Color(0xFF51606F),
+  onSecondary: Color(0xFFFFFFFF),
+  secondaryContainer: Color(0xFFD5E4F7),
+  onSecondaryContainer: Color(0xFF0E1D2A),
+  tertiary: Color(0xFF68587A),
+  onTertiary: Color(0xFFFFFFFF),
+  tertiaryContainer: Color(0xFFEEDBFF),
+  onTertiaryContainer: Color(0xFF231533),
+  error: Color(0xFFBA1A1A),
+  errorContainer: Color(0xFFFFDAD6),
+  onError: Color(0xFFFFFFFF),
+  onErrorContainer: Color(0xFF410002),
+  background: Color(0xFFFFFCFC),
+  onBackground: Color(0xFF1A1C1E),
+  surface: Color(0xFFFFF9F9),
+  onSurface: Color(0xFF1A1C1E),
+  surfaceVariant: Color(0xFFDEE3EB),
+  onSurfaceVariant: Color(0xFF42474E),
+  outline: Color(0xFF72777F),
+  onInverseSurface: Color(0xFFF0F0F4),
+  inverseSurface: Color(0xFF2F3033),
+  inversePrimary: Color(0xFF96CCFF),
+  shadow: Color(0xFF000000),
+  surfaceTint: Color(0xFF00639A),
+);
