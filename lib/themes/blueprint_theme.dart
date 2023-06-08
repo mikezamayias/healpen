@@ -19,7 +19,7 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
         ),
         color: colorScheme.primary,
       ),
-      scaffoldBackgroundColor: colorScheme.background,
+      scaffoldBackgroundColor: colorScheme.surfaceVariant,
       listTileTheme: listTileTheme,
       appBarTheme: appBarTheme,
       textButtonTheme: TextButtonThemeData(
