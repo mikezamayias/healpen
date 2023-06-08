@@ -2,6 +2,28 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
+    prefer_relative_imports: true
     avoid_print: true
     prefer_single_quotes: true
     prefer_const_constructors: true
+    prefer_final_fields: true
+    use_key_in_widget_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_const_constructors_in_immutables: true
+
+analyzer:
+  errors:
+    prefer_relative_imports: error
+    missing_return: error
+    unused_element: error
+    unused_import: error
+    invalid_use_of_protected_member: error
+    parameter_assignments: error
+    sort_unnamed_constructors_first: error
+    sort_pub_dependencies: error
+    unnecessary_statements: error
+  plugins:
+    - custom_lint
+
+custom_lint:
+  enable_all_lint_rules: true
