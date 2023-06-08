@@ -7,8 +7,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'enums/app_theming.dart';
 import 'providers/settings_providers.dart';
-import 'themes/blueprint_theme.dart';
-import 'themes/theme_components/text_theme_data.dart';
 import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 
