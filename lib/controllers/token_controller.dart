@@ -3,7 +3,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/token_model.dart';
 
 class TokenController {
-  // Singleton
+  /// Singleton
   static final TokenController _instance = TokenController._internal();
   factory TokenController() => _instance;
   TokenController._internal() : _storage = const FlutterSecureStorage();

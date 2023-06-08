@@ -25,8 +25,16 @@ void main() {
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      child: ResponsiveSizer(
+        builder: (
+          BuildContext context,
+          Orientation orientation,
+          ScreenType screenType,
+        ) {
+          return const MyApp();
+        },
+      ),
     ),
   );
 }
@@ -41,78 +49,62 @@ class MyApp extends ConsumerStatefulWidget {
 class _MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
-    log(
-      context.theme.colorScheme.primary.toString(),
-      name: 'context.theme.colorScheme.primary:before',
-    );
-    log(
-      ref.watch(currentAppColorProvider).toString(),
-      name: 'currentAppColorProvider:before',
-    );
-    return ResponsiveSizer(
-      builder: (
-        BuildContext context,
-        Orientation orientation,
-        ScreenType screenType,
-      ) {
-        return MaterialApp(
-          title: 'Healpen',
-          debugShowCheckedModeBanner: false,
-          themeMode: switch (ref.watch(appearanceProvider)) {
-            Appearance.system => ThemeMode.system,
-            Appearance.light => ThemeMode.light,
-            Appearance.dark => ThemeMode.dark,
-          },
-          color: ref.watch(currentAppColorProvider).color,
-          theme: getTheme(ref.watch(currentAppColorProvider), Brightness.light),
-          darkTheme:
-              getTheme(ref.watch(currentAppColorProvider), Brightness.dark),
-          home: Scaffold(
-            body: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Wrap(
-                      spacing: gap,
-                      children: [
-                        for (AppColor appColor in AppColor.values)
-                          TextButton(
-                            onPressed: () {
-                              ref
-                                  .watch(currentAppColorProvider.notifier)
-                                  .state = appColor;
-                              log(
-                                ref.watch(currentAppColorProvider).toString(),
-                                name: 'currentAppColorProvider',
-                              );
-                              setState(() {});
-                            },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all(
-                                appColor.color,
-                              ),
-                              textStyle: MaterialStateProperty.all(
-                                  const TextStyle(color: Colors.white)),
-                              foregroundColor: MaterialStateProperty.all(
-                                appColor.color.computeLuminance() > 0.5
-                                    ? Colors.black
-                                    : Colors.white,
-                              ),
-                            ),
-                            child: Text(appColor.name),
-                          )
-                      ],
-                    ),
-                  ),
-                  const Spacer(flex: 2),
-                  Expanded(
-                    child: Card(
-                      child: Center(
-                        child: Text(
-                          ref.watch(currentAppColorProvider).name,
-                          style: context.theme.textTheme.displaySmall!.copyWith(
-                            color: context.theme.cardTheme.color
-                                        ?.computeLuminance() !=
+    return MaterialApp(
+      title: 'Healpen',
+      debugShowCheckedModeBanner: false,
+      themeMode: switch (ref.watch(appearanceProvider)) {
+        Appearance.system => ThemeMode.system,
+        Appearance.light => ThemeMode.light,
+        Appearance.dark => ThemeMode.dark,
+      },
+      color: ref.watch(currentAppColorProvider).color,
+      theme: getTheme(ref.watch(currentAppColorProvider), Brightness.light),
+      darkTheme: getTheme(ref.watch(currentAppColorProvider), Brightness.dark),
+      home: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: Wrap(
+                  spacing: gap,
+                  children: [
+                    for (AppColor appColor in AppColor.values)
+                      TextButton(
+                        onPressed: () {
+                          ref.watch(currentAppColorProvider.notifier).state =
+                              appColor;
+                          log(
+                            ref.watch(currentAppColorProvider).toString(),
+                            name: 'currentAppColorProvider',
+                          );
+                          setState(() {});
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            appColor.color,
+                          ),
+                          textStyle: MaterialStateProperty.all(
+                              const TextStyle(color: Colors.white)),
+                          foregroundColor: MaterialStateProperty.all(
+                            appColor.color.computeLuminance() > 0.5
+                                ? Colors.black
+                                : Colors.white,
+                          ),
+                        ),
+                        child: Text(appColor.name),
+                      )
+                  ],
+                ),
+              ),
+              const Spacer(flex: 2),
+              Expanded(
+                child: Card(
+                  child: Center(
+                    child: Text(
+                      ref.watch(currentAppColorProvider).name,
+                      style: context.theme.textTheme.displaySmall!.copyWith(
+                        color:
+                            context.theme.cardTheme.color?.computeLuminance() !=
                                     null
                                 ? context.theme.cardTheme.color!
                                             .computeLuminance() >
@@ -120,17 +112,15 @@ class _MyAppState extends ConsumerState<MyApp> {
                                     ? Colors.black
                                     : Colors.white
                                 : Colors.white,
-                          ),
-                        ),
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
+                  ),
+                ),
+              )
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

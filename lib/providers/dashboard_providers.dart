@@ -1,10 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 class DashboardProviders {
-  static final DashboardProviders _singleton = DashboardProviders._internal();
-  factory DashboardProviders() => _singleton;
+  /// Singleton
+  static final DashboardProviders _instance = DashboardProviders._internal();
+  factory DashboardProviders() => _instance;
   DashboardProviders._internal();
-
-  final currentDateIndex = StateProvider((ref) => 0);
-  final currentDate = StateProvider((ref) => DateTime.now());
 }

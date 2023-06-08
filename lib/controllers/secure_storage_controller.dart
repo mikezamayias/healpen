@@ -10,11 +10,11 @@ enum Actions { deleteAll }
 enum ItemActions { delete, edit, containsKey, read }
 
 class SecureStorageController {
-  // Singleton
-  static final SecureStorageController _secureStorageController =
+  /// Singleton
+  static final SecureStorageController _instance =
       SecureStorageController._internal();
   SecureStorageController._internal();
-  factory SecureStorageController() => _secureStorageController;
+  factory SecureStorageController() => _instance;
 
   Future<SecureItemModel> read(SecureItemModel secureItemModel) async {
     if (secureItemModel.key == null) {

@@ -1,7 +1,7 @@
 import '../models/page_model.dart';
 
 class PageController {
-  // Singleton
+  /// Singleton
   static final PageController _instance = PageController._internal();
   factory PageController() => _instance;
   PageController._internal() {
