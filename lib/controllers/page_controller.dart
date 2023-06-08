@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/page_model.dart';
@@ -9,21 +10,40 @@ class PageController {
   factory PageController() => _instance;
   PageController._internal() {
     pages = [
-      // project,
-      // charts,
-      // dayDashboard,
-      // user,
+      home,
+      writing,
+      // analysis,
+      history,
       settings,
-      // about,
     ];
   }
 
   // Members
   List<PageModel> pages = <PageModel>[];
 
+  final home = PageModel(
+    label: 'home',
+    icon: FontAwesomeIcons.house,
+    widget: const Center(child: Text('Home')),
+  );
+  final writing = PageModel(
+    label: 'writing',
+    icon: FontAwesomeIcons.pencil,
+    widget: const Center(child: Text('Writing')),
+  );
+  final analysis = PageModel(
+    label: 'analysis',
+    icon: FontAwesomeIcons.chartLine,
+    widget: const Center(child: Text('Analysis')),
+  );
+  final history = PageModel(
+    label: 'history',
+    icon: FontAwesomeIcons.book,
+    widget: const Center(child: Text('History')),
+  );
   final settings = PageModel(
-    label: 'settigns',
-    icon: FontAwesomeIcons.solidFileCode,
+    label: 'settings',
+    icon: FontAwesomeIcons.sliders,
     widget: const SettingsView(),
   );
 }

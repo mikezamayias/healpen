@@ -59,7 +59,7 @@ class _MyAppState extends ConsumerState<MyApp> {
       theme: getTheme(ref.watch(currentAppColorProvider), Brightness.light),
       darkTheme: getTheme(ref.watch(currentAppColorProvider), Brightness.dark),
       home: Scaffold(
-        body: ref.watch(pageControllerProvider).settings.widget,
+        body: ref.watch(currentPageProvider).widget,
         bottomNavigationBar: const CustomBottomNavigationBar(),
       ),
     );
