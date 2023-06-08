@@ -3,17 +3,22 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/constants.dart';
 import 'theme_components/app_bar_theme.dart';
-import 'theme_components/card_theme.dart';
 import 'theme_components/list_tile_theme.dart';
 import 'theme_components/text_theme_data.dart';
 
 ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       useMaterial3: true,
-      brightness: colorScheme.brightness,
       fontFamily: GoogleFonts.ubuntuMono().fontFamily,
       colorScheme: colorScheme,
       textTheme: textThemeData,
-      cardTheme: cardTheme,
+      // cardColor: colorScheme.primary,
+      cardTheme: CardTheme(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        color: colorScheme.primary,
+      ),
       scaffoldBackgroundColor: colorScheme.background,
       listTileTheme: listTileTheme,
       appBarTheme: appBarTheme,

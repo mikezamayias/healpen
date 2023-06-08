@@ -1,17 +1,16 @@
 import 'dart:developer';
 
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import 'constants.dart';
 import 'enums/app_theming.dart';
 import 'providers/settings_providers.dart';
-import 'themes/dark_theme/dark_theme.dart';
-import 'themes/light_theme/light_theme.dart';
-import 'themes/theme_color_schemes/dark_theme_color_scheme.dart';
-import 'themes/theme_color_schemes/light_theme_color_scheme.dart';
+import 'themes/blueprint_theme.dart';
+import 'themes/theme_components/text_theme_data.dart';
+import 'utils/constants.dart';
+import 'utils/helper_functions.dart';
 
 void main() {
   // WidgetsFlutterBinding.ensureInitialized();
@@ -28,94 +27,112 @@ void main() {
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
   runApp(
-    ProviderScope(
-      child: ResponsiveSizer(
-        builder: (
-          BuildContext context,
-          Orientation orientation,
-          ScreenType screenType,
-        ) {
-          return DynamicColorBuilder(
-            builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-              ColorScheme lightColorScheme =
-                  lightDynamic ?? lightThemeColorScheme;
-              ColorScheme darkColorScheme = darkDynamic ?? darkThemeColorScheme;
-              return Consumer(
-                builder: (BuildContext context, WidgetRef ref, _) {
-                  return MaterialApp(
-                    title: 'Code Time',
-                    debugShowCheckedModeBanner: false,
-                    theme: lightTheme(lightColorScheme),
-                    darkTheme: darkTheme(darkColorScheme),
-                    themeMode:
-                        ref.watch(appearanceProvider) == Appearance.system
-                            ? ThemeMode.system
-                            : ref.watch(appearanceProvider) == Appearance.light
-                                ? ThemeMode.light
-                                : ThemeMode.dark,
-                    home: const MyApp(),
-                  );
-                },
-              );
-            },
-          );
-        },
-      ),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key});
 
   @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Healpen',
-      home: Scaffold(
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    for (AppColor appColor in AppColor.values)
-                      TextButton(
-                        onPressed: () {
-                          seedColor = appColor.color;
-                          log(seedColor.toString(), name: 'seedColor');
-                        },
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(appColor.color),
-                          textStyle: MaterialStateProperty.all(
-                              const TextStyle(color: Colors.white)),
-                          foregroundColor: MaterialStateProperty.all(
-                            appColor.color.computeLuminance() > 0.5
-                                ? Colors.black
+    log(
+      context.theme.colorScheme.primary.toString(),
+      name: 'context.theme.colorScheme.primary:before',
+    );
+    log(
+      ref.watch(currentAppColorProvider).toString(),
+      name: 'currentAppColorProvider:before',
+    );
+    return ResponsiveSizer(
+      builder: (
+        BuildContext context,
+        Orientation orientation,
+        ScreenType screenType,
+      ) {
+        return MaterialApp(
+          title: 'Healpen',
+          debugShowCheckedModeBanner: false,
+          themeMode: switch (ref.watch(appearanceProvider)) {
+            Appearance.system => ThemeMode.system,
+            Appearance.light => ThemeMode.light,
+            Appearance.dark => ThemeMode.dark,
+          },
+          color: ref.watch(currentAppColorProvider).color,
+          theme: getTheme(ref.watch(currentAppColorProvider), Brightness.light),
+          darkTheme:
+              getTheme(ref.watch(currentAppColorProvider), Brightness.dark),
+          home: Scaffold(
+            body: SafeArea(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Wrap(
+                      spacing: gap,
+                      children: [
+                        for (AppColor appColor in AppColor.values)
+                          TextButton(
+                            onPressed: () {
+                              ref
+                                  .watch(currentAppColorProvider.notifier)
+                                  .state = appColor;
+                              log(
+                                ref.watch(currentAppColorProvider).toString(),
+                                name: 'currentAppColorProvider',
+                              );
+                              setState(() {});
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all(
+                                appColor.color,
+                              ),
+                              textStyle: MaterialStateProperty.all(
+                                  const TextStyle(color: Colors.white)),
+                              foregroundColor: MaterialStateProperty.all(
+                                appColor.color.computeLuminance() > 0.5
+                                    ? Colors.black
+                                    : Colors.white,
+                              ),
+                            ),
+                            child: Text(appColor.name),
+                          )
+                      ],
+                    ),
+                  ),
+                  const Spacer(flex: 2),
+                  Expanded(
+                    child: Card(
+                      child: Center(
+                        child: Text(
+                          ref.watch(currentAppColorProvider).name,
+                          style: context.theme.textTheme.displaySmall!.copyWith(
+                            color: context.theme.cardTheme.color
+                                        ?.computeLuminance() !=
+                                    null
+                                ? context.theme.cardTheme.color!
+                                            .computeLuminance() >
+                                        0.5
+                                    ? Colors.black
+                                    : Colors.white
                                 : Colors.white,
                           ),
                         ),
-                        child: Text(appColor.name),
-                      )
-                  ],
-                ),
-                const Spacer(),
-                const Expanded(
-                  child: Card(
-                    child: Center(
-                      child: Text('Card'),
+                      ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
