@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCQ5gsnkRQdWK7kEpl3BBzfsSCEIyBfTsc',
-    appId: '1:1058887275393:android:ab7ee75d56f9ad81eb0e80',
+    appId: '1:1058887275393:android:c19882059cad1bbbeb0e80',
     messagingSenderId: '1058887275393',
     projectId: 'healpen',
     storageBucket: 'healpen.appspot.com',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDs20g2qWGMc2feesucsurdbTAY-E0Etxc',
-    appId: '1:1058887275393:ios:453a1a7f6935c18beb0e80',
+    appId: '1:1058887275393:ios:72839fcfed9b1133eb0e80',
     messagingSenderId: '1058887275393',
     projectId: 'healpen',
     storageBucket: 'healpen.appspot.com',
-    iosClientId: '1058887275393-d8vjviu8lue742de5demhabtk84bduul.apps.googleusercontent.com',
-    iosBundleId: 'com.example.healpen',
+    iosClientId: '1058887275393-j6oohim7pgmv1ar33a56baf6c4q883ur.apps.googleusercontent.com',
+    iosBundleId: 'com.mikezamayias.healpen',
   );
 }
