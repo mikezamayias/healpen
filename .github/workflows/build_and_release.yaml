@@ -81,7 +81,7 @@ jobs:
         id: flutter-action
         with:
           cache: true
-          flutter-version: 3.10.0
+          flutter-version: 3.10.3
           architecture: arm64
       - name: Output Flutter Build Information
         run: |
