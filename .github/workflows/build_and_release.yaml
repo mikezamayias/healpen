@@ -1,0 +1,153 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - production
+  workflow_dispatch:
+
+jobs:
+  cancel_previous_runs:
+    name: Cancel Previous Runs
+    runs-on: self-hosted
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{secrets.github_token}}
+
+  get_build_info:
+    name: Get Build Info
+    runs-on: self-hosted
+    needs: cancel_previous_runs
+    outputs:
+      BUILD_DATE: ${{steps.get_build_metadata.outputs.current_date}}
+      BUILD_NAME: ${{steps.get_build_metadata.outputs.build_name}}
+      BUILD_VERSION: ${{steps.get_build_metadata.outputs.build_version}}
+      BUILD_NUMBER: ${{steps.get_build_metadata.outputs.build_number}}
+      BUILD_ATTEMPT: ${{steps.get_build_metadata.outputs.build_attempt}}
+      MAJOR_VERSION: ${{steps.get_build_metadata.outputs.major_version}}
+    steps:
+      - id: get_build_metadata
+        run: |
+          major_version=1
+          echo "major_version=$major_version" >> $GITHUB_OUTPUT
+          current_date=$(date +%Y%m%d)
+          echo "current_date=$current_date" >> $GITHUB_OUTPUT
+          build_number=${{github.run_number}}
+          printf "build_number=%s\n" $build_number >> $GITHUB_OUTPUT
+          build_attempt=${{github.run_attempt}}
+          printf "build_attempt=%s\n" $build_attempt >> $GITHUB_OUTPUT
+          build_version=1.0.0
+          printf "build_version=%s\n" $build_version >> $GITHUB_OUTPUT
+          printf "build_name=%s-%s.%s\n" healpen $build_version $build_number >> $GITHUB_OUTPUT
+
+  build:
+    name: Build and Release
+    runs-on: self-hosted
+    needs: get_build_info
+    env:
+      BUILD_DATE: ${{needs.get_build_info.outputs.BUILD_DATE}}
+      BUILD_NAME: ${{needs.get_build_info.outputs.BUILD_NAME}}
+      BUILD_VERSION: ${{needs.get_build_info.outputs.BUILD_VERSION}}
+      BUILD_NUMBER: ${{needs.get_build_info.outputs.BUILD_NUMBER}}
+      BUILD_ATTEMPT: ${{needs.get_build_info.outputs.BUILD_ATTEMPT}}
+    steps:
+      - name: Output Release Info
+        run: |
+          echo BUILD_DATE: ${{env.BUILD_DATE}}
+          echo BUILD_NAME: ${{env.BUILD_NAME}}
+          echo BUILD_VERSION: ${{env.BUILD_VERSION}}
+          echo BUILD_NUMBER: ${{env.BUILD_NUMBER}}
+          echo BUILD_ATTEMPT: ${{env.BUILD_ATTEMPT}}
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+      - name: Update pubspec version
+        run: |
+          version=$(grep version pubspec.yaml | awk '{print $2}')
+          echo "Current version is $version"
+          new_version="${{env.BUILD_VERSION}}"
+          echo "Updating version to $new_version"
+          sed -i '' "s/^version:.*/version: $new_version+${{env.BUILD_NUMBER}}/" pubspec.yaml
+          version=$(grep version pubspec.yaml | awk '{print $2}')
+          echo "Current version is $version"
+      - name: Build Flutter App
+        uses: subosito/flutter-action@v2.8.0
+        id: flutter-action
+        with:
+          cache: true
+          flutter-version: 3.10.0
+          architecture: arm64
+      - name: Output Flutter Build Information
+        run: |
+          echo CACHE-PATH=${{steps.flutter-action.outputs.CACHE-PATH}}
+          echo CACHE-KEY=${{steps.flutter-action.outputs.CACHE-KEY}}
+          echo CHANNEL=${{steps.flutter-action.outputs.CHANNEL}}
+          echo VERSION=${{steps.flutter-action.outputs.VERSION}}
+          echo ARCHITECTURE=${{steps.flutter-action.outputs.ARCHITECTURE}}
+      # - name: Download Android keystore
+      #   id: android_keystore
+      #   uses: timheuer/base64-to-file@v1.0.3
+      #   with:
+      #     fileName: key.jks
+      #     encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      # - name: Create key.properties
+      #   run: |
+      #     echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
+      #     echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+      #     echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+      #     echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+      - name: Build APK
+        run: flutter build apk
+      - name: Rename APK
+        run: |
+          cd "build/app/outputs/apk/release"
+          mv app-release.apk ${{env.BUILD_NAME}}.apk
+      - name: GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/release/${{env.BUILD_NAME}}.apk"
+          name: ${{env.BUILD_NAME}}
+          tag: ${{env.BUILD_NAME}}
+          body: ${{github.event.head_commit.message}}
+          token: ${{secrets.github_token}}
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{env.BUILD_NAME}}.apk
+          path: build/app/outputs/apk/release/${{env.BUILD_NAME}}.apk
+
+  firebase_app_distribution:
+    name: Upload to Firebase App Distribution
+    runs-on: ubuntu-latest
+    needs: [get_build_info, build]
+    env:
+      BUILD_DATE: ${{needs.get_build_info.outputs.BUILD_DATE}}
+      BUILD_NAME: ${{needs.get_build_info.outputs.BUILD_NAME}}
+      BUILD_VERSION: ${{needs.get_build_info.outputs.BUILD_VERSION}}
+      BUILD_NUMBER: ${{needs.get_build_info.outputs.BUILD_NUMBER}}
+      BUILD_ATTEMPT: ${{needs.get_build_info.outputs.BUILD_ATTEMPT}}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{env.BUILD_NAME}}.apk
+      - uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
+          file: ${{env.BUILD_NAME}}.apk
+          groups: testers
+          releaseNotes: ${{github.event.head_commit.message}}
