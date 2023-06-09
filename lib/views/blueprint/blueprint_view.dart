@@ -19,10 +19,10 @@ class BlueprintView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      color: context.theme.colorScheme.surfaceVariant,
+      color: context.theme.colorScheme.background,
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: context.theme.colorScheme.surfaceVariant,
+          backgroundColor: context.theme.colorScheme.background,
           appBar: appBar != null
               ? PreferredSize(
                   preferredSize: Size.fromHeight(100.h),

@@ -30,7 +30,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               bottom: gap * 2,
             ),
             child: PhysicalModel(
-              color: context.theme.colorScheme.background,
+              color: context.theme.colorScheme.surfaceVariant,
               // shadowColor: context.theme.colorScheme.shadow,
               // elevation: radius,
               borderRadius: BorderRadius.all(Radius.circular(radius)),
