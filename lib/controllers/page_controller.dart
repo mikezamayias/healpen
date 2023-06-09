@@ -10,9 +10,9 @@ class PageController {
   factory PageController() => _instance;
   PageController._internal() {
     pages = [
-      home,
+      // home,
       writing,
-      // analysis,
+      analysis,
       history,
       settings,
     ];
