@@ -13,12 +13,13 @@ class SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Map<String, Widget> pageWidgets = {
-      'Profile': const SettingsAppView(),
-      'Notification': const SettingsAppView(),
-      'Writing': const SettingsAppView(),
-      'Data & Privacy': const SettingsAppView(),
-      'Help & Support': const SettingsAppView(),
-      'About': const SettingsAppView(),
+      'App': const SettingsAppView(),
+      'Profile': const Placeholder(),
+      'Notification': const Placeholder(),
+      'Writing': const Placeholder(),
+      'Data & Privacy': const Placeholder(),
+      'Help & Support': const Placeholder(),
+      'About Healpen': const Placeholder(),
     };
 
     return BlueprintView(
