@@ -27,9 +27,10 @@ class SettingsView extends ConsumerWidget {
         pathNames: ['Personalize your experience'],
       ),
       body: ListView.separated(
-        clipBehavior: Clip.none,
+        primary: true,
         shrinkWrap: true,
         padding: EdgeInsets.zero,
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (_, int index) => CustomListTile(
           titleString: pageWidgets.keys.elementAt(index),
           onTap: () {
