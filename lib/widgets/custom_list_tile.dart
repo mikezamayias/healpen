@@ -65,7 +65,7 @@ class CustomListTile extends StatelessWidget {
       child: PhysicalModel(
         color: backgroundColor ??
             (onTap == null
-                ? context.theme.colorScheme.surface
+                ? context.theme.colorScheme.surfaceVariant
                 : context.theme.colorScheme.primary),
         // shadowColor: context.theme.colorScheme.shadow,
         // elevation: onTap == null ? constants.gap : constants.gap / 2,
@@ -88,7 +88,7 @@ class CustomListTile extends StatelessWidget {
                     leadingIconData!,
                     color: textColor ??
                         (onTap == null
-                            ? context.theme.colorScheme.primary
+                            ? context.theme.colorScheme.onSurfaceVariant
                             : context.theme.colorScheme.onPrimary),
                     size: context.theme.textTheme.headlineMedium!.fontSize,
                   )
@@ -99,19 +99,19 @@ class CustomListTile extends StatelessWidget {
                       ? SelectableText(
                           titleString!,
                           style:
-                              context.theme.textTheme.titleMedium!.copyWith(
+                              context.theme.textTheme.titleLarge!.copyWith(
                             color: onTap == null
-                                ? context.theme.colorScheme.primary
+                                ? context.theme.colorScheme.onSurfaceVariant
                                 : context.theme.colorScheme.onPrimary,
                           ),
                         )
                       : Text(
                           titleString!,
                           style:
-                              context.theme.textTheme.titleMedium!.copyWith(
+                              context.theme.textTheme.titleLarge!.copyWith(
                             color: textColor ??
                                 (onTap == null
-                                    ? context.theme.colorScheme.primary
+                                    ? context.theme.colorScheme.onSurfaceVariant
                                     : context.theme.colorScheme.onPrimary),
                           ),
                         ))
@@ -125,7 +125,7 @@ class CustomListTile extends StatelessWidget {
                               context.theme.textTheme.titleLarge!.copyWith(
                             color: textColor ??
                                 (onTap == null
-                                    ? context.theme.colorScheme.primary
+                                    ? context.theme.colorScheme.onSurfaceVariant
                                     : context.theme.colorScheme.onPrimary),
                           ),
                         )
@@ -135,7 +135,7 @@ class CustomListTile extends StatelessWidget {
                               context.theme.textTheme.titleLarge!.copyWith(
                             color: textColor ??
                                 (onTap == null
-                                    ? context.theme.colorScheme.primary
+                                    ? context.theme.colorScheme.onSurfaceVariant
                                     : context.theme.colorScheme.onPrimary),
                           ),
                         ))
@@ -146,7 +146,7 @@ class CustomListTile extends StatelessWidget {
                     trailingIconData!,
                     color: textColor ??
                         (onTap == null
-                            ? context.theme.colorScheme.primary
+                            ? context.theme.colorScheme.onSurfaceVariant
                             : context.theme.colorScheme.onPrimary),
                     size: context.theme.textTheme.headlineMedium!.fontSize,
                   )
