@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/constants.dart';
@@ -24,19 +23,6 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       appBarTheme: AppBarTheme(
         elevation: elevation,
         centerTitle: true,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarIconBrightness: colorScheme.surface.computeLuminance() > 0.5
-              ? Brightness.dark
-              : Brightness.light,
-          statusBarBrightness: colorScheme.surface.computeLuminance() > 0.5
-              ? Brightness.dark
-              : Brightness.light,
-          systemNavigationBarIconBrightness:
-              colorScheme.surface.computeLuminance() > 0.5
-                  ? Brightness.dark
-                  : Brightness.light,
-        ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(

@@ -281,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.6.5"
+  easy_bar_style:
+    dependency: "direct main"
+    description:
+      name: easy_bar_style
+      sha256: "6b90f66bd47db561e3035ef715e67e01cdd82c487269dd21c3a9fee3bd675482"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.12"
   expandable_page_view:
     dependency: "direct main"
     description:
