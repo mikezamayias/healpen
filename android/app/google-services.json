@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1058887275393",
+    "project_id": "healpen",
+    "storage_bucket": "healpen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1058887275393:android:ab7ee75d56f9ad81eb0e80",
+        "android_client_info": {
+          "package_name": "com.example.healpen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1058887275393-0i74n8aa18mcrgtcl1vlqt6lgu67kh8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQ5gsnkRQdWK7kEpl3BBzfsSCEIyBfTsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1058887275393-0i74n8aa18mcrgtcl1vlqt6lgu67kh8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
