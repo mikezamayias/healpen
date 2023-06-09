@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/constants.dart';
-import 'theme_components/app_bar_theme.dart';
 import 'theme_components/list_tile_theme.dart';
 import 'theme_components/text_theme_data.dart';
 
@@ -21,7 +21,16 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       ),
       scaffoldBackgroundColor: colorScheme.background,
       listTileTheme: listTileTheme,
-      appBarTheme: appBarTheme,
+      appBarTheme: AppBarTheme(
+        elevation: elevation,
+        centerTitle: true,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: colorScheme.surface.computeLuminance() > 0.5
+              ? Brightness.dark
+              : Brightness.light,
+        ),
+      ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
