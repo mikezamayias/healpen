@@ -8,7 +8,7 @@ import 'theme_components/text_theme_data.dart';
 
 ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       useMaterial3: true,
-      fontFamily: GoogleFonts.ubuntuMono().fontFamily,
+      fontFamily: GoogleFonts.lato().fontFamily,
       colorScheme: colorScheme,
       textTheme: textThemeData,
       // cardColor: colorScheme.primary,

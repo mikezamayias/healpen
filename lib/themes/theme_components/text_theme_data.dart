@@ -4,65 +4,65 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../utils/constants.dart';
 
 final TextTheme textThemeData = TextTheme(
-  displayLarge: GoogleFonts.ubuntuMono(
+  displayLarge: GoogleFonts.lato(
     fontSize: 96 * unit,
     fontWeight: FontWeight.w300,
     letterSpacing: -1.5,
   ),
-  displayMedium: GoogleFonts.ubuntuMono(
+  displayMedium: GoogleFonts.lato(
     fontSize: 60 * unit,
     fontWeight: FontWeight.w300,
     letterSpacing: -0.5,
   ),
-  displaySmall: GoogleFonts.ubuntuMono(
+  displaySmall: GoogleFonts.lato(
     fontSize: 48 * unit,
     fontWeight: FontWeight.w400,
   ),
-  headlineMedium: GoogleFonts.ubuntuMono(
+  headlineMedium: GoogleFonts.lato(
     fontSize: 34 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.25,
   ),
-  headlineSmall: GoogleFonts.ubuntuMono(
+  headlineSmall: GoogleFonts.lato(
     fontSize: 24 * unit,
     fontWeight: FontWeight.w400,
   ),
-  titleLarge: GoogleFonts.ubuntuMono(
+  titleLarge: GoogleFonts.lato(
     fontSize: 20 * unit,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.15,
   ),
-  titleMedium: GoogleFonts.ubuntuMono(
+  titleMedium: GoogleFonts.lato(
     fontSize: 16 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.15,
   ),
-  titleSmall: GoogleFonts.ubuntuMono(
+  titleSmall: GoogleFonts.lato(
     fontSize: 14 * unit,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
   ),
-  bodyLarge: GoogleFonts.ubuntuMono(
+  bodyLarge: GoogleFonts.lato(
     fontSize: 16 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.5,
   ),
-  bodyMedium: GoogleFonts.ubuntuMono(
+  bodyMedium: GoogleFonts.lato(
     fontSize: 14 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.25,
   ),
-  labelLarge: GoogleFonts.ubuntuMono(
+  labelLarge: GoogleFonts.lato(
     fontSize: 14 * unit,
     fontWeight: FontWeight.w500,
     letterSpacing: 1.25,
   ),
-  bodySmall: GoogleFonts.ubuntuMono(
+  bodySmall: GoogleFonts.lato(
     fontSize: 12 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
   ),
-  labelSmall: GoogleFonts.ubuntuMono(
+  labelSmall: GoogleFonts.lato(
     fontSize: 10 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 1.5,

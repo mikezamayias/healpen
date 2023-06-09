@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../../../../controllers/page_controller.dart';
@@ -60,7 +59,8 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                             title: Text(
                               pageModel.label.toTitleCase(),
                               style: TextStyle(
-                                fontFamily: GoogleFonts.ubuntuMono().fontFamily,
+                                fontFamily: context
+                                    .theme.textTheme.bodyLarge!.fontFamily,
                               ),
                             ),
                           ),
