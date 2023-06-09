@@ -4,7 +4,6 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../../controllers/page_controller.dart';
 import '../../enums/app_theming.dart';
 import '../../extensions/widget_extenstions.dart';
 import '../../providers/settings_providers.dart';
@@ -18,8 +17,8 @@ class SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BlueprintView(
-      appBar: AppBar(
-        pageModel: PageController().settings,
+      appBar: const AppBar(
+        titleString: 'Personalize your experience',
       ),
       body: Column(
         children: [
