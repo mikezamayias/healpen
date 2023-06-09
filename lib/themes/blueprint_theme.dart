@@ -29,6 +29,13 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
           statusBarIconBrightness: colorScheme.surface.computeLuminance() > 0.5
               ? Brightness.dark
               : Brightness.light,
+          statusBarBrightness: colorScheme.surface.computeLuminance() > 0.5
+              ? Brightness.dark
+              : Brightness.light,
+          systemNavigationBarIconBrightness:
+              colorScheme.surface.computeLuminance() > 0.5
+                  ? Brightness.dark
+                  : Brightness.light,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
