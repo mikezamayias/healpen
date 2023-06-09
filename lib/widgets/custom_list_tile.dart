@@ -3,6 +3,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../utils/constants.dart' as constants;
+import '../utils/constants.dart';
 
 class CustomListTile extends StatelessWidget {
   final String? titleString;
@@ -98,8 +99,7 @@ class CustomListTile extends StatelessWidget {
                   (selectableText!
                       ? SelectableText(
                           titleString!,
-                          style:
-                              context.theme.textTheme.titleLarge!.copyWith(
+                          style: context.theme.textTheme.titleLarge!.copyWith(
                             color: onTap == null
                                 ? context.theme.colorScheme.onSurfaceVariant
                                 : context.theme.colorScheme.onPrimary,
@@ -107,8 +107,7 @@ class CustomListTile extends StatelessWidget {
                         )
                       : Text(
                           titleString!,
-                          style:
-                              context.theme.textTheme.titleLarge!.copyWith(
+                          style: context.theme.textTheme.titleLarge!.copyWith(
                             color: textColor ??
                                 (onTap == null
                                     ? context.theme.colorScheme.onSurfaceVariant
@@ -117,12 +116,24 @@ class CustomListTile extends StatelessWidget {
                         ))
               : null,
           subtitle: subtitle != null || subtitleString != null
-              ? subtitle ??
-                  (selectableText!
+              ? subtitle != null
+                  ? Padding(
+                      padding: EdgeInsets.only(top: gap),
+                      child: Container(
+                        padding: EdgeInsets.all(gap),
+                        decoration: BoxDecoration(
+                          color: context.theme.colorScheme.surface,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(radius - gap),
+                          ),
+                        ),
+                        child: subtitle,
+                      ),
+                    )
+                  : (selectableText!
                       ? SelectableText(
                           subtitleString!,
-                          style:
-                              context.theme.textTheme.titleLarge!.copyWith(
+                          style: context.theme.textTheme.titleLarge!.copyWith(
                             color: textColor ??
                                 (onTap == null
                                     ? context.theme.colorScheme.onSurfaceVariant
@@ -131,8 +142,7 @@ class CustomListTile extends StatelessWidget {
                         )
                       : Text(
                           subtitleString!,
-                          style:
-                              context.theme.textTheme.titleLarge!.copyWith(
+                          style: context.theme.textTheme.titleLarge!.copyWith(
                             color: textColor ??
                                 (onTap == null
                                     ? context.theme.colorScheme.onSurfaceVariant
