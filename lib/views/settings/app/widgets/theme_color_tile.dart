@@ -31,6 +31,13 @@ class ThemeColorTile extends ConsumerWidget {
                 backgroundColor: MaterialStateProperty.all(
                   appColor.color,
                 ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(gap),
+                    ),
+                  ),
+                ),
                 textStyle: MaterialStateProperty.all(
                     const TextStyle(color: Colors.white)),
                 foregroundColor: MaterialStateProperty.all(
