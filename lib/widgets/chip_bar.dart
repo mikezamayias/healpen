@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Chip;
 
 import '../utils/constants.dart' as constants;
-import 'conditional_chip.dart';
+import 'custom_chip.dart';
 
 class ChipBar extends StatelessWidget {
   const ChipBar({
@@ -9,7 +9,7 @@ class ChipBar extends StatelessWidget {
     required this.children,
   }) : super(key: key);
 
-  final List<ConditionalChip> children;
+  final List<CustomChip> children;
 
   @override
   Widget build(BuildContext context) {
