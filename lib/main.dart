@@ -4,21 +4,10 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'controllers/app_theming_controller.dart';
 import 'healpen.dart';
-import 'models/app_theming_model.dart';
-
-final appColorControllerProvider =
-    StateNotifierProvider<AppColorController, AppColorModel>(
-  (ref) => throw UnimplementedError(),
-);
-
-final appearanceControllerProvider =
-    StateNotifierProvider<AppearanceController, AppearanceModel>(
-  (ref) => throw UnimplementedError(),
-);
+import 'providers/settings_providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   // // Adds Firebase Crashlytics to the app
   // FlutterError.onError = (errorDetails) {
   //   FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);

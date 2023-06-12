@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'enums/app_theming.dart';
-import 'main.dart';
 import 'models/app_theming_model.dart';
 import 'providers/page_providers.dart';
+import 'providers/settings_providers.dart';
 import 'utils/helper_functions.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 

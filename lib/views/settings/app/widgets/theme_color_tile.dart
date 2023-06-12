@@ -4,7 +4,7 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../enums/app_theming.dart';
-import '../../../../main.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
