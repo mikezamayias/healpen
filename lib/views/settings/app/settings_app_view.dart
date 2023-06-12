@@ -5,6 +5,7 @@ import '../../../extensions/widget_extenstions.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
+import 'widgets/theme_appearance_tile.dart';
 import 'widgets/theme_color_tile.dart';
 
 class SettingsAppView extends ConsumerWidget {
@@ -14,11 +15,15 @@ class SettingsAppView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
       const ThemeColorTile(),
+      const ThemeAppearanceTile(),
     ].animateWidgetList();
 
     return BlueprintView(
       appBar: const AppBar(
-        pathNames: ['Settings', 'App'],
+        pathNames: [
+          'Settings',
+          'App',
+        ],
       ),
       body: ListView.separated(
         clipBehavior: Clip.none,
