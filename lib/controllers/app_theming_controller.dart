@@ -32,27 +32,29 @@ class AppColorController extends StateNotifier<AppColorModel> {
 }
 
 class AppearanceController extends StateNotifier<AppearanceModel> {
-  static final instance =
-      AppearanceController(AppearanceModel(Appearance.light));
+  static final instance = AppearanceController._();
 
-  AppearanceController(AppearanceModel state) : super(state);
+  AppearanceController._() : super(AppearanceModel(Appearance.system));
 
   Future<void> loadAppearance() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? value = prefs.getString('appearance');
+
     if (value != null) {
       Appearance? matchingAppearance = Appearance.values.firstWhereOrNull(
         (Appearance e) => e.toString() == value,
       );
+
       if (matchingAppearance != null) {
         state = AppearanceModel(matchingAppearance);
       }
     }
   }
 
-  Future<void> setAppearance(Appearance appearance) async {
+  Future<void> updateAppearance(Appearance newAppearance) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('appearance', appearance.toString());
-    state = AppearanceModel(appearance);
+    prefs.setString('appearance', '$newAppearance');
+
+    state = AppearanceModel(newAppearance);
   }
 }

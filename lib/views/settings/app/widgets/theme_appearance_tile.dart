@@ -5,12 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
-import '../../../../providers/settings_providers.dart';
-import '../../../../utils/helper_functions.dart';
+import '../../../../main.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeAppearanceTile extends ConsumerWidget {
-  const ThemeAppearanceTile({super.key});
+  const ThemeAppearanceTile({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
@@ -18,20 +18,22 @@ class ThemeAppearanceTile extends ConsumerWidget {
       subtitle: SegmentedButton<Appearance>(
         showSelectedIcon: false,
         segments: <ButtonSegment<Appearance>>[
-          for (Appearance appAppearance in Appearance.values)
+          for (Appearance appearance in Appearance.values)
             ButtonSegment(
-              value: appAppearance,
-              label: Text(appAppearance.name.toCapitalized()),
+              value: appearance,
+              label: Text(appearance.name.toCapitalized()),
             ),
         ],
-        selected: {ref.watch(appearanceProvider)},
+        selected: {ref.watch(appearanceControllerProvider).appearance},
         onSelectionChanged: (Set<Appearance> newSelection) {
-          ref.watch(appearanceProvider.notifier).state = newSelection.first;
+          Appearance newAppearance = newSelection.first;
+          ref
+              .read(appearanceControllerProvider.notifier)
+              .updateAppearance(newAppearance);
           log(
-            'Appearance changed to ${newSelection.first}',
+            'Appearance changed to $newAppearance',
             name: 'Settings: ThemeAppearanceTile',
           );
-          writeAppearance(ref.watch(appearanceProvider));
         },
       ),
     );
