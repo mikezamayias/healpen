@@ -63,13 +63,49 @@ ThemeData getTheme(AppColor appColor, Brightness brightness) =>
 //   prefs.setString('durationFormat', '$durationFormat');
 // }
 
-/// add selected date format in shared preferences
 Future writeAppearance(Appearance appearance) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString('appearance', '$appearance');
   log(
     '$appearance',
     name: 'helper_functions.dart:appearance',
+  );
+}
+
+Future readAppearance(Appearance appearance) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? value = prefs.getString('appearance');
+  if (value != null) {
+    appearance = Appearance.values.firstWhere(
+      (e) => e.toString() == value,
+    );
+  }
+  log(
+    value ?? 'null',
+    name: 'helper_functions.dart:readAppearance',
+  );
+}
+
+Future writeColor(AppColor appColor) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('color', '$appColor');
+  log(
+    '$appColor',
+    name: 'helper_functions.dart:writeColor',
+  );
+}
+
+Future readColor(AppColor appColor) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? value = prefs.getString('color');
+  if (value != null) {
+    appColor = AppColor.values.firstWhere(
+      (e) => e.toString() == value,
+    );
+  }
+  log(
+    value ?? 'null',
+    name: 'helper_functions.dart:readColor',
   );
 }
 
@@ -89,19 +125,7 @@ Future writeAppearance(Appearance appearance) async {
 //   //   name: 'helper_functions.dart:readDurationFormat',
 // }
 
-Future readAppearance(Appearance appearance) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? value = prefs.getString('appearance');
-  if (value != null) {
-    appearance = Appearance.values.firstWhere(
-      (e) => e.toString() == value,
-    );
-  }
-  log(
-    value ?? 'null',
-    name: 'helper_functions.dart:readAppearance',
-  );
-}
+
 
 // Future writeHourlyRate(double hourlyRate) async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();

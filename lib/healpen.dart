@@ -24,6 +24,7 @@ class Healpen extends ConsumerWidget {
       name: 'colorScheme.background',
     );
     readAppearance(ref.watch(appearanceProvider));
+    readColor(ref.watch(currentAppColorProvider));
     return MaterialApp(
       title: 'Healpen',
       debugShowCheckedModeBanner: false,
