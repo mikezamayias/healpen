@@ -10,6 +10,11 @@ class AppColorController extends StateNotifier<AppColorModel> {
 
   AppColorController._() : super(AppColorModel(AppColor.blue));
 
+  final appColorControllerProvider =
+      StateNotifierProvider<AppColorController, AppColorModel>(
+    (ref) => throw UnimplementedError(),
+  );
+
   Future<void> updateAppColor(AppColor newColor) async {
     state = AppColorModel(newColor);
     await saveColor();
@@ -35,6 +40,11 @@ class AppearanceController extends StateNotifier<AppearanceModel> {
   static final instance = AppearanceController._();
 
   AppearanceController._() : super(AppearanceModel(Appearance.system));
+
+  final appearanceControllerProvider =
+      StateNotifierProvider<AppearanceController, AppearanceModel>(
+    (ref) => throw UnimplementedError(),
+  );
 
   Future<void> loadAppearance() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

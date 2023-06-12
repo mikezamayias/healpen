@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'controllers/app_theming_controller.dart';
 import 'enums/app_theming.dart';
 import 'models/app_theming_model.dart';
 import 'providers/page_providers.dart';
-import 'providers/settings_providers.dart';
 import 'utils/helper_functions.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 
@@ -14,8 +14,10 @@ class Healpen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Get the current values from the controllers
-    AppColorModel appColorModel = ref.watch(appColorControllerProvider);
-    AppearanceModel appearanceModel = ref.watch(appearanceControllerProvider);
+    AppColorModel appColorModel =
+        ref.watch(AppColorController.instance.appColorControllerProvider);
+    AppearanceModel appearanceModel =
+        ref.watch(AppearanceController.instance.appearanceControllerProvider);
 
     // Use the values in your theme
     ThemeData theme = getTheme(

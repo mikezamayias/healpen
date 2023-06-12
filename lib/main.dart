@@ -4,7 +4,6 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'controllers/app_theming_controller.dart';
 import 'healpen.dart';
-import 'providers/settings_providers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,10 +26,10 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
-        appColorControllerProvider.overrideWith(
+        AppColorController.instance.appColorControllerProvider.overrideWith(
           (ref) => AppColorController.instance,
         ),
-        appearanceControllerProvider.overrideWith(
+        AppearanceController.instance.appearanceControllerProvider.overrideWith(
           (ref) => AppearanceController.instance,
         ),
       ],

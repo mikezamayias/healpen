@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/app_theming_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
-import '../../../../providers/settings_providers.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeAppearanceTile extends ConsumerWidget {
@@ -24,11 +24,16 @@ class ThemeAppearanceTile extends ConsumerWidget {
               label: Text(appearance.name.toCapitalized()),
             ),
         ],
-        selected: {ref.watch(appearanceControllerProvider).appearance},
+        selected: {
+          ref
+              .watch(AppearanceController.instance.appearanceControllerProvider)
+              .appearance
+        },
         onSelectionChanged: (Set<Appearance> newSelection) {
           Appearance newAppearance = newSelection.first;
           ref
-              .read(appearanceControllerProvider.notifier)
+              .read(AppearanceController
+                  .instance.appearanceControllerProvider.notifier)
               .updateAppearance(newAppearance);
           log(
             'Appearance changed to $newAppearance',

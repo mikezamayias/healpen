@@ -3,8 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/app_theming_controller.dart';
 import '../../../../enums/app_theming.dart';
-import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -21,10 +21,15 @@ class ThemeColorTile extends ConsumerWidget {
             TextButton(
               onPressed: () async {
                 await ref
-                    .read(appColorControllerProvider.notifier)
+                    .read(AppColorController
+                        .instance.appColorControllerProvider.notifier)
                     .updateAppColor(appColor);
                 log(
-                  ref.watch(appColorControllerProvider).appColor.toString(),
+                  ref
+                      .watch(AppColorController
+                          .instance.appColorControllerProvider)
+                      .appColor
+                      .toString(),
                   name: 'appColorControllerProvider',
                 );
               },
