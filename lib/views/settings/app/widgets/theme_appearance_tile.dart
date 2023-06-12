@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
 import '../../../../providers/settings_providers.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeAppearanceTile extends ConsumerWidget {
@@ -30,6 +31,7 @@ class ThemeAppearanceTile extends ConsumerWidget {
             'Appearance changed to ${newSelection.first}',
             name: 'Settings: ThemeAppearanceTile',
           );
+          writeAppearance(ref.watch(appearanceProvider));
         },
       ),
     );

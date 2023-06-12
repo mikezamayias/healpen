@@ -23,6 +23,7 @@ class Healpen extends ConsumerWidget {
       context.theme.colorScheme.background.toString(),
       name: 'colorScheme.background',
     );
+    readAppearance(ref.watch(appearanceProvider));
     return MaterialApp(
       title: 'Healpen',
       debugShowCheckedModeBanner: false,

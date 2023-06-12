@@ -1,6 +1,9 @@
 // import 'dart:developer';
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../enums/app_theming.dart';
 import '../themes/blueprint_theme.dart';
@@ -60,15 +63,15 @@ ThemeData getTheme(AppColor appColor, Brightness brightness) =>
 //   prefs.setString('durationFormat', '$durationFormat');
 // }
 
-// /// add selected date format in shared preferences
-// Future writeAppearance(Appearance appearance) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   log(
-//     '$appearance',
-//     name: 'helper_functions.dart:appearance',
-//   );
-//   prefs.setString('appearance', '$appearance');
-// }
+/// add selected date format in shared preferences
+Future writeAppearance(Appearance appearance) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('appearance', '$appearance');
+  log(
+    '$appearance',
+    name: 'helper_functions.dart:appearance',
+  );
+}
 
 // /// read selected date format from shared preferences
 // /// and set it as the current date format
@@ -86,19 +89,19 @@ ThemeData getTheme(AppColor appColor, Brightness brightness) =>
 //   //   name: 'helper_functions.dart:readDurationFormat',
 // }
 
-// Future readAppearance(WidgetRef ref) async {
-//   SharedPreferences prefs = await SharedPreferences.getInstance();
-//   String? appearance = prefs.getString('appearance');
-//   if (appearance != null) {
-//     ref.read(appearanceProvider.notifier).state = Appearance.values.firstWhere(
-//       (e) => e.toString() == appearance,
-//     );
-//   }
-//   // log(
-//   //   appearance ?? 'null',
-//   //   name: 'helper_functions.dart:readAppearance',
-//   // );
-// }
+Future readAppearance(Appearance appearance) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? value = prefs.getString('appearance');
+  if (value != null) {
+    appearance = Appearance.values.firstWhere(
+      (e) => e.toString() == value,
+    );
+  }
+  log(
+    value ?? 'null',
+    name: 'helper_functions.dart:readAppearance',
+  );
+}
 
 // Future writeHourlyRate(double hourlyRate) async {
 //   SharedPreferences prefs = await SharedPreferences.getInstance();
