@@ -26,23 +26,22 @@ class SettingsView extends ConsumerWidget {
       appBar: const AppBar(
         pathNames: ['Personalize your experience'],
       ),
-      body: ListView.separated(
-        primary: true,
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (_, int index) => CustomListTile(
-          titleString: pageWidgets.keys.elementAt(index),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => pageWidgets.values.elementAt(index),
-              ),
-            );
-          },
-        ),
-        separatorBuilder: (_, __) => SizedBox(height: gap),
-        itemCount: pageWidgets.length,
+      body: Wrap(
+        spacing: gap,
+        runSpacing: gap,
+        children: [
+          for (String title in pageWidgets.keys)
+            CustomListTile(
+              titleString: title,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => pageWidgets[title]!,
+                  ),
+                );
+              },
+            ),
+        ],
       ),
     );
   }
