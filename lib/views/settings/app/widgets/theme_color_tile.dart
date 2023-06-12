@@ -4,9 +4,8 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../enums/app_theming.dart';
-import '../../../../providers/settings_providers.dart';
+import '../../../../main.dart';
 import '../../../../utils/constants.dart';
-import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeColorTile extends ConsumerWidget {
@@ -20,13 +19,14 @@ class ThemeColorTile extends ConsumerWidget {
         children: [
           for (AppColor appColor in AppColor.values)
             TextButton(
-              onPressed: () {
-                ref.watch(currentAppColorProvider.notifier).state = appColor;
+              onPressed: () async {
+                await ref
+                    .read(appColorControllerProvider.notifier)
+                    .updateAppColor(appColor);
                 log(
-                  ref.watch(currentAppColorProvider).toString(),
-                  name: 'currentAppColorProvider',
+                  ref.watch(appColorControllerProvider).appColor.toString(),
+                  name: 'appColorControllerProvider',
                 );
-                writeColor(ref.watch(currentAppColorProvider));
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(

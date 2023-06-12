@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'enums/app_theming.dart';
+import 'main.dart';
+import 'models/app_theming_model.dart';
 import 'providers/page_providers.dart';
-import 'providers/settings_providers.dart';
 import 'utils/helper_functions.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 
@@ -15,27 +13,28 @@ class Healpen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    log(
-      context.theme.scaffoldBackgroundColor.toString(),
-      name: 'scaffoldBackgroundColor',
+    // Get the current values from the controllers
+    AppColorModel appColorModel = ref.watch(appColorControllerProvider);
+    AppearanceModel appearanceModel = ref.watch(appearanceControllerProvider);
+
+    // Use the values in your theme
+    ThemeData theme = getTheme(
+      appColorModel.appColor,
+      appearanceModel.appearance == Appearance.dark
+          ? Brightness.dark
+          : Brightness.light,
     );
-    log(
-      context.theme.colorScheme.background.toString(),
-      name: 'colorScheme.background',
-    );
-    readAppearance(ref.watch(appearanceProvider));
-    readColor(ref.watch(currentAppColorProvider));
+
     return MaterialApp(
       title: 'Healpen',
       debugShowCheckedModeBanner: false,
-      themeMode: switch (ref.watch(appearanceProvider)) {
-        Appearance.system => ThemeMode.system,
-        Appearance.light => ThemeMode.light,
-        Appearance.dark => ThemeMode.dark,
-      },
-      color: ref.watch(currentAppColorProvider).color,
-      theme: getTheme(ref.watch(currentAppColorProvider), Brightness.light),
-      darkTheme: getTheme(ref.watch(currentAppColorProvider), Brightness.dark),
+      // themeMode: switch (currentAppearance) {
+      //   Appearance.system => ThemeMode.system,
+      //   Appearance.light => ThemeMode.light,
+      //   Appearance.dark => ThemeMode.dark,
+      // },
+      color: appColorModel.appColor.color,
+      theme: theme,
       home: Scaffold(
         body: ref.watch(currentPageProvider).widget,
         bottomNavigationBar: const CustomBottomNavigationBar(),
