@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../utils/constants.dart';
 
@@ -18,7 +17,7 @@ class CustomChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleGestureDetector(
+    return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         curve: curve,
