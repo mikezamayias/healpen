@@ -19,7 +19,7 @@ class SettingsView extends ConsumerWidget {
       'Writing': const Placeholder(),
       'Data & Privacy': const Placeholder(),
       'Help & Support': const Placeholder(),
-      'About Healpen': const Placeholder(),
+      'About': const Placeholder(),
     };
 
     return BlueprintView(
