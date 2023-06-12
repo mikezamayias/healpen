@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:easy_bar_style/easy_bar_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -35,21 +34,9 @@ class Healpen extends ConsumerWidget {
       color: ref.watch(currentAppColorProvider).color,
       theme: getTheme(ref.watch(currentAppColorProvider), Brightness.light),
       darkTheme: getTheme(ref.watch(currentAppColorProvider), Brightness.dark),
-      home: SystemNavigationBarStyle(
-        color: context.theme.colorScheme.surface,
-        iconBrightness: context.theme.colorScheme.background.isLight
-            ? Brightness.dark
-            : Brightness.light,
-        child: StatusBarStyle(
-          color: context.theme.colorScheme.surface,
-          brightness: context.theme.colorScheme.background.isLight
-              ? Brightness.light
-              : Brightness.dark,
-          child: Scaffold(
-            body: ref.watch(currentPageProvider).widget,
-            bottomNavigationBar: const CustomBottomNavigationBar(),
-          ),
-        ),
+      home: Scaffold(
+        body: ref.watch(currentPageProvider).widget,
+        bottomNavigationBar: const CustomBottomNavigationBar(),
       ),
     );
   }

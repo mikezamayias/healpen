@@ -13,7 +13,6 @@ dependencies:
   colorful_safe_area: ^1.0.0
   cupertino_icons: ^1.0.5
   dynamic_color: ^1.5.4
-  easy_bar_style: ^0.0.12
   expandable_page_view: ^1.0.17
   firebase_analytics: ^10.1.0
   firebase_core: ^2.4.1
@@ -46,6 +45,7 @@ dependencies:
   shimmer: ^2.0.0
   simple_gesture_detector: ^0.2.0
   sprung: ^3.0.1
+  status_bar_control: ^3.2.1
   syncfusion_flutter_charts: ^21.1.37
   url_launcher: ^6.1.10
   webview_flutter: ^4.0.2
