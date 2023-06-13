@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../extensions/widget_extenstions.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile/custom_list_tile.dart';
@@ -111,9 +112,27 @@ class WritingViewState extends State<WritingView> {
                   borderRadius: BorderRadius.circular(radius - gap),
                 ),
                 padding: EdgeInsets.all(gap),
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _controller,
+                        maxLines: null,
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        style: context.theme.textTheme.titleLarge!.copyWith(
+                          overflow: TextOverflow.visible,
+                        ),
+                        decoration: const InputDecoration(
+                          hintText: 'Express your feelings and thoughts',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.zero,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                        ),
+                      ),
+                    ),
                     CustomListTile(
                       contentPadding: EdgeInsets.zero,
                       title: CheckboxListTile(
@@ -134,42 +153,42 @@ class WritingViewState extends State<WritingView> {
                         ),
                       ),
                     ),
-                    TextFormField(
-                      controller: _controller,
-                      maxLines: null,
-                      expands: true,
-                      keyboardType: TextInputType.multiline,
-                      style: context.theme.textTheme.titleLarge!.copyWith(
-                        overflow: TextOverflow.visible,
-                      ),
-                      decoration: const InputDecoration(
-                        hintText: 'Express your feelings and thoughts',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
             SizedBox(height: gap),
-            CustomListTile(
-              backgroundColor: context.theme.colorScheme.surface,
-              titleString: 'Writing time',
-              subtitleString: _stopwatch.elapsed.inSeconds.toString(),
-              responsiveWidth: true,
+            Row(
+              children: [
+                Expanded(
+                  child: CustomListTile(
+                    backgroundColor: context.theme.colorScheme.surface,
+                    titleString: 'Writing time',
+                    subtitleString: _stopwatch.elapsed.inSeconds.toString(),
+                    responsiveWidth: true,
+                  ),
+                ),
+                if (_controller.text.isNotEmpty)
+                  ...[
+                    SizedBox(width: gap),
+                    CustomListTile(
+                      onTap:
+                          _controller.text.isNotEmpty ? _handleSaveEntry : null,
+                      titleString: 'New Entry',
+                      backgroundColor: _controller.text.isEmpty
+                          ? context.theme.colorScheme.tertiary
+                          : null,
+                      textColor: _controller.text.isEmpty
+                          ? context.theme.colorScheme.onTertiary
+                          : null,
+                      responsiveWidth: true,
+                    ),
+                  ].animateWidgetList(),
+              ],
             ),
-            SizedBox(height: gap),
-            CustomListTile(
-              onTap: _handleSaveEntry,
-              titleString: 'New Entry',
-              responsiveWidth: true,
-            ),
-          ],
+          ].animateWidgetList(),
         ),
-      ),
+      ).animateSlideInFromTop(),
     );
   }
 }
