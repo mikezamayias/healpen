@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../utils/constants.dart' as constants;
-import 'custom_list_tile.dart';
+import 'custom_list_tile/custom_list_tile.dart';
 
 class LoadingTile extends StatelessWidget {
   const LoadingTile({

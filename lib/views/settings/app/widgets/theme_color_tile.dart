@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../controllers/app_theming_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../utils/constants.dart';
-import '../../../../widgets/custom_list_tile.dart';
+import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
 
 class ThemeColorTile extends ConsumerWidget {
   const ThemeColorTile({super.key});

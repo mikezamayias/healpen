@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../controllers/app_theming_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
-import '../../../../widgets/custom_list_tile.dart';
+import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
 
 class ThemeAppearanceTile extends ConsumerWidget {
   const ThemeAppearanceTile({Key? key}) : super(key: key);
