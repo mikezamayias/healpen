@@ -19,6 +19,7 @@ class CustomListTile extends StatelessWidget {
   final Color? backgroundColor;
   final Color? textColor;
   final double? cornerRadius;
+  final EdgeInsetsGeometry? contentPadding;
 
   const CustomListTile({
     Key? key,
@@ -36,6 +37,7 @@ class CustomListTile extends StatelessWidget {
     this.selectableText = false,
     this.responsiveWidth = false,
     this.cornerRadius,
+    this.contentPadding,
   })  : assert(
           // there can only be at most one of title or titleString or none
           (titleString == null && title == null) ||
@@ -76,6 +78,7 @@ class CustomListTile extends StatelessWidget {
       subtitleString: subtitleString,
       trailing: trailing,
       trailingIconData: trailingIconData,
+      padding: contentPadding,
     );
     return GestureDetector(
       onTap: onTap,

@@ -16,6 +16,7 @@ class MyListTile extends StatelessWidget {
   final String? subtitleString;
   final Widget? trailing;
   final IconData? trailingIconData;
+  final EdgeInsetsGeometry? padding;
 
   const MyListTile({
     super.key,
@@ -30,6 +31,7 @@ class MyListTile extends StatelessWidget {
     required this.subtitleString,
     required this.trailing,
     required this.trailingIconData,
+    this.padding,
   });
 
   @override
@@ -37,12 +39,13 @@ class MyListTile extends StatelessWidget {
     return ListTile(
       dense: true,
       onLongPress: null,
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: gap * 2,
-        vertical: gap / 2,
-      ),
+      contentPadding: padding ??
+          EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap / 2,
+          ),
       minLeadingWidth: 0,
-      minVerticalPadding: gap,
+      minVerticalPadding: padding != null ? 0 : gap,
       horizontalTitleGap: gap * 2,
       leading: leading != null || leadingIconData != null
           ? leading ??
@@ -79,7 +82,9 @@ class MyListTile extends StatelessWidget {
       subtitle: subtitle != null || subtitleString != null
           ? subtitle != null
               ? Padding(
-                  padding: EdgeInsets.only(top: gap),
+                  padding: padding != null
+                      ? EdgeInsets.zero
+                      : EdgeInsets.only(top: gap),
                   child: Container(
                     padding: EdgeInsets.all(gap),
                     decoration: BoxDecoration(
