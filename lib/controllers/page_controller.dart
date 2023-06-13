@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/page_model.dart';
 import '../views/settings/settings_view.dart';
+import '../views/writing/writing_view.dart';
 
 class PageController {
   /// Singleton
@@ -29,7 +30,7 @@ class PageController {
   final writing = PageModel(
     label: 'writing',
     icon: FontAwesomeIcons.pencil,
-    widget: const Center(child: Text('Writing')),
+    widget: const WritingView(),
   );
   final analysis = PageModel(
     label: 'analysis',
