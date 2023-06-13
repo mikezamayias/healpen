@@ -33,6 +33,7 @@ class SettingsView extends ConsumerWidget {
           for (String title in pageWidgets.keys)
             CustomListTile(
               titleString: title,
+              // responsiveWidth: false,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(

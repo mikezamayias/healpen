@@ -18,6 +18,7 @@ class CustomListTile extends StatelessWidget {
   final bool? responsiveWidth;
   final Color? backgroundColor;
   final Color? textColor;
+  final double? cornerRadius;
 
   const CustomListTile({
     Key? key,
@@ -34,6 +35,7 @@ class CustomListTile extends StatelessWidget {
     this.textColor,
     this.selectableText = false,
     this.responsiveWidth = false,
+    this.cornerRadius,
   })  : assert(
           // there can only be at most one of title or titleString or none
           (titleString == null && title == null) ||
@@ -85,10 +87,12 @@ class CustomListTile extends StatelessWidget {
         // shadowColor: context.theme.colorScheme.shadow,
         // elevation: onTap == null ? constants.gap : constants.gap / 2,
         borderRadius: BorderRadius.all(
-          Radius.circular(constants.radius),
+          Radius.circular(
+            cornerRadius ?? constants.gap,
+          ),
         ),
         child: switch (responsiveWidth) {
-          false => IntrinsicWidth(child: listTile),
+          true => IntrinsicWidth(child: listTile),
           _ => listTile,
         },
       ),
