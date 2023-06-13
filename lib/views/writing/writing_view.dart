@@ -76,37 +76,97 @@ class WritingViewState extends State<WritingView> {
     );
   }
 
+  void _handleSaveEntry() {
+    log(
+      'Saved entry: ${_controller.text}',
+      name: '_handleSaveEntry()',
+    );
+    _controller.clear();
+    _stopwatch.reset();
+    _timer?.cancel();
+    _delayTimer?.cancel();
+    setState(() {});
+  }
+
+  bool _value = false;
   @override
   Widget build(BuildContext context) {
     return BlueprintView(
       appBar: const AppBar(
         pathNames: ['Hello Mike,\nWhat\'s on your mind today?'],
       ),
-      body: CustomListTile(
-        cornerRadius: radius,
-        contentPadding: EdgeInsets.all(gap),
-        subtitle: Column(
+      body: Container(
+        decoration: BoxDecoration(
+          color: context.theme.colorScheme.outlineVariant,
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        padding: EdgeInsets.all(gap),
+        child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
-              child: TextFormField(
-                controller: _controller,
-                maxLines: null,
-                expands: true,
-                keyboardType: TextInputType.multiline,
-                style: context.theme.textTheme.titleLarge!.copyWith(
-                  overflow: TextOverflow.visible,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: context.theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(radius - gap),
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'Express your feelings and thoughts',
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.zero,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
+                padding: EdgeInsets.all(gap),
+                child: Stack(
+                  alignment: Alignment.bottomCenter,
+                  children: [
+                    CustomListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: CheckboxListTile(
+                        value: _value,
+                        enableFeedback: true,
+                        visualDensity: VisualDensity.compact,
+                        contentPadding: EdgeInsets.zero,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _value = !value!;
+                          });
+                        },
+                        title: Padding(
+                          padding: EdgeInsets.only(left: gap),
+                          child: const Text(
+                            'Private entry',
+                          ),
+                        ),
+                      ),
+                    ),
+                    TextFormField(
+                      controller: _controller,
+                      maxLines: null,
+                      expands: true,
+                      keyboardType: TextInputType.multiline,
+                      style: context.theme.textTheme.titleLarge!.copyWith(
+                        overflow: TextOverflow.visible,
+                      ),
+                      decoration: const InputDecoration(
+                        hintText: 'Express your feelings and thoughts',
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.zero,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            Text('Time spent writing: ${_stopwatch.elapsed.inSeconds} seconds'),
+            SizedBox(height: gap),
+            CustomListTile(
+              backgroundColor: context.theme.colorScheme.surface,
+              titleString: 'Writing time',
+              subtitleString: _stopwatch.elapsed.inSeconds.toString(),
+              responsiveWidth: true,
+            ),
+            SizedBox(height: gap),
+            CustomListTile(
+              onTap: _handleSaveEntry,
+              titleString: 'New Entry',
+              responsiveWidth: true,
+            ),
           ],
         ),
       ),
