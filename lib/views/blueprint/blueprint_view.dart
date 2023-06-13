@@ -21,33 +21,38 @@ class BlueprintView extends ConsumerWidget {
     return Container(
       color: context.theme.colorScheme.surface,
       child: SafeArea(
-        child: Scaffold(
-          appBar: appBar != null
-              ? PreferredSize(
-                  preferredSize: Size.fromHeight(100.h),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: gap * 2,
-                      right: gap * 2,
-                      top: gap,
-                      bottom: gap * 2,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Scaffold(
+            appBar: appBar != null
+                ? PreferredSize(
+                    preferredSize: Size.fromHeight(100.h),
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: gap * 2,
+                        right: gap * 2,
+                        top: gap,
+                        bottom: gap * 2,
+                      ),
+                      child: appBar!.animateAppBar(context),
                     ),
-                    child: appBar!.animateAppBar(context),
-                  ),
-                )
-              : null,
-          body: Padding(
-            padding: EdgeInsets.only(
-              left: gap * 2,
-              right: gap * 2,
-              bottom: gap * 2,
-            ),
-            child: ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(
-                scrollbars: false,
-                overscroll: false,
+                  )
+                : null,
+            body: Padding(
+              padding: EdgeInsets.only(
+                left: gap * 2,
+                right: gap * 2,
+                bottom: gap * 2,
               ),
-              child: body,
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  scrollbars: false,
+                  overscroll: false,
+                ),
+                child: body,
+              ),
             ),
           ),
         ),
