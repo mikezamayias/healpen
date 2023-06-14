@@ -23,4 +23,12 @@ class WritingState {
       seconds: seconds ?? this.seconds,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'text': text,
+      'isPrivate': isPrivate,
+      'seconds': seconds,
+    };
+  }
 }

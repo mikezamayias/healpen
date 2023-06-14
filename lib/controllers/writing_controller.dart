@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/writing_state.dart';
@@ -13,6 +14,7 @@ final writingControllerProvider =
 class WritingController extends StateNotifier<WritingState> {
   WritingController() : super(const WritingState());
 
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Stopwatch _stopwatch = Stopwatch();
   Timer? _timer;
   Timer? _delayTimer;
@@ -57,7 +59,7 @@ class WritingController extends StateNotifier<WritingState> {
     );
   }
 
-  void handleSaveEntry() {
+  Future<void> handleSaveEntry(String userId) async {
     log(
       'Saved entry: ${state.text}',
       name: '_handleSaveEntry()',
@@ -65,7 +67,15 @@ class WritingController extends StateNotifier<WritingState> {
     _stopwatch.reset();
     _timer?.cancel();
     _delayTimer?.cancel();
+    await _saveEntryToFirebase(userId);
     state = const WritingState();
+  }
+
+  Future<void> _saveEntryToFirebase(String userId) {
+    return _firestore
+        .collection('writingEntries')
+        .doc(userId)
+        .set(state.toMap());
   }
 
   void updatePrivate(bool value) {

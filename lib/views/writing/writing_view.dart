@@ -96,8 +96,8 @@ class WritingView extends ConsumerWidget {
                   ...[
                     SizedBox(width: gap),
                     CustomListTile(
-                      onTap: state.text.isNotEmpty
-                          ? controller.handleSaveEntry
+                      onTap: () => state.text.isNotEmpty
+                          ? controller.handleSaveEntry('testing')
                           : null,
                       titleString: 'New Entry',
                       backgroundColor: state.text.isEmpty
