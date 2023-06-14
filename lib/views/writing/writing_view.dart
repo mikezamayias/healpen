@@ -1,97 +1,22 @@
-import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../controllers/writing_controller.dart';
 import '../../extensions/widget_extenstions.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 
-class WritingView extends StatefulWidget {
+class WritingView extends ConsumerWidget {
   const WritingView({Key? key}) : super(key: key);
 
   @override
-  WritingViewState createState() => WritingViewState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(writingControllerProvider);
+    final controller = ref.read(writingControllerProvider.notifier);
 
-class WritingViewState extends State<WritingView> {
-  final TextEditingController _controller = TextEditingController();
-  final Stopwatch _stopwatch = Stopwatch();
-  Timer? _timer;
-  Timer? _delayTimer;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller.addListener(_handleTextChange);
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _delayTimer?.cancel();
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _handleTextChange() {
-    if (_controller.text.isNotEmpty) {
-      if (!_stopwatch.isRunning) {
-        _startTimer();
-        setState(() {});
-      } else {
-        _restartDelayTimer();
-      }
-    } else if (_controller.text.isEmpty && _stopwatch.isRunning) {
-      _pauseTimerAndLogInput();
-      setState(() {});
-    }
-  }
-
-  void _startTimer() {
-    _stopwatch.start();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {});
-    });
-    _delayTimer = Timer(const Duration(seconds: 3), _pauseTimerAndLogInput);
-  }
-
-  void _restartDelayTimer() {
-    _delayTimer?.cancel();
-    _delayTimer = Timer(const Duration(seconds: 3), _pauseTimerAndLogInput);
-  }
-
-  void _pauseTimerAndLogInput() {
-    _timer?.cancel();
-    _stopwatch.stop();
-    log(
-      'Input: ${_controller.text}',
-      name: '_pauseTimerAndLogInput()',
-    );
-    log(
-      'Time spent writing: ${_stopwatch.elapsed.inSeconds} seconds',
-      name: '_pauseTimerAndLogInput()',
-    );
-  }
-
-  void _handleSaveEntry() {
-    log(
-      'Saved entry: ${_controller.text}',
-      name: '_handleSaveEntry()',
-    );
-    _controller.clear();
-    _stopwatch.reset();
-    _timer?.cancel();
-    _delayTimer?.cancel();
-    setState(() {});
-  }
-
-  bool _value = false;
-  @override
-  Widget build(BuildContext context) {
     return BlueprintView(
       appBar: const AppBar(
         pathNames: ['Hello Mike,\nWhat\'s on your mind today?'],
@@ -117,7 +42,8 @@ class WritingViewState extends State<WritingView> {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: _controller,
+                        initialValue: state.text,
+                        onChanged: controller.handleTextChange,
                         maxLines: null,
                         expands: true,
                         keyboardType: TextInputType.multiline,
@@ -136,14 +62,12 @@ class WritingViewState extends State<WritingView> {
                     CustomListTile(
                       contentPadding: EdgeInsets.zero,
                       title: CheckboxListTile(
-                        value: _value,
+                        value: state.isPrivate,
                         enableFeedback: true,
                         visualDensity: VisualDensity.compact,
                         contentPadding: EdgeInsets.zero,
                         onChanged: (bool? value) {
-                          setState(() {
-                            _value = !value!;
-                          });
+                          controller.updatePrivate(value!);
                         },
                         title: Padding(
                           padding: EdgeInsets.only(left: gap),
@@ -164,21 +88,22 @@ class WritingViewState extends State<WritingView> {
                   child: CustomListTile(
                     backgroundColor: context.theme.colorScheme.surface,
                     titleString: 'Writing time',
-                    subtitleString: _stopwatch.elapsed.inSeconds.toString(),
+                    subtitleString: state.seconds.toString(),
                     responsiveWidth: true,
                   ),
                 ),
-                if (_controller.text.isNotEmpty)
+                if (state.text.isNotEmpty)
                   ...[
                     SizedBox(width: gap),
                     CustomListTile(
-                      onTap:
-                          _controller.text.isNotEmpty ? _handleSaveEntry : null,
+                      onTap: state.text.isNotEmpty
+                          ? controller.handleSaveEntry
+                          : null,
                       titleString: 'New Entry',
-                      backgroundColor: _controller.text.isEmpty
+                      backgroundColor: state.text.isEmpty
                           ? context.theme.colorScheme.tertiary
                           : null,
-                      textColor: _controller.text.isEmpty
+                      textColor: state.text.isEmpty
                           ? context.theme.colorScheme.onTertiary
                           : null,
                       responsiveWidth: true,
