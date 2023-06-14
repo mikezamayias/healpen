@@ -9,7 +9,7 @@ on:
 jobs:
   cancel_previous_runs:
     name: Cancel Previous Runs
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
@@ -18,7 +18,7 @@ jobs:
 
   get_build_info:
     name: Get Build Info
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: cancel_previous_runs
     outputs:
       BUILD_DATE: ${{steps.get_build_metadata.outputs.current_date}}
@@ -44,7 +44,7 @@ jobs:
 
   build:
     name: Build and Release
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: get_build_info
     env:
       BUILD_DATE: ${{needs.get_build_info.outputs.BUILD_DATE}}
