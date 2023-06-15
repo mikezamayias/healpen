@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/writing_state.dart';
@@ -29,6 +30,7 @@ class WritingController extends StateNotifier<WritingState> {
   final Stopwatch _stopwatch = Stopwatch();
   Timer? _timer;
   Timer? _delayTimer;
+  final TextEditingController textController = TextEditingController();
 
   void handleTextChange(String text) {
     if (text.isNotEmpty) {

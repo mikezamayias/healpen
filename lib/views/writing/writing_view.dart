@@ -18,7 +18,7 @@ class WritingView extends ConsumerWidget {
     final state = ref.watch(writingControllerProvider);
     final controller = ref.read(writingControllerProvider.notifier);
     final textController =
-        ref.read(writingControllerProvider.notifier).textFormFieldController;
+        ref.read(writingControllerProvider.notifier).textController;
 
     return BlueprintView(
       appBar: const AppBar(
