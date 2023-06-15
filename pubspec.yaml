@@ -12,6 +12,7 @@ dependencies:
   collection: ^1.17.1
   cupertino_icons: ^1.0.5
   firebase_core: ^2.4.1
+  firebase_crashlytics: ^3.3.3
   flutter:
     sdk: flutter
   flutter_animate: ^4.1.1+1
