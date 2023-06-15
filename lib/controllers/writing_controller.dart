@@ -6,13 +6,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/writing_state.dart';
 
+int timeWindow = 2;
+
 final writingControllerProvider =
     StateNotifierProvider<WritingController, WritingState>((ref) {
   return WritingController();
 });
 
 class WritingController extends StateNotifier<WritingState> {
-  WritingController() : super(const WritingState());
+  // A private constructor.
+  WritingController._() : super(const WritingState());
+
+  // The static singleton instance.
+  static final WritingController _singleton = WritingController._();
+
+  // A factory constructor that returns the singleton instance.
+  factory WritingController() {
+    return _singleton;
+  }
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Stopwatch _stopwatch = Stopwatch();
@@ -38,12 +49,12 @@ class WritingController extends StateNotifier<WritingState> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       state = state.copyWith(seconds: _stopwatch.elapsed.inSeconds);
     });
-    _delayTimer = Timer(const Duration(seconds: 3), _pauseTimerAndLogInput);
+    _delayTimer = Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
   }
 
   void _restartDelayTimer() {
     _delayTimer?.cancel();
-    _delayTimer = Timer(const Duration(seconds: 3), _pauseTimerAndLogInput);
+    _delayTimer = Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
   }
 
   void _pauseTimerAndLogInput() {
@@ -72,10 +83,16 @@ class WritingController extends StateNotifier<WritingState> {
   }
 
   Future<void> _saveEntryToFirebase(String userId) {
+    log(state.toMap().toString(), name: '_saveEntryToFirebase');
     return _firestore
-        .collection('writingEntries')
+        .collection('writing-temp')
         .doc(userId)
-        .set(state.toMap());
+        .collection('entries')
+        .add(state.toMap());
+  }
+
+  void resetText() {
+    state = state.copyWith(text: '');
   }
 
   void updatePrivate(bool value) {
