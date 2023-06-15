@@ -8,6 +8,7 @@ import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
+import 'widgets/stopwatch_tile.dart';
 
 class WritingView extends ConsumerWidget {
   const WritingView({Key? key}) : super(key: key);
@@ -16,6 +17,8 @@ class WritingView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
     final controller = ref.read(writingControllerProvider.notifier);
+    final textController =
+        ref.read(writingControllerProvider.notifier).textFormFieldController;
 
     return BlueprintView(
       appBar: const AppBar(
@@ -42,7 +45,7 @@ class WritingView extends ConsumerWidget {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        initialValue: state.text,
+                        controller: textController,
                         onChanged: controller.handleTextChange,
                         maxLines: null,
                         expands: true,
@@ -85,27 +88,31 @@ class WritingView extends ConsumerWidget {
             Row(
               children: [
                 Expanded(
-                  child: CustomListTile(
-                    backgroundColor: context.theme.colorScheme.surface,
-                    titleString: 'Writing time',
-                    subtitleString: state.seconds.toString(),
-                    responsiveWidth: true,
+                  child: StopwatchTile(
+                    timeInSeconds: state.seconds,
                   ),
                 ),
                 if (state.text.isNotEmpty)
                   ...[
                     SizedBox(width: gap),
                     CustomListTile(
-                      onTap: () => state.text.isNotEmpty
-                          ? controller.handleSaveEntry('testing')
-                          : null,
+                      onTap: () {
+                        if (state.text.isNotEmpty) {
+                          controller.handleSaveEntry('testing');
+                          textController.clear(); // Clears the TextFormField
+                          controller
+                              .resetText(); // Resets the text in the state
+                        }
+                      },
                       titleString: 'New Entry',
-                      backgroundColor: state.text.isEmpty
-                          ? context.theme.colorScheme.tertiary
-                          : null,
-                      textColor: state.text.isEmpty
-                          ? context.theme.colorScheme.onTertiary
-                          : null,
+                      backgroundColor:
+                          state.text.isEmpty || textController.text.isEmpty
+                              ? context.theme.colorScheme.tertiary
+                              : null,
+                      textColor:
+                          state.text.isEmpty || textController.text.isEmpty
+                              ? context.theme.colorScheme.onTertiary
+                              : null,
                       responsiveWidth: true,
                     ),
                   ].animateWidgetList(),
