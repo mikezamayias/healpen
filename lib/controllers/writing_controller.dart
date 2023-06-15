@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../state/writing_state.dart';
 
-int timeWindow = 2;
+int timeWindow = 3;
 
 final writingControllerProvider =
     StateNotifierProvider<WritingController, WritingState>((ref) {
@@ -39,8 +39,14 @@ class WritingController extends StateNotifier<WritingState> {
       } else {
         _restartDelayTimer();
       }
-    } else if (text.isEmpty && _stopwatch.isRunning) {
-      _pauseTimerAndLogInput();
+    } else if (text.isEmpty) {
+      if (_stopwatch.isRunning) {
+        _pauseTimerAndLogInput();
+      }
+      if (_stopwatch.elapsed.inSeconds > 0) {
+        _stopwatch.reset();
+        state = state.copyWith(seconds: 0); // Reset the seconds in the state
+      }
     }
 
     state = state.copyWith(text: text);
@@ -85,7 +91,10 @@ class WritingController extends StateNotifier<WritingState> {
   }
 
   Future<void> _saveEntryToFirebase(String userId) {
-    log(state.toMap().toString(), name: '_saveEntryToFirebase');
+    log(
+      state.toMap().toString(),
+      name: '_saveEntryToFirebase(String userId)',
+    );
     return _firestore
         .collection('writing-temp')
         .doc(userId)
