@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../utils/constants.dart' as constants;
+import '../utils/constants.dart';
 import 'custom_list_tile/custom_list_tile.dart';
 
 class LoadingTile extends StatelessWidget {
@@ -17,13 +17,15 @@ class LoadingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      backgroundColor: context.theme.colorScheme.background,
+      backgroundColor: context.theme.colorScheme.surfaceVariant,
+      textColor: context.theme.colorScheme.onSurfaceVariant,
+      cornerRadius: radius,
       titleString: durationTitle,
       subtitle: Container(
         height: context.theme.textTheme.headlineSmall!.fontSize!,
         alignment: Alignment.center,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(constants.radius),
+          borderRadius: BorderRadius.circular(radius - gap),
           child: LinearProgressIndicator(
             value: value,
             color: context.theme.colorScheme.surfaceVariant,
