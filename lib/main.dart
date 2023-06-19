@@ -120,7 +120,7 @@ void main() async {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Sign in using only your email.',
+                              'Sign in using only your email',
                               style: context.theme.textTheme.titleLarge,
                             ),
                           ],
@@ -137,14 +137,18 @@ void main() async {
                         ),
                       );
                     } else if (state is AwaitingDynamicLink) {
-                      body = const LoadingTile(
-                        durationTitle: 'Sending link to your email',
-                      );
-                    } else if (state is SigningIn) {
                       body = CustomListTile(
                         cornerRadius: radius,
                         contentPadding: const EdgeInsets.all(12),
                         titleString: 'Please check your email inbox',
+                      );
+                    } else if (state is SendingLink) {
+                      body = const LoadingTile(
+                        durationTitle: 'Sending link to your email',
+                      );
+                    } else if (state is SigningIn) {
+                      body = const LoadingTile(
+                        durationTitle: 'Signing in',
                       );
                     } else if (state is AuthFailed) {
                       log(state.exception.toString(), name: 'AuthFailed');
