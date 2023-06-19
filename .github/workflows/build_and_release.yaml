@@ -76,7 +76,7 @@ jobs:
           echo "Current version is $version"
           new_version="${{env.BUILD_VERSION}}"
           echo "Updating version to $new_version"
-          sed -i '' "s/^version:.*/version: $new_version+${{env.BUILD_NUMBER}}/" pubspec.yaml
+          sed -i "s/^version:.*/version: $new_version+${{env.BUILD_NUMBER}}/" pubspec.yaml
           version=$(grep version pubspec.yaml | awk '{print $2}')
           echo "Current version is $version"
       - name: Build Flutter App
