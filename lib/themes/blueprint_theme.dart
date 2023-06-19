@@ -101,66 +101,9 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        isDense: true,
-        fillColor: colorScheme.background,
-        contentPadding: EdgeInsets.all(2 * gap),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius),
-          borderSide: BorderSide(
-            width: 3 * unit,
-            color: colorScheme.outline,
-            // strokeAlign: StrokeAlign.inside,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius),
-          borderSide: BorderSide(
-            width: 3 * unit,
-            color: colorScheme.primary,
-            // strokeAlign: StrokeAlign.inside,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius),
-          borderSide: BorderSide(
-            width: 3 * unit,
-            color: colorScheme.primary,
-            // strokeAlign: StrokeAlign.inside,
-          ),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius),
-          borderSide: BorderSide(
-            width: 3 * unit,
-            color: colorScheme.error,
-            // strokeAlign: StrokeAlign.inside,
-          ),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius),
-          borderSide: BorderSide(
-            width: 3 * unit,
-            color: colorScheme.error,
-            // strokeAlign: StrokeAlign.inside,
-          ),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(radius),
-          borderSide: BorderSide(
-            width: 3 * unit,
-            color: colorScheme.outline,
-            // strokeAlign: StrokeAlign.inside,
-          ),
-        ),
-        labelStyle: textThemeData.titleLarge!.copyWith(
-          color: colorScheme.onSurfaceVariant,
-        ),
-        hintStyle: textThemeData.titleLarge!.copyWith(
-          color: colorScheme.onSurfaceVariant,
-        ),
-        errorStyle: textThemeData.titleLarge!.copyWith(
-          color: colorScheme.error,
-        ),
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        border: InputBorder.none,
+        contentPadding: EdgeInsets.symmetric(horizontal: gap),
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
