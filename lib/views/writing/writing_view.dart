@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -20,10 +21,10 @@ class WritingView extends ConsumerWidget {
     final controller = ref.read(writingControllerProvider.notifier);
     final textController =
         ref.read(writingControllerProvider.notifier).textController;
-
+    final User user = FirebaseAuth.instance.currentUser!;
     return BlueprintView(
-      appBar: const AppBar(
-        pathNames: ['Hello {name},\nWhat\'s on your mind today?'],
+      appBar: AppBar(
+        pathNames: ['Hello ${user.uid},\nWhat\'s on your mind today?'],
       ),
       body: Container(
         decoration: BoxDecoration(

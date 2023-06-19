@@ -18,7 +18,6 @@ import 'models/app_theming_model.dart';
 import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'views/blueprint/blueprint_view.dart';
-import 'views/login/login_view.dart';
 import 'widgets/app_bar.dart';
 import 'widgets/custom_list_tile/custom_list_tile.dart';
 import 'widgets/loading_tile.dart';
