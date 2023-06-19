@@ -83,7 +83,7 @@ class MyListTile extends StatelessWidget {
           ? subtitle != null
               ? Padding(
                   padding: padding != null
-                      ? EdgeInsets.zero
+                      ? const EdgeInsets.only(top: 8)
                       : EdgeInsets.only(top: gap),
                   child: Container(
                     padding: EdgeInsets.all(gap),

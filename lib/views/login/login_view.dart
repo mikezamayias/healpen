@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:validated/validated.dart' as validate;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -23,7 +22,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView>
     implements EmailLinkAuthListener {
   ActionCodeSettings actionCodeSettings = ActionCodeSettings(
-    url: 'https://healpen.page.link/email-link-sign-in',
+    url: 'https://healpen.page.link',
     handleCodeInApp: true,
     androidMinimumVersion: '1',
     androidPackageName: 'com.mikezamayias.healpen',
@@ -51,9 +50,9 @@ class _LoginViewState extends State<LoginView>
   @override
   void onLinkSent(String email) {
     setState(() {
-      child = Text(
-        'Please check your email.',
-        style: context.theme.textTheme.titleLarge,
+      child = CustomListTile(
+        titleString: 'Please check your email.',
+        cornerRadius: radius,
       );
     });
   }
@@ -163,24 +162,30 @@ class _LoginViewState extends State<LoginView>
   late Widget child = Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text(
-        'Enter your email',
-        style: context.theme.textTheme.titleLarge,
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(vertical: gap),
-        child: TextFormField(
+      CustomListTile(
+        cornerRadius: radius,
+        contentPadding: const EdgeInsets.all(12),
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Enter your email',
+              style: context.theme.textTheme.titleLarge,
+            ),
+          ],
+        ),
+        subtitle: TextField(
           controller: emailController,
-          decoration: const InputDecoration(
-            labelText: 'Email',
-          ),
           keyboardType: TextInputType.emailAddress,
-          validator: (value) => switch (validate.isEmail(value ?? '')) {
-            true => null,
-            _ => 'Please enter a valid email address'
-          },
+          decoration: InputDecoration(
+            hintText: 'Email',
+            hintStyle: context.theme.textTheme.titleLarge,
+          ),
+          style: context.theme.textTheme.titleLarge,
         ),
       ),
+      SizedBox(height: gap),
       CustomListTile(
         cornerRadius: radius,
         responsiveWidth: true,
