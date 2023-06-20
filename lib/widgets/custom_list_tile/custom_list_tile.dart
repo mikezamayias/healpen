@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../utils/constants.dart' as constants;
+import '../../utils/constants.dart';
 import 'my_list_tile.dart';
 
 class CustomListTile extends StatelessWidget {
@@ -89,11 +90,7 @@ class CustomListTile extends StatelessWidget {
                 : context.theme.colorScheme.primary),
         // shadowColor: context.theme.colorScheme.shadow,
         // elevation: onTap == null ? constants.gap : constants.gap / 2,
-        borderRadius: BorderRadius.all(
-          Radius.circular(
-            cornerRadius ?? constants.gap,
-          ),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
         child: switch (responsiveWidth) {
           true => IntrinsicWidth(child: listTile),
           _ => listTile,

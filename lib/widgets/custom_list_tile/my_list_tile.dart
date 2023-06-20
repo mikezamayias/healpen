@@ -39,14 +39,10 @@ class MyListTile extends StatelessWidget {
     return ListTile(
       dense: true,
       onLongPress: null,
-      contentPadding: padding ??
-          EdgeInsets.symmetric(
-            horizontal: gap * 2,
-            vertical: gap / 2,
-          ),
+      contentPadding: const EdgeInsets.all(12),
       minLeadingWidth: 0,
-      minVerticalPadding: padding != null ? 0 : gap,
-      horizontalTitleGap: gap * 2,
+      minVerticalPadding: 0,
+      horizontalTitleGap: 0,
       leading: leading != null || leadingIconData != null
           ? leading ??
               FaIcon(
