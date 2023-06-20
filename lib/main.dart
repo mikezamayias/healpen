@@ -106,6 +106,10 @@ void main() async {
                   provider: emailLinkAuthProvider,
                   builder: (context, AuthState state, ctrl, child) {
                     if (state is SignedIn) {
+                      log(
+                        '${FirebaseAuth.instance.currentUser}',
+                        name: 'currentUser',
+                      );
                       return const Healpen();
                     }
 
