@@ -24,7 +24,9 @@ class WritingView extends ConsumerWidget {
     final User user = FirebaseAuth.instance.currentUser!;
     return BlueprintView(
       appBar: AppBar(
-        pathNames: ['Hello ${user.uid},\nWhat\'s on your mind today?'],
+        pathNames: [
+          'Hello ${user.uid.substring(0, 6)},\nWhat\'s on your mind today?'
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
