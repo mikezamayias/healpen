@@ -14,6 +14,7 @@ class CustomListTile extends StatelessWidget {
   final IconData? trailingIconData;
   final Widget? trailing;
   final GestureTapCallback? onTap;
+  final GestureTapCallback? trailingOnTap;
   final bool? selectableText;
   final bool? responsiveWidth;
   final Color? backgroundColor;
@@ -31,6 +32,7 @@ class CustomListTile extends StatelessWidget {
     this.subtitle,
     this.title,
     this.onTap,
+    this.trailingOnTap,
     this.trailingIconData,
     this.backgroundColor,
     this.textColor,
@@ -71,6 +73,7 @@ class CustomListTile extends StatelessWidget {
       leadingIconData: leadingIconData,
       textColor: textColor,
       onTap: onTap,
+      trailingOnTap: trailingOnTap,
       title: title,
       titleString: titleString,
       selectableText: selectableText,

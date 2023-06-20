@@ -9,6 +9,7 @@ class MyListTile extends StatelessWidget {
   final IconData? leadingIconData;
   final Color? textColor;
   final GestureTapCallback? onTap;
+  final GestureTapCallback? trailingOnTap;
   final Widget? title;
   final String? titleString;
   final bool? selectableText;
@@ -24,6 +25,7 @@ class MyListTile extends StatelessWidget {
     required this.leadingIconData,
     required this.textColor,
     required this.onTap,
+    required this.trailingOnTap,
     required this.title,
     required this.titleString,
     required this.selectableText,
@@ -113,15 +115,30 @@ class MyListTile extends StatelessWidget {
                     ))
           : null,
       trailing: trailing != null || trailingIconData != null
-          ? trailing ??
-              FaIcon(
-                trailingIconData!,
-                color: textColor ??
-                    (onTap == null
-                        ? context.theme.colorScheme.onSurfaceVariant
-                        : context.theme.colorScheme.onPrimary),
-                size: context.theme.textTheme.headlineMedium!.fontSize,
-              )
+          ? GestureDetector(
+              onTap: trailingOnTap,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: trailing ??
+                    (trailingOnTap != null
+                        ? FaIcon(
+                            trailingIconData!,
+                            color:
+                                textColor ?? context.theme.colorScheme.primary,
+                            size: context
+                                .theme.textTheme.headlineMedium!.fontSize,
+                          )
+                        : FaIcon(
+                            trailingIconData!,
+                            color: textColor ??
+                                (onTap == null
+                                    ? context.theme.colorScheme.onSurfaceVariant
+                                    : context.theme.colorScheme.onPrimary),
+                            size: context
+                                .theme.textTheme.headlineMedium!.fontSize,
+                          )),
+              ),
+            )
           : null,
     );
   }
