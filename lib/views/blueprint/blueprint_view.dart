@@ -30,12 +30,7 @@ class BlueprintView extends ConsumerWidget {
                 ? PreferredSize(
                     preferredSize: Size.fromHeight(100.h),
                     child: Padding(
-                      padding: EdgeInsets.only(
-                        left: gap * 2,
-                        right: gap * 2,
-                        top: gap,
-                        bottom: gap * 2,
-                      ),
+                      padding: EdgeInsets.all(gap * 2),
                       child: appBar!.animateAppBar(context),
                     ),
                   )

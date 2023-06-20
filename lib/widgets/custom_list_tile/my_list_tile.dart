@@ -39,7 +39,7 @@ class MyListTile extends StatelessWidget {
     return ListTile(
       dense: true,
       onLongPress: null,
-      contentPadding: const EdgeInsets.all(12),
+      contentPadding: padding ?? const EdgeInsets.all(12),
       minLeadingWidth: 0,
       minVerticalPadding: 0,
       horizontalTitleGap: 0,
