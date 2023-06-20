@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'app/settings_app_view.dart';
+import 'profile/settings_profile_view.dart';
 
 class SettingsView extends ConsumerWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -14,7 +16,7 @@ class SettingsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Map<String, Widget> pageWidgets = {
       'App': const SettingsAppView(),
-      'Profile': const Placeholder(),
+      'Profile': const SettingsProfileView(),
       'Notification': const Placeholder(),
       'Writing': const Placeholder(),
       'Data & Privacy': const Placeholder(),
@@ -32,8 +34,18 @@ class SettingsView extends ConsumerWidget {
         children: [
           for (String title in pageWidgets.keys)
             CustomListTile(
-              titleString: title,
-              // responsiveWidth: false,
+              cornerRadius: gap,
+              responsiveWidth: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 4,
+              ),
+              title: Text(
+                title,
+                style: context.theme.textTheme.headlineSmall!.copyWith(
+                  color: context.theme.colorScheme.onPrimary,
+                ),
+              ),
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
