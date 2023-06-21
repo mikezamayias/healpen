@@ -19,10 +19,10 @@ class AppBar extends StatelessWidget {
                       ? '\n${pathNames[i]}'
                       : pathNames[i],
               style: (i < pathNames.length - 1)
-                  ? context.theme.textTheme.headlineSmall!.copyWith(
+                  ? context.theme.textTheme.titleLarge!.copyWith(
                       color: context.theme.colorScheme.outline,
                     )
-                  : context.theme.textTheme.headlineMedium!.copyWith(
+                  : context.theme.textTheme.headlineSmall!.copyWith(
                       color: context.theme.colorScheme.primary,
                     ),
             ),

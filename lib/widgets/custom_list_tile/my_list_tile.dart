@@ -44,7 +44,7 @@ class MyListTile extends StatelessWidget {
       contentPadding: padding ?? const EdgeInsets.all(12),
       minLeadingWidth: 0,
       minVerticalPadding: 0,
-      horizontalTitleGap: 0,
+      horizontalTitleGap: 12,
       leading: leading != null || leadingIconData != null
           ? leading ??
               FaIcon(
@@ -53,7 +53,7 @@ class MyListTile extends StatelessWidget {
                     (onTap == null
                         ? context.theme.colorScheme.onSurfaceVariant
                         : context.theme.colorScheme.onPrimary),
-                size: context.theme.textTheme.headlineMedium!.fontSize,
+                size: context.theme.textTheme.headlineSmall!.fontSize,
               )
           : null,
       title: title != null || titleString != null
@@ -117,27 +117,21 @@ class MyListTile extends StatelessWidget {
       trailing: trailing != null || trailingIconData != null
           ? GestureDetector(
               onTap: trailingOnTap,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: trailing ??
-                    (trailingOnTap != null
-                        ? FaIcon(
-                            trailingIconData!,
-                            color:
-                                textColor ?? context.theme.colorScheme.primary,
-                            size: context
-                                .theme.textTheme.headlineMedium!.fontSize,
-                          )
-                        : FaIcon(
-                            trailingIconData!,
-                            color: textColor ??
-                                (onTap == null
-                                    ? context.theme.colorScheme.onSurfaceVariant
-                                    : context.theme.colorScheme.onPrimary),
-                            size: context
-                                .theme.textTheme.headlineMedium!.fontSize,
-                          )),
-              ),
+              child: trailing ??
+                  (trailingOnTap != null
+                      ? FaIcon(
+                          trailingIconData!,
+                          color: textColor ?? context.theme.colorScheme.primary,
+                          size: context.theme.textTheme.headlineSmall!.fontSize,
+                        )
+                      : FaIcon(
+                          trailingIconData!,
+                          color: textColor ??
+                              (onTap == null
+                                  ? context.theme.colorScheme.onSurfaceVariant
+                                  : context.theme.colorScheme.onPrimary),
+                          size: context.theme.textTheme.headlineSmall!.fontSize,
+                        )),
             )
           : null,
     );

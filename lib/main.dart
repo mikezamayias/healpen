@@ -179,7 +179,7 @@ void main() async {
                     // Only need one return statement
                     return BlueprintView(
                       appBar: const AppBar(
-                        pathNames: ['Passwordless Sign In'],
+                        pathNames: ['Password-less Sign In'],
                       ),
                       body: body,
                     );
