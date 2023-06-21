@@ -6,8 +6,8 @@ import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
+import 'account/settings_account_view.dart';
 import 'app/settings_app_view.dart';
-import 'profile/settings_profile_view.dart';
 
 class SettingsView extends ConsumerWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class SettingsView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Map<String, Widget> pageWidgets = {
       'App': const SettingsAppView(),
-      'Profile': const SettingsProfileView(),
+      'Account': const SettingsAccountView(),
       'Notification': const Placeholder(),
       'Writing': const Placeholder(),
       'Data & Privacy': const Placeholder(),

@@ -14,15 +14,15 @@ import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../../blueprint/blueprint_view.dart';
 
-class SettingsProfileView extends ConsumerStatefulWidget {
-  const SettingsProfileView({Key? key}) : super(key: key);
+class SettingsAccountView extends ConsumerStatefulWidget {
+  const SettingsAccountView({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<SettingsProfileView> createState() =>
-      _SettingsProfileViewState();
+  ConsumerState<SettingsAccountView> createState() =>
+      _SettingsAccountViewState();
 }
 
-class _SettingsProfileViewState extends ConsumerState<SettingsProfileView> {
+class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
   final emailController = TextEditingController();
   bool readOnlyEmailTextField = true;
 
@@ -66,7 +66,7 @@ class _SettingsProfileViewState extends ConsumerState<SettingsProfileView> {
               ? null
               : 'Please enter a valid email address.',
           onChanged: (String email) {
-            log('$email', name: 'email');
+            log(email, name: 'email');
           },
           onFieldSubmitted: (String email) {
             log('$readOnlyEmailTextField', name: 'readOnlyEmailTextField');
@@ -75,7 +75,7 @@ class _SettingsProfileViewState extends ConsumerState<SettingsProfileView> {
             });
           },
         ),
-        trailingIconData: FontAwesomeIcons.penToSquare,
+        // trailingIconData: FontAwesomeIcons.penToSquare,
         textColor: readOnlyEmailTextField
             ? context.theme.colorScheme.outline
             : context.theme.colorScheme.primary,
@@ -87,21 +87,42 @@ class _SettingsProfileViewState extends ConsumerState<SettingsProfileView> {
           });
         },
       ),
+      CustomListTile(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: gap * 2,
+          vertical: 12,
+        ),
+        titleString: 'Sign out',
+        leadingIconData: FontAwesomeIcons.rightFromBracket,
+        onTap: () {
+          HapticFeedback.heavyImpact();
+          // context.read(authProvider).signOut();
+        },
+      ),
+      CustomListTile(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: gap * 2,
+          vertical: 12,
+        ),
+        titleString: 'Delete Account',
+        leadingIconData: FontAwesomeIcons.trash,
+        onTap: () {
+          HapticFeedback.heavyImpact();
+          // context.read(authProvider).signOut();
+        },
+      ),
     ].animateWidgetList();
 
     return BlueprintView(
       appBar: const AppBar(
-        pathNames: [
-          'Settings',
-          'Profile',
-        ],
+        pathNames: ['Settings', 'Account'],
       ),
       body: ListView.separated(
         clipBehavior: Clip.none,
         shrinkWrap: true,
         padding: EdgeInsets.zero,
         itemBuilder: (_, int index) => pageWidgets[index],
-        separatorBuilder: (_, __) => SizedBox(height: gap * 2),
+        separatorBuilder: (_, __) => SizedBox(height: gap),
         itemCount: pageWidgets.length,
       ),
     );
