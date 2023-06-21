@@ -11,7 +11,9 @@ import 'package:validated/validated.dart' as validated;
 import '../../../extensions/widget_extenstions.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
+import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../auth/auth_view.dart';
 import '../../blueprint/blueprint_view.dart';
 
 class SettingsAccountView extends ConsumerStatefulWidget {
@@ -29,16 +31,23 @@ class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
   @override
   Widget build(BuildContext context) {
     final currentUserEmailAddress = FirebaseAuth.instance.currentUser!.email;
+    final user = FirebaseAuth.instance.currentUser!;
+    final displayName = user.displayName;
     List<Widget> pageWidgets = [
       CustomListTile(
         titleString: 'Name',
         subtitle: TextField(
           decoration: InputDecoration(
-            hintText: 'How should we call you?',
+            hintText: displayName ?? 'How should we call you?',
             hintStyle: context.theme.textTheme.titleLarge,
           ),
           style: context.theme.textTheme.titleLarge,
-          onSubmitted: (String email) {},
+          onSubmitted: (String newDisplayName) async {
+            log(newDisplayName, name: 'newDisplayName');
+            await FirebaseAuth.instance.currentUser!.updateDisplayName(
+              newDisplayName,
+            );
+          },
         ),
       ),
       CustomListTile(
@@ -75,7 +84,7 @@ class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
             });
           },
         ),
-        // trailingIconData: FontAwesomeIcons.penToSquare,
+        trailingIconData: FontAwesomeIcons.penToSquare,
         textColor: readOnlyEmailTextField
             ? context.theme.colorScheme.outline
             : context.theme.colorScheme.primary,
@@ -94,9 +103,38 @@ class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
         ),
         titleString: 'Sign out',
         leadingIconData: FontAwesomeIcons.rightFromBracket,
-        onTap: () {
+        onTap: () async {
           HapticFeedback.heavyImpact();
-          // context.read(authProvider).signOut();
+          log('$user', name: 'Signing out user');
+          FirebaseAuth.instance
+              .signOut()
+              .whenComplete(
+                () => context.navigator.pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const AuthView(),
+                  ),
+                ),
+              )
+              .onError(
+            (error, stackTrace) {
+              log('$error', name: 'Error signing out user');
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomDialog(
+                    titleString: 'Error signing out',
+                    contentString: 'Please try again later.',
+                    actions: [
+                      CustomListTile(
+                        onTap: () => context.navigator.pop(),
+                        titleString: 'OK',
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          );
         },
       ),
       CustomListTile(
