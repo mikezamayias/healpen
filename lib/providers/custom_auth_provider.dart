@@ -2,13 +2,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthProvider {
+class CustomAuthProvider {
   // Singleton constructor
-  static final AuthProvider _instance = AuthProvider._internal();
+  static final CustomAuthProvider _instance = CustomAuthProvider._internal();
 
-  factory AuthProvider() => _instance;
+  factory CustomAuthProvider() => _instance;
 
-  AuthProvider._internal();
+  CustomAuthProvider._internal();
 
   // Methods
   /// Configures the [EmailLinkAuthProvider] with the required action code

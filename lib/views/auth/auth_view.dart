@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../healpen.dart';
-import '../../providers/auth_provider.dart';
+import '../../providers/custom_auth_provider.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile/custom_list_tile.dart';
@@ -24,7 +24,7 @@ class AuthView extends ConsumerStatefulWidget {
 class _AuthViewState extends ConsumerState<AuthView> {
   @override
   Widget build(BuildContext context) {
-    final ctrl = ref.watch(AuthProvider().emailLinkAuthProvider);
+    final ctrl = ref.watch(CustomAuthProvider().emailLinkAuthProvider);
     return AuthFlowBuilder<EmailLinkAuthController>(
       provider: ctrl,
       builder: (context, AuthState state, ctrl, child) {
