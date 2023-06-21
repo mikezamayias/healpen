@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile/custom_list_tile.dart';
 
 class StopwatchTile extends StatelessWidget {
@@ -26,6 +27,8 @@ class StopwatchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
+      cornerRadius: radius - gap,
+      contentPadding: EdgeInsets.all(gap),
       backgroundColor: context.theme.colorScheme.surface,
       titleString: 'Writing time',
       subtitleString: formatTime(),

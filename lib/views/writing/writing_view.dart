@@ -47,6 +47,8 @@ class WritingView extends ConsumerWidget {
                 ),
                 SizedBox(width: gap),
                 CustomListTile(
+                  cornerRadius: radius - gap,
+                  contentPadding: EdgeInsets.all(gap),
                   onTap: () {
                     if (state.text.isNotEmpty) {
                       controller.handleSaveEntry('testing');
