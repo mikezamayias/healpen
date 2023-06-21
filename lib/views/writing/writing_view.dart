@@ -22,10 +22,14 @@ class WritingView extends ConsumerWidget {
     final textController =
         ref.read(writingControllerProvider.notifier).textController;
     final User user = FirebaseAuth.instance.currentUser!;
-    final userName = user.uid.substring(0, 6);
+    final userName = user.displayName;
     return BlueprintView(
       appBar: AppBar(
-        pathNames: ['Hello $userName\nWhat\'s on your mind today?'],
+        pathNames: [
+          userName == null
+              ? 'Hello,\nWhat\'s on your mind today?'
+              : 'Hello $userName,\nWhat\'s on your mind today?',
+        ],
       ),
       body: Container(
         decoration: BoxDecoration(
