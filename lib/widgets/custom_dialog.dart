@@ -8,12 +8,14 @@ import 'custom_list_tile/custom_list_tile.dart';
 class CustomDialog extends StatelessWidget {
   final String titleString;
   final String contentString;
+  final Color? backgroundColor;
   final List<CustomListTile> actions;
 
   const CustomDialog({
     super.key,
     required this.titleString,
     required this.contentString,
+    this.backgroundColor,
     required this.actions,
   });
 
@@ -30,7 +32,8 @@ class CustomDialog extends StatelessWidget {
         right: gap,
         bottom: gap,
       ),
-      backgroundColor: context.theme.colorScheme.primaryContainer,
+      backgroundColor:
+          backgroundColor ?? context.theme.colorScheme.primaryContainer,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
@@ -51,6 +54,7 @@ class CustomDialog extends StatelessWidget {
               style: context.theme.textTheme.headlineSmall!.copyWith(
                 color: context.theme.colorScheme.onBackground,
               ),
+              textAlign: TextAlign.center,
             ),
             SizedBox(
               height: gap,
@@ -65,7 +69,7 @@ class CustomDialog extends StatelessWidget {
           ],
         ),
       ),
-      actionsAlignment: MainAxisAlignment.center,
+      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: actions,
     );
   }

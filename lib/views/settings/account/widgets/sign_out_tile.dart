@@ -28,20 +28,7 @@ class SignOutTile extends StatelessWidget {
       onTap: () async {
         User user = FirebaseAuth.instance.currentUser!;
         log('$user', name: 'Signing out user');
-        FirebaseAuth.instance
-            .signOut()
-            .whenComplete(
-              () => context.navigator
-                  .pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => const AuthView(),
-                    ),
-                  )
-                  .whenComplete(
-                    () => HapticFeedback.heavyImpact(),
-                  ),
-            )
-            .onError(
+        FirebaseAuth.instance.signOut().onError(
           (error, stackTrace) {
             log('$error', name: 'Error signing out user');
             showDialog(
@@ -60,6 +47,16 @@ class SignOutTile extends StatelessWidget {
               },
             );
           },
+        ).then(
+          (_) => context.navigator
+              .pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const AuthView(),
+                ),
+              )
+              .whenComplete(
+                () => HapticFeedback.heavyImpact(),
+              ),
         );
       },
     );
