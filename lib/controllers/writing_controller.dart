@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -78,7 +79,7 @@ class WritingController extends StateNotifier<WritingState> {
     );
   }
 
-  Future<void> handleSaveEntry(String userId) async {
+  Future<void> handleSaveEntry() async {
     log(
       'Saved entry: ${state.text}',
       name: '_handleSaveEntry()',
@@ -86,14 +87,15 @@ class WritingController extends StateNotifier<WritingState> {
     _stopwatch.reset();
     _timer?.cancel();
     _delayTimer?.cancel();
-    await _saveEntryToFirebase(userId);
+    await _saveEntryToFirebase();
     state = const WritingState();
   }
 
-  Future<void> _saveEntryToFirebase(String userId) {
+  Future<void> _saveEntryToFirebase() {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
     log(
       state.toMap().toString(),
-      name: '_saveEntryToFirebase(String userId)',
+      name: '_saveEntryToFirebase(userId: $userId)',
     );
     return _firestore
         .collection('writing-temp')

@@ -22,7 +22,7 @@ class NewEntryButton extends ConsumerWidget {
       contentPadding: EdgeInsets.all(gap),
       onTap: () {
         if (state.text.isNotEmpty) {
-          writingController.handleSaveEntry('testing');
+          writingController.handleSaveEntry(); // Saves entry
           writingTextController.clear(); // Clears the TextFormField
           writingController.resetText(); // Resets the text in the state
         }
