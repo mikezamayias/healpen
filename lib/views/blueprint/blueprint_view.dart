@@ -19,7 +19,7 @@ class BlueprintView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      color: context.theme.colorScheme.surface,
+      color: context.theme.scaffoldBackgroundColor,
       child: SafeArea(
         child: GestureDetector(
           onTap: () {
@@ -32,7 +32,7 @@ class BlueprintView extends ConsumerWidget {
                     child: Padding(
                       padding: EdgeInsets.all(gap * 2),
                       child: appBar!.animateAppBar(context),
-                    ),
+                    )
                   )
                 : null,
             body: Padding(

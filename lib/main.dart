@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide AppBar;
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'controllers/app_theming_controller.dart';
@@ -53,7 +55,27 @@ void main() async {
                 debugShowCheckedModeBanner: false,
                 color: appColorModel.appColor.color,
                 theme: theme,
-                home: const AuthView(),
+                home: AnnotatedRegion<SystemUiOverlayStyle>(
+                  value: SystemUiOverlayStyle(
+                    statusBarColor: context.theme.scaffoldBackgroundColor,
+                    statusBarBrightness:
+                        appearanceModel.appearance == Appearance.dark
+                            ? Brightness.dark
+                            : Brightness.light,
+                    statusBarIconBrightness:
+                        appearanceModel.appearance == Appearance.dark
+                            ? Brightness.light
+                            : Brightness.dark,
+                    systemNavigationBarColor:
+                        context.theme.scaffoldBackgroundColor,
+                    systemNavigationBarIconBrightness:
+                        appearanceModel.appearance == Appearance.dark
+                            ? Brightness.light
+                            : Brightness.dark,
+                    systemNavigationBarDividerColor: Colors.transparent,
+                  ),
+                  child: const AuthView(),
+                ),
               );
             },
           );
