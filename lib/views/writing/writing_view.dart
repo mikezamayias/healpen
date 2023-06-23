@@ -16,8 +16,8 @@ class WritingView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final User user = FirebaseAuth.instance.currentUser!;
-    final userName = user.displayName;
+    final User? user = FirebaseAuth.instance.currentUser;
+    final userName = user?.displayName;
     return BlueprintView(
       appBar: AppBar(
         pathNames: [

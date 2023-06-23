@@ -1,23 +1,26 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../controllers/page_controller.dart';
+import '../../../../providers/page_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_dialog.dart';
 import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../../../auth/auth_view.dart';
 
-class SignOutTile extends StatelessWidget {
+class SignOutTile extends ConsumerWidget {
   const SignOutTile({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.symmetric(
         horizontal: gap * 2,
@@ -48,15 +51,19 @@ class SignOutTile extends StatelessWidget {
             );
           },
         ).then(
-          (_) => context.navigator
-              .pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => const AuthView(),
-                ),
-              )
-              .whenComplete(
-                () => HapticFeedback.heavyImpact(),
-              ),
+          (_) {
+            ref.read(currentPageProvider.notifier).state =
+                PageController().writing;
+            return context.navigator
+                .pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const AuthView(),
+                  ),
+                )
+                .whenComplete(
+                  () async => await HapticFeedback.heavyImpact(),
+                );
+          },
         );
       },
     );
