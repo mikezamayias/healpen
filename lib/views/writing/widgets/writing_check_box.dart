@@ -14,9 +14,6 @@ class WritingCheckBox extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(writingControllerProvider);
-    final controller = ref.read(writingControllerProvider.notifier);
-
     return ListTile(
       contentPadding: EdgeInsets.zero,
       minVerticalPadding: 0,
@@ -54,12 +51,12 @@ class WritingCheckBox extends ConsumerWidget {
         ),
       ),
       title: CheckboxListTile(
-        value: state.isPrivate,
+        value: ref.watch(writingControllerProvider).isPrivate,
         enableFeedback: true,
         visualDensity: VisualDensity.compact,
         contentPadding: EdgeInsets.zero,
         onChanged: (bool? value) {
-          controller.updatePrivate(value!);
+          ref.watch(writingControllerProvider.notifier).updatePrivate(value!);
         },
         title: Padding(
           padding: EdgeInsets.only(left: gap),

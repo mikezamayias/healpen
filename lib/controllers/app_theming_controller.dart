@@ -38,9 +38,7 @@ class AppColorController extends StateNotifier<AppColorModel> {
 
 class AppearanceController extends StateNotifier<AppearanceModel> {
   static final instance = AppearanceController._();
-
   AppearanceController._() : super(AppearanceModel(Appearance.system));
-
   final appearanceControllerProvider =
       StateNotifierProvider<AppearanceController, AppearanceModel>(
     (ref) => throw UnimplementedError(),

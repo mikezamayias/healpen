@@ -9,12 +9,9 @@ class WritingTextField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.read(writingControllerProvider.notifier);
-    final textController = controller.textController;
-
     return TextFormField(
-      controller: textController,
-      onChanged: controller.handleTextChange,
+      controller: ref.read(writingControllerProvider.notifier).textController,
+      onChanged: ref.read(writingControllerProvider.notifier).handleTextChange,
       maxLines: null,
       expands: true,
       keyboardType: TextInputType.multiline,

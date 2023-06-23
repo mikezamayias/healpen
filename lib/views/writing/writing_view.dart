@@ -3,12 +3,11 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../../controllers/writing_controller.dart';
 import '../../extensions/widget_extenstions.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
-import '../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
+import 'widgets/new_entry_button.dart';
 import 'widgets/stopwatch_tile.dart';
 import 'widgets/writing_entry.dart';
 
@@ -17,10 +16,6 @@ class WritingView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(writingControllerProvider);
-    final controller = ref.read(writingControllerProvider.notifier);
-    final textController =
-        ref.read(writingControllerProvider.notifier).textController;
     final User user = FirebaseAuth.instance.currentUser!;
     final userName = user.displayName;
     return BlueprintView(
@@ -44,32 +39,9 @@ class WritingView extends ConsumerWidget {
             SizedBox(height: gap),
             Row(
               children: [
-                Expanded(
-                  child: StopwatchTile(
-                    timeInSeconds: state.seconds,
-                  ),
-                ),
+                const Expanded(child: StopwatchTile()),
                 SizedBox(width: gap),
-                CustomListTile(
-                  cornerRadius: radius - gap,
-                  contentPadding: EdgeInsets.all(gap),
-                  onTap: () {
-                    if (state.text.isNotEmpty) {
-                      controller.handleSaveEntry('testing');
-                      textController.clear(); // Clears the TextFormField
-                      controller.resetText(); // Resets the text in the state
-                    }
-                  },
-                  titleString: 'New Entry',
-                  backgroundColor:
-                      state.text.isEmpty || textController.text.isEmpty
-                          ? context.theme.colorScheme.outline
-                          : null,
-                  textColor: state.text.isEmpty || textController.text.isEmpty
-                      ? context.theme.colorScheme.background
-                      : null,
-                  responsiveWidth: true,
-                ),
+                const NewEntryButton(),
               ],
             ),
           ].animateWidgetList(),
