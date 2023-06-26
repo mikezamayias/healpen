@@ -25,7 +25,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           bottom: gap * 2,
         ),
         child: PhysicalModel(
-          color: context.theme.colorScheme.surfaceVariant,
+          color: context.theme.colorScheme.outlineVariant,
           // shadowColor: context.theme.colorScheme.shadow,
           // elevation: radius,
           borderRadius: BorderRadius.all(Radius.circular(radius)),
@@ -46,6 +46,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                 ref.watch(currentPageProvider.notifier).state =
                     PageController().pages[index];
               },
+              // selectedColorOpacity: 0,
               selectedItemColor: context.theme.colorScheme.primary,
               unselectedItemColor: context.theme.colorScheme.outline,
               items: [
@@ -55,8 +56,8 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                         title: Text(
                           pageModel.label.toTitleCase(),
                           style: TextStyle(
-                            fontFamily: context
-                                .theme.textTheme.bodyLarge!.fontFamily,
+                            fontFamily:
+                                context.theme.textTheme.bodyLarge!.fontFamily,
                           ),
                         ),
                       ),
