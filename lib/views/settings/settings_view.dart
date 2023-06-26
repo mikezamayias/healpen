@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
@@ -14,14 +15,35 @@ class SettingsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Map<String, Widget> pageWidgets = {
-      'App': const SettingsAppView(),
-      'Account': const SettingsAccountView(),
-      'Notification': const Placeholder(),
-      'Writing': const Placeholder(),
-      'Data & Privacy': const Placeholder(),
-      'Help & Support': const Placeholder(),
-      'About': const Placeholder(),
+    Map<String, (Widget, IconData)> pageWidgets = {
+      'Theme': (
+        const SettingsAppView(),
+        FontAwesomeIcons.palette,
+      ),
+      'Account': (
+        const SettingsAccountView(),
+        FontAwesomeIcons.userLarge,
+      ),
+      'Notification': (
+        const Placeholder(),
+        FontAwesomeIcons.solidBell,
+      ),
+      'Writing': (
+        const Placeholder(),
+        FontAwesomeIcons.pencil,
+      ),
+      'Data & Privacy': (
+        const Placeholder(),
+        FontAwesomeIcons.scroll,
+      ),
+      'Help & Support': (
+        const Placeholder(),
+        FontAwesomeIcons.solidMessage,
+      ),
+      'About': (
+        const Placeholder(),
+        FontAwesomeIcons.circleInfo,
+      ),
     };
 
     return BlueprintView(
@@ -34,12 +56,13 @@ class SettingsView extends ConsumerWidget {
         children: [
           for (String title in pageWidgets.keys)
             CustomListTile(
-              cornerRadius: gap,
-              responsiveWidth: true,
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 4,
+              responsiveWidth: false,
+              cornerRadius: radius,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: gap * 2,
+                vertical: gap / 2,
               ),
+              leadingIconData: pageWidgets[title]!.$2,
               title: Text(
                 title,
                 style: context.theme.textTheme.headlineSmall!.copyWith(
@@ -49,7 +72,7 @@ class SettingsView extends ConsumerWidget {
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => pageWidgets[title]!,
+                    builder: (_) => pageWidgets[title]!.$1,
                   ),
                 );
               },
