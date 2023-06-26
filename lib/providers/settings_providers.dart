@@ -6,7 +6,6 @@ final appearanceProvider = StateProvider<Appearance>(
   (ref) => Appearance.system,
 );
 
-final currentAppColorProvider = StateProvider<AppColor>(
+final appColorProvider = StateProvider<AppColor>(
   (ref) => AppColor.pastelOcean,
 );
-

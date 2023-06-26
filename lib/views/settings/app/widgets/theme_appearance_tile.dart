@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../controllers/app_theming_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
+import '../../../../providers/settings_providers.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
 
 class ThemeAppearanceTile extends ConsumerWidget {
@@ -24,21 +25,14 @@ class ThemeAppearanceTile extends ConsumerWidget {
               label: Text(appearance.name.toCapitalized()),
             ),
         ],
-        selected: {
-          ref
-              .watch(AppearanceController.instance.appearanceControllerProvider)
-              .appearance
-        },
+        selected: {ref.watch(appearanceProvider)},
         onSelectionChanged: (Set<Appearance> newSelection) {
-          Appearance newAppearance = newSelection.first;
-          ref
-              .read(AppearanceController
-                  .instance.appearanceControllerProvider.notifier)
-              .updateAppearance(newAppearance);
+          ref.watch(appearanceProvider.notifier).state = newSelection.first;
           log(
-            'Appearance changed to $newAppearance',
+            'Theme appearance changed to ${newSelection.first}',
             name: 'Settings: ThemeAppearanceTile',
           );
+          writeAppearance(ref.watch(appearanceProvider));
         },
       ),
     );

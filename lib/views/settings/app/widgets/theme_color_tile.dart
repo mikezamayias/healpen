@@ -3,9 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../controllers/app_theming_controller.dart';
 import '../../../../enums/app_theming.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
 
 class ThemeColorTile extends ConsumerWidget {
@@ -20,18 +21,16 @@ class ThemeColorTile extends ConsumerWidget {
           for (AppColor appColor in AppColor.values)
             TextButton(
               onPressed: () async {
-                await ref
-                    .read(AppColorController
-                        .instance.appColorControllerProvider.notifier)
-                    .updateAppColor(appColor);
+                ref.watch(appColorProvider.notifier).state = appColor;
                 log(
-                  ref
-                      .watch(AppColorController
-                          .instance.appColorControllerProvider)
-                      .appColor
-                      .toString(),
-                  name: 'appColorControllerProvider',
+                  'Theme Color changed to $appColor',
+                  name: 'Settings: ThemeAppearanceTile',
                 );
+                log(
+                  ref.watch(appColorProvider).toString(),
+                  name: 'ref.watch(appColorProvider).toString()',
+                );
+                writeAppColor(ref.watch(appColorProvider));
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
