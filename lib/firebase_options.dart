@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDs20g2qWGMc2feesucsurdbTAY-E0Etxc',
+    apiKey: 'AIzaSyAsYSx3Q0xNnrYPJnINrfRmeCOQ48BcmPI',
     appId: '1:1058887275393:ios:8448617507911eceeb0e80',
     messagingSenderId: '1058887275393',
     projectId: 'healpen',
