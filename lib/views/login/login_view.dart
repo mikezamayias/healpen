@@ -1,173 +1,127 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:flutter/material.dart' hide AppBar;
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../providers/custom_auth_provider.dart';
-import '../../widgets/app_bar.dart';
-import '../../widgets/custom_list_tile/custom_list_tile.dart';
-import '../blueprint/blueprint_view.dart';
 
 class LoginView extends ConsumerStatefulWidget {
-  const LoginView({super.key});
+  const LoginView({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<LoginView> createState() => LoginViewState();
+  ConsumerState<LoginView> createState() => _LoginViewState();
 }
 
-class LoginViewState extends ConsumerState<LoginView>
-    implements EmailLinkAuthListener {
-  @override
-  final auth = FirebaseAuth.instance;
+class _LoginViewState extends ConsumerState<LoginView>
+    with WidgetsBindingObserver {
+  final TextEditingController _emailController = TextEditingController();
 
-  @override
-  late EmailLinkAuthProvider provider;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future signInWithEmailLink(userEmail) async {
+    return await _auth
+        .sendSignInLinkToEmail(
+            email: userEmail,
+            actionCodeSettings:
+                ref.watch(CustomAuthProvider().actionCodeSettingsProvider))
+        .then((value) {
+      log('Email sent');
+    });
+  }
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    provider = ref.watch(CustomAuthProvider().emailLinkAuthProvider)
-      ..authListener = this;
+    WidgetsBinding.instance.addObserver(this);
   }
 
-  late Widget body = CustomListTile(
-    selectableText: true,
-    titleString: 'Sign in using only your email',
-    subtitle: TextField(
-      decoration: InputDecoration(
-        hintText: 'Email',
-        hintStyle: context.theme.textTheme.titleLarge,
-      ),
-      style: context.theme.textTheme.titleLarge,
-      onSubmitted: provider.sendLink,
-    ),
-  );
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    try {
+      FirebaseDynamicLinks.instance.onLink.listen((
+        PendingDynamicLinkData dynamicLink,
+      ) async {
+        final Uri deepLink = dynamicLink.link;
+        handleLink(deepLink, _emailController.text);
+      },
+          // onSuccess: (PendingDynamicLinkData? dynamicLink) async {
+          //   final Uri? deepLink = dynamicLink?.link;
+          //   if (deepLink != null) {
+          //     handleLink(deepLink, _emailController.text);
+          //     FirebaseDynamicLinks.instance.onLink(
+          //         onSuccess: (PendingDynamicLinkData?dynamicLink) async {
+          //           final Uri? deepLink = dynamicLink!.link;
+          //           handleLink(deepLink!, _emailController.text);
+          //         }, onError: (OnLinkErrorException e) async {
+          //       print(e.message);
+          //     });
+          //     // Navigator.pushNamed(context, deepLink.path);
+          //   }
+          // },
+          onError: (e) async {
+        log('$e', name: 'FirebaseDynamicLinks');
+      });
+
+      final PendingDynamicLinkData? data =
+          await FirebaseDynamicLinks.instance.getInitialLink();
+      final Uri? deepLink = data?.link;
+
+      if (deepLink != null) {
+        print(deepLink.userInfo);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void handleLink(Uri link, String userEmail) async {
+    log(userEmail, name: 'handleLink:userEmail');
+    log('$link', name: 'handleLink:link');
+    final UserCredential user = await FirebaseAuth.instance.signInWithEmailLink(
+      email: userEmail,
+      emailLink: link.toString(),
+    );
+    log('${user.credential}', name: 'handleLink');
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlueprintView(
-      appBar: const AppBar(
-        pathNames: ['Password-less Sign In'],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
       ),
-      body: body,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                filled: true,
+                hintStyle: TextStyle(color: Colors.grey[800]),
+                hintText: 'Type in your email address',
+                fillColor: Colors.white70,
+              ),
+              controller: _emailController,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            MaterialButton(
+              onPressed: () {
+                signInWithEmailLink(_emailController.text);
+              },
+              child: const Text('Login'),
+            )
+          ],
+        ),
+      ),
     );
-  }
-
-  @override
-  void onBeforeLinkSent(String email) {
-    setState(() {
-      body = CustomListTile(
-        selectableText: true,
-        titleString: 'onBeforeLinkSent',
-        subtitleString: 'Sending link to $email',
-      );
-    });
-  }
-
-  @override
-  void onLinkSent(String email) {
-    setState(() {
-      body = CustomListTile(
-        selectableText: true,
-        titleString: 'onLinkSent',
-        subtitleString: 'Link sent to $email',
-      );
-    });
-  }
-
-  @override
-  void onBeforeProvidersForEmailFetch() {
-    setState(() {
-      body = const CustomListTile(
-        selectableText: true,
-        titleString: 'onBeforeProvidersForEmailFetch',
-        subtitleString: 'Fetching providers for email',
-      );
-    });
-  }
-
-  @override
-  void onBeforeSignIn() {
-    setState(() {
-      body = const CustomListTile(
-        selectableText: true,
-        titleString: 'onBeforeSignIn',
-        subtitleString: 'Authentication process starts',
-      );
-    });
-  }
-
-  @override
-  void onCanceled() {
-    setState(() {
-      body = const CustomListTile(
-        selectableText: true,
-        titleString: 'onCanceled',
-        subtitleString: 'User canceled the sign in process',
-      );
-    });
-  }
-
-  @override
-  void onCredentialLinked(AuthCredential credential) {
-    setState(() {
-      body = const CustomListTile(
-        selectableText: true,
-        titleString: 'onCredentialLinked',
-        subtitleString: 'Credential linked with current user',
-      );
-    });
-  }
-
-  @override
-  void onDifferentProvidersFound(
-      String email, List<String> providers, AuthCredential? credential) {
-    // Handle case of different providers found
-  }
-
-  @override
-  void onError(Object error) {
-    setState(() {
-      body = CustomListTile(
-        selectableText: true,
-        titleString: 'onError',
-        subtitleString: error.toString(),
-      );
-    });
-  }
-
-  @override
-  void onCredentialReceived(AuthCredential credential) {
-    setState(() {
-      body = const CustomListTile(
-        selectableText: true,
-        titleString: 'onCredentialReceived',
-        subtitleString:
-            'Linking the credential with currently signed in user account',
-      );
-    });
-  }
-
-  @override
-  void onMFARequired(MultiFactorResolver resolver) {
-    setState(() {
-      body = const CustomListTile(
-        selectableText: true,
-        titleString: 'onMFARequired',
-        subtitleString: 'User has to complete MFA',
-      );
-    });
-  }
-
-  @override
-  void onSignedIn(UserCredential credential) {
-    setState(() {
-      body = CustomListTile(
-        selectableText: true,
-        titleString: 'Signed in successfully',
-        subtitleString: 'User: ${credential.user?.email}',
-      );
-    });
   }
 }

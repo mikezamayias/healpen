@@ -10,18 +10,23 @@ class CustomAuthProvider {
 
   CustomAuthProvider._internal();
 
+  final actionCodeSettingsProvider = StateProvider<ActionCodeSettings>(
+    (ref) => ActionCodeSettings(
+      url: 'https://healpen.page.link',
+      handleCodeInApp: true,
+      androidMinimumVersion: '1',
+      androidPackageName: 'com.mikezamayias.healpen',
+      iOSBundleId: 'com.mikezamayias.healpen',
+    ),
+  );
+
   // Methods
   /// Configures the [EmailLinkAuthProvider] with the required action code
   /// settings.
   final emailLinkAuthProvider = StateProvider<EmailLinkAuthProvider>(
     (ref) => EmailLinkAuthProvider(
-      actionCodeSettings: ActionCodeSettings(
-        url: 'https://healpen.page.link',
-        handleCodeInApp: true,
-        androidMinimumVersion: '1',
-        androidPackageName: 'com.mikezamayias.healpen',
-        iOSBundleId: 'com.mikezamayias.healpen',
-      ),
+      actionCodeSettings:
+          ref.watch(CustomAuthProvider().actionCodeSettingsProvider),
     ),
   );
 }
