@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../providers/custom_auth_provider.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
@@ -26,27 +27,9 @@ class LoginViewState extends ConsumerState<LoginView>
   @override
   void initState() {
     super.initState();
-    provider = EmailLinkAuthProvider(
-      actionCodeSettings: ActionCodeSettings(
-        url: 'https://healpen.page.link',
-        handleCodeInApp: true,
-        androidMinimumVersion: '1',
-        androidPackageName: 'com.mikezamayias.healpen',
-        iOSBundleId: 'com.mikezamayias.healpen',
-      ),
-    )..authListener = this;
+    provider = ref.watch(CustomAuthProvider().emailLinkAuthProvider)
+      ..authListener = this;
   }
-
-  // @override
-  // late final EmailLinkAuthProvider provider = EmailLinkAuthProvider(
-  //   actionCodeSettings: ActionCodeSettings(
-  //     url: 'https://healpen.page.link',
-  //     handleCodeInApp: true,
-  //     androidMinimumVersion: '1',
-  //     androidPackageName: 'com.mikezamayias.healpen',
-  //     iOSBundleId: 'com.mikezamayias.healpen',
-  //   ),
-  // )..authListener = this;
 
   late Widget body = CustomListTile(
     selectableText: true,

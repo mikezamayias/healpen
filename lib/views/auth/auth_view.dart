@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,21 +15,17 @@ import '../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';
 
-class AuthView extends ConsumerStatefulWidget {
+class AuthView extends ConsumerWidget {
   const AuthView({super.key});
 
   @override
-  ConsumerState<AuthView> createState() => _AuthViewState();
-}
-
-class _AuthViewState extends ConsumerState<AuthView> {
-  @override
-  Widget build(BuildContext context) {
-    final ctrl = ref.watch(CustomAuthProvider().emailLinkAuthProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final emailLinkProvider =
+        ref.watch(CustomAuthProvider().emailLinkAuthProvider);
     return AuthFlowBuilder<EmailLinkAuthController>(
-      provider: ctrl,
+      provider: emailLinkProvider,
       builder: (context, AuthState state, ctrl, child) {
-        if (state is SignedIn) {
+        if (state is SignedIn || FirebaseAuth.instance.currentUser != null) {
           log(
             '${FirebaseAuth.instance.currentUser}',
             name: 'currentUser',
@@ -81,7 +78,15 @@ class _AuthViewState extends ConsumerState<AuthView> {
             durationTitle: 'Signing in',
           );
         } else if (state is AuthFailed) {
-          log(state.exception.toString(), name: 'AuthFailed');
+          log(
+            state.exception.toString(),
+            name: 'AuthFailed',
+          );
+          FirebaseCrashlytics.instance.recordError(
+            state.exception,
+            null,
+          );
+
           body = CustomListTile(
             cornerRadius: radius,
             contentPadding: const EdgeInsets.all(12),
@@ -89,6 +94,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
             textColor: context.theme.colorScheme.onError,
             titleString: 'Something went wrong!',
             subtitle: ErrorText(exception: state.exception),
+            // subtitleString: state.exception.toString(),
           );
         } else {
           log(
