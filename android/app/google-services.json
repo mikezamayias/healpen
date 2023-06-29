@@ -7,48 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1058887275393:android:ab7ee75d56f9ad81eb0e80",
-        "android_client_info": {
-          "package_name": "com.example.healpen"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1058887275393-0i74n8aa18mcrgtcl1vlqt6lgu67kh8g.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCQ5gsnkRQdWK7kEpl3BBzfsSCEIyBfTsc"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1058887275393-0i74n8aa18mcrgtcl1vlqt6lgu67kh8g.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "1058887275393-d8vjviu8lue742de5demhabtk84bduul.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.healpen"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:1058887275393:android:c19882059cad1bbbeb0e80",
         "android_client_info": {
           "package_name": "com.mikezamayias.healpen"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1058887275393-cmhrmv2q89hpu4tbpho5jntv43a5ihf1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mikezamayias.healpen",
+            "certificate_hash": "0afea8a6a1708cf2f0014b177fabd2fa00933e44"
+          }
+        },
         {
           "client_id": "1058887275393-0i74n8aa18mcrgtcl1vlqt6lgu67kh8g.apps.googleusercontent.com",
           "client_type": 3
