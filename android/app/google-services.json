@@ -39,10 +39,11 @@
               "client_type": 3
             },
             {
-              "client_id": "1058887275393-d8vjviu8lue742de5demhabtk84bduul.apps.googleusercontent.com",
+              "client_id": "1058887275393-etpmst24vst3vcfpalvo83k4j43igbh2.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.healpen"
+                "bundle_id": "com.mikezamayias.healpen",
+                "app_store_id": "6450744761"
               }
             }
           ]
