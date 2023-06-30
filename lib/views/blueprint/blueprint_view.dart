@@ -22,6 +22,7 @@ class BlueprintView extends ConsumerWidget {
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: appBar != null
             ? PreferredSize(
                 preferredSize: Size.fromHeight(100.h),
