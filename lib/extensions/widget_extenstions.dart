@@ -5,13 +5,14 @@ import 'package:sprung/sprung.dart';
 import '../utils/constants.dart';
 
 extension WidgetListExtensions on List<Widget> {
-  List<Widget> animateWidgetList() => animate(interval: 0.15.seconds)
-      .fade(curve: curve, duration: 0.5.seconds)
-      .slideY(begin: 0.6, curve: Sprung.criticallyDamped, duration: 0.5.seconds)
-      .scale(
-        begin: const Offset(0, 0),
-        duration: 0.5.seconds,
-      );
+  List<Widget> animateWidgetList() =>
+      animate(interval: animationDuration.milliseconds)
+          .fade(curve: curve)
+          .slideY(begin: 0.6, curve: Sprung.overDamped)
+          .scale(
+            begin: const Offset(0, 0),
+            duration: animationDuration.milliseconds,
+          );
 
   List<Widget> animateLicences() =>
       animate(interval: animationDuration.microseconds)

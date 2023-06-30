@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../utils/constants.dart';
@@ -21,7 +22,7 @@ class CustomChip extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         curve: curve,
-        duration: duration,
+        duration: animationDuration.milliseconds,
         padding: EdgeInsets.symmetric(
           horizontal: gap * 1.8,
           vertical: gap,

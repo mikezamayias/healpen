@@ -7,5 +7,4 @@ final double gap = 9 * unit;
 final double radius = 30 - gap;
 final double elevation = 0 * unit;
 const int animationDuration = 150;
-const Duration duration = Duration(milliseconds: animationDuration);
 final Curve curve = Sprung.overDamped;

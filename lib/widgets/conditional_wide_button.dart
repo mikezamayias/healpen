@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../utils/constants.dart' as constants;
+import '../utils/constants.dart';
 
 class ConditionalWideButton extends StatefulWidget {
   final bool condition;
@@ -27,13 +28,13 @@ class _ConditionalWideButtonState extends State<ConditionalWideButton> {
           ? context.theme.colorScheme.background
           : context.theme.colorScheme.secondaryContainer,
       shadowColor: context.theme.colorScheme.shadow,
-      elevation: constants.radius,
-      borderRadius: BorderRadius.all(Radius.circular(constants.radius)),
+      elevation: radius,
+      borderRadius: BorderRadius.all(Radius.circular(radius)),
       child: AnimatedContainer(
-        duration: constants.duration,
-        curve: constants.curve,
+        duration: animationDuration.milliseconds,
+        curve: curve,
         alignment: Alignment.center,
-        padding: EdgeInsets.all(constants.gap),
+        padding: EdgeInsets.all(gap),
         child: widget.condition ? widget.firstChild : widget.secondChild,
       ),
     );

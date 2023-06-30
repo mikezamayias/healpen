@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,7 +33,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           child: Padding(
             padding: EdgeInsets.all(gap),
             child: SalomonBottomBar(
-              duration: duration,
+              duration: animationDuration.milliseconds,
               curve: curve,
               margin: EdgeInsets.zero,
               itemShape: RoundedRectangleBorder(
