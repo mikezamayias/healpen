@@ -21,13 +21,14 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final magic = Magic.instance;
   String emailAddress = '';
   final _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  Future<void> loginFunction({required String email}) => magic.auth
-          .loginWithEmailOTP(email: _emailController.text)
+  Future<String> loginFunction({required String email}) => Magic.instance.auth
+          .loginWithEmailOTP(
+        email: _emailController.text,
+      )
           .then((String authResult) {
         log(authResult, name: '_LoginViewState:loginFunction:authResult');
         context.navigator.pushReplacement(
@@ -35,15 +36,60 @@ class _LoginViewState extends State<LoginView> {
             builder: (
               context,
             ) {
+              log('pushReplacement: Healpen');
               return const Healpen();
             },
           ),
         );
-      }).catchError(
-        (e) {
-          log('$e', name: '_LoginViewState:loginFunction:catch');
-        },
-      );
+        return authResult;
+      }).catchError((error, stackTrace) {
+        log('$error', name: '_LoginViewState:loginFunction:catch');
+        // showDialog(
+        //   context: context,
+        //   barrierColor: Colors.transparent,
+        //   builder: (context) {
+        //     return CustomDialog(
+        //       backgroundColor: context.theme.colorScheme.error,
+        //       titleString: 'Error',
+        //       contentString: '$error',
+        //       actions: [
+        //         CustomListTile(
+        //           responsiveWidth: true,
+        //           cornerRadius: radius,
+        //           contentPadding: EdgeInsets.symmetric(
+        //             vertical: gap,
+        //             horizontal: gap * 2,
+        //           ),
+        //           titleString: 'OK',
+        //           onTap: () => context.navigator.pop(),
+        //         ),
+        //       ],
+        //     );
+        //   },
+        // );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: 2.seconds,
+            backgroundColor: Colors.transparent,
+            content: CustomListTile(
+              backgroundColor: context.theme.colorScheme.error,
+              title: Text(
+                '${error['message']}',
+                style: context.theme.textTheme.bodyLarge!.copyWith(
+                  color: context.theme.colorScheme.onError,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                vertical: gap,
+                horizontal: gap * 2,
+              ),
+              cornerRadius: radius,
+            ),
+            padding: EdgeInsets.all(gap * 2),
+          ),
+        );
+        return 'An error occurred during login.';
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +97,7 @@ class _LoginViewState extends State<LoginView> {
       body: Align(
         alignment: Alignment.center,
         child: SizedBox(
-          height: 30.h,
+          height: 42.h,
           child: Form(
             key: _formKey,
             child: Column(
@@ -59,7 +105,8 @@ class _LoginViewState extends State<LoginView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Sign in',
+                  'Sign in with a\n'
+                  'one-time password',
                   style: context.theme.textTheme.headlineLarge!.copyWith(
                     color: context.theme.colorScheme.onSurface,
                   ),
@@ -67,8 +114,10 @@ class _LoginViewState extends State<LoginView> {
                 SizedBox(height: gap),
                 CustomListTile(
                   cornerRadius: radius,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: gap * 2, vertical: gap),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: gap * 2,
+                    vertical: gap,
+                  ),
                   leadingIconData: FontAwesomeIcons.solidEnvelope,
                   title: TextFormField(
                     keyboardType: TextInputType.emailAddress,
@@ -105,15 +154,13 @@ class _LoginViewState extends State<LoginView> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          duration: 6.seconds,
+                          duration: 2.seconds,
                           backgroundColor: Colors.transparent,
                           content: CustomListTile(
                             backgroundColor:
                                 context.theme.colorScheme.secondary,
                             title: Text(
-                              'We\'ve sent you an email with an one-time '
-                              'password. Please check your email and enter the '
-                              'OTP to sign in.',
+                              'Please check your email for the one-time password.',
                               style:
                                   context.theme.textTheme.bodyLarge!.copyWith(
                                 color: context.theme.colorScheme.onSecondary,

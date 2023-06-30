@@ -5,7 +5,6 @@ import '../../../extensions/widget_extenstions.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
-import 'widgets/delete_account_tile.dart';
 import 'widgets/edit_email_tile.dart';
 import 'widgets/edit_name_tile.dart';
 import 'widgets/sign_out_tile.dart';
@@ -25,7 +24,7 @@ class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
       const EditNameTile(),
       const EditEmailTile(),
       const SignOutTile(),
-      const DeleteAccountTile(),
+      // const DeleteAccountTile(),
     ].animateWidgetList();
 
     return BlueprintView(
