@@ -17,7 +17,7 @@ class EditEmailTile extends StatefulWidget {
 }
 
 class _EditEmailTileState extends State<EditEmailTile> {
-  final currentUserEmailAddress = FirebaseAuth.instance.currentUser!.email;
+  final currentUserEmailAddress = FirebaseAuth.instance.currentUser?.email;
   final emailController = TextEditingController();
   bool readOnlyEmailTextField = true;
 

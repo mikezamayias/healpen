@@ -13,7 +13,7 @@ class EditNameTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displayName = FirebaseAuth.instance.currentUser!.displayName;
+    final displayName = FirebaseAuth.instance.currentUser?.displayName;
     return CustomListTile(
       titleString: 'Name',
       subtitle: TextField(
@@ -24,7 +24,7 @@ class EditNameTile extends StatelessWidget {
         style: context.theme.textTheme.titleLarge,
         onSubmitted: (String newDisplayName) async {
           log(newDisplayName, name: 'newDisplayName');
-          await FirebaseAuth.instance.currentUser!.updateDisplayName(
+          await FirebaseAuth.instance.currentUser?.updateDisplayName(
             newDisplayName,
           );
         },

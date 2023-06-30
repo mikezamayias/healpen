@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart' hide AppBar, Divider;
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -75,13 +76,13 @@ class AuthView extends ConsumerWidget {
                 ),
                 leadingIconData: FontAwesomeIcons.solidPaperPlane,
                 onTap: () => authController.sendLink(emailAddress),
-              )
+              ),
             ],
           );
         } else if (state is AwaitingDynamicLink) {
           body = Text(
             'We\'ve sent you an email with a magic link. Check your email and follow the link to sign in',
-            style: context.theme.textTheme.titleLarge!.copyWith(
+            style: context.theme.textTheme.titleMedium!.copyWith(
               color: context.theme.colorScheme.onSurface,
             ),
           );
@@ -136,7 +137,9 @@ class AuthView extends ConsumerWidget {
                 children: [
                   Text(
                     'Sign in with magic link',
-                    style: context.theme.textTheme.headlineSmall,
+                    style: context.theme.textTheme.headlineSmall!.copyWith(
+                      color: context.theme.colorScheme.onSurface,
+                    ),
                   ),
                   SizedBox(height: gap),
                   body,
@@ -147,7 +150,7 @@ class AuthView extends ConsumerWidget {
                   const Spacer(),
                   if (state is! Uninitialized)
                     FutureBuilder(
-                      future: Future.delayed(const Duration(seconds: 3)),
+                      future: Future.delayed(const Duration(seconds: 0)),
                       builder: (
                         BuildContext context,
                         AsyncSnapshot<dynamic> snapshot,
@@ -157,7 +160,23 @@ class AuthView extends ConsumerWidget {
                             titleString: 'Having trouble signing in?',
                             subtitleString: 'Click here to start over',
                             onTap: authController.reset,
-                          ).animateSlideInFromBottom();
+                            cornerRadius: radius,
+                            contentPadding: EdgeInsets.symmetric(
+                              vertical: gap,
+                              horizontal: gap * 2,
+                            ),
+                            leadingIconData: FontAwesomeIcons.arrowsRotate,
+                          )
+                              .animate()
+                              .fadeIn(
+                                curve: curve,
+                                duration: animationDuration.milliseconds,
+                              )
+                              .slideY(
+                                curve: curve,
+                                duration: animationDuration.milliseconds,
+                                begin: 0.5,
+                              );
                         }
                         return const SizedBox();
                       },
