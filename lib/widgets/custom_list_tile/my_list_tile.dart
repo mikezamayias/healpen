@@ -44,7 +44,7 @@ class MyListTile extends StatelessWidget {
       contentPadding: padding ?? const EdgeInsets.all(12),
       minLeadingWidth: 0,
       minVerticalPadding: 0,
-      horizontalTitleGap: 12,
+      horizontalTitleGap: (padding?.horizontal ?? 12) / 2,
       leading: leading != null || leadingIconData != null
           ? leading ??
               FaIcon(
