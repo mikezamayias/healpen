@@ -5,14 +5,13 @@ import 'package:sprung/sprung.dart';
 import '../utils/constants.dart';
 
 extension WidgetListExtensions on List<Widget> {
-  List<Widget> animateWidgetList() =>
-      animate(interval: animationDuration.milliseconds)
-          .fade(curve: curve)
-          .slideY(begin: 0.6, curve: Sprung.overDamped)
-          .scale(
-            begin: const Offset(0, 0),
-            duration: animationDuration.milliseconds,
-          );
+  List<Widget> animateWidgetList() => animate(interval: 0.15.seconds)
+      .fade(curve: curve, duration: 0.5.seconds)
+      .slideY(begin: 0.6, curve: Sprung.criticallyDamped, duration: 0.5.seconds)
+      .scale(
+        begin: const Offset(0, 0),
+        duration: 0.5.seconds,
+      );
 
   List<Widget> animateLicences() =>
       animate(interval: animationDuration.microseconds)
@@ -25,23 +24,24 @@ extension WidgetListExtensions on List<Widget> {
 
 extension WidgetExtensions on Widget {
   Widget animateSlideInFromLeft() => animate()
-      .fade(duration: animationDuration.microseconds)
-      .slideX(begin: 0.6, curve: curve);
+      .fade(duration: animationDuration.milliseconds)
+      .slideX(begin: 1, curve: curve);
 
   Widget animateSlideInFromRight() => animate()
       .fade(duration: animationDuration.microseconds)
       .slideX(begin: -0.6, curve: curve);
 
-  Widget animateSlideInFromTop() => animate()
-      .fade(duration: animationDuration.milliseconds)
-      .slideY(begin: 3, curve: curve);
-
   Widget animateSlideInFromBottom() => animate()
+      .fade(duration: animationDuration.microseconds)
+      .slideY(begin: 10, curve: curve);
+
+  Widget animateSlideInFromTop() => animate()
       .fade(duration: animationDuration.milliseconds)
       .slideY(begin: -10, curve: curve);
 
   Widget animateBottomNavigationBar(BuildContext context) =>
       animateSlideInFromTop().animate();
+
   // animateSlideInFromTop().animate().elevation(
   //       end: 90,
   //       duration: animationDuration.microseconds,
@@ -50,7 +50,7 @@ extension WidgetExtensions on Widget {
   //       borderRadius: BorderRadius.all(Radius.circular(radius)),
   //     );
 
-  Widget animateAppBar(BuildContext context) => animateSlideInFromBottom()
+  Widget animateAppBar(BuildContext context) => animateSlideInFromTop()
       .animate()
       .fade(begin: -1, curve: Sprung.overDamped)
       .slideY(begin: -1, curve: Sprung.overDamped)
