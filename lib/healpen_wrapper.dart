@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:magic_sdk/magic_sdk.dart';
 
 import 'enums/app_theming.dart';
@@ -29,14 +28,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     readAppColor(ref);
     _widgetsBinding = WidgetsBinding.instance;
     _widgetsBinding.addObserver(this);
-    log(
-      '${context.theme.brightness}',
-      name: 'context.theme.brightness',
-    );
-    log(
-      '${context.theme.scaffoldBackgroundColor}',
-      name: 'context.theme.scaffoldBackgroundColor',
-    );
     super.initState();
   }
 
@@ -55,16 +46,11 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         Appearance.light => ThemeMode.light,
         Appearance.dark => ThemeMode.dark,
       },
-      home: Container(
-        color: theme.scaffoldBackgroundColor,
-        child: SafeArea(
-          child: Stack(
-            children: [
-              const LoginView(),
-              Magic.instance.relayer,
-            ],
-          ),
-        ),
+      home: Stack(
+        children: [
+          const LoginView(),
+          SafeArea(child: Magic.instance.relayer),
+        ],
       ),
     );
   }
@@ -90,12 +76,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       _widgetsBinding.platformDispatcher.platformBrightness.toString(),
       name: '_HealpenWrapperState:didChangePlatformBrightness',
     );
-    setState(() {
-      theme = createTheme(
-        ref.watch(appColorProvider).color,
-        _widgetsBinding.platformDispatcher.platformBrightness,
-      );
-    });
+    setState(() {});
   }
 
   @override

@@ -5,7 +5,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:magic_sdk/magic_sdk.dart';
 
-import '../../../../login_view_wrapper.dart';
+import '../../../../healpen_wrapper.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
 
@@ -19,19 +19,30 @@ class SignOutTile extends StatefulWidget {
 }
 
 class _SignOutTileState extends State<SignOutTile> {
-  signOut() {
-    Magic.instance.user.logout().then((bool authResult) {
+  // signOut() {
+  //   Magic.instance.user.logout().then((bool authResult) {
+  //     log('$authResult', name: '_LoginViewState:loginFunction:authResult');
+  //     context.navigator.pushReplacement(
+  //       MaterialPageRoute(
+  //         builder: (context) => const HealpenWrapper(),
+  //       ),
+  //     );
+  //   }).catchError(
+  //     (e) {
+  //       log('$e', name: '_LoginViewState:loginFunction:catch');
+  //     },
+  //   );
+  // }
+
+  Future signOut() async {
+    await Magic.instance.user.logout().then((bool authResult) {
       log('$authResult', name: '_LoginViewState:loginFunction:authResult');
-      context.navigator.pushReplacement(
+      context.navigator.push(
         MaterialPageRoute(
-          builder: (context) => const LoginViewWrapper(),
+          builder: (context) => const HealpenWrapper(),
         ),
       );
-    }).catchError(
-      (e) {
-        log('$e', name: '_LoginViewState:loginFunction:catch');
-      },
-    );
+    });
   }
 
   @override
