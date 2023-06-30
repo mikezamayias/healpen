@@ -97,7 +97,7 @@ class MyListTile extends StatelessWidget {
               : (selectableText!
                   ? SelectableText(
                       subtitleString!,
-                      style: context.theme.textTheme.titleLarge!.copyWith(
+                      style: context.theme.textTheme.titleMedium!.copyWith(
                         color: textColor ??
                             (onTap == null
                                 ? context.theme.colorScheme.onSurfaceVariant
@@ -106,7 +106,7 @@ class MyListTile extends StatelessWidget {
                     )
                   : Text(
                       subtitleString!,
-                      style: context.theme.textTheme.titleLarge!.copyWith(
+                      style: context.theme.textTheme.titleMedium!.copyWith(
                         color: textColor ??
                             (onTap == null
                                 ? context.theme.colorScheme.onSurfaceVariant
