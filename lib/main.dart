@@ -1,20 +1,21 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:magic_sdk/magic_sdk.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'enums/app_theming.dart';
-import 'healpen.dart';
 import 'providers/settings_providers.dart';
 import 'services/firebase_service.dart';
 import 'themes/blueprint_theme.dart';
 import 'utils/helper_functions.dart';
-import 'views/auth/auth_view.dart';
+import 'views/login/login_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await FirebaseService.initialize();
+
+  Magic.instance = Magic('pk_live_0C5A55F503F795D9');
 
   runApp(
     ProviderScope(
@@ -70,9 +71,19 @@ void main() async {
                 //   child: FirebaseAuth.instance.currentUser == null
                 //       ? const AuthView()
                 //       : const Healpen(),
-                home: FirebaseAuth.instance.currentUser == null
-                    ? const AuthView()
-                    : const Healpen(),
+                home: Stack(
+                  children: [
+                    const LoginView(),
+                    Magic.instance.relayer,
+                  ],
+                ),
+                // home: FirebaseAuth.instance.currentUser == null
+                //     ? const AuthView()
+                //     // ? EmailLinkSignInScreen(
+                //     //     provider: ref
+                //     //         .watch(CustomAuthProvider().emailLinkAuthProvider),
+                //     //   )
+                //     : const Healpen(),
               );
             },
           );
