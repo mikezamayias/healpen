@@ -17,7 +17,9 @@ dependencies:
   firebase_core: ^2.14.0
   firebase_crashlytics: ^3.3.3
   firebase_dynamic_links: ^5.3.3
-  firebase_ui_auth: ^1.4.3
+  firebase_ui_auth: ^1.5.0
+  firebase_ui_oauth_apple: ^1.2.4
+  firebase_ui_oauth_google: ^1.2.4
   flutter:
     sdk: flutter
   flutter_animate: ^4.1.1+1
