@@ -8,7 +8,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../extensions/widget_extenstions.dart';
 import '../../healpen.dart';
@@ -16,6 +15,7 @@ import '../../providers/custom_auth_provider.dart';
 import '../../utils/constants.dart';
 import '../../widgets/custom_list_tile/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
+import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
 
 class AuthView extends ConsumerWidget {
@@ -77,6 +77,29 @@ class AuthView extends ConsumerWidget {
                 leadingIconData: FontAwesomeIcons.solidPaperPlane,
                 onTap: () => authController.sendLink(emailAddress),
               ),
+              const TextDivider(data: 'Or continue with'),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CustomListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: gap * 2,
+                      vertical: gap,
+                    ),
+                    titleString: 'Google',
+                    responsiveWidth: true,
+                  ),
+                  CustomListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: gap * 2,
+                      vertical: gap,
+                    ),
+                    titleString: 'Apple',
+                    responsiveWidth: true,
+                  ),
+                ],
+              ),
             ],
           );
         } else if (state is AwaitingDynamicLink) {
@@ -128,61 +151,57 @@ class AuthView extends ConsumerWidget {
         return BlueprintView(
           body: Align(
             alignment: Alignment.center,
-            child: SizedBox(
-              height: 30.h,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Sign in with magic link',
-                    style: context.theme.textTheme.headlineSmall!.copyWith(
-                      color: context.theme.colorScheme.onSurface,
-                    ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Sign in with magic link',
+                  style: context.theme.textTheme.headlineSmall!.copyWith(
+                    color: context.theme.colorScheme.onSurface,
                   ),
-                  SizedBox(height: gap),
-                  body,
-                  // Future.delayed(Duration(seconds: 5), () {
-                  //   Navigator.push(
-                  //       context, MaterialPageRoute(builder: (_) => Screen2()));
-                  // }),
-                  const Spacer(),
-                  if (state is! Uninitialized)
-                    FutureBuilder(
-                      future: Future.delayed(const Duration(seconds: 0)),
-                      builder: (
-                        BuildContext context,
-                        AsyncSnapshot<dynamic> snapshot,
-                      ) {
-                        if (snapshot.connectionState == ConnectionState.done) {
-                          return CustomListTile(
-                            titleString: 'Having trouble signing in?',
-                            subtitleString: 'Click here to start over',
-                            onTap: authController.reset,
-                            cornerRadius: radius,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: gap,
-                              horizontal: gap * 2,
-                            ),
-                            leadingIconData: FontAwesomeIcons.arrowsRotate,
-                          )
-                              .animate()
-                              .fadeIn(
-                                curve: curve,
-                                duration: animationDuration.milliseconds,
-                              )
-                              .slideY(
-                                curve: curve,
-                                duration: animationDuration.milliseconds,
-                                begin: 0.5,
-                              );
-                        }
-                        return const SizedBox();
-                      },
-                    ),
-                ].animateWidgetList(),
-              ),
+                ),
+                SizedBox(height: gap),
+                body,
+                // Future.delayed(Duration(seconds: 5), () {
+                //   Navigator.push(
+                //       context, MaterialPageRoute(builder: (_) => Screen2()));
+                // }),
+                if (state is! Uninitialized)
+                  FutureBuilder(
+                    future: Future.delayed(const Duration(seconds: 0)),
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<dynamic> snapshot,
+                    ) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return CustomListTile(
+                          titleString: 'Having trouble signing in?',
+                          subtitleString: 'Click here to start over',
+                          onTap: authController.reset,
+                          cornerRadius: radius,
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: gap,
+                            horizontal: gap * 2,
+                          ),
+                          leadingIconData: FontAwesomeIcons.arrowsRotate,
+                        )
+                            .animate()
+                            .fadeIn(
+                              curve: curve,
+                              duration: animationDuration.milliseconds,
+                            )
+                            .slideY(
+                              curve: curve,
+                              duration: animationDuration.milliseconds,
+                              begin: 0.5,
+                            );
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+              ].animateWidgetList(),
             ),
           ),
         );
