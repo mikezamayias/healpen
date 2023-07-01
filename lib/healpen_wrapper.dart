@@ -1,14 +1,18 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:magic_sdk/magic_sdk.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'enums/app_theming.dart';
+import 'providers/custom_auth_provider.dart';
 import 'providers/settings_providers.dart';
 import 'utils/helper_functions.dart';
-import 'views/login/login_view.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
   const HealpenWrapper({Key? key}) : super(key: key);
@@ -33,6 +37,13 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   Widget build(BuildContext context) {
+    FirebaseUIAuth.configureProviders([
+      ref.watch(CustomAuthProvider().emailLinkAuthProvider),
+      GoogleProvider(
+          clientId:
+              '1058887275393-nujimnudrgjikn3c9uoqsra7i49n628m.apps.googleusercontent.com'),
+      AppleProvider(),
+    ]);
     theme = createTheme(
       ref.watch(appColorProvider).color,
       _widgetsBinding.platformDispatcher.platformBrightness,
@@ -46,12 +57,26 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         Appearance.light => ThemeMode.light,
         Appearance.dark => ThemeMode.dark,
       },
-      home: Stack(
-        children: [
-          const LoginView(),
-          SafeArea(child: Magic.instance.relayer),
-        ],
-      ),
+      initialRoute:
+          FirebaseAuth.instance.currentUser == null ? '/sign-in' : '/profile',
+      routes: {
+        '/sign-in': (context) => SignInScreen(
+              actions: [
+                AuthStateChangeAction<SignedIn>(
+                  (context, state) =>
+                      context.navigator.pushReplacementNamed('/profile'),
+                ),
+              ],
+            ),
+        '/profile': (context) => ProfileScreen(
+              actions: [
+                SignedOutAction(
+                  (context) =>
+                      context.navigator.pushReplacementNamed('/sign-in'),
+                ),
+              ],
+            )
+      },
     );
   }
 
