@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart' hide AuthProvider;
+import 'package:firebase_ui_oauth_apple/firebase_ui_oauth_apple.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,6 +25,13 @@ class AuthView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    FirebaseUIAuth.configureProviders([
+      AppleProvider(),
+      GoogleProvider(
+        clientId:
+            '1058887275393-nujimnudrgjikn3c9uoqsra7i49n628m.apps.googleusercontent.com',
+      ),
+    ]);
     final emailLinkProvider = ref.watch(
       CustomAuthProvider().emailLinkAuthProvider,
     );
@@ -78,28 +87,38 @@ class AuthView extends ConsumerWidget {
                 onTap: () => authController.sendLink(emailAddress),
               ),
               const TextDivider(data: 'Or continue with'),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomListTile(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: gap * 2,
-                      vertical: gap,
-                    ),
-                    titleString: 'Google',
-                    responsiveWidth: true,
-                  ),
-                  CustomListTile(
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: gap * 2,
-                      vertical: gap,
-                    ),
-                    titleString: 'Apple',
-                    responsiveWidth: true,
-                  ),
-                ],
+              GoogleSignInButton(
+                clientId:
+                    '1058887275393-nujimnudrgjikn3c9uoqsra7i49n628m.apps.googleusercontent.com',
+                loadingIndicator: const CircularProgressIndicator(),
+                onSignedIn: (UserCredential credential) {
+                  context.navigator.pushReplacementNamed('/healpen');
+                },
               ),
+              SizedBox(height: gap),
+              AppleSignInButton(
+                loadingIndicator: const CircularProgressIndicator(),
+                onSignedIn: (UserCredential credential) {
+                  context.navigator.pushReplacementNamed('/healpen');
+                },
+                onError: (exception) {
+                  FirebaseCrashlytics.instance
+                      .recordError(exception, StackTrace.current);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: CustomListTile(
+                        backgroundColor: context.theme.colorScheme.error,
+                        textColor: context.theme.colorScheme.onError,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: gap * 2,
+                          vertical: gap,
+                        ),
+                        titleString: '$exception',
+                      ),
+                    ),
+                  );
+                },
+              )
             ],
           );
         } else if (state is AwaitingDynamicLink) {
