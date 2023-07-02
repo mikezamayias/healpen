@@ -3,7 +3,6 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../../extensions/widget_extenstions.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
@@ -77,9 +76,9 @@ class _WritingViewState extends ConsumerState<WritingView>
                 const NewEntryButton(),
               ],
             ),
-          ].animateWidgetList(),
+          ],
         ),
-      ).animateSlideInFromTop(),
+      ),
     );
   }
 }
