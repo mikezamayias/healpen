@@ -40,8 +40,8 @@ class BlueprintView extends ConsumerWidget {
                 : null,
             body: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: gap,
-                vertical: gap,
+                horizontal: gap * 2,
+                vertical: gap * 2,
               ),
               child: ScrollConfiguration(
                 behavior: ScrollConfiguration.of(context).copyWith(

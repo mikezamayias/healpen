@@ -21,9 +21,9 @@ class CustomBottomNavigationBar extends ConsumerWidget {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.only(
-          left: gap,
-          right: gap,
-          bottom: gap,
+          left: gap * 2,
+          right: gap * 2,
+          // bottom: gap * 2,
         ),
         child: PhysicalModel(
           color: context.theme.colorScheme.outlineVariant,
