@@ -42,7 +42,7 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
           borderRadius: BorderRadius.circular(radius),
         ),
         backgroundColor: Colors.transparent,
-        insetPadding: EdgeInsets.all(gap)
+        // insetPadding: EdgeInsets.all(gap)
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         linearMinHeight: 6 * unit,
