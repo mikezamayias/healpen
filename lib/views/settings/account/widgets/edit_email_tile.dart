@@ -20,7 +20,9 @@ class EditEmailTile extends ConsumerStatefulWidget {
 
 class _EditEmailTileState extends ConsumerState<EditEmailTile> {
   final currentUser = FirebaseAuth.instance.currentUser!;
-  final _emailController = TextEditingController();
+  final _emailController = TextEditingController(
+    text: FirebaseAuth.instance.currentUser!.email,
+  );
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -34,7 +36,7 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
-                hintText: currentUser.email ?? 'What is your email address?',
+                // hintText: currentUser.email ?? 'What is your email address?',
                 hintStyle: context.theme.textTheme.titleLarge,
                 helperStyle: context.theme.textTheme.bodyMedium!.copyWith(
                   color: context.theme.colorScheme.secondary,

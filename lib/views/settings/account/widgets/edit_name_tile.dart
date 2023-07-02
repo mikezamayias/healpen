@@ -14,9 +14,13 @@ class EditNameTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayName = FirebaseAuth.instance.currentUser?.displayName;
+    final textController = TextEditingController(
+      text: displayName,
+    );
     return CustomListTile(
       titleString: 'Name',
       subtitle: TextField(
+        controller: textController,
         decoration: InputDecoration(
           hintText: displayName ?? 'How should we call you?',
           hintStyle: context.theme.textTheme.titleLarge,
