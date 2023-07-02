@@ -31,25 +31,17 @@ class BlueprintView extends ConsumerWidget {
                 ? PreferredSize(
                     preferredSize: Size.fromHeight(100.h),
                     child: Padding(
-                      padding: EdgeInsets.only(
-                        left: gap,
-                        right: gap,
-                      ),
+                      padding: EdgeInsets.only(bottom: gap),
                       child: appBar!.animateAppBar(context),
-                    ))
+                    ),
+                  )
                 : null,
-            body: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: gap * 2,
-                vertical: gap * 2,
+            body: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                scrollbars: false,
+                overscroll: false,
               ),
-              child: ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  scrollbars: false,
-                  overscroll: false,
-                ),
-                child: body,
-              ),
+              child: body,
             ),
           ),
         ),

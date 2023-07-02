@@ -19,52 +19,44 @@ class CustomBottomNavigationBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: gap * 2,
-          right: gap * 2,
-          // bottom: gap * 2,
-        ),
-        child: PhysicalModel(
-          color: context.theme.colorScheme.outlineVariant,
-          // shadowColor: context.theme.colorScheme.shadow,
-          // elevation: radius,
-          borderRadius: BorderRadius.all(Radius.circular(radius)),
-          child: Padding(
-            padding: EdgeInsets.all(gap),
-            child: SalomonBottomBar(
-              duration: animationDuration.milliseconds,
-              curve: curve,
-              margin: EdgeInsets.zero,
-              itemShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(radius / 2)),
-              ),
-              currentIndex: PageController()
-                  .pages
-                  .indexOf(ref.watch(currentPageProvider)),
-              onTap: (int index) {
-                HapticFeedback.mediumImpact();
-                ref.watch(currentPageProvider.notifier).state =
-                    PageController().pages[index];
-              },
-              // selectedColorOpacity: 0,
-              selectedItemColor: context.theme.colorScheme.primary,
-              unselectedItemColor: context.theme.colorScheme.outline,
-              items: [
-                ...PageController().pages.map(
-                      (PageModel pageModel) => SalomonBottomBarItem(
-                        icon: FaIcon(pageModel.icon),
-                        title: Text(
-                          pageModel.label.toTitleCase(),
-                          style: TextStyle(
-                            fontFamily:
-                                context.theme.textTheme.bodyLarge!.fontFamily,
-                          ),
+      child: PhysicalModel(
+        color: context.theme.colorScheme.outlineVariant,
+        // shadowColor: context.theme.colorScheme.shadow,
+        // elevation: radius,
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
+        child: Padding(
+          padding: EdgeInsets.all(gap),
+          child: SalomonBottomBar(
+            duration: animationDuration.milliseconds,
+            curve: curve,
+            margin: EdgeInsets.zero,
+            itemShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(radius / 2)),
+            ),
+            currentIndex:
+                PageController().pages.indexOf(ref.watch(currentPageProvider)),
+            onTap: (int index) {
+              HapticFeedback.mediumImpact();
+              ref.watch(currentPageProvider.notifier).state =
+                  PageController().pages[index];
+            },
+            // selectedColorOpacity: 0,
+            selectedItemColor: context.theme.colorScheme.primary,
+            unselectedItemColor: context.theme.colorScheme.outline,
+            items: [
+              ...PageController().pages.map(
+                    (PageModel pageModel) => SalomonBottomBarItem(
+                      icon: FaIcon(pageModel.icon),
+                      title: Text(
+                        pageModel.label.toTitleCase(),
+                        style: TextStyle(
+                          fontFamily:
+                              context.theme.textTheme.bodyLarge!.fontFamily,
                         ),
                       ),
-                    )
-              ],
-            ),
+                    ),
+                  )
+            ],
           ),
         ),
       ).animateBottomNavigationBar(context),
