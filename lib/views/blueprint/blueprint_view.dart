@@ -24,6 +24,7 @@ class BlueprintView extends ConsumerWidget {
       },
       child: Container(
         color: context.theme.scaffoldBackgroundColor,
+        padding: EdgeInsets.all(gap),
         child: SafeArea(
           child: Scaffold(
             backgroundColor: Colors.transparent,

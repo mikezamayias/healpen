@@ -11,10 +11,7 @@ class Healpen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(gap),
-        child: ref.watch(currentPageProvider).widget,
-      ),
+      body: ref.watch(currentPageProvider).widget,
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(
           right: gap,
