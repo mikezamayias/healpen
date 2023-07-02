@@ -27,6 +27,7 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: user should confirm email before updating
     return CustomListTile(
       titleString: 'Email',
       subtitle: Form(
