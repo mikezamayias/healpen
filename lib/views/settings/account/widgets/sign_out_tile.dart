@@ -27,9 +27,6 @@ class SignOutTile extends ConsumerWidget {
       ),
       titleString: 'Sign out',
       leadingIconData: FontAwesomeIcons.rightFromBracket,
-      // onTap: signOut,
-
-      /// The code below works for Firebase Authentication
       onTap: () async {
         User user = FirebaseAuth.instance.currentUser!;
         log('$user', name: 'Signing out user');
