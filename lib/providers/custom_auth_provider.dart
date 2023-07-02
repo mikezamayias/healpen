@@ -25,6 +25,7 @@ class CustomAuthProvider {
   /// settings.
   final emailLinkAuthProvider = StateProvider<EmailLinkAuthProvider>(
     (ref) =>
-        EmailLinkAuthProvider(actionCodeSettings: _actionCodeSettingsProvider),
+        EmailLinkAuthProvider(actionCodeSettings: _actionCodeSettingsProvider)
+          ..auth = FirebaseAuth.instance,
   );
 }
