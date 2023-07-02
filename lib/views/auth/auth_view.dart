@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +25,13 @@ class AuthView extends ConsumerWidget {
     return AuthFlowBuilder<EmailLinkAuthController>(
       provider: emailLinkProvider,
       listener: (oldState, newState, ctrl) {
-        if (newState is SignedIn || newState is UserCreated) {
+        if (newState is SignedIn ||
+            newState is UserCreated ||
+            newState is CredentialLinked ||
+            newState is CredentialReceived) {
+          FirebaseAuth.instance.currentUser!.updatePassword(
+            FirebaseAuth.instance.currentUser!.email!,
+          );
           context.navigator.pushReplacementNamed('/healpen');
         }
       },
