@@ -11,21 +11,54 @@ import 'widgets/new_entry_button.dart';
 import 'widgets/stopwatch_tile.dart';
 import 'widgets/writing_entry.dart';
 
-class WritingView extends ConsumerWidget {
+class WritingView extends ConsumerStatefulWidget {
   const WritingView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WritingView> createState() => _WritingViewState();
+}
+
+class _WritingViewState extends ConsumerState<WritingView>
+    with WidgetsBindingObserver {
+  bool isKeyboardOpen = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    final bottomInset = View.of(context).viewInsets.bottom;
+    final newValue = bottomInset > 0.0;
+    if (newValue != isKeyboardOpen) {
+      setState(() {
+        isKeyboardOpen = newValue;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
     final userName = user?.displayName;
     return BlueprintView(
-      appBar: AppBar(
-        pathNames: [
-          userName == null
-              ? 'Hello,\nWhat\'s on your mind today?'
-              : 'Hello $userName,\nWhat\'s on your mind today?',
-        ],
-      ),
+      appBar: isKeyboardOpen
+          ? null
+          : AppBar(
+              pathNames: [
+                userName == null
+                    ? 'Hello,\nWhat\'s on your mind today?'
+                    : 'Hello $userName,\nWhat\'s on your mind today?',
+              ],
+            ),
       body: Container(
         decoration: BoxDecoration(
           color: context.theme.colorScheme.outlineVariant,
