@@ -12,7 +12,8 @@ class CustomAuthProvider {
 
   /// Fields
   static final _actionCodeSettingsProvider = ActionCodeSettings(
-    url: 'https://healpen.page.link',
+    url: 'https://healpen.page.link/',
+    // url: 'https://healpen.page.link/sign-in-using-email-link',
     handleCodeInApp: true,
     androidPackageName: 'com.mikezamayias.healpen',
     iOSBundleId: 'com.mikezamayias.healpen',

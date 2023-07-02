@@ -38,7 +38,7 @@ class FirebaseService {
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
     // Pass all uncaught asynchronous errors that aren't handled by Flutter to
     // Crashlytics
-    PlatformDispatcher.instance.onError = (error, stack) {
+    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };

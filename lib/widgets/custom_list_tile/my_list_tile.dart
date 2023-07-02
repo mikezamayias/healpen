@@ -58,24 +58,15 @@ class MyListTile extends StatelessWidget {
           : null,
       title: title != null || titleString != null
           ? title ??
-              (selectableText!
-                  ? SelectableText(
-                      titleString!,
-                      style: context.theme.textTheme.titleLarge!.copyWith(
-                        color: onTap == null
-                            ? context.theme.colorScheme.onSurfaceVariant
-                            : context.theme.colorScheme.onPrimary,
-                      ),
-                    )
-                  : Text(
-                      titleString!,
-                      style: context.theme.textTheme.titleLarge!.copyWith(
-                        color: textColor ??
-                            (onTap == null
-                                ? context.theme.colorScheme.onSurfaceVariant
-                                : context.theme.colorScheme.onPrimary),
-                      ),
-                    ))
+              Text(
+                titleString!,
+                style: context.theme.textTheme.titleLarge!.copyWith(
+                  color: textColor ??
+                      (onTap == null
+                          ? context.theme.colorScheme.onSurfaceVariant
+                          : context.theme.colorScheme.onPrimary),
+                ),
+              )
           : null,
       subtitle: subtitle != null || subtitleString != null
           ? subtitle != null
