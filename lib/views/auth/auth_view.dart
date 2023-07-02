@@ -8,7 +8,6 @@ import '../../utils/constants.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/auth_failed_state.dart';
 import 'widgets/awaiting_dynamic_link_state.dart';
-import 'widgets/healpen_state.dart';
 import 'widgets/sending_link_state.dart';
 import 'widgets/signing_in_state.dart';
 import 'widgets/uninitialized_state.dart';
@@ -24,6 +23,11 @@ class AuthView extends ConsumerWidget {
     );
     return AuthFlowBuilder<EmailLinkAuthController>(
       provider: emailLinkProvider,
+      listener: (oldState, newState, ctrl) {
+        if (newState is SignedIn || newState is UserCreated) {
+          context.navigator.pushReplacementNamed('/healpen');
+        }
+      },
       builder: (
         BuildContext context,
         AuthState state,
@@ -44,7 +48,6 @@ class AuthView extends ConsumerWidget {
                 ),
                 SizedBox(height: gap),
                 switch (state.runtimeType) {
-                  SignedIn => const HealpenState(),
                   Uninitialized => const UninitializedState(),
                   AwaitingDynamicLink => const AwaitingDynamicLinkState(),
                   SendingLink => const SendingLinkState(),
