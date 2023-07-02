@@ -1,14 +1,19 @@
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../providers/custom_auth_provider.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile/custom_list_tile.dart';
 
 class UninitializedState extends ConsumerWidget {
-  const UninitializedState({super.key});
+  final EmailLinkAuthProvider provider;
+
+  const UninitializedState({
+    super.key,
+    required this.provider,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -45,9 +50,7 @@ class UninitializedState extends ConsumerWidget {
             horizontal: gap * 2,
           ),
           leadingIconData: FontAwesomeIcons.solidPaperPlane,
-          onTap: () => ref
-              .watch(CustomAuthProvider().emailLinkAuthProvider)
-              .sendLink(emailAddress),
+          onTap: () => provider.sendLink(emailAddress),
         ),
       ],
     );
