@@ -31,6 +31,7 @@ class FirebaseService {
     await FirebaseAppCheck.instance.activate(
       // androidProvider: AndroidProvider.playIntegrity,
       androidProvider: AndroidProvider.debug,
+      appleProvider: AppleProvider.debug,
     );
 
     /// Initializes Firebase Crashlytics
