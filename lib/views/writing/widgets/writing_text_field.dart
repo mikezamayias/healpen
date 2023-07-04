@@ -16,11 +16,13 @@ class WritingTextField extends ConsumerWidget {
       expands: true,
       keyboardType: TextInputType.multiline,
       style: context.theme.textTheme.titleLarge!.copyWith(
+        color: context.theme.colorScheme.primary,
         overflow: TextOverflow.visible,
       ),
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         // TODO: hint text should be affected from previous writing entries
         hintText: 'Express your feelings and thoughts',
+        hintStyle: context.theme.textTheme.titleLarge!.copyWith(),
         border: InputBorder.none,
         contentPadding: EdgeInsets.zero,
         enabledBorder: InputBorder.none,
