@@ -10,8 +10,6 @@ void main() async {
 
   await FirebaseService.initialize();
 
-  // Magic.instance = Magic('pk_live_0C5A55F503F795D9');
-
   runApp(
     ProviderScope(
       child: ResponsiveSizer(
