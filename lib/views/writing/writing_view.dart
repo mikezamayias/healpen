@@ -60,7 +60,7 @@ class _WritingViewState extends ConsumerState<WritingView>
             ),
       body: Container(
         decoration: BoxDecoration(
-          color: context.theme.colorScheme.outlineVariant,
+          color: context.theme.colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(radius),
         ),
         padding: EdgeInsets.all(gap),

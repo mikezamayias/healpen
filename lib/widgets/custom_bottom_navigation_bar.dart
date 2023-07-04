@@ -20,7 +20,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: PhysicalModel(
-        color: context.theme.colorScheme.outlineVariant,
+        color: context.theme.colorScheme.surfaceVariant,
         // shadowColor: context.theme.colorScheme.shadow,
         // elevation: radius,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
