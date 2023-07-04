@@ -24,17 +24,18 @@ class NewEntryButton extends ConsumerWidget {
         horizontal: gap * 2,
       ),
       onTap: () {
-        if (state.text.isNotEmpty) {
+        if (state.content.isNotEmpty) {
           writingController.handleSaveEntry(); // Saves entry
           writingTextController.clear(); // Clears the TextFormField
           writingController.resetText(); // Resets the text in the state
         }
       },
       titleString: 'New Entry',
-      backgroundColor: state.text.isEmpty || writingTextController.text.isEmpty
-          ? context.theme.colorScheme.outline
-          : null,
-      textColor: state.text.isEmpty || writingTextController.text.isEmpty
+      backgroundColor:
+          state.content.isEmpty || writingTextController.text.isEmpty
+              ? context.theme.colorScheme.outline
+              : null,
+      textColor: state.content.isEmpty || writingTextController.text.isEmpty
           ? context.theme.colorScheme.background
           : null,
       responsiveWidth: true,

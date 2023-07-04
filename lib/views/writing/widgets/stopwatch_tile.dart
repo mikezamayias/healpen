@@ -25,7 +25,7 @@ class StopwatchTile extends ConsumerWidget {
       backgroundColor: context.theme.colorScheme.surface,
       titleString: 'Writing time',
       subtitleString:
-          ref.watch(writingControllerProvider).seconds.writingDurationFormat(),
+          ref.watch(writingControllerProvider).duration.writingDurationFormat(),
       responsiveWidth: true,
     );
   }

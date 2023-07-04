@@ -6,26 +6,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../state/writing_state.dart';
+import '../models/writing_entry/writing_entry_model.dart';
 
 int timeWindow = 3;
 
 final writingControllerProvider =
-    StateNotifierProvider<WritingController, WritingState>((ref) {
+    StateNotifierProvider<WritingController, WritingEntryModel>((ref) {
   return WritingController();
 });
 
-class WritingController extends StateNotifier<WritingState> {
+class WritingController extends StateNotifier<WritingEntryModel> {
   // A private constructor.
-  WritingController._() : super(const WritingState());
+  WritingController._() : super(WritingEntryModel());
 
   // The static singleton instance.
   static final WritingController _singleton = WritingController._();
 
   // A factory constructor that returns the singleton instance.
-  factory WritingController() {
-    return _singleton;
-  }
+  factory WritingController() => _singleton;
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Stopwatch _stopwatch = Stopwatch();
@@ -46,17 +44,17 @@ class WritingController extends StateNotifier<WritingState> {
       }
       if (_stopwatch.elapsed.inSeconds > 0) {
         _stopwatch.reset();
-        state = state.copyWith(seconds: 0); // Reset the seconds in the state
+        state = state.copyWith(duration: 0); // Reset the seconds in the state
       }
     }
 
-    state = state.copyWith(text: text);
+    state = state.copyWith(content: text);
   }
 
   void _startTimer() {
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      state = state.copyWith(seconds: _stopwatch.elapsed.inSeconds);
+      state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
     });
     _delayTimer = Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
   }
@@ -70,7 +68,7 @@ class WritingController extends StateNotifier<WritingState> {
     _timer?.cancel();
     _stopwatch.stop();
     log(
-      'Input: ${state.text}',
+      'Input: ${state.content}',
       name: '_pauseTimerAndLogInput()',
     );
     log(
@@ -81,31 +79,32 @@ class WritingController extends StateNotifier<WritingState> {
 
   Future<void> handleSaveEntry() async {
     log(
-      'Saved entry: ${state.text}',
+      'Saved entry: ${state.content}',
       name: '_handleSaveEntry()',
     );
     _stopwatch.reset();
     _timer?.cancel();
     _delayTimer?.cancel();
     await _saveEntryToFirebase();
-    state = const WritingState();
+    state = WritingEntryModel();
   }
 
   Future<void> _saveEntryToFirebase() {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     log(
-      state.toMap().toString(),
+      state.toDocument().toString(),
       name: '_saveEntryToFirebase(userId: $userId)',
     );
+    state.timestamp = DateTime.now().millisecondsSinceEpoch;
     return _firestore
         .collection('writing-temp')
         .doc(userId)
         .collection('entries')
-        .add(state.toMap());
+        .add(state.toDocument());
   }
 
   void resetText() {
-    state = state.copyWith(text: '');
+    state = state.copyWith(content: '');
   }
 
   void updatePrivate(bool value) {
