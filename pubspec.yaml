@@ -27,12 +27,9 @@ dependencies:
   flutter_screwdriver: ^3.0.0
   flutter_secure_storage: ^8.0.0
   font_awesome_flutter: ^10.3.0
-  freezed_annotation: ^2.2.0
   google_fonts: ^4.0.1
   http: ^0.13.5
-  intl: ^0.18.0
   json_annotation: ^4.8.0
-  magic_sdk: ^4.0.0
   responsive_sizer: ^3.1.1
   rive: ^0.11.4
   salomon_bottom_bar: ^3.3.1
