@@ -19,14 +19,11 @@ class HealpenWrapper extends ConsumerStatefulWidget {
 
 class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     with WidgetsBindingObserver {
-  late WidgetsBinding _widgetsBinding;
-
   @override
   void initState() {
     readAppearance(ref);
     readAppColor(ref);
-    _widgetsBinding = WidgetsBinding.instance;
-    _widgetsBinding.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
@@ -37,13 +34,22 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   }
 
   @override
+  void didChangePlatformBrightness() {
+    log(
+      WidgetsBinding.instance.platformDispatcher.platformBrightness.toString(),
+      name: '_HealpenWrapperState:didChangePlatformBrightness',
+    );
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Healpen',
       debugShowCheckedModeBanner: false,
       theme: createTheme(
         ref.watch(appColorProvider).color,
-        _widgetsBinding.platformDispatcher.platformBrightness,
+        WidgetsBinding.instance.platformDispatcher.platformBrightness,
       ),
       themeMode: switch (ref.watch(appearanceProvider)) {
         Appearance.system => ThemeMode.system,
@@ -57,14 +63,5 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         '/healpen': (context) => const Healpen()
       },
     );
-  }
-
-  @override
-  void didChangePlatformBrightness() {
-    log(
-      _widgetsBinding.platformDispatcher.platformBrightness.toString(),
-      name: '_HealpenWrapperState:didChangePlatformBrightness',
-    );
-    setState(() {});
   }
 }

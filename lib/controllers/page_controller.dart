@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/page_model.dart';
+import '../views/analysis/analysis_view.dart';
 import '../views/settings/settings_view.dart';
 import '../views/writing/writing_view.dart';
 
@@ -35,7 +36,7 @@ class PageController {
   final analysis = PageModel(
     label: 'analysis',
     icon: FontAwesomeIcons.chartLine,
-    widget: const Center(child: Text('Analysis')),
+    widget: const AnalysisView(),
   );
   final history = PageModel(
     label: 'history',
