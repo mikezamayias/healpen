@@ -18,15 +18,13 @@ class StopwatchTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.symmetric(
-        vertical: gap,
-        horizontal: gap * 2,
-      ),
+      contentPadding: EdgeInsets.all(gap),
       backgroundColor: context.theme.colorScheme.surface,
       titleString: 'Writing time',
-      subtitleString:
-          ref.watch(writingControllerProvider).duration.writingDurationFormat(),
-      responsiveWidth: true,
+      trailing: Text(
+        ref.watch(writingControllerProvider).duration.writingDurationFormat(),
+        style: context.theme.textTheme.titleLarge,
+      ),
     );
   }
 }

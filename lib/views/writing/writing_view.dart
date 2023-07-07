@@ -1,13 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../controllers/writing_controller.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/new_entry_button.dart';
 import 'widgets/stopwatch_tile.dart';
+import 'widgets/writing_check_box.dart';
 import 'widgets/writing_entry.dart';
 
 class WritingView extends ConsumerStatefulWidget {
@@ -19,8 +22,6 @@ class WritingView extends ConsumerStatefulWidget {
 
 class _WritingViewState extends ConsumerState<WritingView>
     with WidgetsBindingObserver {
-  bool isKeyboardOpen = false;
-
   @override
   void initState() {
     super.initState();
@@ -37,10 +38,9 @@ class _WritingViewState extends ConsumerState<WritingView>
   void didChangeMetrics() {
     final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
-    if (newValue != isKeyboardOpen) {
-      setState(() {
-        isKeyboardOpen = newValue;
-      });
+    if (newValue != ref.watch(WritingController().isKeyboardOpenProvider)) {
+      ref.read(WritingController().isKeyboardOpenProvider.notifier).state =
+          newValue;
     }
   }
 
@@ -49,7 +49,7 @@ class _WritingViewState extends ConsumerState<WritingView>
     final User? user = FirebaseAuth.instance.currentUser;
     final userName = user?.displayName;
     return BlueprintView(
-      appBar: isKeyboardOpen
+      appBar: ref.watch(WritingController().isKeyboardOpenProvider)
           ? null
           : AppBar(
               pathNames: [
@@ -69,12 +69,21 @@ class _WritingViewState extends ConsumerState<WritingView>
           children: [
             const Expanded(child: WritingEntry()),
             SizedBox(height: gap),
-            Row(
-              children: [
-                const Expanded(child: StopwatchTile()),
-                SizedBox(width: gap),
-                const NewEntryButton(),
-              ],
+            const StopwatchTile(),
+            AnimatedSwitcher(
+              duration: animationDuration.milliseconds,
+              child: ref.watch(WritingController().isKeyboardOpenProvider)
+                  ? null
+                  : Padding(
+                      padding: EdgeInsets.only(top: gap),
+                      child: Row(
+                        children: [
+                          const Expanded(child: WritingCheckBox()),
+                          SizedBox(width: gap),
+                          const NewEntryButton(),
+                        ],
+                      ),
+                    ),
             ),
           ],
         ),

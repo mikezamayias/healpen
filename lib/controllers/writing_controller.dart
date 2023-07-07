@@ -30,6 +30,7 @@ class WritingController extends StateNotifier<WritingEntryModel> {
   Timer? _timer;
   Timer? _delayTimer;
   final TextEditingController textController = TextEditingController();
+  final isKeyboardOpenProvider = StateProvider((ref) => false);
 
   void handleTextChange(String text) {
     if (text.isNotEmpty) {

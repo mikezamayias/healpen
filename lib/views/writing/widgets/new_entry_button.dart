@@ -19,10 +19,7 @@ class NewEntryButton extends ConsumerWidget {
         ref.read(writingControllerProvider.notifier).textController;
     return CustomListTile(
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.symmetric(
-        vertical: gap,
-        horizontal: gap * 2,
-      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: gap),
       onTap: () {
         if (state.content.isNotEmpty) {
           writingController.handleSaveEntry(); // Saves entry
@@ -38,6 +35,7 @@ class NewEntryButton extends ConsumerWidget {
       textColor: state.content.isEmpty || writingTextController.text.isEmpty
           ? context.theme.colorScheme.background
           : null,
+      // trailingIconData: FontAwesomeIcons.plus,
       responsiveWidth: true,
     );
   }
