@@ -38,6 +38,7 @@ class UninitializedState extends ConsumerWidget {
         CustomListTile(
           responsiveWidth: true,
           titleString: 'Send link',
+          contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
           leadingIconData: FontAwesomeIcons.solidPaperPlane,
           onTap: () => ref
               .watch(CustomAuthProvider().emailLinkAuthProvider)

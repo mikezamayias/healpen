@@ -23,7 +23,6 @@ class SignOutTile extends ConsumerWidget {
     return CustomListTile(
       contentPadding: EdgeInsets.symmetric(
         horizontal: gap * 2,
-        vertical: gap,
       ),
       titleString: 'Sign out',
       leadingIconData: FontAwesomeIcons.rightFromBracket,

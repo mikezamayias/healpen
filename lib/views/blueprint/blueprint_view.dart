@@ -19,9 +19,7 @@ class BlueprintView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => context.focusScope.unfocus(),
       child: Container(
         color: context.theme.scaffoldBackgroundColor,
         padding: EdgeInsets.all(gap),

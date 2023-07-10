@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
@@ -69,18 +70,22 @@ class _WritingViewState extends ConsumerState<WritingView>
             const Expanded(child: WritingEntry()),
             Padding(
               padding: EdgeInsets.only(top: gap),
-              child: Row(
-                children: [
-                  const Expanded(child: WritingCheckBox()),
-                  SizedBox(width: gap),
-                  const NewEntryButton(),
-                ],
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: gap),
               child: const StopwatchTile(),
             ),
+            if (!ref.watch(WritingController().isKeyboardOpenProvider))
+              Padding(
+                padding: EdgeInsets.only(top: gap),
+                child: Row(
+                  children: [
+                    const Expanded(child: WritingCheckBox()),
+                    SizedBox(width: gap),
+                    const NewEntryButton(),
+                  ],
+                ),
+              ).animate().fadeIn(
+                    curve: curve,
+                    duration: animationDuration.microseconds,
+                  ),
           ],
         ),
       ),

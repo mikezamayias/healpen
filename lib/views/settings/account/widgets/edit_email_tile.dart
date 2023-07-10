@@ -57,7 +57,6 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
               cornerRadius: radius,
               contentPadding: EdgeInsets.symmetric(
                 horizontal: gap * 2,
-                vertical: gap,
               ),
               titleString: 'Save Email',
               leadingIconData: FontAwesomeIcons.solidFloppyDisk,

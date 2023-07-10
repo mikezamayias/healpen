@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'enums/app_theming.dart';
 import 'healpen.dart';
@@ -45,25 +46,30 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Healpen',
-      debugShowCheckedModeBanner: false,
-      theme: createTheme(
-        ref.watch(appColorProvider).color,
-        WidgetsBinding.instance.platformDispatcher.platformBrightness,
+    return HideKeyboard(
+      child: MaterialApp(
+        title: 'Healpen',
+        debugShowCheckedModeBanner: false,
+        navigatorObservers: [
+          ClearFocusNavigatorObserver(),
+        ],
+        theme: createTheme(
+          ref.watch(appColorProvider).color,
+          WidgetsBinding.instance.platformDispatcher.platformBrightness,
+        ),
+        themeMode: switch (ref.watch(appearanceProvider)) {
+          Appearance.system => ThemeMode.system,
+          Appearance.light => ThemeMode.light,
+          Appearance.dark => ThemeMode.dark,
+        },
+        initialRoute:
+            FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',
+        routes: {
+          '/auth': (context) => const AuthView(),
+          '/healpen': (context) => const Healpen(),
+          '/note': (context) => const NoteView(),
+        },
       ),
-      themeMode: switch (ref.watch(appearanceProvider)) {
-        Appearance.system => ThemeMode.system,
-        Appearance.light => ThemeMode.light,
-        Appearance.dark => ThemeMode.dark,
-      },
-      initialRoute:
-          FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',
-      routes: {
-        '/auth': (context) => const AuthView(),
-        '/healpen': (context) => const Healpen(),
-        '/note': (context) => const NoteView(),
-      },
     );
   }
 }
