@@ -54,7 +54,7 @@ class CustomListTile extends StatelessWidget {
           ),
       minLeadingWidth: 0,
       minVerticalPadding: 0,
-      horizontalTitleGap: (contentPadding?.horizontal ?? 12) / 2,
+      horizontalTitleGap: (contentPadding?.horizontal ?? gap * 2) / 2,
       leading: leading != null || leadingIconData != null
           ? leading ??
               FaIcon(
