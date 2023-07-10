@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../utils/constants.dart';
 
@@ -14,7 +15,10 @@ class CustomListTile extends StatelessWidget {
   final IconData? trailingIconData;
   final Widget? trailing;
   final GestureTapCallback? onTap;
+  final GestureTapCallback? onLongPress;
   final GestureTapCallback? trailingOnTap;
+  final Function(SwipeDirection)? onHorizontalSwipe;
+  final Function(SwipeDirection)? onVerticalSwipe;
   final bool? selectableText;
   final bool? responsiveWidth;
   final Color? backgroundColor;
@@ -32,6 +36,9 @@ class CustomListTile extends StatelessWidget {
     this.subtitle,
     this.title,
     this.onTap,
+    this.onLongPress,
+    this.onHorizontalSwipe,
+    this.onVerticalSwipe,
     this.trailingOnTap,
     this.trailingIconData,
     this.backgroundColor,
@@ -44,114 +51,97 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var listTile = ListTile(
-      dense: false,
-      onLongPress: null,
-      contentPadding: contentPadding ??
-          EdgeInsets.symmetric(
-            horizontal: gap * 2,
-            vertical: gap,
-          ),
-      minLeadingWidth: 0,
-      minVerticalPadding: 0,
-      horizontalTitleGap: (contentPadding?.horizontal ?? gap * 2) / 2,
-      leading: leading != null || leadingIconData != null
-          ? leading ??
-              FaIcon(
-                leadingIconData!,
-                color: textColor ??
-                    (onTap == null
-                        ? context.theme.colorScheme.onSurfaceVariant
-                        : context.theme.colorScheme.onPrimary),
-                size: context.theme.textTheme.headlineSmall!.fontSize,
-              )
-          : null,
-      title: title != null || titleString != null
-          ? title ??
-              Text(
-                titleString!,
-                style: context.theme.textTheme.titleLarge!.copyWith(
-                  color: textColor ??
-                      (onTap == null
-                          ? context.theme.colorScheme.onSurfaceVariant
-                          : context.theme.colorScheme.onPrimary),
-                ),
-              )
-          : null,
-      subtitle: subtitle != null || subtitleString != null
-          ? subtitle != null
-              ? Padding(
-                  padding: contentPadding != null
-                      ? const EdgeInsets.only(top: 8)
-                      : EdgeInsets.only(top: gap),
-                  child: Container(
-                    padding: EdgeInsets.all(gap),
-                    decoration: BoxDecoration(
-                      color: context.theme.colorScheme.surface,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(radius - gap),
-                      ),
-                    ),
-                    child: subtitle,
-                  ),
-                )
-              : (selectableText!
-                  ? SelectableText(
-                      subtitleString!,
-                      style: context.theme.textTheme.titleMedium!.copyWith(
-                        color: textColor ??
-                            (onTap == null
-                                ? context.theme.colorScheme.onSurfaceVariant
-                                : context.theme.colorScheme.onPrimary),
-                      ),
-                    )
-                  : Text(
-                      subtitleString!,
-                      style: context.theme.textTheme.titleMedium!.copyWith(
-                        color: textColor ??
-                            (onTap == null
-                                ? context.theme.colorScheme.onSurfaceVariant
-                                : context.theme.colorScheme.onPrimary),
-                      ),
-                    ))
-          : null,
-      trailing: trailing != null || trailingIconData != null
-          ? GestureDetector(
-              onTap: trailingOnTap,
-              child: trailing ??
-                  (trailingOnTap != null
-                      ? FaIcon(
-                          trailingIconData!,
-                          color: textColor ?? context.theme.colorScheme.primary,
-                          size: context.theme.textTheme.headlineSmall!.fontSize,
-                        )
-                      : FaIcon(
-                          trailingIconData!,
-                          color: textColor ??
-                              (onTap == null
-                                  ? context.theme.colorScheme.onSurfaceVariant
-                                  : context.theme.colorScheme.onPrimary),
-                          size: context.theme.textTheme.headlineSmall!.fontSize,
-                        )),
-            )
-          : null,
-    );
-    return GestureDetector(
+    return SimpleGestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
+      onHorizontalSwipe: onHorizontalSwipe,
+      onVerticalSwipe: onVerticalSwipe,
       child: PhysicalModel(
         color: backgroundColor ??
             (onTap == null
                 ? context.theme.colorScheme.surfaceVariant
                 : context.theme.colorScheme.primary),
-        // shadowColor: context.theme.colorScheme.shadow,
-        // elevation: onTap == null ? constants.gap : constants.gap / 2,
         borderRadius: BorderRadius.all(
           Radius.circular(cornerRadius ?? radius),
         ),
-        child: switch (responsiveWidth) {
-          true => IntrinsicWidth(child: listTile),
-          _ => listTile,
-        },
+        child: Padding(
+          padding: contentPadding ??
+              EdgeInsets.symmetric(
+                horizontal: gap * 2,
+                vertical: gap,
+              ),
+          child: Row(
+            mainAxisSize:
+                responsiveWidth! ? MainAxisSize.min : MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              if (leading != null || leadingIconData != null) ...[
+                leading ??
+                    FaIcon(
+                      leadingIconData!,
+                      color: textColor ??
+                          (onTap == null
+                              ? context.theme.colorScheme.onSurfaceVariant
+                              : context.theme.colorScheme.onPrimary),
+                      size: context.theme.textTheme.headlineSmall!.fontSize,
+                    ),
+                SizedBox(width: gap),
+              ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    if (title != null || titleString != null)
+                      title ??
+                          Text(
+                            titleString!,
+                            style: context.theme.textTheme.titleLarge!.copyWith(
+                              color: textColor ??
+                                  (onTap == null
+                                      ? context
+                                          .theme.colorScheme.onSurfaceVariant
+                                      : context.theme.colorScheme.onPrimary),
+                            ),
+                          ),
+                    if (subtitle != null && subtitleString == null)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Container(
+                          padding: EdgeInsets.all(gap),
+                          decoration: BoxDecoration(
+                            color: context.theme.colorScheme.surface,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(radius - gap),
+                            ),
+                          ),
+                          child: subtitle,
+                        ),
+                      )
+                    else
+                      Text(subtitleString!)
+                  ],
+                ),
+              ),
+              if (trailing != null || trailingIconData != null) ...[
+                SizedBox(width: gap),
+                trailing ??
+                    GestureDetector(
+                      onTap: trailingOnTap,
+                      child: FaIcon(
+                        trailingIconData!,
+                        color: textColor ??
+                            (onTap == null
+                                ? context.theme.colorScheme.onSurfaceVariant
+                                : context.theme.colorScheme.onPrimary),
+                        size: context.theme.textTheme.headlineSmall!.fontSize,
+                      ),
+                    ),
+              ]
+            ],
+          ),
+        ),
       ),
     );
   }
