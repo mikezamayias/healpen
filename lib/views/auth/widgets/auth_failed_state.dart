@@ -23,11 +23,6 @@ class AuthFailedState extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomListTile(
-            cornerRadius: radius,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: gap * 2,
-              vertical: gap,
-            ),
             leadingIconData: FontAwesomeIcons.circleExclamation,
             selectableText: true,
             backgroundColor: context.theme.colorScheme.error,
@@ -38,12 +33,7 @@ class AuthFailedState extends StatelessWidget {
           ),
           SizedBox(height: gap),
           CustomListTile(
-            cornerRadius: radius,
             responsiveWidth: true,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: gap * 2,
-              vertical: gap,
-            ),
             leadingIconData: FontAwesomeIcons.arrowLeft,
             selectableText: true,
             // backgroundColor: context.theme.colorScheme.error,

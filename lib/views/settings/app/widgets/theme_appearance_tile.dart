@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
 import '../../../../providers/settings_providers.dart';
+import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -16,6 +17,7 @@ class ThemeAppearanceTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       titleString: 'Appearance',
+      contentPadding: EdgeInsets.all(gap),
       subtitle: SegmentedButton<Appearance>(
         showSelectedIcon: false,
         segments: <ButtonSegment<Appearance>>[

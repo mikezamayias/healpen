@@ -55,10 +55,7 @@ class HistoryView extends ConsumerWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final NoteModel entry = snapshot.data![index];
                   return CustomListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
+                    contentPadding: EdgeInsets.all(gap),
                     titleString: entry.timestamp.timestampFormat(),
                     subtitle: Column(
                       mainAxisSize: MainAxisSize.min,

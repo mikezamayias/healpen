@@ -20,18 +20,10 @@ class LoadingTile extends StatelessWidget {
       backgroundColor: context.theme.colorScheme.surfaceVariant,
       textColor: context.theme.colorScheme.onSurfaceVariant,
       cornerRadius: radius,
-      contentPadding: const EdgeInsets.all(12),
       titleString: durationTitle,
-      subtitle: Container(
-        height: context.theme.textTheme.bodySmall!.fontSize!,
-        alignment: Alignment.center,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(radius - gap),
-          child: LinearProgressIndicator(
-            value: value,
-            color: context.theme.colorScheme.surfaceVariant,
-          ),
-        ),
+      leading: LinearProgressIndicator(
+        value: value,
+        color: context.theme.colorScheme.surfaceVariant,
       ),
     );
   }

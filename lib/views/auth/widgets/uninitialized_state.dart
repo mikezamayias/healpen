@@ -19,11 +19,6 @@ class UninitializedState extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomListTile(
-          cornerRadius: radius,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: gap * 2,
-            vertical: gap,
-          ),
           leadingIconData: FontAwesomeIcons.solidEnvelope,
           title: TextField(
             decoration: InputDecoration(
@@ -40,10 +35,6 @@ class UninitializedState extends ConsumerWidget {
           responsiveWidth: true,
           titleString: 'Send link',
           cornerRadius: radius,
-          contentPadding: EdgeInsets.symmetric(
-            vertical: gap,
-            horizontal: gap * 2,
-          ),
           leadingIconData: FontAwesomeIcons.solidPaperPlane,
           onTap: () => ref
               .watch(CustomAuthProvider().emailLinkAuthProvider)

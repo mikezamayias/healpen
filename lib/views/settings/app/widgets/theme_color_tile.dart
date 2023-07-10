@@ -11,10 +11,12 @@ import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeColorTile extends ConsumerWidget {
   const ThemeColorTile({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       titleString: 'Color',
+      contentPadding: EdgeInsets.all(gap),
       subtitle: Wrap(
         spacing: gap,
         children: [

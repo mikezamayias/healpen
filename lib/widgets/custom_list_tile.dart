@@ -34,7 +34,6 @@ class CustomListTile extends StatelessWidget {
     this.onTap,
     this.trailingOnTap,
     this.trailingIconData,
-
     this.backgroundColor,
     this.textColor,
     this.selectableText = false,
@@ -48,7 +47,11 @@ class CustomListTile extends StatelessWidget {
     var listTile = ListTile(
       dense: false,
       onLongPress: null,
-      contentPadding: contentPadding ?? const EdgeInsets.all(12),
+      contentPadding: contentPadding ??
+          EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
       minLeadingWidth: 0,
       minVerticalPadding: 0,
       horizontalTitleGap: (contentPadding?.horizontal ?? 12) / 2,
