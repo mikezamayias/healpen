@@ -2,49 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../utils/constants.dart';
+import '../utils/constants.dart';
 
-class MyListTile extends StatelessWidget {
+class CustomListTile extends StatelessWidget {
+  final String? titleString;
+  final String? subtitleString;
+  final Widget? title;
+  final Widget? subtitle;
   final Widget? leading;
   final IconData? leadingIconData;
-  final Color? textColor;
+  final IconData? trailingIconData;
+  final Widget? trailing;
   final GestureTapCallback? onTap;
   final GestureTapCallback? trailingOnTap;
-  final Widget? title;
-  final String? titleString;
   final bool? selectableText;
-  final Widget? subtitle;
-  final String? subtitleString;
-  final Widget? trailing;
-  final IconData? trailingIconData;
-  final EdgeInsetsGeometry? padding;
+  final bool? responsiveWidth;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final double? cornerRadius;
+  final EdgeInsetsGeometry? contentPadding;
 
-  const MyListTile({
-    super.key,
-    required this.leading,
-    required this.leadingIconData,
-    required this.textColor,
-    required this.onTap,
-    required this.trailingOnTap,
-    required this.title,
-    required this.titleString,
-    required this.selectableText,
-    required this.subtitle,
-    required this.subtitleString,
-    required this.trailing,
-    required this.trailingIconData,
-    this.padding,
-  });
+  const CustomListTile({
+    Key? key,
+    this.titleString,
+    this.subtitleString,
+    this.leadingIconData,
+    this.trailing,
+    this.leading,
+    this.subtitle,
+    this.title,
+    this.onTap,
+    this.trailingOnTap,
+    this.trailingIconData,
+
+    this.backgroundColor,
+    this.textColor,
+    this.selectableText = false,
+    this.responsiveWidth = false,
+    this.cornerRadius,
+    this.contentPadding,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      dense: true,
+    var listTile = ListTile(
+      dense: false,
       onLongPress: null,
-      contentPadding: padding ?? const EdgeInsets.all(12),
+      contentPadding: contentPadding ?? const EdgeInsets.all(12),
       minLeadingWidth: 0,
       minVerticalPadding: 0,
-      horizontalTitleGap: (padding?.horizontal ?? 12) / 2,
+      horizontalTitleGap: (contentPadding?.horizontal ?? 12) / 2,
       leading: leading != null || leadingIconData != null
           ? leading ??
               FaIcon(
@@ -71,7 +78,7 @@ class MyListTile extends StatelessWidget {
       subtitle: subtitle != null || subtitleString != null
           ? subtitle != null
               ? Padding(
-                  padding: padding != null
+                  padding: contentPadding != null
                       ? const EdgeInsets.only(top: 8)
                       : EdgeInsets.only(top: gap),
                   child: Container(
@@ -125,6 +132,24 @@ class MyListTile extends StatelessWidget {
                         )),
             )
           : null,
+    );
+    return GestureDetector(
+      onTap: onTap,
+      child: PhysicalModel(
+        color: backgroundColor ??
+            (onTap == null
+                ? context.theme.colorScheme.surfaceVariant
+                : context.theme.colorScheme.primary),
+        // shadowColor: context.theme.colorScheme.shadow,
+        // elevation: onTap == null ? constants.gap : constants.gap / 2,
+        borderRadius: BorderRadius.all(
+          Radius.circular(cornerRadius ?? radius),
+        ),
+        child: switch (responsiveWidth) {
+          true => IntrinsicWidth(child: listTile),
+          _ => listTile,
+        },
+      ),
     );
   }
 }
