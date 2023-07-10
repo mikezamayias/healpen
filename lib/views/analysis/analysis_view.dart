@@ -13,11 +13,8 @@ class AnalysisView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<String> tabTitles = ['Mood Explorer', 'Writing Patterns'];
     return BlueprintView(
-      appBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: gap),
-        child: const AppBar(
-          pathNames: ['Your writing insights'],
-        ),
+      appBar: const AppBar(
+        pathNames: ['Your writing insights'],
       ),
       body: Column(
         children: [
