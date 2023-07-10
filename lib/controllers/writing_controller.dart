@@ -6,18 +6,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/writing_entry/writing_entry_model.dart';
+import '../models/note/note_model.dart';
 
 int timeWindow = 3;
 
 final writingControllerProvider =
-    StateNotifierProvider<WritingController, WritingEntryModel>((ref) {
+    StateNotifierProvider<WritingController, NoteModel>((ref) {
   return WritingController();
 });
 
-class WritingController extends StateNotifier<WritingEntryModel> {
+class WritingController extends StateNotifier<NoteModel> {
   // A private constructor.
-  WritingController._() : super(WritingEntryModel());
+  WritingController._() : super(NoteModel());
 
   // The static singleton instance.
   static final WritingController _singleton = WritingController._();
@@ -78,7 +78,7 @@ class WritingController extends StateNotifier<WritingEntryModel> {
     );
   }
 
-  Future<void> handleSaveEntry() async {
+  Future<void> handleSaveNote() async {
     log(
       'Saved entry: ${state.content}',
       name: '_handleSaveEntry()',
@@ -86,11 +86,11 @@ class WritingController extends StateNotifier<WritingEntryModel> {
     _stopwatch.reset();
     _timer?.cancel();
     _delayTimer?.cancel();
-    await _saveEntryToFirebase();
-    state = WritingEntryModel();
+    await _saveNoteToFirebase();
+    state = NoteModel();
   }
 
-  Future<void> _saveEntryToFirebase() {
+  Future<void> _saveNoteToFirebase() {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     log(
       state.toDocument().toString(),
@@ -100,7 +100,7 @@ class WritingController extends StateNotifier<WritingEntryModel> {
     return _firestore
         .collection('writing-temp')
         .doc(userId)
-        .collection('entries')
+        .collection('notes')
         .add(state.toDocument());
   }
 

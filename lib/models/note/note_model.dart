@@ -1,33 +1,33 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'writing_entry_model.g.dart';
+part 'note_model.g.dart';
 
 @JsonSerializable()
-class WritingEntryModel {
+class NoteModel {
   String content;
   bool isPrivate;
   int duration;
   int timestamp;
 
-  WritingEntryModel({
+  NoteModel({
     this.content = '',
     this.isPrivate = false,
     this.duration = 0,
     int? timestamp,
   }) : timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
 
-  factory WritingEntryModel.fromDocument(Map<String, dynamic> json) =>
-      _$WritingEntryModelFromJson(json);
+  factory NoteModel.fromDocument(Map<String, dynamic> json) =>
+      _$NoteModelFromJson(json);
 
-  Map<String, dynamic> toDocument() => _$WritingEntryModelToJson(this);
+  Map<String, dynamic> toDocument() => _$NoteModelToJson(this);
 
-  WritingEntryModel copyWith({
+  NoteModel copyWith({
     String? content,
     bool? isPrivate,
     int? duration,
     int? timestamp,
   }) {
-    return WritingEntryModel(
+    return NoteModel(
       content: content ?? this.content,
       isPrivate: isPrivate ?? this.isPrivate,
       duration: duration ?? this.duration,
@@ -37,6 +37,6 @@ class WritingEntryModel {
 
   @override
   String toString() {
-    return 'WritingEntryModel(content: $content, isPrivate: $isPrivate, duration: $duration, timestamp: $timestamp)';
+    return 'NoteModel(content: $content, isPrivate: $isPrivate, duration: $duration, timestamp: $timestamp)';
   }
 }
