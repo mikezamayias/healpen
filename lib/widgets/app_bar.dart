@@ -23,7 +23,7 @@ class AppBar extends StatelessWidget {
                       color: context.theme.colorScheme.outline,
                     )
                   : context.theme.textTheme.headlineSmall!.copyWith(
-                      color: context.theme.colorScheme.primary,
+                      color: context.theme.colorScheme.secondary,
                     ),
             ),
         ],
