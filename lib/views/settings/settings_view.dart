@@ -56,19 +56,19 @@ class SettingsView extends ConsumerWidget {
         children: [
           for (String title in pageWidgets.keys)
             CustomListTile(
-              responsiveWidth: false,
-              cornerRadius: radius,
+              leadingIconData: pageWidgets[title]!.$2,
+              // title: Text(
+              //   title,
+              //   style: context.theme.textTheme.headlineSmall!.copyWith(
+              //     color: context.theme.colorScheme.onPrimary,
+              //   ),
+              // ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: gap * 2,
-                vertical: gap / 2,
+                vertical: gap * 2,
               ),
-              leadingIconData: pageWidgets[title]!.$2,
-              title: Text(
-                title,
-                style: context.theme.textTheme.headlineSmall!.copyWith(
-                  color: context.theme.colorScheme.onPrimary,
-                ),
-              ),
+              textColor: context.theme.colorScheme.onPrimary,
+              titleString: title,
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
