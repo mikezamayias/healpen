@@ -17,6 +17,7 @@ class CustomListTile extends StatelessWidget {
   final GestureTapCallback? onTap;
   final GestureTapCallback? onLongPress;
   final GestureTapCallback? trailingOnTap;
+  final GestureTapCallback? leadingOnTap;
   final Function(SwipeDirection)? onHorizontalSwipe;
   final Function(SwipeDirection)? onVerticalSwipe;
   final bool? selectableText;
@@ -40,6 +41,7 @@ class CustomListTile extends StatelessWidget {
     this.onHorizontalSwipe,
     this.onVerticalSwipe,
     this.trailingOnTap,
+    this.leadingOnTap,
     this.trailingIconData,
     this.backgroundColor,
     this.textColor,
@@ -52,6 +54,7 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SimpleGestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       onLongPress: onLongPress,
       onHorizontalSwipe: onHorizontalSwipe,
@@ -65,11 +68,7 @@ class CustomListTile extends StatelessWidget {
           Radius.circular(cornerRadius ?? radius),
         ),
         child: Padding(
-          padding: contentPadding ??
-              EdgeInsets.symmetric(
-                horizontal: gap * 2,
-                vertical: gap,
-              ),
+          padding: contentPadding ?? EdgeInsets.all(gap),
           child: Row(
             mainAxisSize:
                 responsiveWidth! ? MainAxisSize.min : MainAxisSize.max,
@@ -78,63 +77,49 @@ class CustomListTile extends StatelessWidget {
             children: <Widget>[
               if (leading != null || leadingIconData != null) ...[
                 leading ??
-                    FaIcon(
-                      leadingIconData!,
-                      color: textColor ??
-                          (onTap == null
-                              ? context.theme.colorScheme.onSurfaceVariant
-                              : context.theme.colorScheme.onPrimary),
-                      size: context.theme.textTheme.headlineSmall!.fontSize,
+                    SimpleGestureDetector(
+                      onTap: leadingOnTap,
+                      child: FaIcon(
+                        leadingIconData!,
+                        color: leadingOnTap == null
+                            ? textColor ??
+                                context.theme.colorScheme.onSurfaceVariant
+                            : context.theme.colorScheme.primary,
+                        size: context.theme.textTheme.headlineSmall!.fontSize,
+                      ),
                     ),
-                SizedBox(width: gap),
-              ],
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    if (title != null || titleString != null)
-                      title ??
-                          Text(
-                            titleString!,
-                            style: context.theme.textTheme.titleLarge!.copyWith(
-                              color: textColor ??
-                                  (onTap == null
-                                      ? context
-                                          .theme.colorScheme.onSurfaceVariant
-                                      : context.theme.colorScheme.onPrimary),
-                            ),
-                          ),
-                    if (subtitle != null && subtitleString == null)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Container(
-                          padding: EdgeInsets.all(gap),
-                          decoration: BoxDecoration(
-                            color: context.theme.colorScheme.surface,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(radius - gap),
-                            ),
-                          ),
-                          child: subtitle,
-                        ),
-                      )
-                    else
-                      Text(subtitleString!)
-                  ],
+                SizedBox(
+                  width: (contentPadding ?? EdgeInsets.all(gap)).horizontal / 2,
                 ),
+              ],
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  if (title != null || titleString != null)
+                    title ??
+                        Text(
+                          titleString!,
+                          style: context.theme.textTheme.titleLarge!.copyWith(
+                            color: textColor ??
+                                (onTap == null
+                                    ? context.theme.colorScheme.onSurfaceVariant
+                                    : context.theme.colorScheme.onPrimary),
+                          ),
+                        ),
+                ],
               ),
               if (trailing != null || trailingIconData != null) ...[
-                SizedBox(width: gap),
+                const Spacer(),
                 trailing ??
-                    GestureDetector(
+                    SimpleGestureDetector(
                       onTap: trailingOnTap,
                       child: FaIcon(
                         trailingIconData!,
-                        color: textColor ??
-                            (onTap == null
-                                ? context.theme.colorScheme.onSurfaceVariant
-                                : context.theme.colorScheme.onPrimary),
+                        color: trailingOnTap == null
+                            ? textColor ??
+                                context.theme.colorScheme.onSurfaceVariant
+                            : context.theme.colorScheme.primary,
                         size: context.theme.textTheme.headlineSmall!.fontSize,
                       ),
                     ),
