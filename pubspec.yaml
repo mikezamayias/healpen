@@ -34,6 +34,7 @@ dependencies:
   rive: ^0.11.4
   salomon_bottom_bar: ^3.3.1
   shared_preferences: ^2.2.0
+  simple_gesture_detector: ^0.2.0
   sprung: ^3.0.1
   validated: ^2.0.0
 
