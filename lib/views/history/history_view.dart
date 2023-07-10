@@ -3,14 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/history_view_controller.dart';
-import '../../extensions/int_extensions.dart';
 import '../../models/note/note_model.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/divider.dart';
 import '../blueprint/blueprint_view.dart';
-import 'widgets/note_stats_title.dart';
+import 'widgets/note_tile.dart';
 
 class HistoryView extends ConsumerWidget {
   const HistoryView({super.key});
@@ -54,34 +53,7 @@ class HistoryView extends ConsumerWidget {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
                   final NoteModel entry = snapshot.data![index];
-                  return CustomListTile(
-                    contentPadding: EdgeInsets.all(gap),
-                    titleString: entry.timestamp.timestampFormat(),
-                    subtitle: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          entry.content,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: context.theme.textTheme.bodyLarge!.copyWith(
-                            color: context.theme.colorScheme.onBackground,
-                          ),
-                        ),
-                        NoteStatsTile(
-                          statsTitle: 'Duration',
-                          statsValue: entry.duration.writingDurationFormat(),
-                        ),
-                        NoteStatsTile(
-                          statsTitle: 'Word Count',
-                          statsValue:
-                              entry.content.split(' ').length.toString(),
-                        ),
-                      ],
-                    ),
-                  );
+                  return NoteTile(entry: entry);
                 },
               );
             } else {
