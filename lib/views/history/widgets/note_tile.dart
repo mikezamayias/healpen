@@ -25,21 +25,25 @@ class NoteTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            entry.content,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: context.theme.textTheme.bodyLarge!.copyWith(
-              color: context.theme.colorScheme.onBackground,
-            ),
-          ),
-          NoteStatsTile(
-            statsTitle: 'Duration',
-            statsValue: entry.duration.writingDurationFormat(),
-          ),
-          NoteStatsTile(
-            statsTitle: 'Word Count',
-            statsValue: entry.content.split(' ').length.toString(),
+          // Text(
+          //   entry.content,
+          //   maxLines: 2,
+          //   overflow: TextOverflow.ellipsis,
+          //   style: context.theme.textTheme.bodyLarge!.copyWith(
+          //     color: context.theme.colorScheme.onBackground,
+          //   ),
+          // ),
+          Row(
+            children: [
+              NoteStatsTile(
+                statsTitle: 'Duration',
+                statsValue: entry.duration.writingDurationFormat(),
+              ),
+              NoteStatsTile(
+                statsTitle: 'Words',
+                statsValue: entry.content.split(' ').length.toString(),
+              ),
+            ],
           ),
         ],
       ),

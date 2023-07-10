@@ -53,6 +53,7 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final padding = contentPadding ?? EdgeInsets.all(gap * 2);
     return SimpleGestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
@@ -68,7 +69,7 @@ class CustomListTile extends StatelessWidget {
           Radius.circular(cornerRadius ?? radius),
         ),
         child: Padding(
-          padding: contentPadding ?? EdgeInsets.all(gap),
+          padding: padding,
           child: Row(
             mainAxisSize:
                 responsiveWidth! ? MainAxisSize.min : MainAxisSize.max,
@@ -81,34 +82,60 @@ class CustomListTile extends StatelessWidget {
                       onTap: leadingOnTap,
                       child: FaIcon(
                         leadingIconData!,
-                        color: leadingOnTap == null
-                            ? textColor ??
-                                context.theme.colorScheme.onSurfaceVariant
-                            : context.theme.colorScheme.primary,
+                        color: textColor ??
+                            ((leadingOnTap != null || onTap != null)
+                                ? context.theme.colorScheme.onPrimary
+                                : context.theme.colorScheme.onSurfaceVariant),
                         size: context.theme.textTheme.headlineSmall!.fontSize,
                       ),
                     ),
-                SizedBox(
-                  width: (contentPadding ?? EdgeInsets.all(gap)).horizontal / 2,
-                ),
+                SizedBox(width: padding.horizontal / 2),
               ],
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  if (title != null || titleString != null)
-                    title ??
-                        Text(
-                          titleString!,
-                          style: context.theme.textTheme.titleLarge!.copyWith(
-                            color: textColor ??
-                                (onTap == null
-                                    ? context.theme.colorScheme.onSurfaceVariant
-                                    : context.theme.colorScheme.onPrimary),
-                          ),
-                        ),
-                ],
-              ),
+              if (title == null && titleString != null)
+                Text(
+                  titleString!,
+                  style: context.theme.textTheme.titleLarge!.copyWith(
+                    color: textColor ??
+                        (onTap == null
+                            ? context.theme.colorScheme.onSurfaceVariant
+                            : context.theme.colorScheme.onPrimary),
+                  ),
+                )
+              else
+                title!,
+              // if (subtitle != null || subtitleString != null) ...[
+              //   SizedBox(
+              //     height:
+              //     (contentPadding ?? EdgeInsets.all(gap)).vertical / 4,
+              //   ),
+              //   Container(
+              //     decoration: BoxDecoration(
+              //       color: backgroundColor ??
+              //           context.theme.colorScheme.surface,
+              //       borderRadius: BorderRadius.all(
+              //         Radius.circular((cornerRadius ?? radius) - gap),
+              //       ),
+              //     ),
+              //     child: Padding(
+              //       padding: EdgeInsets.symmetric(
+              //         horizontal: gap,
+              //         vertical: gap / 2,
+              //       ),
+              //       child: subtitle ??
+              //           SelectableText(
+              //             subtitleString!,
+              //             style:
+              //             context.theme.textTheme.titleSmall!.copyWith(
+              //               color: textColor ??
+              //                   (onTap == null
+              //                       ? context
+              //                       .theme.colorScheme.onSurfaceVariant
+              //                       : context.theme.colorScheme.onPrimary),
+              //             ),
+              //           ),
+              //     ),
+              //   ),
+              // ],
               if (trailing != null || trailingIconData != null) ...[
                 const Spacer(),
                 trailing ??
