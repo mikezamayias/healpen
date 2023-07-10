@@ -21,27 +21,31 @@ class AnalysisView extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          CustomListTile(
-            titleString: tabTitles.first,
-            subtitle: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Text('hello world'),
-                ),
-              ],
+          Expanded(
+            child: CustomListTile(
+              titleString: tabTitles.first,
+              subtitle: const Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    child: Text('hello world'),
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(height: gap),
-          CustomListTile(
-            titleString: tabTitles.last,
-            subtitle: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Text('hello world'),
-                ),
-              ],
+          Expanded(
+            child: CustomListTile(
+              titleString: tabTitles.last,
+              subtitle: const Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text('hello world'),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
