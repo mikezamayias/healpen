@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../extensions/int_extensions.dart';
 import '../../../models/note/note_model.dart';
@@ -19,31 +20,49 @@ class NoteTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: entry.timestamp.timestampFormat(),
-      subtitle: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      title: Text(
+        entry.content,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: context.theme.textTheme.bodyLarge!.copyWith(
+          color: context.theme.colorScheme.onPrimary,
+        ),
+      ),
+      subtitle: Wrap(
+        runSpacing: 0,
+        spacing: gap,
+        crossAxisAlignment: WrapCrossAlignment.end,
         children: [
-          // Text(
-          //   entry.content,
-          //   maxLines: 2,
-          //   overflow: TextOverflow.ellipsis,
-          //   style: context.theme.textTheme.bodyLarge!.copyWith(
-          //     color: context.theme.colorScheme.onBackground,
-          //   ),
-          // ),
+          NoteStatsTile(
+            statsTitle: 'Date',
+            statsValue: entry.timestamp.timestampFormat(),
+          ),
+          NoteStatsTile(
+            statsTitle: 'Words',
+            statsValue: entry.content.split(' ').length.toString(),
+          ),
           Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              NoteStatsTile(
-                statsTitle: 'Duration',
-                statsValue: entry.duration.writingDurationFormat(),
+              Text(
+                'Private',
+                style: context.theme.textTheme.bodyMedium!.copyWith(
+                  color: context.theme.colorScheme.secondary,
+                ),
               ),
-              NoteStatsTile(
-                statsTitle: 'Words',
-                statsValue: entry.content.split(' ').length.toString(),
+              SizedBox(width: gap / 2),
+              FaIcon(
+                entry.isPrivate
+                    ? FontAwesomeIcons.lock
+                    : FontAwesomeIcons.lockOpen,
+                size: context.theme.textTheme.bodyMedium!.fontSize,
+                color: context.theme.colorScheme.onBackground,
               ),
             ],
+          ),
+          NoteStatsTile(
+            statsTitle: 'Duration',
+            statsValue: entry.duration.writingDurationFormat(),
           ),
         ],
       ),

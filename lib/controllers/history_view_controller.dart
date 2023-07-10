@@ -29,6 +29,7 @@ class HistoryViewController {
       .collection('writing-temp')
       .doc(_uid)
       .collection('notes')
+      // .where('isPrivate', isEqualTo: false)
       .orderBy('timestamp', descending: true)
       .snapshots();
 

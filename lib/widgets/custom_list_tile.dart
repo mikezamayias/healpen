@@ -15,6 +15,7 @@ class CustomListTile extends StatelessWidget {
   final Widget? trailing;
   final GestureTapCallback? onTap;
   final GestureTapCallback? trailingOnTap;
+  final GestureTapCallback? leadingOnTap;
   final bool? selectableText;
   final bool? responsiveWidth;
   final Color? backgroundColor;
@@ -33,6 +34,7 @@ class CustomListTile extends StatelessWidget {
     this.title,
     this.onTap,
     this.trailingOnTap,
+    this.leadingOnTap,
     this.trailingIconData,
     this.backgroundColor,
     this.textColor,
@@ -44,27 +46,37 @@ class CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var listTile = ListTile(
+    final padding = contentPadding ??
+        EdgeInsets.symmetric(
+          horizontal: gap * 2,
+          vertical: gap,
+        );
+    final listTile = ListTile(
       dense: false,
       onLongPress: null,
-      contentPadding: contentPadding ??
-          EdgeInsets.symmetric(
-            horizontal: gap * 2,
-            vertical: gap,
-          ),
+      contentPadding: padding,
       minLeadingWidth: 0,
       minVerticalPadding: 0,
-      horizontalTitleGap: (contentPadding?.horizontal ?? gap * 2) / 2,
+      horizontalTitleGap: padding.horizontal / 2,
       leading: leading != null || leadingIconData != null
-          ? leading ??
-              FaIcon(
-                leadingIconData!,
-                color: textColor ??
-                    (onTap == null
-                        ? context.theme.colorScheme.onSurfaceVariant
-                        : context.theme.colorScheme.onPrimary),
-                size: context.theme.textTheme.headlineSmall!.fontSize,
-              )
+          ? GestureDetector(
+              onTap: leadingOnTap,
+              child: leading ??
+                  (leadingOnTap != null
+                      ? FaIcon(
+                          leadingIconData!,
+                          color: textColor ?? context.theme.colorScheme.primary,
+                          size: context.theme.textTheme.titleLarge!.fontSize,
+                        )
+                      : FaIcon(
+                          leadingIconData!,
+                          color: textColor ??
+                              (onTap == null
+                                  ? context.theme.colorScheme.onSurfaceVariant
+                                  : context.theme.colorScheme.onPrimary),
+                          size: context.theme.textTheme.titleLarge!.fontSize,
+                        )),
+            )
           : null,
       title: title != null || titleString != null
           ? title ??
@@ -123,7 +135,7 @@ class CustomListTile extends StatelessWidget {
                       ? FaIcon(
                           trailingIconData!,
                           color: textColor ?? context.theme.colorScheme.primary,
-                          size: context.theme.textTheme.headlineSmall!.fontSize,
+                          size: context.theme.textTheme.titleLarge!.fontSize,
                         )
                       : FaIcon(
                           trailingIconData!,
@@ -131,7 +143,7 @@ class CustomListTile extends StatelessWidget {
                               (onTap == null
                                   ? context.theme.colorScheme.onSurfaceVariant
                                   : context.theme.colorScheme.onPrimary),
-                          size: context.theme.textTheme.headlineSmall!.fontSize,
+                          size: context.theme.textTheme.titleLarge!.fontSize,
                         )),
             )
           : null,

@@ -7,7 +7,6 @@ import '../../models/note/note_model.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
-import '../../widgets/divider.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/note_tile.dart';
 
@@ -36,7 +35,7 @@ class HistoryView extends ConsumerWidget {
                   titleString: 'Something went wrong',
                   backgroundColor: context.theme.colorScheme.error,
                   textColor: context.theme.colorScheme.onError,
-                  subtitle: Text(snapshot.error.toString()),
+                  subtitle: SelectableText(snapshot.error.toString()),
                 ),
               );
             }
@@ -49,7 +48,7 @@ class HistoryView extends ConsumerWidget {
 
             if (snapshot.data!.isNotEmpty) {
               return ListView.separated(
-                separatorBuilder: (_, __) => const Divider(),
+                separatorBuilder: (_, __) => SizedBox(height: gap),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (BuildContext context, int index) {
                   final NoteModel entry = snapshot.data![index];

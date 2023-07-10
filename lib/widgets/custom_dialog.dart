@@ -69,7 +69,7 @@ class CustomDialog extends StatelessWidget {
           ],
         ),
       ),
-      actionsAlignment: MainAxisAlignment.spaceBetween,
+      actionsAlignment: MainAxisAlignment.center,
       actions: actions,
     );
   }

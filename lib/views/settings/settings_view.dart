@@ -65,7 +65,7 @@ class SettingsView extends ConsumerWidget {
               // ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: gap * 2,
-                vertical: gap * 2,
+                // vertical: gap * 2,
               ),
               textColor: context.theme.colorScheme.onPrimary,
               titleString: title,
