@@ -29,6 +29,7 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
   Widget build(BuildContext context) {
     // TODO: user should confirm email before updating
     return CustomListTile(
+      contentPadding: EdgeInsets.all(gap),
       titleString: 'Email',
       subtitle: Form(
         key: _formKey,
@@ -37,6 +38,7 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
+                contentPadding: EdgeInsets.zero,
                 // hintText: currentUser.email ?? 'What is your email address?',
                 hintStyle: context.theme.textTheme.titleLarge,
                 helperStyle: context.theme.textTheme.bodyMedium!.copyWith(
