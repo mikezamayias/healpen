@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../../widgets/custom_list_tile.dart';
 
 class EditNameTile extends StatelessWidget {
   const EditNameTile({

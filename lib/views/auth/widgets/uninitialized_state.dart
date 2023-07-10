@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../providers/custom_auth_provider.dart';
 import '../../../utils/constants.dart';
-import '../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../widgets/custom_list_tile.dart';
 
 class UninitializedState extends ConsumerWidget {
   const UninitializedState({super.key});

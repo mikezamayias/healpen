@@ -4,7 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../utils/constants.dart';
-import '../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../widgets/custom_list_tile.dart';
 
 class AuthFailedState extends StatelessWidget {
   final AuthState state;

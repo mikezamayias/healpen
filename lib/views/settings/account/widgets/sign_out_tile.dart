@@ -11,7 +11,7 @@ import '../../../../controllers/page_controller.dart';
 import '../../../../providers/page_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_dialog.dart';
-import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../../widgets/custom_list_tile.dart';
 
 class SignOutTile extends ConsumerWidget {
   const SignOutTile({

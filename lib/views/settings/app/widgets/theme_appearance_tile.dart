@@ -7,7 +7,7 @@ import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/helper_functions.dart';
-import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeAppearanceTile extends ConsumerWidget {
   const ThemeAppearanceTile({Key? key}) : super(key: key);

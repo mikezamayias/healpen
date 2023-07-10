@@ -9,7 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:validated/validated.dart' as validated;
 
 import '../../../../utils/constants.dart';
-import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../../widgets/custom_list_tile.dart';
 
 class EditEmailTile extends ConsumerStatefulWidget {
   const EditEmailTile({Key? key}) : super(key: key);

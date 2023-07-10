@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../controllers/writing_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_dialog.dart';
-import '../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../widgets/custom_list_tile.dart';
 
 class WritingCheckBox extends ConsumerWidget {
   const WritingCheckBox({Key? key}) : super(key: key);

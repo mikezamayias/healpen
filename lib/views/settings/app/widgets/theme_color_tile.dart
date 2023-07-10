@@ -7,7 +7,7 @@ import '../../../../enums/app_theming.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
-import '../../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeColorTile extends ConsumerWidget {
   const ThemeColorTile({super.key});

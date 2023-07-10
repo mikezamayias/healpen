@@ -7,7 +7,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import '../../../controllers/writing_controller.dart';
 import '../../../extensions/int_extensions.dart';
 import '../../../utils/constants.dart';
-import '../../../widgets/custom_list_tile/custom_list_tile.dart';
+import '../../../widgets/custom_list_tile.dart';
 
 class StopwatchTile extends ConsumerWidget {
   const StopwatchTile({
