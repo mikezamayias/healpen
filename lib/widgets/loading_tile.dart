@@ -21,9 +21,8 @@ class LoadingTile extends StatelessWidget {
       textColor: context.theme.colorScheme.onSurfaceVariant,
       cornerRadius: radius,
       titleString: durationTitle,
-      leading: LinearProgressIndicator(
+      leading: CircularProgressIndicator(
         value: value,
-        color: context.theme.colorScheme.surfaceVariant,
       ),
     );
   }
