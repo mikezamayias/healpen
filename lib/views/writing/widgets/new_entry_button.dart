@@ -19,7 +19,6 @@ class NewEntryButton extends ConsumerWidget {
         ref.read(writingControllerProvider.notifier).textController;
     return CustomListTile(
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.symmetric(horizontal: gap),
       onTap: () {
         if (state.content.isNotEmpty) {
           writingController.handleSaveNote(); // Saves entry

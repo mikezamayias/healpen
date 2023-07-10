@@ -42,28 +42,27 @@ class AuthView extends ConsumerWidget {
         Widget? _,
       ) {
         return BlueprintView(
-          body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Sign in with magic link',
-                  style: context.theme.textTheme.headlineSmall!.copyWith(
-                    color: context.theme.colorScheme.onSurface,
-                  ),
+          body: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Sign in with magic link',
+                style: context.theme.textTheme.headlineSmall!.copyWith(
+                  color: context.theme.colorScheme.onSurface,
                 ),
-                SizedBox(height: gap),
-                switch (state.runtimeType) {
-                  Uninitialized => const UninitializedState(),
-                  AwaitingDynamicLink => const AwaitingDynamicLinkState(),
-                  SendingLink => const SendingLinkState(),
-                  SigningIn => const SigningInState(),
-                  AuthFailed => AuthFailedState(state: state),
-                  _ => UnknownState(state: state)
-                },
-              ],
-            ),
+              ),
+              SizedBox(height: gap * 2),
+              switch (state.runtimeType) {
+                Uninitialized => const UninitializedState(),
+                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
+                SendingLink => const SendingLinkState(),
+                SigningIn => const SigningInState(),
+                AuthFailed => AuthFailedState(state: state),
+                _ => UnknownState(state: state)
+              },
+            ],
           ),
         );
       },

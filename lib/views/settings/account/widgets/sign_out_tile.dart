@@ -27,6 +27,7 @@ class SignOutTile extends ConsumerWidget {
       ),
       titleString: 'Sign out',
       leadingIconData: FontAwesomeIcons.rightFromBracket,
+      textColor: context.theme.colorScheme.onPrimary,
       onTap: () async {
         User user = FirebaseAuth.instance.currentUser!;
         log('$user', name: 'Signing out user');

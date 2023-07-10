@@ -9,6 +9,7 @@ import 'healpen.dart';
 import 'providers/settings_providers.dart';
 import 'utils/helper_functions.dart';
 import 'views/auth/auth_view.dart';
+import 'views/note/note_view.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
   const HealpenWrapper({Key? key}) : super(key: key);
@@ -60,7 +61,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',
       routes: {
         '/auth': (context) => const AuthView(),
-        '/healpen': (context) => const Healpen()
+        '/healpen': (context) => const Healpen(),
+        '/note': (context) => const NoteView(),
       },
     );
   }

@@ -8,7 +8,7 @@ import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class UninitializedState extends ConsumerWidget {
-  const UninitializedState({super.key});
+  const UninitializedState({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,21 +20,24 @@ class UninitializedState extends ConsumerWidget {
       children: [
         CustomListTile(
           leadingIconData: FontAwesomeIcons.solidEnvelope,
-          title: TextField(
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.zero,
-              hintText: 'Email',
-              hintStyle: context.theme.textTheme.titleLarge,
+          backgroundColor: context.theme.colorScheme.surfaceVariant,
+          textColor: context.theme.colorScheme.onSurfaceVariant,
+          title: IntrinsicWidth(
+            child: TextField(
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.zero,
+                hintText: 'Email',
+                hintStyle: context.theme.textTheme.titleLarge,
+              ),
+              style: context.theme.textTheme.titleLarge,
+              onChanged: (String value) => emailAddress = value,
             ),
-            style: context.theme.textTheme.titleLarge,
-            onChanged: (String value) => emailAddress = value,
           ),
         ),
-        SizedBox(height: gap),
+        SizedBox(height: gap * 2),
         CustomListTile(
           responsiveWidth: true,
           titleString: 'Send link',
-          cornerRadius: radius,
           leadingIconData: FontAwesomeIcons.solidPaperPlane,
           onTap: () => ref
               .watch(CustomAuthProvider().emailLinkAuthProvider)
