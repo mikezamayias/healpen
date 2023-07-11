@@ -53,7 +53,7 @@ class AuthView extends ConsumerWidget {
                   color: context.theme.colorScheme.onSurface,
                 ),
               ),
-              SizedBox(height: gap * 2),
+              SizedBox(height: gap),
               switch (state.runtimeType) {
                 Uninitialized => const UninitializedState(),
                 AwaitingDynamicLink => const AwaitingDynamicLinkState(),

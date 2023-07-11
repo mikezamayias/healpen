@@ -34,11 +34,10 @@ class UninitializedState extends ConsumerWidget {
             ),
           ),
         ),
-        SizedBox(height: gap * 2),
+        SizedBox(height: gap),
         CustomListTile(
           responsiveWidth: true,
           titleString: 'Send link',
-          contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
           leadingIconData: FontAwesomeIcons.solidPaperPlane,
           onTap: () => ref
               .watch(CustomAuthProvider().emailLinkAuthProvider)
