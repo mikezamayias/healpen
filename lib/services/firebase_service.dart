@@ -29,9 +29,10 @@ class FirebaseService {
 
     /// Initializes Firebase AppCheck
     await FirebaseAppCheck.instance.activate(
-      // androidProvider: AndroidProvider.playIntegrity,
-      androidProvider: AndroidProvider.debug,
-      appleProvider: AppleProvider.debug,
+      androidProvider: AndroidProvider.playIntegrity,
+      // androidProvider: AndroidProvider.debug,
+      appleProvider: AppleProvider.appAttest,
+      // appleProvider: AppleProvider.debug,
     );
 
     /// Initializes Firebase Crashlytics
