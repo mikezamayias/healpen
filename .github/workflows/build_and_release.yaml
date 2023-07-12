@@ -9,8 +9,8 @@ on:
 jobs:
   cancel_previous_runs:
     name: Cancel Previous Runs
-    # runs-on: self-hosted
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    # runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
         uses: styfle/cancel-workflow-action@0.11.0
@@ -70,6 +70,32 @@ jobs:
         with:
           distribution: "zulu"
           java-version: "17"
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2.8.0
+        id: flutter-action
+        with:
+          cache: true
+          flutter-version: 3.10.5
+          architecture: arm64
+      - name: Output Flutter Build Information
+        run: |
+          echo CACHE-PATH=${{steps.flutter-action.outputs.CACHE-PATH}}
+          echo CACHE-KEY=${{steps.flutter-action.outputs.CACHE-KEY}}
+          echo CHANNEL=${{steps.flutter-action.outputs.CHANNEL}}
+          echo VERSION=${{steps.flutter-action.outputs.VERSION}}
+          echo ARCHITECTURE=${{steps.flutter-action.outputs.ARCHITECTURE}}
+      - name: Download Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: android-keystore.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      - name: Create keystore.properties  file
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/keystore.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/keystore.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/keystore.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/keystore.properties
       - name: Update pubspec version
         run: |
           version=$(grep version pubspec.yaml | awk '{print $2}')
@@ -79,32 +105,6 @@ jobs:
           sed -i "s/^version:.*/version: $new_version+${{env.BUILD_NUMBER}}/" pubspec.yaml
           version=$(grep version pubspec.yaml | awk '{print $2}')
           echo "Current version is $version"
-      - name: Build Flutter App
-        uses: subosito/flutter-action@v2.8.0
-        id: flutter-action
-        with:
-          cache: true
-          flutter-version: 3.10.5
-          architecture: x64
-      - name: Output Flutter Build Information
-        run: |
-          echo CACHE-PATH=${{steps.flutter-action.outputs.CACHE-PATH}}
-          echo CACHE-KEY=${{steps.flutter-action.outputs.CACHE-KEY}}
-          echo CHANNEL=${{steps.flutter-action.outputs.CHANNEL}}
-          echo VERSION=${{steps.flutter-action.outputs.VERSION}}
-          echo ARCHITECTURE=${{steps.flutter-action.outputs.ARCHITECTURE}}
-      # - name: Download Android keystore
-      #   id: android_keystore
-      #   uses: timheuer/base64-to-file@v1.0.3
-      #   with:
-      #     fileName: key.jks
-      #     encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      # - name: Create key.properties
-      #   run: |
-      #     echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" > android/key.properties
-      #     echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
-      #     echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
-      #     echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
       - name: Build APK
         run: flutter build apk
       - name: Rename APK
