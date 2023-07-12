@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1058887275393-cmhrmv2q89hpu4tbpho5jntv43a5ihf1.apps.googleusercontent.com",
+          "client_id": "1058887275393-aspe3voderp47a0cq5f8rsc8dl5v7f0h.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.mikezamayias.healpen",
-            "certificate_hash": "0afea8a6a1708cf2f0014b177fabd2fa00933e44"
+            "certificate_hash": "df1ded4c1d4e9a5f548f897f911f0d058f8c36e6"
           }
         },
         {
