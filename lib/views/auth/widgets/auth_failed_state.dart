@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -16,6 +17,10 @@ class AuthFailedState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseCrashlytics.instance.recordError(
+      (state as AuthFailed).exception.toString(),
+      StackTrace.current,
+    );
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -28,8 +33,7 @@ class AuthFailedState extends StatelessWidget {
             backgroundColor: context.theme.colorScheme.error,
             textColor: context.theme.colorScheme.onError,
             titleString: 'Something went wrong',
-            subtitleString:
-                (state as AuthFailed).exception.toString().split('] ').last,
+            subtitleString: (state as AuthFailed).exception.toString(),
           ),
           SizedBox(height: gap),
           CustomListTile(
