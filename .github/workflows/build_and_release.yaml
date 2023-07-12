@@ -93,9 +93,6 @@ jobs:
       - name: Print Keystore Path
         run: |
           echo "Keystore Path: ${{ steps.android_keystore.outputs.filePath }}"
-      - name: Move Keystore to Android app root directory
-        run: |
-          mv ${{ steps.android_keystore.outputs.filePath }} android/app
       - name: Create keystore.properties  file
         run: |
           echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/keystore.properties
