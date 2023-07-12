@@ -102,6 +102,9 @@ jobs:
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/keystore.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/keystore.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/keystore.properties
+      - name: View keystore.properties content
+        run: |
+          cat android/keystore.properties
       - name: Update pubspec version
         run: |
           version=$(grep version pubspec.yaml | awk '{print $2}')
