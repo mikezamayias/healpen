@@ -69,7 +69,7 @@ jobs:
         id: android_keystore
         uses: timheuer/base64-to-file@v1.0.3
         with:
-          fileName: healpen-key.jks
+          fileName: ${{ secrets.ANDROID_KEY_ALIAS }}.jks
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
       - name: Create keystore.properties file
         run: |
