@@ -21,11 +21,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-println "storeFile: " + System.getenv("SIGNING_STORE_FILE")
-println "keyAlias: " + System.getenv("SIGNING_KEY_ALIAS")
-println "storePassword: " + System.getenv("SIGNING_STORE_PASSWORD")
-println "keyPassword: " + System.getenv("SIGNING_KEY_PASSWORD")
-
 apply plugin: 'com.android.application'
 // START: FlutterFire Configuration
 apply plugin: 'com.google.gms.google-services'
