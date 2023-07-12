@@ -21,13 +21,10 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-def keystoreProperties = new Properties()
-def keystorePropertiesFile = rootProject.file('key.properties')
-if (keystorePropertiesFile.exists()) {
-    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
-
-println 'Keystore properties: ' + keystoreProperties.toString()
+println storeFile + System.getenv("SIGNING_STORE_FILE")
+println keyAlias + System.getenv("SIGNING_KEY_ALIAS")
+println storePassword + System.getenv("SIGNING_STORE_PASSWORD")
+println keyPassword + System.getenv("SIGNING_KEY_PASSWORD")
 
 apply plugin: 'com.android.application'
 // START: FlutterFire Configuration
@@ -70,10 +67,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(keystoreProperties['storeFile'])
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storePassword keystoreProperties['storePassword']
+            storeFile file(System.getenv("SIGNING_STORE_FILE"))
+            storePassword System.getenv("SIGNING_STORE_PASSWORD")
+            keyAlias System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD")
         }
     }
 

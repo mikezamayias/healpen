@@ -69,18 +69,8 @@ jobs:
         id: android_keystore
         uses: timheuer/base64-to-file@v1.0.3
         with:
-          fileName: healpen-key.jks
+          fileName: ${{ secrets.ANDROID_KEY_ALIAS }}.jks
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      - name: Create keystore.properties file
-        run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> ./android/app/key.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> ./android/app/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> ./android/app/key.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> ./android/app/key.properties
-      - name: View keystore.properties content
-        run: |
-          cat android/app/key.properties
-
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -114,7 +104,16 @@ jobs:
           version=$(grep version pubspec.yaml | awk '{print $2}')
           echo "Current version is $version"
       - name: Build APK
-        run: flutter build apk
+        env:
+          SIGNING_STORE_FILE: ${{ steps.android_keystore.outputs.filePath }}
+          SIGNING_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: |
+          echo $SIGNING_KEY_ALIAS
+          echo $SIGNING_KEY_PASSWORD
+          echo $SIGNING_STORE_PASSWORD
+          flutter build apk
       - name: Rename APK
         run: |
           cd "build/app/outputs/apk/release"
