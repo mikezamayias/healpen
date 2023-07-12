@@ -65,15 +65,13 @@ jobs:
           echo BUILD_ATTEMPT: ${{env.BUILD_ATTEMPT}}
       - name: Checkout Code
         uses: actions/checkout@v3
-      - name: Download Android keystore
+      - name: Create Android keystore
         id: android_keystore
-        uses: timheuer/base64-to-file@v1.0.3
-        with:
-          fileName: ${{ secrets.ANDROID_KEY_ALIAS }}.jks
-          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/${{ secrets.ANDROID_KEY_ALIAS }}.jks
       - name: Create keystore.properties file
         run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> ./android/app/key.properties
+          echo "storeFile=./android/app/${{ secrets.ANDROID_KEY_ALIAS }}.jks" >> ./android/app/key.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> ./android/app/key.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> ./android/app/key.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> ./android/app/key.properties
