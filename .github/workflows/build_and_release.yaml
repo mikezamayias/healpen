@@ -90,6 +90,9 @@ jobs:
         with:
           fileName: android-keystore.jks
           encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      - name: Print Keystore Path
+        run: |
+          echo "Keystore Path: ${{ steps.android_keystore.outputs.filePath }}"
       - name: Create keystore.properties  file
         run: |
           echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/keystore.properties
