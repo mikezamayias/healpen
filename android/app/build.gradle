@@ -27,7 +27,6 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile.absolutePath))
 }
 
-
 println 'Keystore properties: ' + keystoreProperties.toString()
 
 apply plugin: 'com.android.application'

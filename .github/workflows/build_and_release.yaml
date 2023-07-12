@@ -74,12 +74,12 @@ jobs:
       - name: Print Keystore Path
         run: |
           echo "Keystore Path: ${{ steps.android_keystore.outputs.filePath }}"
-      - name: Create keystore.properties  file
+      - name: Create keystore.properties file
         run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/keystore.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/keystore.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/keystore.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/keystore.properties
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> ./android/key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> ./android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> ./android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> ./android/key.properties
       - name: View keystore.properties content
         run: |
           cat android/keystore.properties
