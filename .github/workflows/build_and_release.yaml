@@ -65,6 +65,24 @@ jobs:
           echo BUILD_ATTEMPT: ${{env.BUILD_ATTEMPT}}
       - name: Checkout Code
         uses: actions/checkout@v3
+      - name: Download Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.0.3
+        with:
+          fileName: healpen-key.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+      - name: Print Keystore Path
+        run: |
+          echo "Keystore Path: ${{ steps.android_keystore.outputs.filePath }}"
+      - name: Create keystore.properties  file
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/keystore.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/keystore.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/keystore.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/keystore.properties
+      - name: View keystore.properties content
+        run: |
+          cat android/keystore.properties
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -84,24 +102,6 @@ jobs:
           echo CHANNEL=${{steps.flutter-action.outputs.CHANNEL}}
           echo VERSION=${{steps.flutter-action.outputs.VERSION}}
           echo ARCHITECTURE=${{steps.flutter-action.outputs.ARCHITECTURE}}
-      - name: Download Android keystore
-        id: android_keystore
-        uses: timheuer/base64-to-file@v1.0.3
-        with:
-          fileName: healpen-key.jks
-          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      - name: Print Keystore Path
-        run: |
-          echo "Keystore Path: ${{ steps.android_keystore.outputs.filePath }}"
-      - name: Create keystore.properties  file
-        run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/keystore.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/keystore.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/keystore.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/keystore.properties
-      - name: View keystore.properties content
-        run: |
-          cat android/keystore.properties
       - name: Update pubspec version
         run: |
           version=$(grep version pubspec.yaml | awk '{print $2}')
