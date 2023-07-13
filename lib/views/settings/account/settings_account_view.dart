@@ -22,7 +22,10 @@ class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
   Widget build(BuildContext context) {
     List<Widget> pageWidgets = [
       const EditNameTile(),
-      const EditEmailTile(),
+
+      /// TODO: study and implement the re-authentication process required
+      ///  to change email
+      // const EditEmailTile(),
       const SignOutTile(),
       // const DeleteAccountTile(),
     ].animateWidgetList();
