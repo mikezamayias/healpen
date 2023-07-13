@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../controllers/analysis_view_controller.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
+import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';
 
 class AnalysisView extends ConsumerWidget {
@@ -11,41 +14,71 @@ class AnalysisView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<String> tabTitles = ['Mood Explorer', 'Writing Patterns'];
     return BlueprintView(
       appBar: const AppBar(
         pathNames: ['Your writing insights'],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: CustomListTile(
-              titleString: tabTitles.first,
-              subtitle: const Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    child: Text('hello world'),
-                  ),
-                ],
+      body: StreamBuilder(
+        stream: AnalysisViewController().metricGroupingsStream,
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<String>> metricGroupingsSnapshot,
+        ) {
+          if (metricGroupingsSnapshot.hasError) {
+            return Center(
+              child: CustomListTile(
+                titleString: 'Something went wrong',
+                backgroundColor: context.theme.colorScheme.error,
+                textColor: context.theme.colorScheme.onError,
+                subtitle:
+                    SelectableText(metricGroupingsSnapshot.error.toString()),
               ),
-            ),
-          ),
-          SizedBox(height: gap),
-          Expanded(
-            child: CustomListTile(
-              titleString: tabTitles.last,
-              subtitle: const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text('hello world'),
-                  ),
-                ],
+            );
+          }
+
+          if (metricGroupingsSnapshot.connectionState ==
+              ConnectionState.waiting) {
+            return const LoadingTile(durationTitle: 'Loading metrics');
+          }
+
+          if (metricGroupingsSnapshot.data!.isNotEmpty) {
+            return Column(
+              children: metricGroupingsSnapshot.data!
+                  .asMap()
+                  .entries
+                  .map(
+                    (entry) => Expanded(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: CustomListTile(
+                              contentPadding: EdgeInsets.all(gap),
+                              titleString: entry.value,
+                              subtitle: AspectRatio(
+                                aspectRatio: 1,
+                                child: Text(
+                                  entry.toString(),
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (entry.key !=
+                              metricGroupingsSnapshot.data!.length - 1)
+                            SizedBox(height: gap),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            );
+          } else {
+            return const Center(
+              child: CustomListTile(
+                titleString: 'No metrics yet',
               ),
-            ),
-          ),
-        ],
+            );
+          }
+        },
       ),
     );
   }
