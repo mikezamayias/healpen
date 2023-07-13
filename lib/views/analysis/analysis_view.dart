@@ -54,10 +54,9 @@ class AnalysisView extends ConsumerWidget {
                             child: CustomListTile(
                               contentPadding: EdgeInsets.all(gap),
                               titleString: entry.value,
-                              subtitle: AspectRatio(
-                                aspectRatio: 1,
+                              subtitle: const Center(
                                 child: Text(
-                                  entry.toString(),
+                                  'To be implemented.',
                                 ),
                               ),
                             ),
