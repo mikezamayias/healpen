@@ -25,13 +25,10 @@ class SettingsAppView extends ConsumerWidget {
           'App',
         ],
       ),
-      body: ListView.separated(
-        clipBehavior: Clip.none,
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        itemBuilder: (_, int index) => pageWidgets[index],
-        separatorBuilder: (_, __) => SizedBox(height: gap * 2),
-        itemCount: pageWidgets.length,
+      body: Wrap(
+        spacing: gap,
+        runSpacing: gap,
+        children: pageWidgets,
       ),
     );
   }

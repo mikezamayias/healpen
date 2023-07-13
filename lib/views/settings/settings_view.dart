@@ -55,28 +55,24 @@ class SettingsView extends ConsumerWidget {
         runSpacing: gap,
         children: [
           for (String title in pageWidgets.keys)
-            CustomListTile(
-              leadingIconData: pageWidgets[title]!.$2,
-              // title: Text(
-              //   title,
-              //   style: context.theme.textTheme.headlineSmall!.copyWith(
-              //     color: context.theme.colorScheme.onPrimary,
-              //   ),
-              // ),
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: gap * 2,
-                // vertical: gap * 2,
+            if (pageWidgets[title]!.$1 is! Placeholder)
+              CustomListTile(
+                responsiveWidth: true,
+                leadingIconData: pageWidgets[title]!.$2,
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: gap * 2,
+                  vertical: gap,
+                ),
+                textColor: context.theme.colorScheme.onPrimary,
+                titleString: title,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => pageWidgets[title]!.$1,
+                    ),
+                  );
+                },
               ),
-              textColor: context.theme.colorScheme.onPrimary,
-              titleString: title,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => pageWidgets[title]!.$1,
-                  ),
-                );
-              },
-            ),
         ],
       ),
     );

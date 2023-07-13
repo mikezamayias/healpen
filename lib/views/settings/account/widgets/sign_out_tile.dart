@@ -21,13 +21,15 @@ class SignOutTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
+      responsiveWidth: true,
       contentPadding: EdgeInsets.symmetric(
         horizontal: gap * 2,
+        vertical: gap,
       ),
       titleString: 'Sign out',
       leadingIconData: FontAwesomeIcons.rightFromBracket,
       textColor: context.theme.colorScheme.onPrimary,
-      onTap: () async {
+      onTap: () {
         User user = FirebaseAuth.instance.currentUser!;
         log('$user', name: 'Signing out user');
         FirebaseAuth.instance.signOut().onError(

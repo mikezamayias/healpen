@@ -31,13 +31,10 @@ class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
       appBar: const AppBar(
         pathNames: ['Settings', 'Account'],
       ),
-      body: ListView.separated(
-        clipBehavior: Clip.none,
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        itemBuilder: (_, int index) => pageWidgets[index],
-        separatorBuilder: (_, __) => SizedBox(height: gap),
-        itemCount: pageWidgets.length,
+      body: Wrap(
+        spacing: gap,
+        runSpacing: gap,
+        children: pageWidgets,
       ),
     );
   }
