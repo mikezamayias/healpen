@@ -78,55 +78,61 @@ class CustomListTile extends StatelessWidget {
                         )),
             )
           : null,
-      title: title != null || titleString != null
-          ? title ??
-              Text(
-                titleString!,
-                style: context.theme.textTheme.titleLarge!.copyWith(
-                  color: textColor ??
-                      (onTap == null
-                          ? context.theme.colorScheme.onSurfaceVariant
-                          : context.theme.colorScheme.onPrimary),
-                ),
-              )
-          : null,
-      subtitle: subtitle != null || subtitleString != null
-          ? subtitle != null
-              ? Padding(
-                  padding: contentPadding != null
-                      ? const EdgeInsets.only(top: 8)
-                      : EdgeInsets.only(top: gap),
-                  child: Container(
-                    padding: EdgeInsets.all(gap),
-                    decoration: BoxDecoration(
-                      color: context.theme.colorScheme.surface,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(radius - gap),
-                      ),
-                    ),
-                    child: subtitle,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (title != null || titleString != null)
+            title ??
+                Text(
+                  titleString!,
+                  style: context.theme.textTheme.titleLarge!.copyWith(
+                    color: textColor ??
+                        (onTap == null
+                            ? context.theme.colorScheme.onSurfaceVariant
+                            : context.theme.colorScheme.onPrimary),
                   ),
-                )
-              : (selectableText!
-                  ? SelectableText(
-                      subtitleString!,
-                      style: context.theme.textTheme.titleMedium!.copyWith(
-                        color: textColor ??
-                            (onTap == null
-                                ? context.theme.colorScheme.onSurfaceVariant
-                                : context.theme.colorScheme.onPrimary),
-                      ),
-                    )
-                  : Text(
-                      subtitleString!,
-                      style: context.theme.textTheme.titleMedium!.copyWith(
-                        color: textColor ??
-                            (onTap == null
-                                ? context.theme.colorScheme.onSurfaceVariant
-                                : context.theme.colorScheme.onPrimary),
-                      ),
-                    ))
-          : null,
+                ),
+          if (subtitle != null || subtitleString != null) ...[
+            if (title != null || titleString != null) SizedBox(height: gap),
+            Flexible(
+              child: Container(
+                padding: EdgeInsets.all(gap),
+                decoration: BoxDecoration(
+                  color: context.theme.colorScheme.surface,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(radius - gap),
+                  ),
+                ),
+                child: subtitle ??
+                    (selectableText!
+                        ? SelectableText(
+                            subtitleString!,
+                            style:
+                                context.theme.textTheme.titleMedium!.copyWith(
+                              color: textColor ??
+                                  (onTap == null
+                                      ? context
+                                          .theme.colorScheme.onSurfaceVariant
+                                      : context.theme.colorScheme.onPrimary),
+                            ),
+                          )
+                        : Text(
+                            subtitleString!,
+                            style:
+                                context.theme.textTheme.titleMedium!.copyWith(
+                              color: textColor ??
+                                  (onTap == null
+                                      ? context
+                                          .theme.colorScheme.onSurfaceVariant
+                                      : context.theme.colorScheme.onPrimary),
+                            ),
+                          )),
+              ),
+            ),
+          ]
+        ],
+      ),
       trailing: trailing != null || trailingIconData != null
           ? GestureDetector(
               onTap: trailingOnTap,
