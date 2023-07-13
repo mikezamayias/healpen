@@ -18,7 +18,7 @@ class AuthFailedState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseCrashlytics.instance.recordError(
-      (state as AuthFailed).exception.toString(),
+      (state as AuthFailed).exception,
       StackTrace.current,
     );
     return Center(
