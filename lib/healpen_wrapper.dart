@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
@@ -21,12 +22,34 @@ class HealpenWrapper extends ConsumerStatefulWidget {
 
 class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     with WidgetsBindingObserver {
+  late ThemeData theme;
   @override
   void initState() {
     readAppearance(ref);
     readAppColor(ref);
     WidgetsBinding.instance.addObserver(this);
+    theme = createTheme(
+      ref.read(appColorProvider.notifier).state.color,
+      WidgetsBinding.instance.platformDispatcher.platformBrightness,
+    );
+    updateSystemBarStyles();
     super.initState();
+  }
+
+  void updateSystemBarStyles() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: theme.colorScheme.background,
+      statusBarColor: theme.colorScheme.background,
+      statusBarBrightness: theme.colorScheme.background.isLight
+          ? Brightness.dark
+          : Brightness.light,
+      statusBarIconBrightness: theme.colorScheme.background.isLight
+          ? Brightness.dark
+          : Brightness.light,
+      systemNavigationBarIconBrightness: theme.colorScheme.background.isLight
+          ? Brightness.dark
+          : Brightness.light,
+    ));
   }
 
   @override
@@ -41,7 +64,13 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       WidgetsBinding.instance.platformDispatcher.platformBrightness.toString(),
       name: '_HealpenWrapperState:didChangePlatformBrightness',
     );
-    setState(() {});
+    theme = createTheme(
+      ref.read(appColorProvider.notifier).state.color,
+      WidgetsBinding.instance.platformDispatcher.platformBrightness,
+    );
+    setState(() {
+      updateSystemBarStyles();
+    });
   }
 
   @override
@@ -53,10 +82,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
         ],
-        theme: createTheme(
-          ref.watch(appColorProvider).color,
-          WidgetsBinding.instance.platformDispatcher.platformBrightness,
-        ),
+        theme: theme,
         themeMode: switch (ref.watch(appearanceProvider)) {
           Appearance.system => ThemeMode.system,
           Appearance.light => ThemeMode.light,

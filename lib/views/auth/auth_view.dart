@@ -56,8 +56,8 @@ class AuthView extends ConsumerWidget {
               SizedBox(height: gap),
               switch (state.runtimeType) {
                 Uninitialized => const UninitializedState(),
-                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
                 SendingLink => const SendingLinkState(),
+                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
                 SigningIn => const SigningInState(),
                 AuthFailed => AuthFailedState(state: state),
                 _ => UnknownState(state: state)
