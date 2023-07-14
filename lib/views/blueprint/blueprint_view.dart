@@ -22,7 +22,7 @@ class BlueprintView extends ConsumerWidget {
       onTap: () => context.focusScope.unfocus(),
       child: Container(
         color: context.theme.scaffoldBackgroundColor,
-        padding: EdgeInsets.only(left: gap, right: gap, bottom: gap),
+        padding: EdgeInsets.all(gap),
         child: SafeArea(
           child: Scaffold(
             backgroundColor: Colors.transparent,
