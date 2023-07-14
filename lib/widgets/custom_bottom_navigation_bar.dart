@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide PageController;
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -35,11 +34,9 @@ class CustomBottomNavigationBar extends ConsumerWidget {
             ),
             currentIndex:
                 PageController().pages.indexOf(ref.watch(currentPageProvider)),
-            onTap: (int index) {
-              HapticFeedback.mediumImpact();
-              ref.watch(currentPageProvider.notifier).state =
-                  PageController().pages[index];
-            },
+            onTap: (int index) => ref
+                .watch(currentPageProvider.notifier)
+                .state = PageController().pages[index],
             // selectedColorOpacity: 0,
             selectedItemColor: context.theme.colorScheme.primary,
             unselectedItemColor: context.theme.colorScheme.outline,
