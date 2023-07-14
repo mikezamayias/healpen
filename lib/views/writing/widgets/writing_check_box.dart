@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -35,9 +36,7 @@ class WritingCheckBox extends ConsumerWidget {
                   cornerRadius: radius - gap,
                   responsiveWidth: true,
                   titleString: 'Okay',
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+                  onTap: context.navigator.pop,
                 )
               ],
             );
@@ -46,11 +45,14 @@ class WritingCheckBox extends ConsumerWidget {
       },
       titleString: 'Private note',
       trailingIconData: ref.watch(writingControllerProvider).isPrivate
-          ? FontAwesomeIcons.lock
-          : FontAwesomeIcons.lockOpen,
-      trailingOnTap: () => ref
-          .watch(writingControllerProvider.notifier)
-          .updatePrivate(!ref.watch(writingControllerProvider).isPrivate),
+          ? FontAwesomeIcons.solidSquareCheck
+          : FontAwesomeIcons.square,
+      trailingOnTap: () {
+        HapticFeedback.mediumImpact();
+        ref
+            .watch(writingControllerProvider.notifier)
+            .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);
+      },
     );
   }
 }
