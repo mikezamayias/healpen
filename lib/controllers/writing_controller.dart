@@ -11,9 +11,9 @@ import '../models/note/note_model.dart';
 int timeWindow = 3;
 
 final writingControllerProvider =
-    StateNotifierProvider<WritingController, NoteModel>((ref) {
-  return WritingController();
-});
+    StateNotifierProvider<WritingController, NoteModel>(
+  (ref) => WritingController(),
+);
 
 class WritingController extends StateNotifier<NoteModel> {
   // A private constructor.
@@ -48,8 +48,7 @@ class WritingController extends StateNotifier<NoteModel> {
         state = state.copyWith(duration: 0); // Reset the seconds in the state
       }
     }
-
-    state = state.copyWith(content: text);
+    state.content = text;
   }
 
   void _startTimer() {
@@ -96,7 +95,7 @@ class WritingController extends StateNotifier<NoteModel> {
       state.toDocument().toString(),
       name: '_saveEntryToFirebase(userId: $userId)',
     );
-    state.timestamp = DateTime.now().millisecondsSinceEpoch;
+    state = state.copyWith(timestamp: DateTime.now().millisecondsSinceEpoch);
     return _firestore
         .collection('writing-temp')
         .doc(userId)
@@ -108,7 +107,7 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(content: '');
   }
 
-  void updatePrivate(bool value) {
-    state = state.copyWith(isPrivate: value);
+  void updatePrivate(bool bool) {
+    state = state.copyWith(isPrivate: bool);
   }
 }
