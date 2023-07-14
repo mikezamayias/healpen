@@ -19,20 +19,6 @@ class WritingEntry extends ConsumerWidget {
       ),
       padding: EdgeInsets.all(gap),
       child: const WritingTextField(),
-      // child: Column(
-      //   mainAxisSize: MainAxisSize.max,
-      //   children: [
-      //     const Expanded(child: WritingTextField()),
-      //     AnimatedSwitcher(
-      //       duration: animationDuration.milliseconds,
-      //       switchInCurve: curve,
-      //       switchOutCurve: curve,
-      //       child: ref.watch(WritingController().isKeyboardOpenProvider)
-      //           ? null
-      //           : const WritingCheckBox(),
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
