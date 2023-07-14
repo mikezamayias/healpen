@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
@@ -5,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../providers/custom_auth_provider.dart';
-import '../../utils/constants.dart';
+import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/auth_failed_state.dart';
 import 'widgets/awaiting_dynamic_link_state.dart';
@@ -41,28 +43,26 @@ class AuthView extends ConsumerWidget {
         EmailLinkAuthController authController,
         Widget? _,
       ) {
+        log(
+          '${state.runtimeType}',
+          name: 'AuthView:state',
+        );
         return BlueprintView(
-          body: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Sign in with magic link',
-                style: context.theme.textTheme.headlineSmall!.copyWith(
-                  color: context.theme.colorScheme.onSurface,
-                ),
-              ),
-              SizedBox(height: gap),
-              switch (state.runtimeType) {
-                Uninitialized => const UninitializedState(),
-                SendingLink => const SendingLinkState(),
-                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
-                SigningIn => const SigningInState(),
-                AuthFailed => AuthFailedState(state: state),
-                _ => UnknownState(state: state)
-              },
+          appBar: AppBar(
+            pathNames: [
+              'Sign in with magic link',
+              '${state.runtimeType}',
             ],
+          ),
+          body: Center(
+            child: switch (state.runtimeType) {
+              Uninitialized => const UninitializedState(),
+              SendingLink => const SendingLinkState(),
+              AwaitingDynamicLink => const AwaitingDynamicLinkState(),
+              SigningIn => const SigningInState(),
+              AuthFailed => AuthFailedState(state: state),
+              _ => UnknownState(state: state)
+            },
           ),
         );
       },

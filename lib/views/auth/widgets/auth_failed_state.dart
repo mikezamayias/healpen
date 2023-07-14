@@ -21,33 +21,31 @@ class AuthFailedState extends StatelessWidget {
       (state as AuthFailed).exception,
       StackTrace.current,
     );
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomListTile(
-            leadingIconData: FontAwesomeIcons.circleExclamation,
-            selectableText: true,
-            backgroundColor: context.theme.colorScheme.error,
-            textColor: context.theme.colorScheme.onError,
-            titleString: 'Something went wrong',
-            subtitleString:
-                '${(state as AuthFailed).exception}'.split('] ').last,
-          ),
-          SizedBox(height: gap),
-          CustomListTile(
-            responsiveWidth: true,
-            leadingIconData: FontAwesomeIcons.arrowLeft,
-            selectableText: true,
-            // backgroundColor: context.theme.colorScheme.error,
-            // textColor: context.theme.colorScheme.onError,
-            titleString: 'Go back',
-            onTap: () => context.navigator.pushReplacementNamed('/auth'),
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomListTile(
+          leadingIconData: FontAwesomeIcons.circleExclamation,
+          selectableText: true,
+          backgroundColor: context.theme.colorScheme.error,
+          textColor: context.theme.colorScheme.onError,
+          titleString: 'Something went wrong',
+          subtitleString:
+              '${(state as AuthFailed).exception}'.split('] ').last,
+        ),
+        SizedBox(height: gap),
+        CustomListTile(
+          responsiveWidth: true,
+          leadingIconData: FontAwesomeIcons.arrowLeft,
+          selectableText: true,
+          // backgroundColor: context.theme.colorScheme.error,
+          // textColor: context.theme.colorScheme.onError,
+          titleString: 'Go back',
+          onTap: () => context.navigator.pushReplacementNamed('/auth'),
+        ),
+      ],
     );
   }
 }
