@@ -33,7 +33,8 @@ class AuthFailedState extends StatelessWidget {
             backgroundColor: context.theme.colorScheme.error,
             textColor: context.theme.colorScheme.onError,
             titleString: 'Something went wrong',
-            subtitleString: (state as AuthFailed).exception.toString(),
+            subtitleString:
+                '${(state as AuthFailed).exception}'.split('] ').last,
           ),
           SizedBox(height: gap),
           CustomListTile(

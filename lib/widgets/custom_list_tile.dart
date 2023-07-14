@@ -93,44 +93,39 @@ class CustomListTile extends StatelessWidget {
                             : context.theme.colorScheme.onPrimary),
                   ),
                 ),
-          if (subtitle != null || subtitleString != null) ...[
-            if (title != null || titleString != null) SizedBox(height: gap),
-            Flexible(
-              child: Container(
-                padding: EdgeInsets.all(gap),
-                decoration: BoxDecoration(
-                  color: context.theme.colorScheme.surface,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(radius - gap),
-                  ),
-                ),
-                child: subtitle ??
-                    (selectableText!
-                        ? SelectableText(
-                            subtitleString!,
-                            style:
-                                context.theme.textTheme.titleMedium!.copyWith(
-                              color: textColor ??
-                                  (onTap == null
-                                      ? context
-                                          .theme.colorScheme.onSurfaceVariant
-                                      : context.theme.colorScheme.onPrimary),
-                            ),
-                          )
-                        : Text(
-                            subtitleString!,
-                            style:
-                                context.theme.textTheme.titleMedium!.copyWith(
-                              color: textColor ??
-                                  (onTap == null
-                                      ? context
-                                          .theme.colorScheme.onSurfaceVariant
-                                      : context.theme.colorScheme.onPrimary),
-                            ),
-                          )),
-              ),
-            ),
-          ]
+          if (subtitle != null || subtitleString != null)
+            subtitle != null && subtitleString == null
+                ? Flexible(
+                    child: Container(
+                      padding: EdgeInsets.all(gap),
+                      decoration: BoxDecoration(
+                        color: context.theme.colorScheme.surface,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(radius - gap),
+                        ),
+                      ),
+                      child: subtitle,
+                    ),
+                  )
+                : selectableText!
+                    ? SelectableText(
+                        subtitleString!,
+                        style: context.theme.textTheme.titleMedium!.copyWith(
+                          color: textColor ??
+                              (onTap == null
+                                  ? context.theme.colorScheme.onSurfaceVariant
+                                  : context.theme.colorScheme.onPrimary),
+                        ),
+                      )
+                    : Text(
+                        subtitleString!,
+                        style: context.theme.textTheme.titleMedium!.copyWith(
+                          color: textColor ??
+                              (onTap == null
+                                  ? context.theme.colorScheme.onSurfaceVariant
+                                  : context.theme.colorScheme.onPrimary),
+                        ),
+                      ),
         ],
       ),
       trailing: trailing != null || trailingIconData != null
