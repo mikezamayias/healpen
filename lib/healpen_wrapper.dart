@@ -23,6 +23,7 @@ class HealpenWrapper extends ConsumerStatefulWidget {
 class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     with WidgetsBindingObserver {
   late ThemeData theme;
+
   @override
   void initState() {
     readAppearance(ref);
