@@ -17,7 +17,7 @@ class NoteStatsTile extends StatelessWidget {
       text: TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: '$statsTitle ',
+            text: '$statsTitle / ',
             style: context.theme.textTheme.bodyMedium!.copyWith(
               color: context.theme.colorScheme.secondary,
             ),
