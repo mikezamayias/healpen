@@ -52,4 +52,6 @@ dev_dependencies:
   riverpod_lint: ^1.2.0
 
 flutter:
+  assets:
+    - shorebird.yaml
   uses-material-design: true
