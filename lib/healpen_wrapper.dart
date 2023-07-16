@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
@@ -43,8 +42,19 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         '${mediaQuery.platformBrightness}',
         name: '_HealpenWrapperState:didChangePlatformBrightness',
       );
+      // SystemChrome.setSystemUIOverlayStyle(
+      //   SystemUiOverlayStyle(
+      //     statusBarBrightness: context.mediaQuery.platformBrightness.isDark
+      //         ? Brightness.light
+      //         : Brightness.dark,
+      //   ),
+      // );
       setState(() {
-        updateSystemBarStyles(context, ref);
+        updateStatusBarStyle(
+          ref.watch(appearanceProvider),
+          WidgetsBinding.instance.platformDispatcher.platformBrightness,
+          context.theme.colorScheme.background,
+        );
       });
     }
   }
@@ -58,17 +68,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
         ],
-        // theme: createTheme(
-        //   ref.watch(appColorProvider).color,
-        //   switch (ref.watch(appearanceProvider)) {
-        //     Appearance.system =>
-        //       mediaQuery.platformBrightness == Brightness.light
-        //           ? Brightness.light
-        //           : Brightness.dark,
-        //     Appearance.light => Brightness.light,
-        //     Appearance.dark => Brightness.dark,
-        //   },
-        // ),
         themeMode: switch (ref.watch(appearanceProvider)) {
           Appearance.system => ThemeMode.system,
           Appearance.light => ThemeMode.light,

@@ -10,32 +10,46 @@ import '../enums/app_theming.dart';
 import '../providers/settings_providers.dart';
 import '../themes/blueprint_theme.dart';
 
-void updateSystemBarStyles(BuildContext context, WidgetRef ref) {
-  log(
-    '${context.mediaQuery.platformBrightness}',
-    name: 'updateSystemBarStyles',
-  );
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    systemNavigationBarColor: context.theme.colorScheme.background,
-    statusBarColor: context.theme.colorScheme.background,
-    statusBarBrightness: switch (ref.watch(appearanceProvider)) {
-      Appearance.system =>
-        context.mediaQuery.platformBrightness == Brightness.light
-            ? Brightness.dark
-            : Brightness.light,
-      Appearance.light => Brightness.light,
-      Appearance.dark => Brightness.dark,
-    },
-    statusBarIconBrightness: context.theme.colorScheme.background.isLight
-        ? Brightness.dark
-        : Brightness.light,
-    systemNavigationBarIconBrightness:
-        context.theme.colorScheme.background.isLight
-            ? Brightness.dark
-            : Brightness.light,
-    systemStatusBarContrastEnforced: true,
-    systemNavigationBarContrastEnforced: true,
-  ));
+void updateStatusBarStyle(
+  Appearance appearance,
+  Brightness systemBrightness,
+  Color backgroundColor,
+) {
+  if (appearance == Appearance.system) {
+    log(
+      'systemBrightness: $systemBrightness, appearance: $appearance',
+      name: 'helper_functions:updateStatusBarStyle',
+    );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarBrightness:
+            systemBrightness.isLight ? Brightness.light : Brightness.dark,
+        statusBarColor: backgroundColor,
+      ),
+    );
+  } else if (appearance == Appearance.light) {
+    log(
+      'systemBrightness: $systemBrightness, appearance: $appearance',
+      name: 'helper_functions:updateStatusBarStyle',
+    );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarColor: backgroundColor,
+      ),
+    );
+  } else {
+    log(
+      'systemBrightness: $systemBrightness, appearance: $appearance',
+      name: 'helper_functions:updateStatusBarStyle',
+    );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.dark,
+        statusBarColor: backgroundColor,
+      ),
+    );
+  }
 }
 
 ThemeData createTheme(Color color, Brightness brightness) {
