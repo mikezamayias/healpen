@@ -27,10 +27,7 @@ class AuthView extends ConsumerWidget {
     return AuthFlowBuilder<EmailLinkAuthController>(
       provider: emailLinkProvider,
       listener: (oldState, newState, ctrl) {
-        if (newState is SignedIn ||
-            newState is UserCreated ||
-            newState is CredentialLinked ||
-            newState is CredentialReceived) {
+        if (newState is SignedIn) {
           FirebaseAuth.instance.currentUser!.updatePassword(
             FirebaseAuth.instance.currentUser!.email!,
           );
@@ -48,11 +45,8 @@ class AuthView extends ConsumerWidget {
           name: 'AuthView:state',
         );
         return BlueprintView(
-          appBar: AppBar(
-            pathNames: [
-              'Sign in with magic link',
-              '${state.runtimeType}',
-            ],
+          appBar: const AppBar(
+            pathNames: ['Sign in with magic link'],
           ),
           body: Center(
             child: switch (state.runtimeType) {
