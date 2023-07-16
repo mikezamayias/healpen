@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../providers/custom_auth_provider.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/constants.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/auth_failed_state.dart';
 import 'widgets/awaiting_dynamic_link_state.dart';
@@ -45,18 +45,26 @@ class AuthView extends ConsumerWidget {
           name: 'AuthView:state',
         );
         return BlueprintView(
-          appBar: const AppBar(
-            pathNames: ['Sign in with magic link'],
-          ),
           body: Center(
-            child: switch (state.runtimeType) {
-              Uninitialized => const UninitializedState(),
-              SendingLink => const SendingLinkState(),
-              AwaitingDynamicLink => const AwaitingDynamicLinkState(),
-              SigningIn => const SigningInState(),
-              AuthFailed => AuthFailedState(state: state),
-              _ => UnknownState(state: state)
-            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Sign in with magic link',
+                  style: context.theme.textTheme.headlineSmall,
+                ),
+                SizedBox(height: gap),
+                switch (state.runtimeType) {
+                  Uninitialized => const UninitializedState(),
+                  SendingLink => const SendingLinkState(),
+                  AwaitingDynamicLink => const AwaitingDynamicLinkState(),
+                  SigningIn => const SigningInState(),
+                  AuthFailed => AuthFailedState(state: state),
+                  _ => UnknownState(state: state)
+                },
+              ],
+            ),
           ),
         );
       },
