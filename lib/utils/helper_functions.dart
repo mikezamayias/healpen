@@ -10,44 +10,35 @@ import '../enums/app_theming.dart';
 import '../providers/settings_providers.dart';
 import '../themes/blueprint_theme.dart';
 
-void updateStatusBarStyle(
-  Appearance appearance,
-  Brightness systemBrightness,
-  Color backgroundColor,
-) {
+SystemUiOverlayStyle getSystemUIOverlayStyle(
+    ThemeData theme,
+    Appearance appearance,
+    ) {
   if (appearance == Appearance.system) {
-    log(
-      'systemBrightness: $systemBrightness, appearance: $appearance',
-      name: 'helper_functions:updateStatusBarStyle',
-    );
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarBrightness:
-            systemBrightness.isLight ? Brightness.light : Brightness.dark,
-        statusBarColor: backgroundColor,
-      ),
+    return SystemUiOverlayStyle(
+      systemNavigationBarColor: theme.colorScheme.background,
+      systemNavigationBarDividerColor: theme.colorScheme.background,
+      systemNavigationBarIconBrightness:
+      theme.brightness.isLight ? Brightness.dark : Brightness.light,
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness:
+      theme.brightness.isLight ? Brightness.dark : Brightness.light,
     );
   } else if (appearance == Appearance.light) {
-    log(
-      'systemBrightness: $systemBrightness, appearance: $appearance',
-      name: 'helper_functions:updateStatusBarStyle',
-    );
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.light,
-        statusBarColor: backgroundColor,
-      ),
+    return SystemUiOverlayStyle(
+      systemNavigationBarColor: theme.colorScheme.background,
+      systemNavigationBarDividerColor: theme.colorScheme.background,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
     );
   } else {
-    log(
-      'systemBrightness: $systemBrightness, appearance: $appearance',
-      name: 'helper_functions:updateStatusBarStyle',
-    );
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarBrightness: Brightness.dark,
-        statusBarColor: backgroundColor,
-      ),
+    return SystemUiOverlayStyle(
+      systemNavigationBarColor: theme.colorScheme.background,
+      systemNavigationBarDividerColor: theme.colorScheme.background,
+      systemNavigationBarIconBrightness: Brightness.light,
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
     );
   }
 }
