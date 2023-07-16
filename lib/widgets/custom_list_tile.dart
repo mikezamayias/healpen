@@ -96,15 +96,18 @@ class CustomListTile extends StatelessWidget {
           if (subtitle != null || subtitleString != null)
             subtitle != null && subtitleString == null
                 ? Flexible(
-                    child: Container(
-                      padding: EdgeInsets.all(gap),
-                      decoration: BoxDecoration(
-                        color: context.theme.colorScheme.surface,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(radius - gap),
+                    child: Padding(
+                      padding: EdgeInsets.only(top: padding.vertical / 2),
+                      child: Container(
+                        padding: EdgeInsets.all(gap),
+                        decoration: BoxDecoration(
+                          color: context.theme.colorScheme.surface,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(radius - gap),
+                          ),
                         ),
+                        child: subtitle,
                       ),
-                      child: subtitle,
                     ),
                   )
                 : selectableText!

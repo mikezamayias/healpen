@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
@@ -31,10 +32,15 @@ class ThemeAppearanceTile extends ConsumerWidget {
         onSelectionChanged: (Set<Appearance> newSelection) {
           ref.watch(appearanceProvider.notifier).state = newSelection.first;
           log(
-            'Theme appearance changed to ${newSelection.first}',
+            '${newSelection.first}',
             name: 'Settings: ThemeAppearanceTile',
           );
           writeAppearance(ref.watch(appearanceProvider));
+          updateStatusBarStyle(
+            ref.watch(appearanceProvider),
+            context.mediaQuery.platformBrightness,
+            context.theme.colorScheme.background,
+          );
         },
       ),
     );

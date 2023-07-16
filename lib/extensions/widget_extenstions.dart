@@ -6,12 +6,12 @@ import '../utils/constants.dart';
 
 extension WidgetListExtensions on List<Widget> {
   List<Widget> animateWidgetList() =>
-      animate(interval: animationDuration.milliseconds)
+      animate(interval: 60.milliseconds)
           .fade(curve: curve)
-          .slideY(begin: 0.6, curve: Sprung.overDamped)
+          .slideX(begin: 0.6, curve: curve)
           .scale(
             begin: const Offset(0, 0),
-            duration: animationDuration.milliseconds,
+            duration: 60.milliseconds,
           );
 
   List<Widget> animateLicences() =>
@@ -51,10 +51,10 @@ extension WidgetExtensions on Widget {
   //       borderRadius: BorderRadius.all(Radius.circular(radius)),
   //     );
 
-  Widget animateAppBar(BuildContext context) => animateSlideInFromTop()
+  Widget animateAppBar() => animateSlideInFromTop()
       .animate()
-      .fade(begin: -1, curve: Sprung.overDamped)
-      .slideY(begin: -1, curve: Sprung.overDamped)
+      .fade(begin: -1, curve: curve)
+      .slideY(begin: -1, curve: curve)
       .scale(
         begin: const Offset(0.6, 0.6),
         duration: animationDuration.milliseconds,

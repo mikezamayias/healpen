@@ -25,7 +25,7 @@ class EditNameTile extends StatelessWidget {
         controller: textController,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.zero,
-          hintText: displayName ?? 'How should we call you?',
+          hintText: displayName ?? 'How should you be called?',
           hintStyle: context.theme.textTheme.titleLarge,
         ),
         style: context.theme.textTheme.titleLarge,

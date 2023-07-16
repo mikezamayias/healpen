@@ -1,12 +1,56 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../enums/app_theming.dart';
 import '../providers/settings_providers.dart';
 import '../themes/blueprint_theme.dart';
+
+void updateStatusBarStyle(
+  Appearance appearance,
+  Brightness systemBrightness,
+  Color backgroundColor,
+) {
+  if (appearance == Appearance.system) {
+    log(
+      'systemBrightness: $systemBrightness, appearance: $appearance',
+      name: 'helper_functions:updateStatusBarStyle',
+    );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarBrightness:
+            systemBrightness.isLight ? Brightness.light : Brightness.dark,
+        statusBarColor: backgroundColor,
+      ),
+    );
+  } else if (appearance == Appearance.light) {
+    log(
+      'systemBrightness: $systemBrightness, appearance: $appearance',
+      name: 'helper_functions:updateStatusBarStyle',
+    );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.light,
+        statusBarColor: backgroundColor,
+      ),
+    );
+  } else {
+    log(
+      'systemBrightness: $systemBrightness, appearance: $appearance',
+      name: 'helper_functions:updateStatusBarStyle',
+    );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.dark,
+        statusBarColor: backgroundColor,
+      ),
+    );
+  }
+}
 
 ThemeData createTheme(Color color, Brightness brightness) {
   return blueprintTheme(

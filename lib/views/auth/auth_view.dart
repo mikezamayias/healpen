@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
@@ -25,10 +27,7 @@ class AuthView extends ConsumerWidget {
     return AuthFlowBuilder<EmailLinkAuthController>(
       provider: emailLinkProvider,
       listener: (oldState, newState, ctrl) {
-        if (newState is SignedIn ||
-            newState is UserCreated ||
-            newState is CredentialLinked ||
-            newState is CredentialReceived) {
+        if (newState is SignedIn) {
           FirebaseAuth.instance.currentUser!.updatePassword(
             FirebaseAuth.instance.currentUser!.email!,
           );
@@ -41,28 +40,31 @@ class AuthView extends ConsumerWidget {
         EmailLinkAuthController authController,
         Widget? _,
       ) {
+        log(
+          '${state.runtimeType}',
+          name: 'AuthView:state',
+        );
         return BlueprintView(
-          body: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Sign in with magic link',
-                style: context.theme.textTheme.headlineSmall!.copyWith(
-                  color: context.theme.colorScheme.onSurface,
+          body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Sign in with magic link',
+                  style: context.theme.textTheme.headlineSmall,
                 ),
-              ),
-              SizedBox(height: gap),
-              switch (state.runtimeType) {
-                Uninitialized => const UninitializedState(),
-                SendingLink => const SendingLinkState(),
-                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
-                SigningIn => const SigningInState(),
-                AuthFailed => AuthFailedState(state: state),
-                _ => UnknownState(state: state)
-              },
-            ],
+                SizedBox(height: gap),
+                switch (state.runtimeType) {
+                  Uninitialized => const UninitializedState(),
+                  SendingLink => const SendingLinkState(),
+                  AwaitingDynamicLink => const AwaitingDynamicLinkState(),
+                  SigningIn => const SigningInState(),
+                  AuthFailed => AuthFailedState(state: state),
+                  _ => UnknownState(state: state)
+                },
+              ],
+            ),
           ),
         );
       },

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
-class NewEntryButton extends ConsumerWidget {
-  const NewEntryButton({
+class NewNoteButton extends ConsumerWidget {
+  const NewNoteButton({
     super.key,
   });
 
@@ -27,7 +28,8 @@ class NewEntryButton extends ConsumerWidget {
           writingController.resetText(); // Resets the text in the state
         }
       },
-      titleString: 'New Entry',
+      leadingIconData: FontAwesomeIcons.circlePlus,
+      titleString: 'New',
       backgroundColor:
           state.content.isEmpty || writingTextController.text.isEmpty
               ? context.theme.colorScheme.outline
