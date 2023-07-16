@@ -35,6 +35,7 @@ class ThemeAppearanceTile extends ConsumerWidget {
             name: 'Settings: ThemeAppearanceTile',
           );
           writeAppearance(ref.watch(appearanceProvider));
+          updateSystemBarStyles(context, ref);
         },
       ),
     );

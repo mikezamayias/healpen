@@ -22,35 +22,12 @@ class HealpenWrapper extends ConsumerStatefulWidget {
 
 class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     with WidgetsBindingObserver {
-  late ThemeData theme;
-
   @override
   void initState() {
     readAppearance(ref);
     readAppColor(ref);
     WidgetsBinding.instance.addObserver(this);
-    theme = createTheme(
-      ref.read(appColorProvider.notifier).state.color,
-      WidgetsBinding.instance.platformDispatcher.platformBrightness,
-    );
-    updateSystemBarStyles();
     super.initState();
-  }
-
-  void updateSystemBarStyles() {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemNavigationBarColor: theme.colorScheme.background,
-      statusBarColor: theme.colorScheme.background,
-      statusBarBrightness: theme.colorScheme.background.isLight
-          ? Brightness.dark
-          : Brightness.light,
-      statusBarIconBrightness: theme.colorScheme.background.isLight
-          ? Brightness.dark
-          : Brightness.light,
-      systemNavigationBarIconBrightness: theme.colorScheme.background.isLight
-          ? Brightness.dark
-          : Brightness.light,
-    ));
   }
 
   @override
@@ -61,17 +38,15 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   void didChangePlatformBrightness() {
-    log(
-      WidgetsBinding.instance.platformDispatcher.platformBrightness.toString(),
-      name: '_HealpenWrapperState:didChangePlatformBrightness',
-    );
-    theme = createTheme(
-      ref.read(appColorProvider.notifier).state.color,
-      WidgetsBinding.instance.platformDispatcher.platformBrightness,
-    );
-    setState(() {
-      updateSystemBarStyles();
-    });
+    if (ref.watch(appearanceProvider) == Appearance.system) {
+      log(
+        '${mediaQuery.platformBrightness}',
+        name: '_HealpenWrapperState:didChangePlatformBrightness',
+      );
+      setState(() {
+        updateSystemBarStyles(context, ref);
+      });
+    }
   }
 
   @override
@@ -83,12 +58,30 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
         ],
-        theme: theme,
+        // theme: createTheme(
+        //   ref.watch(appColorProvider).color,
+        //   switch (ref.watch(appearanceProvider)) {
+        //     Appearance.system =>
+        //       mediaQuery.platformBrightness == Brightness.light
+        //           ? Brightness.light
+        //           : Brightness.dark,
+        //     Appearance.light => Brightness.light,
+        //     Appearance.dark => Brightness.dark,
+        //   },
+        // ),
         themeMode: switch (ref.watch(appearanceProvider)) {
           Appearance.system => ThemeMode.system,
           Appearance.light => ThemeMode.light,
           Appearance.dark => ThemeMode.dark,
         },
+        theme: createTheme(
+          ref.watch(appColorProvider).color,
+          Brightness.light,
+        ),
+        darkTheme: createTheme(
+          ref.watch(appColorProvider).color,
+          Brightness.dark,
+        ),
         initialRoute:
             FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',
         routes: {
