@@ -42,18 +42,10 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         '${mediaQuery.platformBrightness}',
         name: '_HealpenWrapperState:didChangePlatformBrightness',
       );
-      // SystemChrome.setSystemUIOverlayStyle(
-      //   SystemUiOverlayStyle(
-      //     statusBarBrightness: context.mediaQuery.platformBrightness.isDark
-      //         ? Brightness.light
-      //         : Brightness.dark,
-      //   ),
-      // );
       setState(() {
-        updateStatusBarStyle(
+        getSystemUIOverlayStyle(
+          context.theme,
           ref.watch(appearanceProvider),
-          WidgetsBinding.instance.platformDispatcher.platformBrightness,
-          context.theme.colorScheme.background,
         );
       });
     }
@@ -75,11 +67,12 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         },
         theme: createTheme(
           ref.watch(appColorProvider).color,
-          Brightness.light,
-        ),
-        darkTheme: createTheme(
-          ref.watch(appColorProvider).color,
-          Brightness.dark,
+          switch (ref.watch(appearanceProvider)) {
+            Appearance.system =>
+              WidgetsBinding.instance.platformDispatcher.platformBrightness,
+            Appearance.light => Brightness.light,
+            Appearance.dark => Brightness.dark,
+          },
         ),
         initialRoute:
             FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',

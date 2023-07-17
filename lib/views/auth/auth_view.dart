@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,10 +26,12 @@ class AuthView extends ConsumerWidget {
     return AuthFlowBuilder<EmailLinkAuthController>(
       provider: emailLinkProvider,
       listener: (oldState, newState, ctrl) {
-        if (newState is SignedIn) {
-          FirebaseAuth.instance.currentUser!.updatePassword(
-            FirebaseAuth.instance.currentUser!.email!,
-          );
+        // TODO: check if the following implementation is correct
+        // documentation mentions only the SignedIn check
+        if (newState is SignedIn ||
+            newState is UserCreated ||
+            newState is CredentialLinked ||
+            newState is CredentialReceived) {
           context.navigator.pushReplacementNamed('/healpen');
         }
       },
