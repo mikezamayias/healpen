@@ -129,10 +129,21 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{env.BUILD_NAME}}.apk
-      - uses: wzieba/Firebase-Distribution-Github-Action@v1
+      - name: Distribution to Testers
+        if: github.ref == 'refs/heads/development'
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
           serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
           file: ${{env.BUILD_NAME}}.apk
           groups: testers
+          releaseNotes: ${{github.event.head_commit.message}}
+      - name: Distribution to Beta Testers
+        if: github.ref == 'refs/heads/production'
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
+          file: ${{env.BUILD_NAME}}.apk
+          groups: beta-testers
           releaseNotes: ${{github.event.head_commit.message}}
