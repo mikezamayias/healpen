@@ -36,10 +36,9 @@ class ThemeAppearanceTile extends ConsumerWidget {
             name: 'Settings: ThemeAppearanceTile',
           );
           writeAppearance(ref.watch(appearanceProvider));
-          updateStatusBarStyle(
+          getSystemUIOverlayStyle(
+            context.theme,
             ref.watch(appearanceProvider),
-            context.mediaQuery.platformBrightness,
-            context.theme.colorScheme.background,
           );
         },
       ),
