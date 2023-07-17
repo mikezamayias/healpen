@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,35 +12,48 @@ import '../providers/settings_providers.dart';
 import '../themes/blueprint_theme.dart';
 
 SystemUiOverlayStyle getSystemUIOverlayStyle(
-    ThemeData theme,
-    Appearance appearance,
-    ) {
-  if (appearance == Appearance.system) {
-    return SystemUiOverlayStyle(
-      systemNavigationBarColor: theme.colorScheme.background,
-      systemNavigationBarDividerColor: theme.colorScheme.background,
-      systemNavigationBarIconBrightness:
-      theme.brightness.isLight ? Brightness.dark : Brightness.light,
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness:
-      theme.brightness.isLight ? Brightness.dark : Brightness.light,
-    );
-  } else if (appearance == Appearance.light) {
-    return SystemUiOverlayStyle(
-      systemNavigationBarColor: theme.colorScheme.background,
-      systemNavigationBarDividerColor: theme.colorScheme.background,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    );
+  ThemeData theme,
+  Appearance appearance,
+) {
+  if (Platform.isAndroid) {
+    if (appearance == Appearance.system) {
+      return SystemUiOverlayStyle(
+        systemNavigationBarColor: theme.colorScheme.background,
+        systemNavigationBarDividerColor: theme.colorScheme.background,
+        systemNavigationBarIconBrightness:
+            theme.brightness.isLight ? Brightness.dark : Brightness.light,
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness:
+            theme.brightness.isLight ? Brightness.dark : Brightness.light,
+      );
+    } else {
+      if (appearance == Appearance.light) {
+        return SystemUiOverlayStyle(
+          systemNavigationBarColor: theme.colorScheme.background,
+          systemNavigationBarDividerColor: theme.colorScheme.background,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+        );
+      } else {
+        return SystemUiOverlayStyle(
+          systemNavigationBarColor: theme.colorScheme.background,
+          systemNavigationBarDividerColor: theme.colorScheme.background,
+          systemNavigationBarIconBrightness: Brightness.light,
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        );
+      }
+    }
   } else {
-    return SystemUiOverlayStyle(
-      systemNavigationBarColor: theme.colorScheme.background,
-      systemNavigationBarDividerColor: theme.colorScheme.background,
-      systemNavigationBarIconBrightness: Brightness.light,
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-    );
+    return switch (appearance) {
+      Appearance.system =>
+        WidgetsBinding.instance.platformDispatcher.platformBrightness.isLight
+            ? SystemUiOverlayStyle.dark
+            : SystemUiOverlayStyle.light,
+      Appearance.light => SystemUiOverlayStyle.dark,
+      Appearance.dark => SystemUiOverlayStyle.light,
+    };
   }
 }
 
