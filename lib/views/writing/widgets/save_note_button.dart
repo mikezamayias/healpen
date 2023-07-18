@@ -7,17 +7,17 @@ import '../../../controllers/writing_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
-class NewNoteButton extends ConsumerWidget {
-  const NewNoteButton({
+class SaveNoteButton extends ConsumerWidget {
+  const SaveNoteButton({
     super.key,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
-    final writingController = ref.read(writingControllerProvider.notifier);
+    final writingController = ref.watch(writingControllerProvider.notifier);
     final writingTextController =
-        ref.read(writingControllerProvider.notifier).textController;
+        ref.watch(writingControllerProvider.notifier).textController;
     return CustomListTile(
       cornerRadius: radius - gap,
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
@@ -28,8 +28,6 @@ class NewNoteButton extends ConsumerWidget {
           writingController.resetText(); // Resets the text in the state
         }
       },
-      leadingIconData: FontAwesomeIcons.circlePlus,
-      titleString: 'New',
       backgroundColor:
           state.content.isEmpty || writingTextController.text.isEmpty
               ? context.theme.colorScheme.outline
@@ -37,8 +35,9 @@ class NewNoteButton extends ConsumerWidget {
       textColor: state.content.isEmpty || writingTextController.text.isEmpty
           ? context.theme.colorScheme.background
           : null,
-      // trailingIconData: FontAwesomeIcons.plus,
       responsiveWidth: true,
+      titleString: 'Save',
+      leadingIconData: FontAwesomeIcons.solidFloppyDisk,
     );
   }
 }

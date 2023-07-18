@@ -8,7 +8,7 @@ import '../../controllers/writing_controller.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
-import 'widgets/new_note_button.dart';
+import 'widgets/save_note_button.dart';
 import 'widgets/stopwatch_tile.dart';
 import 'widgets/writing_check_box.dart';
 import 'widgets/writing_entry.dart';
@@ -79,7 +79,7 @@ class _WritingViewState extends ConsumerState<WritingView>
                   children: [
                     const Expanded(child: WritingCheckBox()),
                     SizedBox(width: gap),
-                    const NewNoteButton(),
+                    const SaveNoteButton(),
                   ],
                 ),
               ).animate().fadeIn(
