@@ -99,7 +99,12 @@ class WritingController extends StateNotifier<NoteModel> {
       state.toDocument().toString(),
       name: '_saveEntryToFirebase(userId: $userId)',
     );
-    state = state.copyWith(timestamp: DateTime.now().millisecondsSinceEpoch);
+    state = state.copyWith(
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
+    state = state.copyWith(
+      wordCount: state.content.trim().split(' ').length,
+    );
     return _firestore
         .collection('writing-temp')
         .doc(userId)
