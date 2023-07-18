@@ -28,7 +28,7 @@ class NoteView extends StatelessWidget {
             children: [
               Expanded(
                 child: CustomListTile(
-                  titleString: 'Timestamp',
+                  titleString: 'Date and Time',
                   responsiveWidth: true,
                   contentPadding: EdgeInsets.all(gap),
                   subtitle: SelectableText(
