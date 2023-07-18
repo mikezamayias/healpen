@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,9 +24,33 @@ class SaveNoteButton extends ConsumerWidget {
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
       onTap: () {
         if (state.content.isNotEmpty) {
-          writingController.handleSaveNote(); // Saves entry
-          writingTextController.clear(); // Clears the TextFormField
-          writingController.resetText(); // Resets the text in the state
+          writingController.handleSaveNote().then(
+            (_) {
+              writingTextController.clear(); // Clears the TextFormField
+              writingController.resetText(); // Resets the text in the state
+              return ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  padding: EdgeInsets.only(
+                    left: gap,
+                    right: gap,
+                    bottom: gap,
+                  ),
+                  duration: 3.seconds,
+                  content: CustomListTile(
+                    backgroundColor: context.theme.colorScheme.secondary,
+                    textColor: context.theme.colorScheme.onSecondary,
+                    titleString: 'Note added successfully!',
+                    leadingIconData: FontAwesomeIcons.solidCircleCheck,
+                    contentPadding: EdgeInsets.symmetric(
+                      vertical: gap,
+                      horizontal: gap * 2,
+                    ),
+                    cornerRadius: radius,
+                  ),
+                ),
+              );
+            },
+          ); // Saves entry
         }
       },
       backgroundColor:
