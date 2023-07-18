@@ -77,7 +77,7 @@ class NoteView extends StatelessWidget {
                 contentPadding: EdgeInsets.all(gap),
                 titleString: 'Word Count',
                 subtitle: Text(
-                  noteModel.content.split(' ').length.toString(),
+                  noteModel.wordCount.toString(),
                 ),
               ),
             ],

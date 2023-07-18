@@ -10,6 +10,7 @@ NoteModel _$NoteModelFromJson(Map<String, dynamic> json) => NoteModel(
       content: json['content'] as String? ?? '',
       isPrivate: json['isPrivate'] as bool? ?? false,
       duration: json['duration'] as int? ?? 0,
+      wordCount: json['wordCount'] as int?,
       timestamp: json['timestamp'] as int?,
     );
 
@@ -18,4 +19,5 @@ Map<String, dynamic> _$NoteModelToJson(NoteModel instance) => <String, dynamic>{
       'isPrivate': instance.isPrivate,
       'duration': instance.duration,
       'timestamp': instance.timestamp,
+      'wordCount': instance.wordCount,
     };

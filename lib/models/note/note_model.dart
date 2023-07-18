@@ -8,13 +8,16 @@ class NoteModel {
   bool isPrivate;
   int duration;
   int timestamp;
+  int wordCount;
 
   NoteModel({
     this.content = '',
     this.isPrivate = false,
     this.duration = 0,
+    int? wordCount,
     int? timestamp,
-  }) : timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
+  })  : wordCount = content.trim().split(' ').length,
+        timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
 
   factory NoteModel.fromDocument(Map<String, dynamic> json) =>
       _$NoteModelFromJson(json);
@@ -26,17 +29,19 @@ class NoteModel {
     bool? isPrivate,
     int? duration,
     int? timestamp,
+    int? wordCount,
   }) {
     return NoteModel(
       content: content ?? this.content,
       isPrivate: isPrivate ?? this.isPrivate,
       duration: duration ?? this.duration,
       timestamp: timestamp ?? this.timestamp,
+      wordCount: wordCount ?? this.wordCount,
     );
   }
 
   @override
   String toString() {
-    return 'NoteModel(content: $content, isPrivate: $isPrivate, duration: $duration, timestamp: $timestamp)';
+    return 'NoteModel(content: $content, isPrivate: $isPrivate, duration: $duration, timestamp: $timestamp, wordCount: $wordCount)';
   }
 }
