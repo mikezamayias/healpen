@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sprung/sprung.dart';
 
 import '../utils/constants.dart';
 
@@ -18,6 +20,7 @@ class CustomListTile extends StatelessWidget {
   final GestureTapCallback? leadingOnTap;
   final bool? selectableText;
   final bool? responsiveWidth;
+  final bool? showCaseLeadingIcon;
   final Color? backgroundColor;
   final Color? textColor;
   final double? cornerRadius;
@@ -40,6 +43,7 @@ class CustomListTile extends StatelessWidget {
     this.textColor,
     this.selectableText = false,
     this.responsiveWidth = false,
+    this.showCaseLeadingIcon = false,
     this.cornerRadius,
     this.contentPadding,
   }) : super(key: key);
@@ -53,6 +57,7 @@ class CustomListTile extends StatelessWidget {
         );
     final listTile = ListTile(
       dense: false,
+      onTap: null,
       onLongPress: null,
       contentPadding: padding,
       minLeadingWidth: 0,
@@ -61,21 +66,29 @@ class CustomListTile extends StatelessWidget {
       leading: leading != null || leadingIconData != null
           ? GestureDetector(
               onTap: leadingOnTap,
-              child: leading ??
-                  (leadingOnTap != null
-                      ? FaIcon(
-                          leadingIconData!,
-                          color: textColor ?? context.theme.colorScheme.primary,
-                          size: context.theme.textTheme.titleLarge!.fontSize,
-                        )
-                      : FaIcon(
-                          leadingIconData!,
-                          color: textColor ??
-                              (onTap == null
+              child: Animate(
+                effects: [
+                  if (showCaseLeadingIcon!)
+                    ShakeEffect(
+                      delay: 2.seconds,
+                      curve: Sprung.criticallyDamped,
+                      duration: 6.seconds,
+                      hz: 1,
+                      offset: const Offset(0, 3),
+                    ),
+                ],
+                child: leading ??
+                    FaIcon(
+                      leadingIconData!,
+                      color: textColor ??
+                          (leadingOnTap != null
+                              ? context.theme.colorScheme.primary
+                              : onTap == null
                                   ? context.theme.colorScheme.onSurfaceVariant
                                   : context.theme.colorScheme.onPrimary),
-                          size: context.theme.textTheme.titleLarge!.fontSize,
-                        )),
+                      size: context.theme.textTheme.titleLarge!.fontSize,
+                    ),
+              ),
             )
           : null,
       title: Column(

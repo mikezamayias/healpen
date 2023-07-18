@@ -6,11 +6,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
 
-class WritingCheckBox extends ConsumerWidget {
-  const WritingCheckBox({Key? key}) : super(key: key);
+class PrivateNoteCheckBox extends ConsumerWidget {
+  const PrivateNoteCheckBox({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,8 +20,14 @@ class WritingCheckBox extends ConsumerWidget {
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
       backgroundColor: context.theme.colorScheme.surface,
       responsiveWidth: true,
+      showCaseLeadingIcon:
+          ref.watch(WritingController().shakePrivateNoteInfoProvider),
       leadingIconData: FontAwesomeIcons.circleInfo,
       leadingOnTap: () {
+        ref
+            .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
+            .state = false;
+        writeShakePrivateNoteInfo(false);
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -43,7 +50,7 @@ class WritingCheckBox extends ConsumerWidget {
           },
         );
       },
-      titleString: 'Private note',
+      titleString: 'Make private',
       trailingIconData: ref.watch(writingControllerProvider).isPrivate
           ? FontAwesomeIcons.solidSquareCheck
           : FontAwesomeIcons.square,

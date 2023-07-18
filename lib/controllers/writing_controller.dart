@@ -31,6 +31,10 @@ class WritingController extends StateNotifier<NoteModel> {
   Timer? _delayTimer;
   final TextEditingController textController = TextEditingController();
   final isKeyboardOpenProvider = StateProvider((ref) => false);
+  final shakePrivateNoteInfoProvider = StateProvider((ref) {
+    log('shakePrivateNoteInfoProvider', name: 'WritingController');
+    return true;
+  });
 
   void handleTextChange(String text) {
     if (text.isNotEmpty) {

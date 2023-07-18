@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controllers/writing_controller.dart';
 import '../enums/app_theming.dart';
 import '../providers/settings_providers.dart';
 import '../themes/blueprint_theme.dart';
@@ -66,30 +67,6 @@ ThemeData createTheme(Color color, Brightness brightness) {
   );
 }
 
-ThemeData getTheme(AppColor appColor, Brightness brightness) =>
-    switch (appColor) {
-      AppColor.blue => createTheme(
-          AppColor.blue.color,
-          brightness,
-        ),
-      AppColor.teal => createTheme(
-          AppColor.teal.color,
-          brightness,
-        ),
-      AppColor.pastelBlue => createTheme(
-          AppColor.pastelBlue.color,
-          brightness,
-        ),
-      AppColor.pastelTeal => createTheme(
-          AppColor.pastelTeal.color,
-          brightness,
-        ),
-      AppColor.pastelOcean => createTheme(
-          AppColor.pastelOcean.color,
-          brightness,
-        ),
-    };
-
 Future writeAppearance(Appearance appearance) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   log(
@@ -135,5 +112,28 @@ Future readAppColor(WidgetRef ref) async {
     ref.read(appColorProvider.notifier).state = AppColor.values.firstWhere(
       (e) => e.toString() == appColor,
     );
+  }
+}
+
+Future writeShakePrivateNoteInfo(bool shakePrivateNoteInfo) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  log(
+    '$shakePrivateNoteInfo',
+    name: 'helper_functions.dart:writeShakePrivateNoteInfo',
+  );
+  prefs.setBool('shakePrivateNoteInfo', shakePrivateNoteInfo);
+}
+
+Future readShakePrivateNoteInfo(WidgetRef ref) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool? shakePrivateNoteInfo = prefs.getBool('shakePrivateNoteInfo');
+  log(
+    '$shakePrivateNoteInfo',
+    name: 'helper_functions.dart:readShakePrivateNoteInfo',
+  );
+
+  if (shakePrivateNoteInfo != null) {
+    ref.read(WritingController().shakePrivateNoteInfoProvider.notifier).state =
+        shakePrivateNoteInfo;
   }
 }
