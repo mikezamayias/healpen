@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../extensions/int_extensions.dart';
-import '../../../extensions/widget_extenstions.dart';
 import '../../../models/note/note_model.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -47,14 +47,16 @@ class NoteTile extends StatelessWidget {
           ),
           NoteStatsTile(
             statsTitle: 'Word Count',
-            statsValue: entry.content.split(' ').length.toString(),
+            statsValue: entry.wordCount.toString(),
           ),
         ],
       ),
+      leadingIconData:
+          entry.isPrivate ? FontAwesomeIcons.lock : FontAwesomeIcons.lockOpen,
       onTap: () => context.navigator.pushNamed(
         '/note',
         arguments: entry,
       ),
-    ).animateSlideInFromRight();
+    );
   }
 }

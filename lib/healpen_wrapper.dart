@@ -25,6 +25,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   void initState() {
     readAppearance(ref);
     readAppColor(ref);
+    readShakePrivateNoteInfo(ref);
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }

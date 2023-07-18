@@ -13,7 +13,11 @@ class Healpen extends ConsumerWidget {
     return Scaffold(
       body: ref.watch(currentPageProvider).widget,
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: gap),
+        padding: EdgeInsets.only(
+          left: gap,
+          right: gap,
+          bottom: gap,
+        ),
         child: const CustomBottomNavigationBar(),
       ),
     );

@@ -31,6 +31,10 @@ class WritingController extends StateNotifier<NoteModel> {
   Timer? _delayTimer;
   final TextEditingController textController = TextEditingController();
   final isKeyboardOpenProvider = StateProvider((ref) => false);
+  final shakePrivateNoteInfoProvider = StateProvider((ref) {
+    log('shakePrivateNoteInfoProvider', name: 'WritingController');
+    return true;
+  });
 
   void handleTextChange(String text) {
     if (text.isNotEmpty) {
@@ -95,7 +99,12 @@ class WritingController extends StateNotifier<NoteModel> {
       state.toDocument().toString(),
       name: '_saveEntryToFirebase(userId: $userId)',
     );
-    state = state.copyWith(timestamp: DateTime.now().millisecondsSinceEpoch);
+    state = state.copyWith(
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
+    state = state.copyWith(
+      wordCount: state.content.trim().split(' ').length,
+    );
     return _firestore
         .collection('writing-temp')
         .doc(userId)

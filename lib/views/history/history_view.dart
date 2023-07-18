@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/history_view_controller.dart';
-import '../../extensions/widget_extenstions.dart';
 import '../../models/note/note_model.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
@@ -48,10 +47,8 @@ class HistoryView extends ConsumerWidget {
 
             if (snapshot.data!.isNotEmpty) {
               List<NoteModel> noteModels = snapshot.data!;
-              List<Widget> noteModelTiles = noteModels
-                  .map((e) => NoteTile(entry: e))
-                  .toList()
-                  .animateWidgetList();
+              List<Widget> noteModelTiles =
+                  noteModels.map((e) => NoteTile(entry: e)).toList();
               return ListView.separated(
                 separatorBuilder: (_, __) => SizedBox(height: gap),
                 itemCount: snapshot.data!.length,
