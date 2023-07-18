@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../extensions/widget_extenstions.dart';
+import '../../extensions/widget_extensions.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
