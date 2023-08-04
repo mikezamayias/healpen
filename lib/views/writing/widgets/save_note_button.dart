@@ -39,7 +39,7 @@ class SaveNoteButton extends ConsumerWidget {
                   content: CustomListTile(
                     backgroundColor: context.theme.colorScheme.secondary,
                     textColor: context.theme.colorScheme.onSecondary,
-                    titleString: 'Note added successfully!',
+                    titleString: 'Note saved successfully!',
                     leadingIconData: FontAwesomeIcons.solidCircleCheck,
                     contentPadding: EdgeInsets.symmetric(
                       vertical: gap,

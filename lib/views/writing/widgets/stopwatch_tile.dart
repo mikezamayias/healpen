@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
 import '../../../extensions/int_extensions.dart';
@@ -18,7 +19,9 @@ class StopwatchTile extends ConsumerWidget {
       cornerRadius: radius - gap,
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
       backgroundColor: context.theme.colorScheme.surface,
-      titleString: 'Writing time',
+      textColor: context.theme.colorScheme.onSurface,
+      titleString: 'Stopwatch',
+      leadingIconData: FontAwesomeIcons.stopwatch,
       trailing: Text(
         ref.watch(writingControllerProvider).duration.writingDurationFormat(),
         style: context.theme.textTheme.titleLarge,
