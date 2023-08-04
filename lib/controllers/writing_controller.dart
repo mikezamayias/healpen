@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/note/note_model.dart';
+import '../utils/helper_functions.dart';
 
 int timeWindow = 3;
 
@@ -36,31 +37,39 @@ class WritingController extends StateNotifier<NoteModel> {
     return true;
   });
 
-  void handleTextChange(String text) {
+  void handleTextChange(String text) async {
     if (text.isNotEmpty) {
       if (!_stopwatch.isRunning) {
         _startTimer();
       } else {
-        _restartDelayTimer();
+        if (await readWritingResetStopwatchOnEmpty()) {
+          _restartDelayTimer();
+        }
       }
     } else if (text.isEmpty) {
-      if (_stopwatch.isRunning) {
-        _pauseTimerAndLogInput();
-      }
-      if (_stopwatch.elapsed.inSeconds > 0) {
-        _stopwatch.reset();
-        state = state.copyWith(duration: 0); // Reset the seconds in the state
+      if (await readWritingResetStopwatchOnEmpty()) {
+        // If the text is empty, check if the stopwatch should be reset
+        if (_stopwatch.isRunning) {
+          _pauseTimerAndLogInput();
+        }
+        if (_stopwatch.elapsed.inSeconds > 0) {
+          _stopwatch.reset();
+          state = state.copyWith(duration: 0); // Reset the seconds in the state
+        }
       }
     }
     state.content = text;
   }
 
-  void _startTimer() {
+  void _startTimer() async {
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
     });
-    _delayTimer = Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
+    if (await readWritingResetStopwatchOnEmpty()) {
+      _delayTimer =
+          Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
+    }
   }
 
   void _restartDelayTimer() {
