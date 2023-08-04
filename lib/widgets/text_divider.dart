@@ -7,9 +7,10 @@ import 'divider.dart';
 
 class TextDivider extends StatelessWidget {
   final String data;
-  const TextDivider({
+
+  const TextDivider(
+    this.data, {
     Key? key,
-    required this.data,
   }) : super(key: key);
 
   @override

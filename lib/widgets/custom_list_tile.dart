@@ -70,7 +70,7 @@ class CustomListTile extends StatelessWidget {
                 effects: [
                   if (showCaseLeadingIcon!)
                     ShakeEffect(
-                      delay: 2.seconds,
+                      delay: 1.seconds,
                       curve: Sprung.criticallyDamped,
                       duration: 6.seconds,
                       hz: 1,
