@@ -24,28 +24,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     with WidgetsBindingObserver {
   @override
   void initState() {
-    readAppearance().then(
-      (Appearance value) {
-        ref.read(appAppearanceProvider.notifier).state = value;
-      },
-    );
-    readAppColor().then(
-      (AppColor value) {
-        ref.read(appColorProvider.notifier).state = value;
-      },
-    );
-    readShakePrivateNoteInfo().then(
-      (bool value) {
-        ref
-            .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
-            .state = value;
-      },
-    );
-    readWritingResetStopwatchOnEmpty().then(
-      (bool value) {
-        ref.read(writingResetStopwatchOnEmptyProvider.notifier).state = value;
-      },
-    );
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -54,6 +32,17 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() async {
+    ref.watch(appAppearanceProvider.notifier).state = await readAppearance();
+    ref.watch(appColorProvider.notifier).state = await readAppColor();
+    ref.watch(WritingController().shakePrivateNoteInfoProvider.notifier).state =
+        await readShakePrivateNoteInfo();
+    ref.watch(writingResetStopwatchOnEmptyProvider.notifier).state =
+        await readWritingResetStopwatchOnEmpty();
+    super.didChangeDependencies();
   }
 
   @override
