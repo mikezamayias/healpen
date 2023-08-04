@@ -3,13 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../controllers/writing_controller.dart';
 import '../enums/app_theming.dart';
-import '../providers/settings_providers.dart';
 import '../themes/blueprint_theme.dart';
 
 SystemUiOverlayStyle getSystemUIOverlayStyle(
@@ -76,19 +73,16 @@ Future writeAppearance(Appearance appearance) async {
   prefs.setString('appearance', '$appearance');
 }
 
-Future readAppearance(WidgetRef ref) async {
+Future<Appearance> readAppearance() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? appearance = prefs.getString('appearance');
   log(
     '$appearance',
     name: 'helper_functions.dart:readAppearance',
   );
-
-  if (appearance != null) {
-    ref.read(appearanceProvider.notifier).state = Appearance.values.firstWhere(
-      (e) => e.toString() == appearance,
-    );
-  }
+  return Appearance.values.firstWhere(
+    (e) => e.toString() == appearance,
+  );
 }
 
 Future writeAppColor(AppColor appColor) async {
@@ -100,19 +94,16 @@ Future writeAppColor(AppColor appColor) async {
   prefs.setString('appColor', '$appColor');
 }
 
-Future readAppColor(WidgetRef ref) async {
+Future<AppColor> readAppColor() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? appColor = prefs.getString('appColor');
   log(
     '$appColor',
     name: 'helper_functions.dart:readAppColor',
   );
-
-  if (appColor != null) {
-    ref.read(appColorProvider.notifier).state = AppColor.values.firstWhere(
-      (e) => e.toString() == appColor,
-    );
-  }
+  return AppColor.values.firstWhere(
+    (e) => e.toString() == appColor,
+  );
 }
 
 Future writeShakePrivateNoteInfo(bool shakePrivateNoteInfo) async {
@@ -124,16 +115,35 @@ Future writeShakePrivateNoteInfo(bool shakePrivateNoteInfo) async {
   prefs.setBool('shakePrivateNoteInfo', shakePrivateNoteInfo);
 }
 
-Future readShakePrivateNoteInfo(WidgetRef ref) async {
+Future<bool> readShakePrivateNoteInfo() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool? shakePrivateNoteInfo = prefs.getBool('shakePrivateNoteInfo');
+  bool shakePrivateNoteInfo = prefs.getBool('shakePrivateNoteInfo') ?? true;
   log(
     '$shakePrivateNoteInfo',
     name: 'helper_functions.dart:readShakePrivateNoteInfo',
   );
+  return shakePrivateNoteInfo;
+}
 
-  if (shakePrivateNoteInfo != null) {
-    ref.read(WritingController().shakePrivateNoteInfoProvider.notifier).state =
-        shakePrivateNoteInfo;
-  }
+Future writeWritingResetStopwatchOnEmpty(
+    bool writingResetStopwatchOnEmpty) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  log(
+    '$writingResetStopwatchOnEmpty',
+    name: 'helper_functions.dart:writeWritingResetStopwatchOnEmpty',
+  );
+  prefs.setBool('writingResetStopwatchOnEmpty', writingResetStopwatchOnEmpty);
+}
+
+Future<bool> readWritingResetStopwatchOnEmpty() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool writingResetStopwatchOnEmpty = prefs.getBool(
+        'writingResetStopwatchOnEmpty',
+      ) ??
+      false;
+  log(
+    '$writingResetStopwatchOnEmpty',
+    name: 'helper_functions.dart:readWritingResetStopwatchOnEmpty',
+  );
+  return writingResetStopwatchOnEmpty;
 }

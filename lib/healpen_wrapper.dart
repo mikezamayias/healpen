@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import 'controllers/writing_controller.dart';
 import 'enums/app_theming.dart';
 import 'healpen.dart';
 import 'providers/settings_providers.dart';
@@ -23,9 +24,28 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     with WidgetsBindingObserver {
   @override
   void initState() {
-    readAppearance(ref);
-    readAppColor(ref);
-    readShakePrivateNoteInfo(ref);
+    readAppearance().then(
+      (Appearance value) {
+        ref.read(appAppearanceProvider.notifier).state = value;
+      },
+    );
+    readAppColor().then(
+      (AppColor value) {
+        ref.read(appColorProvider.notifier).state = value;
+      },
+    );
+    readShakePrivateNoteInfo().then(
+      (bool value) {
+        ref
+            .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
+            .state = value;
+      },
+    );
+    readWritingResetStopwatchOnEmpty().then(
+      (bool value) {
+        ref.read(writingResetStopwatchOnEmptyProvider.notifier).state = value;
+      },
+    );
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -38,7 +58,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   void didChangePlatformBrightness() {
-    if (ref.watch(appearanceProvider) == Appearance.system) {
+    if (ref.watch(appAppearanceProvider) == Appearance.system) {
       log(
         '${mediaQuery.platformBrightness}',
         name: '_HealpenWrapperState:didChangePlatformBrightness',
@@ -46,7 +66,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       setState(() {
         getSystemUIOverlayStyle(
           context.theme,
-          ref.watch(appearanceProvider),
+          ref.watch(appAppearanceProvider),
         );
       });
     }
@@ -61,14 +81,14 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
         ],
-        themeMode: switch (ref.watch(appearanceProvider)) {
+        themeMode: switch (ref.watch(appAppearanceProvider)) {
           Appearance.system => ThemeMode.system,
           Appearance.light => ThemeMode.light,
           Appearance.dark => ThemeMode.dark,
         },
         theme: createTheme(
           ref.watch(appColorProvider).color,
-          switch (ref.watch(appearanceProvider)) {
+          switch (ref.watch(appAppearanceProvider)) {
             Appearance.system =>
               WidgetsBinding.instance.platformDispatcher.platformBrightness,
             Appearance.light => Brightness.light,

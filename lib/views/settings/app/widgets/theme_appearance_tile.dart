@@ -28,17 +28,17 @@ class ThemeAppearanceTile extends ConsumerWidget {
               label: Text(appearance.name.toCapitalized()),
             ),
         ],
-        selected: {ref.watch(appearanceProvider)},
+        selected: {ref.watch(appAppearanceProvider)},
         onSelectionChanged: (Set<Appearance> newSelection) {
-          ref.watch(appearanceProvider.notifier).state = newSelection.first;
+          ref.watch(appAppearanceProvider.notifier).state = newSelection.first;
           log(
             '${newSelection.first}',
             name: 'Settings: ThemeAppearanceTile',
           );
-          writeAppearance(ref.watch(appearanceProvider));
+          writeAppearance(ref.watch(appAppearanceProvider));
           getSystemUIOverlayStyle(
             context.theme,
-            ref.watch(appearanceProvider),
+            ref.watch(appAppearanceProvider),
           );
         },
       ),
