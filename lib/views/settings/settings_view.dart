@@ -8,8 +8,7 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
-import 'app/settings_theme_view.dart';
-import 'writing/settings_writing_view.dart';
+import 'app/settings_app_view.dart';
 
 class SettingsView extends ConsumerWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -17,13 +16,17 @@ class SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Map<String, (Widget, IconData)> pageWidgets = {
-      'Theme': (
-        const SettingsThemeView(),
-        FontAwesomeIcons.palette,
-      ),
-      'Writing': (
-        const SettingsWritingView(),
-        FontAwesomeIcons.pencil,
+      // 'Theme': (
+      //   const SettingsThemeView(),
+      //   FontAwesomeIcons.palette,
+      // ),
+      // 'Writing': (
+      //   const SettingsWritingView(),
+      //   FontAwesomeIcons.pencil,
+      // ),
+      'App': (
+        const SettingsAppView(),
+        FontAwesomeIcons.sliders,
       ),
       'Account': (
         const SettingsAccountView(),
