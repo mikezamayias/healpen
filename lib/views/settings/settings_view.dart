@@ -64,7 +64,7 @@ class SettingsView extends ConsumerWidget {
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  Navigator.of(context).push(
+                  context.navigator.push(
                     MaterialPageRoute(
                       builder: (_) => pageWidgets[title]!.$1,
                     ),
