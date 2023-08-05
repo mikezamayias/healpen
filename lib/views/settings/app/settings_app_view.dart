@@ -28,6 +28,7 @@ class SettingsAppView extends ConsumerWidget {
 
     return BlueprintView(
       appBar: const AppBar(
+        automaticallyImplyLeading: true,
         pathNames: [
           'Settings',
           'App',

@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart' hide AppBar, Page;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class AppBar extends StatelessWidget {
+import '../providers/settings_providers.dart';
+
+class AppBar extends ConsumerWidget {
   final List<String> pathNames;
+  final bool? automaticallyImplyLeading;
 
-  const AppBar({Key? key, required this.pathNames}) : super(key: key);
+  const AppBar({
+    Key? key,
+    required this.pathNames,
+    this.automaticallyImplyLeading = false,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return RichText(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appBarContent = RichText(
       text: TextSpan(
         children: [
           for (int i = 0; i < pathNames.length; i++)
@@ -29,5 +38,23 @@ class AppBar extends StatelessWidget {
         ],
       ),
     );
+    return ref.watch(customNavigationButtonsProvider) &&
+            automaticallyImplyLeading!
+        ? Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                enableFeedback: true,
+                iconSize: context.theme.textTheme.titleLarge!.fontSize,
+                onPressed: context.navigator.pop,
+                icon: const FaIcon(FontAwesomeIcons.chevronLeft),
+              ),
+              appBarContent,
+            ],
+          )
+        : appBarContent;
   }
 }

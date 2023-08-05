@@ -15,15 +15,16 @@ class NavigationSettingsTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: 'Custom in-app navigation buttons',
+      titleString: 'Back button in app bar',
       subtitle: const Text(
-        'Enables custom in-app navigation buttons for easier navigation.',
+        'Turns on a back button at the top of the screen, making it simpler to return to previous pages.',
       ),
       trailing: Switch(
         value: ref.watch(customNavigationButtonsProvider),
         onChanged: (value) async {
           ref.read(customNavigationButtonsProvider.notifier).state = value;
-          writeCustomNavigationButtons(ref.watch(customNavigationButtonsProvider));
+          writeCustomNavigationButtons(
+              ref.watch(customNavigationButtonsProvider));
           log(
             '${ref.watch(customNavigationButtonsProvider)}',
             name: 'SettingsView:customNavigationButtons',
