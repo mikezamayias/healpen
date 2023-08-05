@@ -56,21 +56,19 @@ class SignOutTile extends ConsumerWidget {
                 PageController().writing;
             SharedPreferences.getInstance().then(
               (SharedPreferences prefs) {
-                [
-                  'appearance',
+                for (String key in [
+                  'appAppearance',
                   'appColor',
                   'shakePrivateNoteInfo',
                   'writingResetStopwatchOnEmpty',
                   'customNavigationButtons',
-                ].map(
-                  (String key) {
-                    prefs.remove(key);
-                    log(
-                      'Removed $key from shared preferences',
-                      name: 'SignOutTile:SharedPreferences',
-                    );
-                  },
-                );
+                ]) {
+                  prefs.remove(key);
+                  log(
+                    'Removed $key from shared preferences',
+                    name: 'SignOutTile:SharedPreferences',
+                  );
+                }
               },
             );
             HapticFeedback.heavyImpact().whenComplete(

@@ -36,13 +36,13 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   void didChangeDependencies() async {
-    ref.watch(appAppearanceProvider.notifier).state = await readAppearance();
-    ref.watch(appColorProvider.notifier).state = await readAppColor();
-    ref.watch(WritingController().shakePrivateNoteInfoProvider.notifier).state =
+    ref.read(appAppearanceProvider.notifier).state = await readAppAppearance();
+    ref.read(appColorProvider.notifier).state = await readAppColor();
+    ref.read(WritingController().shakePrivateNoteInfoProvider.notifier).state =
         await readShakePrivateNoteInfo();
-    ref.watch(writingResetStopwatchOnEmptyProvider.notifier).state =
+    ref.read(writingResetStopwatchOnEmptyProvider.notifier).state =
         await readWritingResetStopwatchOnEmpty();
-    ref.watch(customNavigationButtonsProvider.notifier).state =
+    ref.read(customNavigationButtonsProvider.notifier).state =
         await readCustomNavigationButtons();
     super.didChangeDependencies();
   }

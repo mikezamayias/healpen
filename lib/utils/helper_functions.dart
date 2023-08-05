@@ -64,21 +64,21 @@ ThemeData createTheme(Color color, Brightness brightness) {
   );
 }
 
-Future writeAppearance(Appearance appearance) async {
+Future writeAppAppearance(Appearance appearance) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   log(
     '$appearance',
     name: 'helper_functions.dart:writeAppearance',
   );
-  prefs.setString('appearance', '$appearance');
+  prefs.setString('appAppearance', '$appearance');
 }
 
-Future<Appearance> readAppearance() async {
+Future<Appearance> readAppAppearance() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? appearance = prefs.getString('appearance');
+  String? appearance = prefs.getString('appAppearance');
   log(
     '$appearance',
-    name: 'helper_functions.dart:readAppearance',
+    name: 'helper_functions.dart:readAppAppearance',
   );
   return Appearance.values.firstWhere(
     (e) => e.toString() == (appearance ?? 'Appearance.system'),
@@ -102,7 +102,7 @@ Future<AppColor> readAppColor() async {
     name: 'helper_functions.dart:readAppColor',
   );
   return AppColor.values.firstWhere(
-    (e) => e.toString() == (appColor ?? 'AppColor.pastelOcean'),
+    (e) => e.toString() == (appColor ?? 'AppColor.pastelTeal'),
   );
 }
 

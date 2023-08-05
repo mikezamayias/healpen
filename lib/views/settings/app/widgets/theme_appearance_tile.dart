@@ -35,7 +35,7 @@ class ThemeAppearanceTile extends ConsumerWidget {
             '${newSelection.first}',
             name: 'Settings: ThemeAppearanceTile',
           );
-          writeAppearance(ref.watch(appAppearanceProvider));
+          writeAppAppearance(ref.watch(appAppearanceProvider));
           getSystemUIOverlayStyle(
             context.theme,
             ref.watch(appAppearanceProvider),
