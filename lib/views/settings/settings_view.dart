@@ -6,12 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
-import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
 import 'app/settings_app_view.dart';
-import 'app/widgets/theme_appearance_tile.dart';
-import 'app/widgets/theme_color_tile.dart';
 
 class SettingsView extends ConsumerWidget {
   const SettingsView({Key? key}) : super(key: key);
