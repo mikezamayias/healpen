@@ -50,6 +50,7 @@ class AppBar extends ConsumerWidget {
                 enableFeedback: true,
                 iconSize: context.theme.textTheme.titleLarge!.fontSize,
                 onPressed: context.navigator.pop,
+                color: context.theme.colorScheme.primary,
                 icon: const FaIcon(FontAwesomeIcons.chevronLeft),
               ),
               appBarContent,
