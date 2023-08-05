@@ -16,17 +16,9 @@ class SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Map<String, (Widget, IconData)> pageWidgets = {
-      // 'Theme': (
-      //   const SettingsThemeView(),
-      //   FontAwesomeIcons.palette,
-      // ),
-      // 'Writing': (
-      //   const SettingsWritingView(),
-      //   FontAwesomeIcons.pencil,
-      // ),
       'App': (
         const SettingsAppView(),
-        FontAwesomeIcons.sliders,
+        FontAwesomeIcons.mobileScreenButton,
       ),
       'Account': (
         const SettingsAccountView(),
