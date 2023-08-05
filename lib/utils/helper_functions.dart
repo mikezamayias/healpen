@@ -81,7 +81,7 @@ Future<Appearance> readAppearance() async {
     name: 'helper_functions.dart:readAppearance',
   );
   return Appearance.values.firstWhere(
-    (e) => e.toString() == appearance,
+    (e) => e.toString() == (appearance ?? 'Appearance.system'),
   );
 }
 
@@ -102,7 +102,7 @@ Future<AppColor> readAppColor() async {
     name: 'helper_functions.dart:readAppColor',
   );
   return AppColor.values.firstWhere(
-    (e) => e.toString() == appColor,
+    (e) => e.toString() == (appColor ?? 'AppColor.pastelOcean'),
   );
 }
 
@@ -160,7 +160,8 @@ Future writeCustomNavigationButtons(bool customNavigationButtons) async {
 
 Future<bool> readCustomNavigationButtons() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool customNavigationButtons = prefs.getBool('customNavigationButtons') ?? true;
+  bool customNavigationButtons =
+      prefs.getBool('customNavigationButtons') ?? true;
   log(
     '$customNavigationButtons',
     name: 'helper_functions.dart:readCustomNavigationButtons',
