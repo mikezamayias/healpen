@@ -6,9 +6,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
+import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
 import 'app/settings_app_view.dart';
+import 'app/widgets/theme_appearance_tile.dart';
+import 'app/widgets/theme_color_tile.dart';
 
 class SettingsView extends ConsumerWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -66,6 +69,37 @@ class SettingsView extends ConsumerWidget {
                   );
                 },
               ),
+          // CustomListTile(
+          //   responsiveWidth: true,
+          //   leadingIconData: FontAwesomeIcons.palette,
+          //   contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+          //   textColor: context.theme.colorScheme.onPrimary,
+          //   titleString: 'Theme',
+          //   onTap: () {
+          //     showModalBottomSheet(
+          //       context: context,
+          //       useSafeArea: true,
+          //       showDragHandle: true,
+          //       builder: (BuildContext context) {
+          //         return SafeArea(
+          //           child: Padding(
+          //             padding: EdgeInsets.symmetric(horizontal: gap),
+          //             child: Column(
+          //               mainAxisSize: MainAxisSize.min,
+          //               children: [
+          //                 const TextDivider('Theme'),
+          //                 SizedBox(height: gap),
+          //                 const ThemeColorTile(),
+          //                 SizedBox(height: gap),
+          //                 const ThemeAppearanceTile(),
+          //               ],
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //     );
+          //   },
+          // ),
         ],
       ),
     );
