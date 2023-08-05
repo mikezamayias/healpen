@@ -126,7 +126,8 @@ Future<bool> readShakePrivateNoteInfo() async {
 }
 
 Future writeWritingResetStopwatchOnEmpty(
-    bool writingResetStopwatchOnEmpty) async {
+  bool writingResetStopwatchOnEmpty,
+) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   log(
     '$writingResetStopwatchOnEmpty',
@@ -146,4 +147,23 @@ Future<bool> readWritingResetStopwatchOnEmpty() async {
     name: 'helper_functions.dart:readWritingResetStopwatchOnEmpty',
   );
   return writingResetStopwatchOnEmpty;
+}
+
+Future writeCustomNavigationButtons(bool customNavigationButtons) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  log(
+    '$customNavigationButtons',
+    name: 'helper_functions.dart:writeCustomNavigationButtons',
+  );
+  prefs.setBool('customNavigationButtons', customNavigationButtons);
+}
+
+Future<bool> readCustomNavigationButtons() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool customNavigationButtons = prefs.getBool('customNavigationButtons') ?? true;
+  log(
+    '$customNavigationButtons',
+    name: 'helper_functions.dart:readCustomNavigationButtons',
+  );
+  return customNavigationButtons;
 }

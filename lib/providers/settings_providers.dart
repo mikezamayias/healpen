@@ -16,3 +16,10 @@ final appColorProvider = StateProvider<AppColor>(
 final writingResetStopwatchOnEmptyProvider = StateProvider<bool>(
   (ref) => true,
 );
+
+/// Whether to show custom navigation buttons in the app.
+/// When set to true, the app will show custom navigation buttons.
+/// When set to false, the app will show the default navigation buttons.
+final customNavigationButtonsProvider = StateProvider<bool>(
+  (ref) => true,
+);

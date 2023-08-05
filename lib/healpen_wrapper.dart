@@ -42,6 +42,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         await readShakePrivateNoteInfo();
     ref.watch(writingResetStopwatchOnEmptyProvider.notifier).state =
         await readWritingResetStopwatchOnEmpty();
+    ref.watch(customNavigationButtonsProvider.notifier).state =
+        await readCustomNavigationButtons();
     super.didChangeDependencies();
   }
 
