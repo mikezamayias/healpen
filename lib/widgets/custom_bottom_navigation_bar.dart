@@ -38,7 +38,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                 .watch(currentPageProvider.notifier)
                 .state = PageController().pages[index],
             // selectedColorOpacity: 0,
-            selectedItemColor: context.theme.colorScheme.primary,
+            selectedItemColor: context.theme.colorScheme.secondary,
             unselectedItemColor: context.theme.colorScheme.outline,
             items: [
               ...PageController().pages.map(
