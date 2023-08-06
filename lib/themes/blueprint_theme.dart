@@ -42,9 +42,10 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
           borderRadius: BorderRadius.circular(radius),
         ),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.transparent,
+        backgroundColor: colorScheme.secondary,
         actionBackgroundColor: colorScheme.onSecondary,
         actionTextColor: colorScheme.primary,
+        insetPadding: EdgeInsets.zero,
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         linearMinHeight: 6 * unit,
