@@ -116,7 +116,8 @@ class WritingController extends StateNotifier<NoteModel> {
       _delayTimer?.cancel();
     }
     _saveNoteToFirebase().whenComplete(() {
-      resetNote(); // Only reset the note after _saveNoteToFirebase has completed
+      textController.clear();
+      resetNote();
     });
   }
 

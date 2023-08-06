@@ -41,6 +41,8 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.transparent,
         actionBackgroundColor: colorScheme.onSecondary,
         actionTextColor: colorScheme.primary,
       ),
