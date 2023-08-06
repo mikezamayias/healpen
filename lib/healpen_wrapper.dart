@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import 'controllers/settings/preferences_controller.dart';
 import 'controllers/writing_controller.dart';
 import 'enums/app_theming.dart';
 import 'healpen.dart';
@@ -36,14 +37,26 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   void didChangeDependencies() async {
-    ref.read(appAppearanceProvider.notifier).state = await readAppAppearance();
-    ref.read(appColorProvider.notifier).state = await readAppColor();
-    ref.read(WritingController().shakePrivateNoteInfoProvider.notifier).state =
-        await readShakePrivateNoteInfo();
-    ref.read(writingResetStopwatchOnEmptyProvider.notifier).state =
-        await readWritingResetStopwatchOnEmpty();
-    ref.read(customNavigationButtonsProvider.notifier).state =
-        await readCustomNavigationButtons();
+    PreferencesController().appAppearance.read().then(
+          (value) => ref.watch(appAppearanceProvider.notifier).state = value,
+        );
+    PreferencesController().appColor.read().then(
+          (value) => ref.watch(appColorProvider.notifier).state = value,
+        );
+    PreferencesController().shakePrivateNoteInfo.read().then(
+          (value) => ref
+              .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
+              .state = value,
+        );
+    PreferencesController().writingAutomaticStopwatch.read().then(
+          (value) => ref
+              .watch(writingAutomaticStopwatchProvider.notifier)
+              .state = value,
+        );
+    PreferencesController().navigationBackButton.read().then(
+          (value) =>
+              ref.watch(customNavigationButtonsProvider.notifier).state = value,
+        );
     super.didChangeDependencies();
   }
 
