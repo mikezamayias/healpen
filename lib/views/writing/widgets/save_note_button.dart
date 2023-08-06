@@ -4,9 +4,10 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
+import '../../../models/snack_bar_options.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
+import '../../../widgets/custom_snack_bar.dart';
 
 class SaveNoteButton extends ConsumerWidget {
   const SaveNoteButton({
@@ -17,21 +18,25 @@ class SaveNoteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
     final writingController = ref.watch(writingControllerProvider.notifier);
-    final writingTextController =
-        ref.watch(writingControllerProvider.notifier).textController;
     return CustomListTile(
       cornerRadius: radius - gap,
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
       onTap: state.content.isNotEmpty
           ? () {
-              doAndShowSnackbar(
+              CustomSnackBar.doActionAndShowSnackBar(
                 context,
-                firstDo: writingController.handleSaveNote(),
-                thenDo: [writingTextController.clear()],
-                snackBarOptions: (
-                  'Note saved successfully!',
-                  FontAwesomeIcons.solidCircleCheck,
+                doAction: writingController.handleSaveNote,
+                options: SnackBarOptions(
+                  message: 'Saving note...',
+                  icon: FontAwesomeIcons.solidFloppyDisk,
                 ),
+                afterSnackBar: () {
+                  CustomSnackBar.showSnackBar(
+                    context,
+                    message: 'Note saved!',
+                    icon: FontAwesomeIcons.solidCircleCheck,
+                  );
+                },
               );
             }
           : null,
