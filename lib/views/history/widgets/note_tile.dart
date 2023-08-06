@@ -144,29 +144,13 @@ class NoteTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text(
-                      entry.timestamp.timestampFormat(),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.theme.textTheme.titleLarge!.copyWith(
-                        color: context.theme.colorScheme.onSurface,
-                      ),
-                    ),
-                    Text(
-                      entry.content,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.theme.textTheme.titleSmall!.copyWith(
-                        color: context.theme.colorScheme.onSurface,
-                      ),
+                    NoteStatsTile(
+                      statsTitle: 'Date and Time Created',
+                      statsValue: entry.timestamp.timestampFormat(),
                     ),
                     NoteStatsTile(
-                      statsTitle: 'Duration',
-                      statsValue: entry.duration.writingDurationFormat(),
-                    ),
-                    NoteStatsTile(
-                      statsTitle: 'Word Count',
-                      statsValue: entry.wordCount.toString(),
+                      statsTitle: 'Content',
+                      statsValue: entry.content,
                     ),
                   ],
                 ),

@@ -17,7 +17,7 @@ class NoteStatsTile extends StatelessWidget {
       text: TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: '$statsTitle / ',
+            text: '$statsTitle\n',
             style: context.theme.textTheme.titleMedium!.copyWith(
               color: context.theme.colorScheme.secondary,
             ),
@@ -30,6 +30,8 @@ class NoteStatsTile extends StatelessWidget {
           ),
         ],
       ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 3,
     );
   }
 }
