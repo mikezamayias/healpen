@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/history_view_controller.dart';
 import '../../controllers/page_controller.dart';
+import '../../extensions/widget_extensions.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/page_providers.dart';
 import '../../utils/constants.dart';
@@ -47,14 +48,15 @@ class HistoryView extends ConsumerWidget {
                   ),
                 );
               }
-
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const LoadingTile(durationTitle: 'Loading notes');
               }
               if (snapshot.data!.isNotEmpty) {
                 List<NoteModel> noteModels = snapshot.data!;
-                List<Widget> noteModelTiles =
-                    noteModels.map((e) => NoteTile(entry: e)).toList();
+                List<Widget> noteModelTiles = noteModels
+                    .map((e) => NoteTile(entry: e))
+                    .toList()
+                    .animateWidgetList();
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(radius),
                   child: ListView.separated(
