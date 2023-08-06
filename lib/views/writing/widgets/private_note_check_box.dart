@@ -20,7 +20,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
       backgroundColor: context.theme.colorScheme.surface,
       responsiveWidth: true,
-      showCaseLeadingIcon:
+      showcaseLeadingIcon:
           ref.watch(WritingController().shakePrivateNoteInfoProvider),
       leadingIconData: FontAwesomeIcons.circleInfo,
       leadingOnTap: () {

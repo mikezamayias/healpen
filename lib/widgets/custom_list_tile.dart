@@ -20,7 +20,7 @@ class CustomListTile extends StatelessWidget {
   final GestureTapCallback? leadingOnTap;
   final bool? selectableText;
   final bool? responsiveWidth;
-  final bool? showCaseLeadingIcon;
+  final bool? showcaseLeadingIcon;
   final bool? enableSubtitleWrapper;
   final Color? backgroundColor;
   final Color? textColor;
@@ -44,7 +44,7 @@ class CustomListTile extends StatelessWidget {
     this.textColor,
     this.selectableText = false,
     this.responsiveWidth = false,
-    this.showCaseLeadingIcon = false,
+    this.showcaseLeadingIcon = false,
     this.enableSubtitleWrapper = true,
     this.cornerRadius,
     this.contentPadding,
@@ -70,7 +70,7 @@ class CustomListTile extends StatelessWidget {
               onTap: leadingOnTap,
               child: Animate(
                 effects: [
-                  if (showCaseLeadingIcon!)
+                  if (showcaseLeadingIcon!)
                     ShakeEffect(
                       delay: 1.seconds,
                       curve: Sprung.criticallyDamped,
