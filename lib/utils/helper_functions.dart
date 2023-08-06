@@ -82,7 +82,7 @@ doAndShowSnackbar(
           right: gap,
           bottom: gap,
         ),
-        duration: 3.seconds,
+        duration: 2.seconds,
         content: CustomListTile(
           backgroundColor: context.theme.colorScheme.secondary,
           textColor: context.theme.colorScheme.onSecondary,
