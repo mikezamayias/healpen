@@ -21,6 +21,7 @@ class CustomListTile extends StatelessWidget {
   final bool? selectableText;
   final bool? responsiveWidth;
   final bool? showCaseLeadingIcon;
+  final bool? enableSubtitleWrapper;
   final Color? backgroundColor;
   final Color? textColor;
   final double? cornerRadius;
@@ -44,6 +45,7 @@ class CustomListTile extends StatelessWidget {
     this.selectableText = false,
     this.responsiveWidth = false,
     this.showCaseLeadingIcon = false,
+    this.enableSubtitleWrapper = true,
     this.cornerRadius,
     this.contentPadding,
   }) : super(key: key);
@@ -111,16 +113,18 @@ class CustomListTile extends StatelessWidget {
                 ? Flexible(
                     child: Padding(
                       padding: EdgeInsets.only(top: padding.vertical / 2),
-                      child: Container(
-                        padding: EdgeInsets.all(gap),
-                        decoration: BoxDecoration(
-                          color: context.theme.colorScheme.surface,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(radius - gap),
-                          ),
-                        ),
-                        child: subtitle,
-                      ),
+                      child: enableSubtitleWrapper!
+                          ? Container(
+                              padding: EdgeInsets.all(gap),
+                              decoration: BoxDecoration(
+                                color: context.theme.colorScheme.surface,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(radius - gap),
+                                ),
+                              ),
+                              child: subtitle,
+                            )
+                          : subtitle!,
                     ),
                   )
                 : selectableText!

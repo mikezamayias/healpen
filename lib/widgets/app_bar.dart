@@ -4,6 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../providers/settings_providers.dart';
+import '../utils/constants.dart';
 
 class AppBar extends ConsumerWidget {
   final List<String> pathNames;
@@ -45,14 +46,15 @@ class AppBar extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              IconButton(
+              IconButton.filled(
                 padding: EdgeInsets.zero,
                 enableFeedback: true,
                 iconSize: context.theme.textTheme.titleLarge!.fontSize,
                 onPressed: context.navigator.pop,
-                color: context.theme.colorScheme.primary,
+                color: context.theme.colorScheme.onPrimary,
                 icon: const FaIcon(FontAwesomeIcons.chevronLeft),
               ),
+              SizedBox(width: gap),
               appBarContent,
             ],
           )
