@@ -11,10 +11,10 @@ final appColorProvider = StateProvider<AppColor>(
 );
 
 /// Whether to reset the stopwatch when the user erases all the text.
-/// When set to true, the stopwatch will continue running until the user saves.
-/// When set to false, the stopwatch will reset when the user erases all the text.
-final writingResetStopwatchOnEmptyProvider = StateProvider<bool>(
-  (ref) => true,
+/// When set to false, the stopwatch will continue running until the user saves.
+/// When set to true, the stopwatch will reset when the user erases all the text.
+final writingAutomaticStopwatchProvider = StateProvider<bool>(
+  (ref) => false,
 );
 
 /// Whether to show custom navigation buttons in the app.

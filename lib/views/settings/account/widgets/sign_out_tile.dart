@@ -7,9 +7,9 @@ import 'package:flutter_iterum/flutter_iterum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../controllers/page_controller.dart';
+import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/page_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_dialog.dart';
@@ -51,26 +51,10 @@ class SignOutTile extends ConsumerWidget {
             );
           },
         ).then(
-          (_) {
+          (_) async {
             ref.read(currentPageProvider.notifier).state =
                 PageController().writing;
-            SharedPreferences.getInstance().then(
-              (SharedPreferences prefs) {
-                for (String key in [
-                  'appAppearance',
-                  'appColor',
-                  'shakePrivateNoteInfo',
-                  'writingResetStopwatchOnEmpty',
-                  'customNavigationButtons',
-                ]) {
-                  prefs.remove(key);
-                  log(
-                    'Removed $key from shared preferences',
-                    name: 'SignOutTile:SharedPreferences',
-                  );
-                }
-              },
-            );
+            await PreferencesController().resetAll();
             HapticFeedback.heavyImpact().whenComplete(
               () => Iterum.revive(context),
             );

@@ -20,13 +20,13 @@ class WritingStopwatchTile extends ConsumerWidget {
         'Pauses the stopwatch when you stop typing and resets it when you clear all text.',
       ),
       trailing: Switch(
-        value: ref.watch(writingResetStopwatchOnEmptyProvider),
+        value: ref.watch(writingAutomaticStopwatchProvider),
         onChanged: (value) async {
-          ref.read(writingResetStopwatchOnEmptyProvider.notifier).state = value;
+          ref.read(writingAutomaticStopwatchProvider.notifier).state = value;
           writeWritingResetStopwatchOnEmpty(
-              ref.watch(writingResetStopwatchOnEmptyProvider));
+              ref.watch(writingAutomaticStopwatchProvider));
           log(
-            '${ref.watch(writingResetStopwatchOnEmptyProvider)}',
+            '${ref.watch(writingAutomaticStopwatchProvider)}',
             name: 'SettingsWritingView:writingResetStopwatchOnEmpty',
           );
         },

@@ -19,6 +19,7 @@ class ThemeAppearanceTile extends ConsumerWidget {
     return CustomListTile(
       titleString: 'Appearance',
       contentPadding: EdgeInsets.all(gap),
+      enableSubtitleWrapper: false,
       subtitle: SegmentedButton<Appearance>(
         showSelectedIcon: false,
         segments: <ButtonSegment<Appearance>>[

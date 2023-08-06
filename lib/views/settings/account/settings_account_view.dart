@@ -31,6 +31,7 @@ class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
 
     return BlueprintView(
       appBar: const AppBar(
+        automaticallyImplyLeading: true,
         pathNames: ['Settings', 'Account'],
       ),
       body: Wrap(

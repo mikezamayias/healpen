@@ -17,46 +17,25 @@ class ThemeColorTile extends ConsumerWidget {
     return CustomListTile(
       titleString: 'Color',
       contentPadding: EdgeInsets.all(gap),
-      subtitle: Wrap(
-        spacing: gap,
-        children: [
+      enableSubtitleWrapper: false,
+      subtitle: SegmentedButton<AppColor>(
+        showSelectedIcon: false,
+        segments: <ButtonSegment<AppColor>>[
           for (AppColor appColor in AppColor.values)
-            TextButton(
-              onPressed: () async {
-                ref.watch(appColorProvider.notifier).state = appColor;
-                log(
-                  'Theme Color changed to $appColor',
-                  name: 'Settings: ThemeAppearanceTile',
-                );
-                log(
-                  ref.watch(appColorProvider).toString(),
-                  name: 'ref.watch(appColorProvider).toString()',
-                );
-                writeAppColor(ref.watch(appColorProvider));
-              },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  appColor.color,
-                ),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(gap),
-                    ),
-                  ),
-                ),
-                textStyle: MaterialStateProperty.all(
-                  const TextStyle(color: Colors.white),
-                ),
-                foregroundColor: MaterialStateProperty.all(
-                  appColor.color.computeLuminance() > 0.5
-                      ? Colors.black
-                      : Colors.white,
-                ),
-              ),
-              child: Text(appColor.name),
-            )
+            ButtonSegment(
+              value: appColor,
+              label: Text(appColor.name),
+            ),
         ],
+        selected: {ref.watch(appColorProvider)},
+        onSelectionChanged: (Set<AppColor> newSelection) {
+          ref.watch(appColorProvider.notifier).state = newSelection.first;
+          log(
+            '${newSelection.first}',
+            name: 'Settings: ThemeAppearanceTile',
+          );
+          writeAppColor(ref.watch(appColorProvider));
+        },
       ),
     );
   }
