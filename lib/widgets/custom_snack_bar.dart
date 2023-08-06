@@ -12,24 +12,24 @@ class CustomSnackBar {
   static final Queue<ScaffoldFeatureController<SnackBar, SnackBarClosedReason>>
       _snackBarQueue = Queue();
 
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
-    BuildContext context, {
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason>
+      showSnackBar({
     required String message,
     required IconData icon,
     VoidCallback? onActionTap,
     String actionLabel = 'Undo',
   }) {
     final snackBar = SnackBar(
-      margin: EdgeInsets.all(gap),
-      padding: EdgeInsets.only(right: gap * 2),
+      // margin: EdgeInsets.all(gap),
+      padding: EdgeInsets.only(right: gap),
       duration: 2.seconds,
-      backgroundColor: context.theme.colorScheme.secondary,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radius),
-      ),
+      backgroundColor:
+          scaffoldMessengerKey.currentContext!.theme.colorScheme.secondary,
       content: CustomListTile(
-        backgroundColor: context.theme.colorScheme.secondary,
-        textColor: context.theme.colorScheme.onSecondary,
+        backgroundColor:
+            scaffoldMessengerKey.currentContext!.theme.colorScheme.secondary,
+        textColor:
+            scaffoldMessengerKey.currentContext!.theme.colorScheme.onSecondary,
         titleString: message,
         leadingIconData: icon,
         contentPadding: EdgeInsets.symmetric(
@@ -47,29 +47,27 @@ class CustomSnackBar {
     );
 
     final snackBarController =
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        scaffoldMessengerKey.currentState!.showSnackBar(snackBar);
     _snackBarQueue.add(snackBarController);
 
     return snackBarController;
   }
 
-  static void doActionAndShowSnackBar(
-    BuildContext context, {
+  static void doActionAndShowSnackBar({
     required Future Function() doAction,
     required SnackBarOptions options,
     required dynamic afterSnackBar,
   }) {
-    bool continuteWithAction = true;
+    bool continueWithAction = true;
     final firstSnackBarController = showSnackBar(
-      context,
       message: options.message,
       icon: options.icon,
       onActionTap: () {
-        continuteWithAction = false;
+        continueWithAction = false;
       },
     );
 
-    if (continuteWithAction) {
+    if (continueWithAction) {
       firstSnackBarController.closed.then((SnackBarClosedReason reason) async {
         if (reason != SnackBarClosedReason.action) {
           // After the first snackbar is dismissed, we show the second one.

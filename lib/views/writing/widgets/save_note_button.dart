@@ -24,7 +24,6 @@ class SaveNoteButton extends ConsumerWidget {
       onTap: state.content.isNotEmpty
           ? () {
               CustomSnackBar.doActionAndShowSnackBar(
-                context,
                 doAction: writingController.handleSaveNote,
                 options: SnackBarOptions(
                   message: 'Saving note...',
@@ -32,7 +31,6 @@ class SaveNoteButton extends ConsumerWidget {
                 ),
                 afterSnackBar: () {
                   CustomSnackBar.showSnackBar(
-                    context,
                     message: 'Note saved!',
                     icon: FontAwesomeIcons.solidCircleCheck,
                   );
