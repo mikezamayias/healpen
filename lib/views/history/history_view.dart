@@ -55,12 +55,15 @@ class HistoryView extends ConsumerWidget {
                 List<NoteModel> noteModels = snapshot.data!;
                 List<Widget> noteModelTiles =
                     noteModels.map((e) => NoteTile(entry: e)).toList();
-                return ListView.separated(
-                  separatorBuilder: (_, __) => SizedBox(height: gap),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return noteModelTiles[index];
-                  },
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(radius),
+                  child: ListView.separated(
+                    separatorBuilder: (_, __) => SizedBox(height: gap),
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return noteModelTiles[index];
+                    },
+                  ),
                 );
               } else {
                 return Column(
