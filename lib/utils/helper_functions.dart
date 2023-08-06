@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../enums/app_theming.dart';
 import '../themes/blueprint_theme.dart';
+import '../widgets/custom_list_tile.dart';
+import 'constants.dart';
 
 SystemUiOverlayStyle getSystemUIOverlayStyle(
   ThemeData theme,
@@ -60,4 +63,38 @@ ThemeData createTheme(Color color, Brightness brightness) {
       brightness: brightness,
     ),
   );
+}
+
+doAndShowSnackbar(
+  BuildContext context, {
+  required Future firstDo,
+  required thenDo,
+  required (String, IconData) snackBarOptions,
+}) {
+  firstDo.then((value) {
+    for (var action in thenDo) {
+      action;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        padding: EdgeInsets.only(
+          left: gap,
+          right: gap,
+          bottom: gap,
+        ),
+        duration: 3.seconds,
+        content: CustomListTile(
+          backgroundColor: context.theme.colorScheme.secondary,
+          textColor: context.theme.colorScheme.onSecondary,
+          titleString: snackBarOptions.$1,
+          leadingIconData: snackBarOptions.$2,
+          contentPadding: EdgeInsets.symmetric(
+            vertical: gap,
+            horizontal: gap * 2,
+          ),
+          cornerRadius: radius,
+        ),
+      ),
+    );
+  });
 }

@@ -136,7 +136,8 @@ class WritingController extends StateNotifier<NoteModel> {
         .collection('writing-temp')
         .doc(userId)
         .collection('notes')
-        .add(state.toDocument());
+        .doc(state.timestamp.toString())
+        .set(state.toDocument());
   }
 
   void resetNote() {

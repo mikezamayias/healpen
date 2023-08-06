@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class SaveNoteButton extends ConsumerWidget {
@@ -23,29 +23,14 @@ class SaveNoteButton extends ConsumerWidget {
       cornerRadius: radius - gap,
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
       onTap: state.content.isNotEmpty
-          ? () async {
-              await writingController.handleSaveNote();
-              writingTextController.clear(); // Clears TextFormField
-              writingController.resetNote(); // Resets state
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  padding: EdgeInsets.only(
-                    left: gap,
-                    right: gap,
-                    bottom: gap,
-                  ),
-                  duration: 3.seconds,
-                  content: CustomListTile(
-                    backgroundColor: context.theme.colorScheme.secondary,
-                    textColor: context.theme.colorScheme.onSecondary,
-                    titleString: 'Note saved successfully!',
-                    leadingIconData: FontAwesomeIcons.solidCircleCheck,
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: gap,
-                      horizontal: gap * 2,
-                    ),
-                    cornerRadius: radius,
-                  ),
+          ? () {
+              doAndShowSnackbar(
+                context,
+                firstDo: writingController.handleSaveNote(),
+                thenDo: [writingTextController.clear()],
+                snackBarOptions: (
+                  'Note saved successfully!',
+                  FontAwesomeIcons.solidCircleCheck,
                 ),
               );
             }
