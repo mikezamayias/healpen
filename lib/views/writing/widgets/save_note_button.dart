@@ -22,13 +22,12 @@ class SaveNoteButton extends ConsumerWidget {
     return CustomListTile(
       cornerRadius: radius - gap,
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
-      onTap: () {
-        if (state.content.isNotEmpty) {
-          writingController.handleSaveNote().then(
-            (_) {
-              writingTextController.clear(); // Clears the TextFormField
-              writingController.resetText(); // Resets the text in the state
-              return ScaffoldMessenger.of(context).showSnackBar(
+      onTap: state.content.isNotEmpty
+          ? () async {
+              await writingController.handleSaveNote();
+              writingTextController.clear(); // Clears TextFormField
+              writingController.resetNote(); // Resets state
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   padding: EdgeInsets.only(
                     left: gap,
@@ -49,17 +48,12 @@ class SaveNoteButton extends ConsumerWidget {
                   ),
                 ),
               );
-            },
-          ); // Saves entry
-        }
-      },
-      backgroundColor:
-          state.content.isEmpty || writingTextController.text.isEmpty
-              ? context.theme.colorScheme.outline
-              : null,
-      textColor: state.content.isEmpty || writingTextController.text.isEmpty
-          ? context.theme.colorScheme.background
+            }
           : null,
+      backgroundColor:
+          state.content.isEmpty ? context.theme.colorScheme.outline : null,
+      textColor:
+          state.content.isEmpty ? context.theme.colorScheme.background : null,
       responsiveWidth: true,
       titleString: 'Save',
       leadingIconData: FontAwesomeIcons.solidFloppyDisk,
