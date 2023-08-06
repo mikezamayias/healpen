@@ -26,6 +26,8 @@ class HistoryView extends ConsumerWidget {
           'Your past notes',
         ],
       ),
+
+      /// TODO: implement date grouping based on date. each date should be the titile of a CustomListTile and the subtitle should be the notes for that date. Look at app settings for inspiration.
       body: CustomListTile(
         contentPadding: EdgeInsets.all(gap),
         titleString: 'History',
