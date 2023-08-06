@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum AppColor {
+enum ThemeColor {
   // blue(
   //   color: Color(0xFF4A90E2),
   //   name: 'Blue',
@@ -22,13 +22,13 @@ enum AppColor {
     name: 'Pastel Ocean',
   );
 
-  const AppColor({required this.color, required this.name});
+  const ThemeColor({required this.color, required this.name});
 
   final Color color;
   final String name;
 }
 
-enum Appearance {
+enum ThemeAppearance {
   system,
   light,
   dark,

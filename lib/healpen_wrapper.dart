@@ -37,24 +37,26 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   void didChangeDependencies() async {
-    PreferencesController().appAppearance.read().then(
-          (value) => ref.watch(appAppearanceProvider.notifier).state = value,
+    PreferencesController().themeAppearance.read().then(
+          (ThemeAppearance value) =>
+              ref.watch(themeAppearanceProvider.notifier).state = value,
         );
-    PreferencesController().appColor.read().then(
-          (value) => ref.watch(appColorProvider.notifier).state = value,
+    PreferencesController().themeColor.read().then(
+          (ThemeColor value) =>
+              ref.watch(themeColorProvider.notifier).state = value,
         );
     PreferencesController().shakePrivateNoteInfo.read().then(
-          (value) => ref
+          (bool value) => ref
               .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
               .state = value,
         );
     PreferencesController().writingAutomaticStopwatch.read().then(
-          (value) => ref
+          (bool value) => ref
               .watch(writingAutomaticStopwatchProvider.notifier)
               .state = value,
         );
     PreferencesController().navigationBackButton.read().then(
-          (value) =>
+          (bool value) =>
               ref.watch(customNavigationButtonsProvider.notifier).state = value,
         );
     super.didChangeDependencies();
@@ -62,7 +64,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   void didChangePlatformBrightness() {
-    if (ref.watch(appAppearanceProvider) == Appearance.system) {
+    if (ref.watch(themeAppearanceProvider) == ThemeAppearance.system) {
       log(
         '${mediaQuery.platformBrightness}',
         name: '_HealpenWrapperState:didChangePlatformBrightness',
@@ -70,7 +72,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       setState(() {
         getSystemUIOverlayStyle(
           context.theme,
-          ref.watch(appAppearanceProvider),
+          ref.watch(themeAppearanceProvider),
         );
       });
     }
@@ -85,18 +87,18 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
         ],
-        themeMode: switch (ref.watch(appAppearanceProvider)) {
-          Appearance.system => ThemeMode.system,
-          Appearance.light => ThemeMode.light,
-          Appearance.dark => ThemeMode.dark,
+        themeMode: switch (ref.watch(themeAppearanceProvider)) {
+          ThemeAppearance.system => ThemeMode.system,
+          ThemeAppearance.light => ThemeMode.light,
+          ThemeAppearance.dark => ThemeMode.dark,
         },
         theme: createTheme(
-          ref.watch(appColorProvider).color,
-          switch (ref.watch(appAppearanceProvider)) {
-            Appearance.system =>
+          ref.watch(themeColorProvider).color,
+          switch (ref.watch(themeAppearanceProvider)) {
+            ThemeAppearance.system =>
               WidgetsBinding.instance.platformDispatcher.platformBrightness,
-            Appearance.light => Brightness.light,
-            Appearance.dark => Brightness.dark,
+            ThemeAppearance.light => Brightness.light,
+            ThemeAppearance.dark => Brightness.dark,
           },
         ),
         initialRoute:

@@ -12,24 +12,34 @@ class PreferencesController {
   PreferencesController._() {
     _models = [
       shakePrivateNoteInfo,
-      appColor,
-      appAppearance,
+      themeColor,
+      themeAppearance,
       writingAutomaticStopwatch,
       navigationBackButton,
     ];
   }
 
   /// Preference models
-  final shakePrivateNoteInfo =
-      PreferenceModel<bool>('shakePrivateNoteInfo', true);
-  final appColor =
-      PreferenceModel<String>('appColor', AppColor.pastelOcean.toString());
-  final appAppearance =
-      PreferenceModel<String>('appAppearance', Appearance.system.toString());
-  final writingAutomaticStopwatch =
-      PreferenceModel<bool>('writingAutomaticStopwatch', false);
-  final navigationBackButton =
-      PreferenceModel<bool>('navigationBackButton', true);
+  final shakePrivateNoteInfo = PreferenceModel<bool>(
+    'shakePrivateNoteInfo',
+    true,
+  );
+  final themeColor = PreferenceModel<ThemeColor>(
+    'themeColor',
+    ThemeColor.pastelOcean,
+  );
+  final themeAppearance = PreferenceModel<ThemeAppearance>(
+    'themeAppearance',
+    ThemeAppearance.system,
+  );
+  final writingAutomaticStopwatch = PreferenceModel<bool>(
+    'writingAutomaticStopwatch',
+    false,
+  );
+  final navigationBackButton = PreferenceModel<bool>(
+    'navigationBackButton',
+    true,
+  );
 
   /// List of all preference models
   late List<PreferenceModel> _models;

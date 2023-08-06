@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
 import '../../../../providers/settings_providers.dart';
@@ -20,26 +21,29 @@ class ThemeAppearanceTile extends ConsumerWidget {
       titleString: 'Appearance',
       contentPadding: EdgeInsets.all(gap),
       enableSubtitleWrapper: false,
-      subtitle: SegmentedButton<Appearance>(
+      subtitle: SegmentedButton<ThemeAppearance>(
         showSelectedIcon: false,
-        segments: <ButtonSegment<Appearance>>[
-          for (Appearance appearance in Appearance.values)
+        segments: <ButtonSegment<ThemeAppearance>>[
+          for (ThemeAppearance appearance in ThemeAppearance.values)
             ButtonSegment(
               value: appearance,
               label: Text(appearance.name.toCapitalized()),
             ),
         ],
-        selected: {ref.watch(appAppearanceProvider)},
-        onSelectionChanged: (Set<Appearance> newSelection) {
-          ref.watch(appAppearanceProvider.notifier).state = newSelection.first;
+        selected: {ref.watch(themeAppearanceProvider)},
+        onSelectionChanged: (Set<ThemeAppearance> newSelection) {
+          ref.watch(themeAppearanceProvider.notifier).state =
+              newSelection.first;
           log(
             '${newSelection.first}',
             name: 'Settings: ThemeAppearanceTile',
           );
-          writeAppAppearance(ref.watch(appAppearanceProvider));
+          PreferencesController().themeAppearance.write(
+                ref.watch(themeAppearanceProvider),
+              );
           getSystemUIOverlayStyle(
             context.theme,
-            ref.watch(appAppearanceProvider),
+            ref.watch(themeAppearanceProvider),
           );
         },
       ),

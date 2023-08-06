@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../enums/app_theming.dart';
+
 class PreferenceModel<T> {
   final String key;
   T value;
@@ -13,14 +15,34 @@ class PreferenceModel<T> {
     return 'PreferenceModel{key: $key, value: $value}';
   }
 
-  Future<dynamic> read() async {
+  Future<T> read() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var readValue = prefs.get(key) ?? value;
+    T value;
+    var prefsValue = prefs.get(key);
+
+    if (T == ThemeAppearance) {
+      value = ThemeAppearance.values.firstWhere(
+        (e) => e.toString() == prefsValue,
+        orElse: () => ThemeAppearance.system,
+      ) as T;
+    } else if (T == ThemeColor) {
+      value = ThemeColor.values.firstWhere(
+        (e) => e.toString() == prefsValue,
+        orElse: () => ThemeColor.pastelOcean,
+      ) as T;
+    } else if (T == bool) {
+      value = (prefs.getBool(key) ?? this.value) as T;
+    } else {
+      value = (prefs.getString(key) ?? this.value) as T;
+    }
+
     log(
-      '$readValue',
+      '$value',
       name: 'PreferenceModel:read:$key',
     );
-    return readValue;
+
+    this.value = value;
+    return value;
   }
 
   Future<void> write(T type) async {

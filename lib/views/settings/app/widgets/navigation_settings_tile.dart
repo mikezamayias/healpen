@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
-import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class NavigationSettingsTile extends ConsumerWidget {
@@ -23,8 +23,9 @@ class NavigationSettingsTile extends ConsumerWidget {
         value: ref.watch(customNavigationButtonsProvider),
         onChanged: (value) async {
           ref.read(customNavigationButtonsProvider.notifier).state = value;
-          writeCustomNavigationButtons(
-              ref.watch(customNavigationButtonsProvider));
+          PreferencesController().navigationBackButton.write(
+                ref.watch(customNavigationButtonsProvider),
+              );
           log(
             '${ref.watch(customNavigationButtonsProvider)}',
             name: 'SettingsView:customNavigationButtons',

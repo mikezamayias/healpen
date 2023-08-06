@@ -2,12 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../enums/app_theming.dart';
 
-final appAppearanceProvider = StateProvider<Appearance>(
-  (ref) => Appearance.system,
+final themeAppearanceProvider = StateProvider<ThemeAppearance>(
+  (ref) => ThemeAppearance.system,
 );
 
-final appColorProvider = StateProvider<AppColor>(
-  (ref) => AppColor.pastelOcean,
+final themeColorProvider = StateProvider<ThemeColor>(
+  (ref) => ThemeColor.pastelOcean,
 );
 
 /// Whether to reset the stopwatch when the user erases all the text.

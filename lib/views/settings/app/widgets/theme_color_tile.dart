@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
-import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeColorTile extends ConsumerWidget {
@@ -18,23 +18,25 @@ class ThemeColorTile extends ConsumerWidget {
       titleString: 'Color',
       contentPadding: EdgeInsets.all(gap),
       enableSubtitleWrapper: false,
-      subtitle: SegmentedButton<AppColor>(
+      subtitle: SegmentedButton<ThemeColor>(
         showSelectedIcon: false,
-        segments: <ButtonSegment<AppColor>>[
-          for (AppColor appColor in AppColor.values)
+        segments: <ButtonSegment<ThemeColor>>[
+          for (ThemeColor appColor in ThemeColor.values)
             ButtonSegment(
               value: appColor,
               label: Text(appColor.name),
             ),
         ],
-        selected: {ref.watch(appColorProvider)},
-        onSelectionChanged: (Set<AppColor> newSelection) {
-          ref.watch(appColorProvider.notifier).state = newSelection.first;
+        selected: {ref.watch(themeColorProvider)},
+        onSelectionChanged: (Set<ThemeColor> newSelection) {
+          ref.watch(themeColorProvider.notifier).state = newSelection.first;
           log(
             '${newSelection.first}',
             name: 'Settings: ThemeAppearanceTile',
           );
-          writeAppColor(ref.watch(appColorProvider));
+          PreferencesController().themeColor.write(
+                ref.watch(themeColorProvider)
+              );
         },
       ),
     );

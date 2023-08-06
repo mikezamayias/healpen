@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/note/note_model.dart';
-import '../utils/helper_functions.dart';
+import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
 
@@ -42,12 +42,12 @@ class WritingController extends StateNotifier<NoteModel> {
       if (!_stopwatch.isRunning) {
         _startTimer();
       } else {
-        if (await readWritingResetStopwatchOnEmpty()) {
+        if (await PreferencesController().writingAutomaticStopwatch.read()) {
           _restartDelayTimer();
         }
       }
     } else if (text.isEmpty) {
-      if (await readWritingResetStopwatchOnEmpty()) {
+      if (await PreferencesController().writingAutomaticStopwatch.read()) {
         // If the text is empty, check if the stopwatch should be reset
         if (_stopwatch.isRunning) {
           _pauseTimerAndLogInput();
@@ -66,7 +66,7 @@ class WritingController extends StateNotifier<NoteModel> {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
     });
-    if (await readWritingResetStopwatchOnEmpty()) {
+    if (await PreferencesController().writingAutomaticStopwatch.read()) {
       _delayTimer =
           Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
     }

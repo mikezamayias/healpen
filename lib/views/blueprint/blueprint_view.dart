@@ -24,7 +24,7 @@ class BlueprintView extends ConsumerWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: getSystemUIOverlayStyle(
         context.theme,
-        ref.watch(appAppearanceProvider),
+        ref.watch(themeAppearanceProvider),
       ),
       child: GestureDetector(
         onTap: () => context.focusScope.unfocus(),
