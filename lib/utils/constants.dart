@@ -8,5 +8,4 @@ final double radius = 30 - gap;
 final double elevation = 0 * unit;
 const int animationDuration = 150;
 final Curve curve = Sprung.overDamped;
-final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey =
-    GlobalKey<ScaffoldMessengerState>();
+final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();

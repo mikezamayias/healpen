@@ -20,23 +20,23 @@ class CustomSnackBar {
     String actionLabel = 'Undo',
   }) {
     final snackBar = SnackBar(
-      // margin: EdgeInsets.all(gap),
+      margin: EdgeInsets.all(gap),
       padding: EdgeInsets.only(right: gap),
       duration: 2.seconds,
-      backgroundColor:
-          scaffoldMessengerKey.currentContext!.theme.colorScheme.secondary,
-      content: CustomListTile(
-        backgroundColor:
-            scaffoldMessengerKey.currentContext!.theme.colorScheme.secondary,
-        textColor:
-            scaffoldMessengerKey.currentContext!.theme.colorScheme.onSecondary,
-        titleString: message,
-        leadingIconData: icon,
-        contentPadding: EdgeInsets.symmetric(
-          horizontal: gap * 2,
-          vertical: gap,
-        ),
-        cornerRadius: radius,
+      content: Builder(
+        builder: (BuildContext context) {
+          return CustomListTile(
+            backgroundColor: context.theme.colorScheme.secondary,
+            textColor: context.theme.colorScheme.onSecondary,
+            titleString: message,
+            leadingIconData: icon,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: gap * 2,
+              vertical: gap,
+            ),
+            cornerRadius: radius,
+          );
+        },
       ),
       action: onActionTap != null
           ? SnackBarAction(
