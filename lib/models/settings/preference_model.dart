@@ -47,10 +47,20 @@ class PreferenceModel<T> {
 
   Future<void> write(T type) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    log(
+      '$type',
+      name: 'PreferenceModel:write:$key',
+    );
     if (type is bool) {
       prefs.setBool(key, type);
     } else if (type is String) {
       prefs.setString(key, type);
+    } else if (type is ThemeAppearance) {
+      prefs.setString(key, type.toString());
+    } else if (type is ThemeColor) {
+      prefs.setString(key, type.toString());
+    } else {
+      throw Exception('Type not supported');
     }
   }
 }

@@ -21,10 +21,10 @@ class ThemeColorTile extends ConsumerWidget {
       subtitle: SegmentedButton<ThemeColor>(
         showSelectedIcon: false,
         segments: <ButtonSegment<ThemeColor>>[
-          for (ThemeColor appColor in ThemeColor.values)
+          for (ThemeColor themeColor in ThemeColor.values)
             ButtonSegment(
-              value: appColor,
-              label: Text(appColor.name),
+              value: themeColor,
+              label: Text(themeColor.name),
             ),
         ],
         selected: {ref.watch(themeColorProvider)},
@@ -32,7 +32,7 @@ class ThemeColorTile extends ConsumerWidget {
           ref.watch(themeColorProvider.notifier).state = newSelection.first;
           log(
             '${newSelection.first}',
-            name: 'Settings: ThemeAppearanceTile',
+            name: 'Settings:ThemeColorTile',
           );
           PreferencesController().themeColor.write(
                 ref.watch(themeColorProvider)
