@@ -10,6 +10,7 @@ import 'controllers/writing_controller.dart';
 import 'enums/app_theming.dart';
 import 'healpen.dart';
 import 'providers/settings_providers.dart';
+import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'views/auth/auth_view.dart';
 import 'views/note/note_view.dart';
@@ -83,6 +84,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     return HideKeyboard(
       child: MaterialApp(
         title: 'Healpen',
+        scaffoldMessengerKey: scaffoldMessengerKey,
         debugShowCheckedModeBanner: false,
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
