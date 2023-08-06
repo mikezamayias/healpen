@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart' hide AppBar, Divider;
+import 'package:flutter/material.dart' hide AppBar, Divider, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/history_view_controller.dart';
+import '../../controllers/page_controller.dart';
 import '../../models/note/note_model.dart';
+import '../../providers/page_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
@@ -55,13 +58,14 @@ class HistoryView extends ConsumerWidget {
                 itemBuilder: (_, int index) => noteModelTiles[index],
               );
             } else {
-              return const Center(
-                child: CustomListTile(
-                  titleString: 'No notes yet',
-                  subtitle: Text(
-                    'Start writing to see your notes here',
-                  ),
-                ),
+              return CustomListTile(
+                titleString: 'No notes yet',
+                contentPadding: EdgeInsets.all(gap),
+                subtitle: const Text('Start writing to see your notes here'),
+                onTap: () => ref.read(currentPageProvider.notifier).state =
+                    PageController().writing,
+                leadingIconData: FontAwesomeIcons.pencil,
+                showcaseLeadingIcon: true,
               );
             }
           },
