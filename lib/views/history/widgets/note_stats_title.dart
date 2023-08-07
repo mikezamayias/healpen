@@ -19,13 +19,13 @@ class NoteStatsTile extends StatelessWidget {
           TextSpan(
             text: '$statsTitle\n',
             style: context.theme.textTheme.titleMedium!.copyWith(
-              color: context.theme.colorScheme.secondary,
+              color: context.theme.colorScheme.onPrimary,
             ),
           ),
           TextSpan(
             text: statsValue,
             style: context.theme.textTheme.titleLarge!.copyWith(
-              color: context.theme.colorScheme.onBackground,
+              color: context.theme.colorScheme.onPrimary,
             ),
           ),
         ],
