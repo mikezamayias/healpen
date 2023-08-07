@@ -107,6 +107,8 @@ class CustomListTile extends StatelessWidget {
                             ? context.theme.colorScheme.onSurfaceVariant
                             : context.theme.colorScheme.onPrimary),
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
           if (subtitle != null || subtitleString != null)
             subtitle != null && subtitleString == null
