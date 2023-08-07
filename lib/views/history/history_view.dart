@@ -32,63 +32,60 @@ class HistoryView extends ConsumerWidget {
         contentPadding: EdgeInsets.all(gap),
         titleString: 'History',
         enableSubtitleWrapper: false,
-        subtitle: ClipRRect(
-          clipBehavior: Clip.hardEdge,
-          child: StreamBuilder(
-            stream: HistoryViewController().notesStream,
-            builder: (
-              BuildContext context,
-              AsyncSnapshot<List<NoteModel>> snapshot,
-            ) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: CustomListTile(
-                    titleString: 'Something went wrong',
-                    backgroundColor: context.theme.colorScheme.error,
-                    textColor: context.theme.colorScheme.onError,
-                    subtitle: SelectableText(snapshot.error.toString()),
+        subtitle: StreamBuilder(
+          stream: HistoryViewController().notesStream,
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<List<NoteModel>> snapshot,
+          ) {
+            if (snapshot.hasError) {
+              return Center(
+                child: CustomListTile(
+                  titleString: 'Something went wrong',
+                  backgroundColor: context.theme.colorScheme.error,
+                  textColor: context.theme.colorScheme.onError,
+                  subtitle: SelectableText(snapshot.error.toString()),
+                ),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const LoadingTile(durationTitle: 'Loading notes');
+            }
+            if (snapshot.data!.isNotEmpty) {
+              List<NoteModel> noteModels = snapshot.data!;
+              List<Widget> noteModelTiles = noteModels
+                  .map((e) => NoteTile(entry: e))
+                  .toList()
+                  .animateWidgetList();
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(radius - gap),
+                child: ListView.separated(
+                  separatorBuilder: (_, __) => SizedBox(height: gap),
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return noteModelTiles[index];
+                  },
+                ),
+              );
+            } else {
+              return Column(
+                children: [
+                  CustomListTile(
+                    titleString: 'No notes yet',
+                    contentPadding: EdgeInsets.all(gap),
+                    subtitle:
+                        const Text('Start writing to see your notes here'),
+                    onTap: () => ref
+                        .read(currentPageProvider.notifier)
+                        .state = PageController().writing,
+                    leadingIconData: FontAwesomeIcons.pencil,
+                    showcaseLeadingIcon: true,
                   ),
-                );
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const LoadingTile(durationTitle: 'Loading notes');
-              }
-              if (snapshot.data!.isNotEmpty) {
-                List<NoteModel> noteModels = snapshot.data!;
-                List<Widget> noteModelTiles = noteModels
-                    .map((e) => NoteTile(entry: e))
-                    .toList()
-                    .animateWidgetList();
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(radius),
-                  child: ListView.separated(
-                    separatorBuilder: (_, __) => SizedBox(height: gap),
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return noteModelTiles[index];
-                    },
-                  ),
-                );
-              } else {
-                return Column(
-                  children: [
-                    CustomListTile(
-                      titleString: 'No notes yet',
-                      contentPadding: EdgeInsets.all(gap),
-                      subtitle:
-                          const Text('Start writing to see your notes here'),
-                      onTap: () => ref
-                          .read(currentPageProvider.notifier)
-                          .state = PageController().writing,
-                      leadingIconData: FontAwesomeIcons.pencil,
-                      showcaseLeadingIcon: true,
-                    ),
-                    const Spacer(),
-                  ],
-                );
-              }
-            },
-          ),
+                  const Spacer(),
+                ],
+              );
+            }
+          },
         ),
       ),
     );

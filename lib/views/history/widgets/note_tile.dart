@@ -22,7 +22,7 @@ class NoteTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
+      borderRadius: BorderRadius.circular(radius - gap),
       child: IntrinsicWidth(
         child: Slidable(
           key: ValueKey(entry.timestamp.toString()),
@@ -73,7 +73,7 @@ class NoteTile extends StatelessWidget {
                 icon: entry.isPrivate
                     ? FontAwesomeIcons.lockOpen
                     : FontAwesomeIcons.lock,
-                borderRadius: BorderRadius.circular(radius),
+                borderRadius: BorderRadius.circular(radius - gap),
               ),
               SizedBox(width: gap),
               SlidableAction(
@@ -118,7 +118,7 @@ class NoteTile extends StatelessWidget {
                 icon: entry.isFavorite
                     ? FontAwesomeIcons.star
                     : FontAwesomeIcons.solidStar,
-                borderRadius: BorderRadius.circular(radius),
+                borderRadius: BorderRadius.circular(radius - gap),
               ),
               SizedBox(width: gap),
             ],
@@ -163,7 +163,7 @@ class NoteTile extends StatelessWidget {
                 backgroundColor: context.theme.colorScheme.tertiary,
                 foregroundColor: context.theme.colorScheme.onTertiary,
                 icon: FontAwesomeIcons.trashCan,
-                borderRadius: BorderRadius.circular(radius),
+                borderRadius: BorderRadius.circular(radius - gap),
                 padding: EdgeInsets.zero,
               ),
             ],
@@ -172,6 +172,7 @@ class NoteTile extends StatelessWidget {
             alignment: Alignment.topRight,
             children: [
               CustomListTile(
+                cornerRadius: radius - gap,
                 contentPadding: EdgeInsets.all(gap),
                 backgroundColor: context.theme.colorScheme.surface,
                 textColor: context.theme.colorScheme.onSurface,
