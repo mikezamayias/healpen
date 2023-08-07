@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/note/note_model.dart';
+import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
 
@@ -37,30 +38,49 @@ class WritingController extends StateNotifier<NoteModel> {
   });
 
   void handleTextChange(String text) {
-    if (text.isNotEmpty) {
-      if (!_stopwatch.isRunning) {
-        _startTimer();
-      } else {
-        _restartDelayTimer();
+    PreferencesController()
+        .writingAutomaticStopwatch
+        .read()
+        .then((bool automaticStopwatch) {
+      state.content = text;
+      log('$state', name: 'WritingController:handleTextChange');
+      if (text.isNotEmpty) {
+        if (!_stopwatch.isRunning) {
+          _startTimer();
+        } else {
+          if (automaticStopwatch) {
+            _restartDelayTimer();
+          }
+        }
+      } else if (text.isEmpty) {
+        if (automaticStopwatch) {
+          if (_stopwatch.isRunning) {
+            _pauseTimerAndLogInput();
+          }
+          if (_stopwatch.elapsed.inSeconds > 0) {
+            _stopwatch.reset();
+            state =
+                state.copyWith(duration: 0); // Reset the seconds in the state
+          }
+        } else {
+          _logInput();
+        }
       }
-    } else if (text.isEmpty) {
-      if (_stopwatch.isRunning) {
-        _pauseTimerAndLogInput();
-      }
-      if (_stopwatch.elapsed.inSeconds > 0) {
-        _stopwatch.reset();
-        state = state.copyWith(duration: 0); // Reset the seconds in the state
-      }
-    }
-    state.content = text;
+    });
   }
 
-  void _startTimer() {
+  void _startTimer() async {
+    bool automaticStopwatch = await PreferencesController()
+        .writingAutomaticStopwatch
+        .read(); // Read the automatic stopwatch preference
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
     });
-    _delayTimer = Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
+    if (automaticStopwatch) {
+      _delayTimer =
+          Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
+    }
   }
 
   void _restartDelayTimer() {
@@ -71,26 +91,34 @@ class WritingController extends StateNotifier<NoteModel> {
   void _pauseTimerAndLogInput() {
     _timer?.cancel();
     _stopwatch.stop();
+    _logInput();
+  }
+
+  void _logInput() {
     log(
-      'Input: ${state.content}',
-      name: '_pauseTimerAndLogInput()',
-    );
-    log(
-      'Time spent writing: ${_stopwatch.elapsed.inSeconds} seconds',
-      name: '_pauseTimerAndLogInput()',
+      '$state',
+      name: '_logInput():state',
     );
   }
 
-  Future<void> handleSaveNote() async {
+  Future handleSaveNote() async {
+    bool automaticStopwatch = await PreferencesController()
+        .writingAutomaticStopwatch
+        .read(); // Read the automatic stopwatch preference
     log(
-      'Saved entry: ${state.content}',
-      name: '_handleSaveEntry()',
+      'Saved entry: $state',
+      name: 'handleSaveNote()',
     );
     _stopwatch.reset();
-    _timer?.cancel();
-    _delayTimer?.cancel();
-    await _saveNoteToFirebase();
-    state = NoteModel();
+    _stopwatch.stop();
+    if (automaticStopwatch) {
+      _timer?.cancel();
+      _delayTimer?.cancel();
+    }
+    _saveNoteToFirebase().whenComplete(() {
+      textController.clear();
+      resetNote();
+    });
   }
 
   Future<void> _saveNoteToFirebase() {
@@ -103,17 +131,18 @@ class WritingController extends StateNotifier<NoteModel> {
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
     state = state.copyWith(
-      wordCount: state.content.trim().split(' ').length,
+      wordCount: state.content.toString().trim().split(' ').length,
     );
     return _firestore
         .collection('writing-temp')
         .doc(userId)
         .collection('notes')
-        .add(state.toDocument());
+        .doc(state.timestamp.toString())
+        .set(state.toDocument());
   }
 
-  void resetText() {
-    state = state.copyWith(content: '');
+  void resetNote() {
+    state = NoteModel();
   }
 
   void updatePrivate(bool bool) {

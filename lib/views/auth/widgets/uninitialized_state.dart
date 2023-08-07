@@ -50,6 +50,7 @@ class UninitializedState extends ConsumerWidget {
           ),
           SizedBox(height: gap),
           CustomListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
             responsiveWidth: true,
             titleString: 'Send link',
             leadingIconData: FontAwesomeIcons.solidPaperPlane,

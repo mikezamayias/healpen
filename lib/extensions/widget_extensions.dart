@@ -6,7 +6,7 @@ import '../utils/constants.dart';
 
 extension WidgetListExtensions on List<Widget> {
   List<Widget> animateWidgetList() =>
-      animate(interval: 60.milliseconds)
+      animate(interval: 15.milliseconds)
           .fade(curve: curve)
           .slideX(begin: 0.6, curve: curve)
           .scale(

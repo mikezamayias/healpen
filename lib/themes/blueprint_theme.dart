@@ -41,8 +41,11 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),
-        backgroundColor: Colors.transparent,
-        // insetPadding: EdgeInsets.all(gap)
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: colorScheme.secondary,
+        actionBackgroundColor: colorScheme.onSecondary,
+        actionTextColor: colorScheme.primary,
+        insetPadding: EdgeInsets.zero,
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         linearMinHeight: 6 * unit,

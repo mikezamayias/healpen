@@ -9,6 +9,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../controllers/page_controller.dart';
+import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/page_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_dialog.dart';
@@ -23,10 +24,7 @@ class SignOutTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       responsiveWidth: true,
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: gap * 2,
-        vertical: gap,
-      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
       titleString: 'Sign out',
       leadingIconData: FontAwesomeIcons.rightFromBracket,
       textColor: context.theme.colorScheme.onPrimary,
@@ -53,9 +51,10 @@ class SignOutTile extends ConsumerWidget {
             );
           },
         ).then(
-          (_) {
+          (_) async {
             ref.read(currentPageProvider.notifier).state =
                 PageController().writing;
+            await PreferencesController().resetAll();
             HapticFeedback.heavyImpact().whenComplete(
               () => Iterum.revive(context),
             );

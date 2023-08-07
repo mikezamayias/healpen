@@ -47,4 +47,41 @@ class HistoryViewController {
         }
         return _writingEntries;
       });
+
+  Future<void> deleteNote({
+    required NoteModel noteModel,
+  }) async {
+    await _db
+        .collection('writing-temp')
+        .doc(_uid)
+        .collection('notes')
+        .doc(noteModel.timestamp.toString())
+        .delete();
+  }
+
+  Future<void> noteToggleFavorite({
+    required NoteModel noteModel,
+  }) async {
+    await _db
+        .collection('writing-temp')
+        .doc(_uid)
+        .collection('notes')
+        .doc(noteModel.timestamp.toString())
+        .update({
+      'isFavorite': !noteModel.isFavorite,
+    });
+  }
+
+  Future<void> noteTogglePrivate({
+    required NoteModel noteModel,
+  }) async {
+    await _db
+        .collection('writing-temp')
+        .doc(_uid)
+        .collection('notes')
+        .doc(noteModel.timestamp.toString())
+        .update({
+      'isPrivate': !noteModel.isPrivate,
+    });
+  }
 }

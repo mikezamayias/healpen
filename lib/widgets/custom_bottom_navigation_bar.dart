@@ -9,7 +9,7 @@ import '../../../../controllers/page_controller.dart';
 import '../../../../models/page_model.dart';
 import '../../../../providers/page_providers.dart';
 import '../../../extensions/string_extensions.dart';
-import '../../../extensions/widget_extenstions.dart';
+import '../extensions/widget_extensions.dart';
 import '../../../utils/constants.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
@@ -38,7 +38,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                 .watch(currentPageProvider.notifier)
                 .state = PageController().pages[index],
             // selectedColorOpacity: 0,
-            selectedItemColor: context.theme.colorScheme.primary,
+            selectedItemColor: context.theme.colorScheme.secondary,
             unselectedItemColor: context.theme.colorScheme.outline,
             items: [
               ...PageController().pages.map(

@@ -16,9 +16,9 @@ class SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Map<String, (Widget, IconData)> pageWidgets = {
-      'Theme': (
+      'App': (
         const SettingsAppView(),
-        FontAwesomeIcons.palette,
+        FontAwesomeIcons.mobileScreenButton,
       ),
       'Account': (
         const SettingsAccountView(),
@@ -27,10 +27,6 @@ class SettingsView extends ConsumerWidget {
       'Notification': (
         const Placeholder(),
         FontAwesomeIcons.solidBell,
-      ),
-      'Writing': (
-        const Placeholder(),
-        FontAwesomeIcons.pencil,
       ),
       'Data & Privacy': (
         const Placeholder(),
@@ -59,20 +55,48 @@ class SettingsView extends ConsumerWidget {
               CustomListTile(
                 responsiveWidth: true,
                 leadingIconData: pageWidgets[title]!.$2,
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: gap * 2,
-                  vertical: gap,
-                ),
+                contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  Navigator.of(context).push(
+                  context.navigator.push(
                     MaterialPageRoute(
                       builder: (_) => pageWidgets[title]!.$1,
                     ),
                   );
                 },
               ),
+          // CustomListTile(
+          //   responsiveWidth: true,
+          //   leadingIconData: FontAwesomeIcons.palette,
+          //   contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+          //   textColor: context.theme.colorScheme.onPrimary,
+          //   titleString: 'Theme',
+          //   onTap: () {
+          //     showModalBottomSheet(
+          //       context: context,
+          //       useSafeArea: true,
+          //       showDragHandle: true,
+          //       builder: (BuildContext context) {
+          //         return SafeArea(
+          //           child: Padding(
+          //             padding: EdgeInsets.symmetric(horizontal: gap),
+          //             child: Column(
+          //               mainAxisSize: MainAxisSize.min,
+          //               children: [
+          //                 const TextDivider('Theme'),
+          //                 SizedBox(height: gap),
+          //                 const ThemeColorTile(),
+          //                 SizedBox(height: gap),
+          //                 const ThemeAppearanceTile(),
+          //               ],
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //     );
+          //   },
+          // ),
         ],
       ),
     );

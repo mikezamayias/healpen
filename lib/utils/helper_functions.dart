@@ -1,23 +1,18 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../controllers/writing_controller.dart';
 import '../enums/app_theming.dart';
-import '../providers/settings_providers.dart';
 import '../themes/blueprint_theme.dart';
 
 SystemUiOverlayStyle getSystemUIOverlayStyle(
   ThemeData theme,
-  Appearance appearance,
+  ThemeAppearance appearance,
 ) {
   if (Platform.isAndroid) {
-    if (appearance == Appearance.system) {
+    if (appearance == ThemeAppearance.system) {
       return SystemUiOverlayStyle(
         systemNavigationBarColor: theme.colorScheme.background,
         systemNavigationBarDividerColor: theme.colorScheme.background,
@@ -28,7 +23,7 @@ SystemUiOverlayStyle getSystemUIOverlayStyle(
             theme.brightness.isLight ? Brightness.dark : Brightness.light,
       );
     } else {
-      if (appearance == Appearance.light) {
+      if (appearance == ThemeAppearance.light) {
         return SystemUiOverlayStyle(
           systemNavigationBarColor: theme.colorScheme.background,
           systemNavigationBarDividerColor: theme.colorScheme.background,
@@ -48,12 +43,12 @@ SystemUiOverlayStyle getSystemUIOverlayStyle(
     }
   } else {
     return switch (appearance) {
-      Appearance.system =>
+      ThemeAppearance.system =>
         WidgetsBinding.instance.platformDispatcher.platformBrightness.isLight
             ? SystemUiOverlayStyle.dark
             : SystemUiOverlayStyle.light,
-      Appearance.light => SystemUiOverlayStyle.dark,
-      Appearance.dark => SystemUiOverlayStyle.light,
+      ThemeAppearance.light => SystemUiOverlayStyle.dark,
+      ThemeAppearance.dark => SystemUiOverlayStyle.light,
     };
   }
 }
@@ -65,75 +60,4 @@ ThemeData createTheme(Color color, Brightness brightness) {
       brightness: brightness,
     ),
   );
-}
-
-Future writeAppearance(Appearance appearance) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  log(
-    '$appearance',
-    name: 'helper_functions.dart:writeAppearance',
-  );
-  prefs.setString('appearance', '$appearance');
-}
-
-Future readAppearance(WidgetRef ref) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? appearance = prefs.getString('appearance');
-  log(
-    '$appearance',
-    name: 'helper_functions.dart:readAppearance',
-  );
-
-  if (appearance != null) {
-    ref.read(appearanceProvider.notifier).state = Appearance.values.firstWhere(
-      (e) => e.toString() == appearance,
-    );
-  }
-}
-
-Future writeAppColor(AppColor appColor) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  log(
-    '$appColor',
-    name: 'helper_functions.dart:writeAppColor',
-  );
-  prefs.setString('appColor', '$appColor');
-}
-
-Future readAppColor(WidgetRef ref) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? appColor = prefs.getString('appColor');
-  log(
-    '$appColor',
-    name: 'helper_functions.dart:readAppColor',
-  );
-
-  if (appColor != null) {
-    ref.read(appColorProvider.notifier).state = AppColor.values.firstWhere(
-      (e) => e.toString() == appColor,
-    );
-  }
-}
-
-Future writeShakePrivateNoteInfo(bool shakePrivateNoteInfo) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  log(
-    '$shakePrivateNoteInfo',
-    name: 'helper_functions.dart:writeShakePrivateNoteInfo',
-  );
-  prefs.setBool('shakePrivateNoteInfo', shakePrivateNoteInfo);
-}
-
-Future readShakePrivateNoteInfo(WidgetRef ref) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool? shakePrivateNoteInfo = prefs.getBool('shakePrivateNoteInfo');
-  log(
-    '$shakePrivateNoteInfo',
-    name: 'helper_functions.dart:readShakePrivateNoteInfo',
-  );
-
-  if (shakePrivateNoteInfo != null) {
-    ref.read(WritingController().shakePrivateNoteInfoProvider.notifier).state =
-        shakePrivateNoteInfo;
-  }
 }

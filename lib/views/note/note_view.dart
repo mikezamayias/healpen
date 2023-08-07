@@ -17,6 +17,7 @@ class NoteView extends StatelessWidget {
     final noteModel = ModalRoute.of(context)!.settings.arguments as NoteModel;
     return BlueprintView(
       appBar: const AppBar(
+        automaticallyImplyLeading: true,
         pathNames: ['Note'],
       ),
       body: Column(
@@ -78,6 +79,22 @@ class NoteView extends StatelessWidget {
                 titleString: 'Word Count',
                 subtitle: Text(
                   noteModel.wordCount.toString(),
+                ),
+              ),
+              SizedBox(width: gap),
+              CustomListTile(
+                responsiveWidth: true,
+                contentPadding: EdgeInsets.all(gap),
+                titleString: 'Favorite',
+                subtitle: Center(
+                  child: FaIcon(
+                    noteModel.isFavorite
+                        ? FontAwesomeIcons.solidStar
+                        : FontAwesomeIcons.star,
+                    size: context.theme.textTheme.headlineSmall!.fontSize! +
+                        context.theme.textTheme.headlineSmall!.height!,
+                    color: context.theme.colorScheme.onBackground,
+                  ),
                 ),
               ),
             ],

@@ -5,9 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import 'controllers/settings/preferences_controller.dart';
+import 'controllers/writing_controller.dart';
 import 'enums/app_theming.dart';
 import 'healpen.dart';
 import 'providers/settings_providers.dart';
+import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'views/auth/auth_view.dart';
 import 'views/note/note_view.dart';
@@ -23,9 +26,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     with WidgetsBindingObserver {
   @override
   void initState() {
-    readAppearance(ref);
-    readAppColor(ref);
-    readShakePrivateNoteInfo(ref);
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
@@ -37,8 +37,35 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   }
 
   @override
+  void didChangeDependencies() async {
+    PreferencesController().themeAppearance.read().then(
+          (ThemeAppearance value) =>
+              ref.watch(themeAppearanceProvider.notifier).state = value,
+        );
+    PreferencesController().themeColor.read().then(
+          (ThemeColor value) =>
+              ref.watch(themeColorProvider.notifier).state = value,
+        );
+    PreferencesController().shakePrivateNoteInfo.read().then(
+          (bool value) => ref
+              .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
+              .state = value,
+        );
+    PreferencesController().writingAutomaticStopwatch.read().then(
+          (bool value) => ref
+              .watch(writingAutomaticStopwatchProvider.notifier)
+              .state = value,
+        );
+    PreferencesController().navigationBackButton.read().then(
+          (bool value) =>
+              ref.watch(customNavigationButtonsProvider.notifier).state = value,
+        );
+    super.didChangeDependencies();
+  }
+
+  @override
   void didChangePlatformBrightness() {
-    if (ref.watch(appearanceProvider) == Appearance.system) {
+    if (ref.watch(themeAppearanceProvider) == ThemeAppearance.system) {
       log(
         '${mediaQuery.platformBrightness}',
         name: '_HealpenWrapperState:didChangePlatformBrightness',
@@ -46,7 +73,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       setState(() {
         getSystemUIOverlayStyle(
           context.theme,
-          ref.watch(appearanceProvider),
+          ref.watch(themeAppearanceProvider),
         );
       });
     }
@@ -57,22 +84,23 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
     return HideKeyboard(
       child: MaterialApp(
         title: 'Healpen',
+        scaffoldMessengerKey: scaffoldMessengerKey,
         debugShowCheckedModeBanner: false,
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
         ],
-        themeMode: switch (ref.watch(appearanceProvider)) {
-          Appearance.system => ThemeMode.system,
-          Appearance.light => ThemeMode.light,
-          Appearance.dark => ThemeMode.dark,
+        themeMode: switch (ref.watch(themeAppearanceProvider)) {
+          ThemeAppearance.system => ThemeMode.system,
+          ThemeAppearance.light => ThemeMode.light,
+          ThemeAppearance.dark => ThemeMode.dark,
         },
         theme: createTheme(
-          ref.watch(appColorProvider).color,
-          switch (ref.watch(appearanceProvider)) {
-            Appearance.system =>
+          ref.watch(themeColorProvider).color,
+          switch (ref.watch(themeAppearanceProvider)) {
+            ThemeAppearance.system =>
               WidgetsBinding.instance.platformDispatcher.platformBrightness,
-            Appearance.light => Brightness.light,
-            Appearance.dark => Brightness.dark,
+            ThemeAppearance.light => Brightness.light,
+            ThemeAppearance.dark => Brightness.dark,
           },
         ),
         initialRoute:

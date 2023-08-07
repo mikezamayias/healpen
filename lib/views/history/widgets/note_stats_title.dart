@@ -17,19 +17,21 @@ class NoteStatsTile extends StatelessWidget {
       text: TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: '$statsTitle / ',
-            style: context.theme.textTheme.bodyMedium!.copyWith(
+            text: '$statsTitle\n',
+            style: context.theme.textTheme.titleMedium!.copyWith(
               color: context.theme.colorScheme.secondary,
             ),
           ),
           TextSpan(
             text: statsValue,
-            style: context.theme.textTheme.bodyLarge!.copyWith(
+            style: context.theme.textTheme.titleLarge!.copyWith(
               color: context.theme.colorScheme.onBackground,
             ),
           ),
         ],
       ),
+      overflow: TextOverflow.ellipsis,
+      maxLines: 3,
     );
   }
 }
