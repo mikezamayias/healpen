@@ -4,7 +4,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
-import '../../../models/snack_bar_options.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/custom_snack_bar.dart';
@@ -23,19 +22,31 @@ class SaveNoteButton extends ConsumerWidget {
       contentPadding: EdgeInsets.symmetric(horizontal: gap),
       onTap: state.content.isNotEmpty
           ? () {
-              CustomSnackBar.doActionAndShowSnackBar(
-                doAction: writingController.handleSaveNote,
-                options: SnackBarOptions(
-                  message: 'Saving note...',
-                  icon: FontAwesomeIcons.solidFloppyDisk,
-                ),
-                afterSnackBar: () {
-                  CustomSnackBar.showSnackBar(
-                    message: 'Note saved!',
-                    icon: FontAwesomeIcons.solidCircleCheck,
-                  );
-                },
+              final snackBarConfig = SnackBarConfig(
+                titleString1: 'Save note?',
+                leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
+                trailingWidgets1: [
+                  IconButton.filledTonal(
+                    onPressed:
+                        scaffoldMessengerKey.currentState!.hideCurrentSnackBar,
+                    icon: const FaIcon(
+                      FontAwesomeIcons.check,
+                    ),
+                  ),
+                  SizedBox(width: gap),
+                  IconButton.filledTonal(
+                    onPressed: scaffoldMessengerKey
+                        .currentState!.removeCurrentSnackBar,
+                    icon: const FaIcon(
+                      FontAwesomeIcons.xmark,
+                    ),
+                  ),
+                ],
+                actionAfterSnackBar1: writingController.handleSaveNote,
+                titleString2: 'Note saved!',
+                leadingIconData2: FontAwesomeIcons.solidCircleCheck,
               );
+              CustomSnackBar(snackBarConfig).showSnackBar(context);
             }
           : null,
       backgroundColor:
