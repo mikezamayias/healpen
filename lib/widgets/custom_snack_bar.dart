@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
@@ -13,16 +14,19 @@ class CustomSnackBar {
   void showSnackBar(BuildContext context) {
     final snackBar1 = _snackBarConfig.createSnackBar1();
     final snackBar2 = _snackBarConfig.createSnackBar2();
-    scaffoldMessengerKey.currentState!
-        .showSnackBar(snackBar1)
-        .closed
-        .then((SnackBarClosedReason value) async {
-      if (value == SnackBarClosedReason.hide ||
-          value == SnackBarClosedReason.timeout) {
-        _snackBarConfig.actionAfterSnackBar1().then((_) {
-          scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
-        });
-      }
+    HapticFeedback.vibrate().whenComplete(() {
+      scaffoldMessengerKey.currentState!
+          .showSnackBar(snackBar1)
+          .closed
+          .then((SnackBarClosedReason value) async {
+        if (value == SnackBarClosedReason.hide) {
+          _snackBarConfig.actionAfterSnackBar1().then((_) {
+            HapticFeedback.vibrate().whenComplete(() {
+              scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
+            });
+          });
+        }
+      });
     });
   }
 }
