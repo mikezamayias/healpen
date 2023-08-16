@@ -2,7 +2,7 @@
 platform :ios, '13.0'
 
 # https://github.com/FirebaseExtended/flutterfire/issues/2751
-firestore_ios_sdk_frameworks_version = '10.10.0' # '10.7.0' '10.3.0' '9.6.0' '9.4.0' '8.15.0' '8.11.0' '7.4.0'
+firestore_ios_sdk_frameworks_version = '10.12.0' # '10.7.0' '10.3.0' '9.6.0' '9.4.0' '8.15.0' '8.11.0' '7.4.0'
 pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => firestore_ios_sdk_frameworks_version
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
