@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide AppBar;
+import 'package:flutter/material.dart';
 import 'package:flutter_iterum/flutter_iterum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
