@@ -84,10 +84,10 @@ jobs:
           fi
       - name: Build APK
         env:
-          SIGNING_STORE_FILE: ${{ steps.android_keystore.outputs.filePath }}
-          SIGNING_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-          SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          HEALPEN_SIGNING_STORE_FILE: ${{ steps.android_keystore.outputs.filePath }}
+          HEALPEN_SIGNING_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          HEALPEN_SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          HEALPEN_SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
         run: flutter build apk --release
       - name: Rename APK
         run: |
