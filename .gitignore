@@ -45,3 +45,5 @@ app.*.map.json
 
 # Ignore GoogleService file
 **/GoogleService-Info.plist
+/.env
+/lib/env/env.g.dart
