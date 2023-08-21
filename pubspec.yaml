@@ -58,4 +58,10 @@ dev_dependencies:
 flutter:
   assets:
     - shorebird.yaml
+    - assets/images/onboarding/screen_1.svg
+    - assets/images/onboarding/screen_2.svg
+    - assets/images/onboarding/screen_3.svg
+    - assets/images/onboarding/screen_4.svg
+    - assets/images/onboarding/screen_5.svg
+    - assets/images/onboarding/screen_6.svg
   uses-material-design: true
