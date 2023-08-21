@@ -24,10 +24,6 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           ref.watch(WritingController().shakePrivateNoteInfoProvider),
       leadingIconData: FontAwesomeIcons.circleInfo,
       leadingOnTap: () {
-        ref
-            .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
-            .state = false;
-        PreferencesController().shakePrivateNoteInfo.write(false);
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -43,7 +39,15 @@ class PrivateNoteCheckBox extends ConsumerWidget {
                   cornerRadius: radius - gap,
                   responsiveWidth: true,
                   titleString: 'Okay',
-                  onTap: context.navigator.pop,
+                  onTap: () {
+                    ref
+                        .watch(WritingController()
+                            .shakePrivateNoteInfoProvider
+                            .notifier)
+                        .state = false;
+                    PreferencesController().shakePrivateNoteInfo.write(false);
+                    context.navigator.pop();
+                  },
                 )
               ],
             );
