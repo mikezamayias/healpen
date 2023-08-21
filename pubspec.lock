@@ -281,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.13"
+  dots_indicator:
+    dependency: "direct main"
+    description:
+      name: dots_indicator
+      sha256: "58b6a365744aa62aa1b70c4ea29e5106fbe064f5edaf7e9652e9b856edbfd9bb"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   email_validator:
     dependency: transitive
     description:
@@ -644,7 +652,7 @@ packages:
     source: hosted
     version: "3.0.0"
   flutter_svg:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_svg
       sha256: "8c5d68a82add3ca76d792f058b186a0599414f279f00ece4830b9b231b570338"

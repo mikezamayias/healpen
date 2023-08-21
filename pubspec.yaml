@@ -12,6 +12,7 @@ dependencies:
   collection: ^1.17.1
   cupertino_icons: ^1.0.5
   dart_openai: ^4.0.0
+  dots_indicator: ^3.0.0
   envied: ^0.3.0
   firebase_analytics: ^10.4.3
   firebase_app_check: ^0.1.4+3
@@ -31,6 +32,7 @@ dependencies:
   flutter_screwdriver: ^3.0.0
   flutter_secure_storage: ^8.0.0
   flutter_slidable: ^3.0.0
+  flutter_svg: ^2.0.7
   font_awesome_flutter: ^10.3.0
   google_fonts: ^5.1.0
   http: ^1.1.0
