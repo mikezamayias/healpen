@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -14,6 +13,7 @@ import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'views/auth/auth_view.dart';
 import 'views/note/note_view.dart';
+import 'views/onboarding/onboarding_view.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
   const HealpenWrapper({Key? key}) : super(key: key);
@@ -103,9 +103,11 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
             ThemeAppearance.dark => Brightness.dark,
           },
         ),
-        initialRoute:
-            FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',
+        initialRoute: '/onboarding',
+        // initialRoute:
+        //     FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',
         routes: {
+          '/onboarding': (context) => const OnboardingView(),
           '/auth': (context) => const AuthView(),
           '/healpen': (context) => const Healpen(),
           '/note': (context) => const NoteView(),
