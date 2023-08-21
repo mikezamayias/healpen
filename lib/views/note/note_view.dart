@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -14,7 +17,38 @@ class NoteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final noteModel = ModalRoute.of(context)!.settings.arguments as NoteModel;
+    final NoteModel noteModel =
+        ModalRoute.of(context)!.settings.arguments as NoteModel;
+    const String model = 'text-davinci-003';
+    const List<String> labels = [
+      'Very Unpleasant',
+      'Unpleasant',
+      'Slightly Unpleasant',
+      'Neutral',
+      'Slightly Pleasant',
+      'Pleasant',
+      'Very Pleasant'
+    ];
+    OpenAI.instance.completion
+        .create(
+      model: model,
+      prompt: buildPrompt(noteModel, labels),
+      temperature: 0,
+      maxTokens: 60,
+      topP: 1,
+      frequencyPenalty: 0.5,
+      presencePenalty: 0,
+      n: 1,
+      stop: 'Label:',
+      echo: true,
+    )
+        .then((OpenAICompletionModel completion) {
+      log(
+        completion.choices.first.text.split('Label:').last.trim(),
+        name:
+            'NoteView:build:completion.choices.first.text.split(\'Label:\').last.trim()',
+      );
+    });
     return BlueprintView(
       appBar: const AppBar(
         automaticallyImplyLeading: true,
@@ -114,4 +148,9 @@ class NoteView extends StatelessWidget {
       ),
     );
   }
+
+  String buildPrompt(NoteModel noteModel, List<String> labels) => '''
+Label the following text as ${labels.join(', ')}.\n
+Text:${noteModel.content}\n
+Label:''';
 }
