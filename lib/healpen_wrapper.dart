@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import 'controllers/onboarding/onboarding_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'controllers/writing_controller.dart';
 import 'enums/app_theming.dart';
@@ -60,6 +62,20 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           (bool value) =>
               ref.watch(customNavigationButtonsProvider.notifier).state = value,
         );
+    PreferencesController().onboardingCompleted.read().then(
+          (bool value) => ref
+              .watch(
+                  OnboardingController().onboardingCompletedProvider.notifier)
+              .state = value,
+        );
+    log(
+      '${FirebaseAuth.instance.currentUser != null}',
+      name: '_HealpenWrapperState:didChangeDependencies:currentUserExists',
+    );
+    log(
+      '${ref.watch(OnboardingController().onboardingCompletedProvider)}',
+      name: '_HealpenWrapperState:didChangeDependencies:onboardingCompleted',
+    );
     super.didChangeDependencies();
   }
 
@@ -103,9 +119,14 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
             ThemeAppearance.dark => Brightness.dark,
           },
         ),
-        initialRoute: '/onboarding',
-        // initialRoute:
-        //     FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',
+        initialRoute: switch (FirebaseAuth.instance.currentUser == null ||
+            ref.watch(OnboardingController().onboardingCompletedProvider)) {
+          true => '/onboarding',
+          false => switch (FirebaseAuth.instance.currentUser != null) {
+              true => '/healpen',
+              false => '/auth',
+            },
+        },
         routes: {
           '/onboarding': (context) => const OnboardingView(),
           '/auth': (context) => const AuthView(),
