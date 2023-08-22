@@ -86,7 +86,7 @@ jobs:
         run: |
           echo "OPEN_AI_API_KEY=${{secrets.OPEN_AI_API_KEY}}" >> .env
       - name: Build generated files
-        run: dart run build_runner build
+        run: dart run build_runner build --delete-conflicting-outputs
       - name: Build APK
         env:
           HEALPEN_SIGNING_STORE_FILE: ${{ steps.android_keystore.outputs.filePath }}
