@@ -63,8 +63,8 @@ class PreferencesController {
 
   /// Reset all preferences
   Future<void> resetAll() async {
-    for (var model in _models) {
-      await model.write(model.value);
+    for (PreferenceModel model in _models) {
+      await model.reset();
     }
   }
 }
