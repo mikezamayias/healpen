@@ -16,6 +16,7 @@ class PreferencesController {
       themeAppearance,
       writingAutomaticStopwatch,
       navigationBackButton,
+      onboardingCompleted,
     ];
   }
 
@@ -39,6 +40,10 @@ class PreferencesController {
   final navigationBackButton = PreferenceModel<bool>(
     'navigationBackButton',
     true,
+  );
+  final onboardingCompleted = PreferenceModel<bool>(
+    'onboardingCompleted',
+    false,
   );
 
   /// List of all preference models

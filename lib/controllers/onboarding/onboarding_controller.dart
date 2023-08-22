@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../models/onboarding/onboarding_model.dart';
 import '../../views/onboarding/widgets/onboarding_screen_view.dart';
 
@@ -55,6 +57,9 @@ class OnboardingController {
       imagePath: 'assets/images/onboarding/screen_6.svg',
     ),
   ];
+  final onboardingCompletedProvider = StateProvider<bool>((ref) {
+    return false;
+  });
 
   /// Methods
 
