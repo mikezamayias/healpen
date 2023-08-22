@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/onboarding/onboarding_model.dart';
@@ -57,9 +55,7 @@ class OnboardingController {
       imagePath: 'assets/images/onboarding/screen_6.svg',
     ),
   ];
-  final onboardingCompletedProvider = StateProvider<bool>((ref) {
-    return false;
-  });
+  final onboardingCompletedProvider = StateProvider<bool>((ref) => false);
 
   /// Methods
 
@@ -70,13 +66,8 @@ class OnboardingController {
       ];
 
   /// Get [OnboardingScreenView]
-  OnboardingScreenView currentOnboardingScreenView(int currentIndex) {
-    log(
-      '$currentIndex',
-      name: 'OnboardingScreenController:currentOnboardingScreenView',
-    );
-    return _onboardingScreenView(currentIndex);
-  }
+  OnboardingScreenView currentOnboardingScreenView(int currentIndex) =>
+      _onboardingScreenView(currentIndex);
 
   _onboardingScreenView(int index) => OnboardingScreenView(
         onboardingScreenModel: onboardingScreenModels[index],
