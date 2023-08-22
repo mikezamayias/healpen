@@ -43,7 +43,15 @@ class PrivateNoteCheckBox extends ConsumerWidget {
                   cornerRadius: radius - gap,
                   responsiveWidth: true,
                   titleString: 'Okay',
-                  onTap: context.navigator.pop,
+                  onTap: () {
+                    ref
+                        .watch(WritingController()
+                            .shakePrivateNoteInfoProvider
+                            .notifier)
+                        .state = false;
+                    PreferencesController().shakePrivateNoteInfo.write(false);
+                    context.navigator.pop();
+                  },
                 )
               ],
             );

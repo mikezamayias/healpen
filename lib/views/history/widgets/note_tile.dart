@@ -4,12 +4,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/history_view_controller.dart';
-import '../../../extensions/int_extensions.dart';
 import '../../../models/note/note_model.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/custom_snack_bar.dart';
-import 'note_stats_title.dart';
 
 class NoteTile extends StatelessWidget {
   const NoteTile({
@@ -27,7 +25,7 @@ class NoteTile extends StatelessWidget {
         child: Slidable(
           key: ValueKey(entry.timestamp.toString()),
           startActionPane: ActionPane(
-            extentRatio: 0.5,
+            extentRatio: 1,
             motion: const ScrollMotion(),
             dragDismissible: false,
             children: [
@@ -62,7 +60,7 @@ class NoteTile extends StatelessWidget {
                       noteModel: entry,
                     ),
                     titleString2: entry.isPrivate
-                        ? 'Note unmarked as private!'
+                        ? 'Note marked as not private!'
                         : 'Note marked as private!',
                     leadingIconData2: FontAwesomeIcons.solidCircleCheck,
                   );
@@ -126,7 +124,7 @@ class NoteTile extends StatelessWidget {
           endActionPane: ActionPane(
             motion: const ScrollMotion(),
             dragDismissible: true,
-            extentRatio: 0.25,
+            extentRatio: 1,
             children: [
               SizedBox(width: gap),
               SlidableAction(
@@ -168,56 +166,13 @@ class NoteTile extends StatelessWidget {
               ),
             ],
           ),
-          child: Stack(
-            alignment: Alignment.topRight,
-            children: [
-              CustomListTile(
-                contentPadding: EdgeInsets.all(gap),
-                backgroundColor: context.theme.colorScheme.surface,
-                textColor: context.theme.colorScheme.onSurface,
-                title: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    NoteStatsTile(
-                      statsTitle: 'Date and Time Created',
-                      statsValue: entry.timestamp.timestampFormat(),
-                    ),
-                    NoteStatsTile(
-                      statsTitle: 'Content',
-                      statsValue: entry.content,
-                    ),
-                  ],
-                ),
-                onTap: () => context.navigator.pushNamed(
-                  '/note',
-                  arguments: entry,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(gap),
-                child: Column(
-                  children: [
-                    FaIcon(
-                      entry.isPrivate
-                          ? FontAwesomeIcons.lock
-                          : FontAwesomeIcons.lockOpen,
-                      size: context.theme.textTheme.titleLarge!.fontSize,
-                      color: context.theme.colorScheme.secondary,
-                    ),
-                    SizedBox(height: gap),
-                    FaIcon(
-                      entry.isFavorite
-                          ? FontAwesomeIcons.solidStar
-                          : FontAwesomeIcons.star,
-                      size: context.theme.textTheme.titleLarge!.fontSize,
-                      color: context.theme.colorScheme.secondary,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          child: CustomListTile(
+            contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+            titleString: entry.content,
+            onTap: () => context.navigator.pushNamed(
+              '/note',
+              arguments: entry,
+            ),
           ),
         ),
       ),

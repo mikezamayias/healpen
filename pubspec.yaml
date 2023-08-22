@@ -11,6 +11,9 @@ dependencies:
   cloud_firestore: ^4.8.1
   collection: ^1.17.1
   cupertino_icons: ^1.0.5
+  dart_openai: ^4.0.0
+  dots_indicator: ^3.0.0
+  envied: ^0.3.0
   firebase_analytics: ^10.4.3
   firebase_app_check: ^0.1.4+3
   firebase_auth: ^4.6.3
@@ -29,9 +32,10 @@ dependencies:
   flutter_screwdriver: ^3.0.0
   flutter_secure_storage: ^8.0.0
   flutter_slidable: ^3.0.0
+  flutter_svg: ^2.0.7
   font_awesome_flutter: ^10.3.0
-  google_fonts: ^4.0.1
-  http: ^0.13.5
+  google_fonts: ^5.1.0
+  http: ^1.1.0
   json_annotation: ^4.8.0
   responsive_sizer: ^3.1.1
   rive: ^0.11.4
@@ -42,17 +46,24 @@ dependencies:
   validated: ^2.0.0
 
 dev_dependencies:
-  build_runner: ^2.3.3
-  custom_lint: ^0.4.0
+  build_runner: ^2.4.6
+  custom_lint: ^0.5.2
+  envied_generator: ^0.3.0+3
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
   freezed: ^2.3.2
   json_serializable: ^6.6.0
   lint: ^2.1.2
-  riverpod_lint: ^1.2.0
+  riverpod_lint: ^2.0.1
 
 flutter:
   assets:
     - shorebird.yaml
+    - assets/images/onboarding/screen_1.svg
+    - assets/images/onboarding/screen_2.svg
+    - assets/images/onboarding/screen_3.svg
+    - assets/images/onboarding/screen_4.svg
+    - assets/images/onboarding/screen_5.svg
+    - assets/images/onboarding/screen_6.svg
   uses-material-design: true

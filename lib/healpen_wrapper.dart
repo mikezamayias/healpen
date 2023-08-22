@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import 'controllers/onboarding/onboarding_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'controllers/writing_controller.dart';
 import 'enums/app_theming.dart';
@@ -14,6 +15,7 @@ import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'views/auth/auth_view.dart';
 import 'views/note/note_view.dart';
+import 'views/onboarding/onboarding_view.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
   const HealpenWrapper({Key? key}) : super(key: key);
@@ -56,10 +58,24 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               .watch(writingAutomaticStopwatchProvider.notifier)
               .state = value,
         );
-    PreferencesController().navigationBackButton.read().then(
+    PreferencesController().enableBackButton.read().then(
           (bool value) =>
-              ref.watch(customNavigationButtonsProvider.notifier).state = value,
+              ref.watch(enableBackButtonProvider.notifier).state = value,
         );
+    PreferencesController().onboardingCompleted.read().then(
+          (bool value) => ref
+              .watch(
+                  OnboardingController().onboardingCompletedProvider.notifier)
+              .state = value,
+        );
+    log(
+      '${FirebaseAuth.instance.currentUser != null}',
+      name: '_HealpenWrapperState:didChangeDependencies:currentUserExists',
+    );
+    log(
+      '${ref.watch(OnboardingController().onboardingCompletedProvider)}',
+      name: '_HealpenWrapperState:didChangeDependencies:onboardingCompleted',
+    );
     super.didChangeDependencies();
   }
 
@@ -103,9 +119,16 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
             ThemeAppearance.dark => Brightness.dark,
           },
         ),
-        initialRoute:
-            FirebaseAuth.instance.currentUser == null ? '/auth' : '/healpen',
+        initialRoute: switch (FirebaseAuth.instance.currentUser == null ||
+            ref.watch(OnboardingController().onboardingCompletedProvider)) {
+          true => '/onboarding',
+          false => switch (FirebaseAuth.instance.currentUser != null) {
+              true => '/healpen',
+              false => '/auth',
+            },
+        },
         routes: {
+          '/onboarding': (context) => const OnboardingView(),
           '/auth': (context) => const AuthView(),
           '/healpen': (context) => const Healpen(),
           '/note': (context) => const NoteView(),

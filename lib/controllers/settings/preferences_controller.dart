@@ -15,7 +15,8 @@ class PreferencesController {
       themeColor,
       themeAppearance,
       writingAutomaticStopwatch,
-      navigationBackButton,
+      enableBackButton,
+      onboardingCompleted,
     ];
   }
 
@@ -36,9 +37,13 @@ class PreferencesController {
     'writingAutomaticStopwatch',
     false,
   );
-  final navigationBackButton = PreferenceModel<bool>(
-    'navigationBackButton',
+  final enableBackButton = PreferenceModel<bool>(
+    'enableBackButton',
     true,
+  );
+  final onboardingCompleted = PreferenceModel<bool>(
+    'onboardingCompleted',
+    false,
   );
 
   /// List of all preference models
@@ -58,8 +63,8 @@ class PreferencesController {
 
   /// Reset all preferences
   Future<void> resetAll() async {
-    for (var model in _models) {
-      await model.write(model.value);
+    for (PreferenceModel model in _models) {
+      await model.reset();
     }
   }
 }

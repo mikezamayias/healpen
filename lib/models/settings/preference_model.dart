@@ -63,4 +63,13 @@ class PreferenceModel<T> {
       throw Exception('Type not supported');
     }
   }
+
+  Future<void> reset() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    log(
+      'Removed key: $key',
+      name: 'PreferenceModel:reset',
+    );
+    await prefs.remove(key);
+  }
 }

@@ -4,13 +4,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../models/page_model.dart';
 import '../views/analysis/analysis_view.dart';
 import '../views/history/history_view.dart';
+import '../views/onboarding/onboarding_view.dart';
 import '../views/settings/settings_view.dart';
 import '../views/writing/writing_view.dart';
 
 class PageController {
   /// Singleton
   static final PageController _instance = PageController._internal();
+
   factory PageController() => _instance;
+
   PageController._internal() {
     pages = [
       // home,
@@ -48,5 +51,10 @@ class PageController {
     label: 'settings',
     icon: FontAwesomeIcons.sliders,
     widget: const SettingsView(),
+  );
+  final onboarding = PageModel(
+    label: 'onboarding',
+    icon: FontAwesomeIcons.circleInfo,
+    widget: const OnboardingView(),
   );
 }

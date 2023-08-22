@@ -23,7 +23,7 @@ class SettingsAppView extends ConsumerWidget {
       const TextDivider('Writing'),
       const WritingStopwatchTile(),
       const TextDivider('Navigation'),
-      const NavigationSettingsTile(),
+      const EnableBackButtonSettingsTile(),
     ].animateWidgetList();
 
     return BlueprintView(
