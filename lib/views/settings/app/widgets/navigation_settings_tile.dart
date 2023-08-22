@@ -8,8 +8,8 @@ import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class NavigationSettingsTile extends ConsumerWidget {
-  const NavigationSettingsTile({Key? key}) : super(key: key);
+class EnableBackButtonSettingsTile extends ConsumerWidget {
+  const EnableBackButtonSettingsTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,15 +20,15 @@ class NavigationSettingsTile extends ConsumerWidget {
         'Turns on a back button at the top of the screen, making it simpler to return to previous pages.',
       ),
       trailing: Switch(
-        value: ref.watch(customNavigationButtonsProvider),
+        value: ref.watch(enableBackButtonProvider),
         onChanged: (value) async {
-          ref.read(customNavigationButtonsProvider.notifier).state = value;
-          PreferencesController().navigationBackButton.write(
-                ref.watch(customNavigationButtonsProvider),
+          ref.read(enableBackButtonProvider.notifier).state = value;
+          PreferencesController().enableBackButton.write(
+                ref.watch(enableBackButtonProvider),
               );
           log(
-            '${ref.watch(customNavigationButtonsProvider)}',
-            name: 'SettingsView:customNavigationButtons',
+            '${ref.watch(enableBackButtonProvider)}',
+            name: 'SettingsView:EnableBackButtonSettingsTile',
           );
         },
       ),

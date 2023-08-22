@@ -58,9 +58,9 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               .watch(writingAutomaticStopwatchProvider.notifier)
               .state = value,
         );
-    PreferencesController().navigationBackButton.read().then(
+    PreferencesController().enableBackButton.read().then(
           (bool value) =>
-              ref.watch(customNavigationButtonsProvider.notifier).state = value,
+              ref.watch(enableBackButtonProvider.notifier).state = value,
         );
     PreferencesController().onboardingCompleted.read().then(
           (bool value) => ref

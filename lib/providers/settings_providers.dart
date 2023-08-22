@@ -20,6 +20,6 @@ final writingAutomaticStopwatchProvider = StateProvider<bool>(
 /// Whether to show custom navigation buttons in the app.
 /// When set to true, the app will show custom navigation buttons.
 /// When set to false, the app will show the default navigation buttons.
-final customNavigationButtonsProvider = StateProvider<bool>(
+final enableBackButtonProvider = StateProvider<bool>(
   (ref) => true,
 );
