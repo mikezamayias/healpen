@@ -36,57 +36,43 @@ class _OnboardingNavigationBarState
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(radius),
-          child: AnimatedCrossFade(
-            firstChild: OnboardingButton(
-              titleString: 'Back',
-              onTap: () {
-                ref
-                    .watch(OnboardingController().pageControllerProvider)
-                    .animateToPage(
-                      currentPageIndex - 1,
-                      duration: animationDuration.milliseconds,
-                      curve: curve,
-                    );
-              },
-            ),
-            secondChild: OnboardingButton(
-              titleString: 'Skip',
-              onTap: goToAuth,
-            ),
-            crossFadeState: currentPageIndex == 0
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            duration: animationDuration.milliseconds,
+        if (currentPageIndex == 0)
+          OnboardingButton(
+            titleString: 'Skip',
+            onTap: goToAuth,
+          )
+        else
+          OnboardingButton(
+            titleString: 'Back',
+            onTap: () {
+              ref
+                  .watch(OnboardingController().pageControllerProvider)
+                  .animateToPage(
+                    currentPageIndex - 1,
+                    duration: animationDuration.milliseconds,
+                    curve: curve,
+                  );
+            },
           ),
-        ),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(radius),
-          child: AnimatedCrossFade(
-            firstChild: OnboardingButton(
-              titleString: currentPageIndex == 0 ? 'Get Started' : 'Next',
-              onTap: () {
-                ref
-                    .watch(OnboardingController().pageControllerProvider)
-                    .animateToPage(
-                      currentPageIndex + 1,
-                      duration: animationDuration.milliseconds,
-                      curve: curve,
-                    );
-              },
-            ),
-            secondChild: OnboardingButton(
-              titleString: 'Start Writing Now',
-              onTap: goToAuth,
-            ),
-            crossFadeState: currentPageIndex ==
-                    OnboardingController().onboardingScreenViews.length - 1
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            duration: animationDuration.milliseconds,
-          ),
-        ),
+        if (currentPageIndex ==
+            OnboardingController().onboardingScreenViews.length - 1)
+          OnboardingButton(
+            titleString: 'Start Writing Now',
+            onTap: goToAuth,
+          )
+        else
+          OnboardingButton(
+            titleString: currentPageIndex == 0 ? 'Get Started' : 'Next',
+            onTap: () {
+              ref
+                  .watch(OnboardingController().pageControllerProvider)
+                  .animateToPage(
+                    currentPageIndex + 1,
+                    duration: animationDuration.milliseconds,
+                    curve: curve,
+                  );
+            },
+          )
       ],
     );
   }
