@@ -1,8 +1,9 @@
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:sprung/sprung.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../controllers/settings/preferences_controller.dart';
@@ -83,72 +84,113 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
                       duration: 1.5.seconds,
                     ),
               ),
-            ).animate().fade(
-                  curve: curve,
+            )
+                .animate()
+                .fade(
+                  begin: -1,
                   duration: 1.5.seconds,
+                  curve: Sprung.overDamped,
+                )
+                .slideY(
+                  begin: -0.5,
+                  end: 0,
+                  duration: 1.5.seconds,
+                  curve: Sprung.overDamped,
                 ),
-            Column(
+            // DotsIndicator(
+            //   dotsCount: OnboardingController().onboardingScreenViews.length,
+            //   position: currentIndex,
+            //   decorator: DotsDecorator(
+            //     size: Size.square(gap),
+            //     activeSize: Size(gap * 2, gap),
+            //     activeShape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(radius),
+            //     ),
+            //     spacing: EdgeInsets.symmetric(
+            //       horizontal: gap / 2,
+            //     ),
+            //   ),
+            // )
+            SmoothPageIndicator(
+              controller: pageController,
+              count: OnboardingController().onboardingScreenViews.length,
+              effect: ExpandingDotsEffect(
+                activeDotColor: theme.colorScheme.primary,
+                dotColor: theme.colorScheme.surfaceVariant,
+              ),
+            )
+                .animate(
+                  delay: 1.5.seconds,
+                )
+                .fade(
+                  begin: -1,
+                  duration: 1.5.seconds,
+                  curve: Sprung.overDamped,
+                )
+                .slideY(
+                  begin: 1,
+                  end: 0,
+                  duration: 1.5.seconds,
+                  curve: Sprung.overDamped,
+                ),
+            SizedBox(height: gap * 2),
+
+            ///   Check if the current model is first or last.
+            ///   If first, show `skip` and `get started` buttons
+            ///   If last, show `back` and `start writing now` buttons
+            ///   If neither, show `back` and `next` buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ///   Check if the current model is first or last.
-                ///   If first, show `skip` and `get started` buttons
-                ///   If last, show `back` and `start writing now` buttons
-                ///   If neither, show `back` and `next` buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (currentIndex != 0)
-                      OnboardingButton(
-                        titleString: 'Back',
-                        onTap: () {
-                          pageController.jumpToPage(currentIndex - 1);
-                        },
-                      ),
-                    if (currentIndex == 0)
-                      OnboardingButton(
-                        titleString: 'Skip',
-                        onTap: goToAuth,
-                      ),
-                    if (currentIndex ==
-                        OnboardingController().onboardingScreenViews.length - 1)
-                      OnboardingButton(
-                        titleString: 'Start Writing Now',
-                        onTap: goToAuth,
-                      )
-                    else
-                      OnboardingButton(
-                        titleString: currentIndex == 0 ? 'Get Started' : 'Next',
-                        onTap: () {
-                          pageController.jumpToPage(currentIndex + 1);
-                        },
-                      ),
-                  ],
-                ),
-                SizedBox(height: gap * 3),
-                DotsIndicator(
-                  dotsCount:
-                      OnboardingController().onboardingScreenViews.length,
-                  position: currentIndex,
-                  decorator: DotsDecorator(
-                    size: Size.square(gap),
-                    activeSize: Size(gap * 2, gap),
-                    activeShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(radius),
-                    ),
-                    spacing: EdgeInsets.symmetric(
-                      horizontal: gap / 2,
-                    ),
+                if (currentIndex != 0)
+                  OnboardingButton(
+                    titleString: 'Back',
+                    onTap: () {
+                      pageController.animateToPage(
+                        currentIndex - 1,
+                        duration: 1.seconds,
+                        curve: curve,
+                      );
+                    },
                   ),
-                ),
-              ]
-                  .animate(interval: .5.seconds)
-                  .fade(curve: curve, duration: 1.seconds)
-                  .slideY(
-                    begin: 0.5,
-                    end: 0,
-                    curve: curve,
-                    duration: 1.seconds,
+                if (currentIndex == 0)
+                  OnboardingButton(
+                    titleString: 'Skip',
+                    onTap: goToAuth,
                   ),
-            ),
+                if (currentIndex ==
+                    OnboardingController().onboardingScreenViews.length - 1)
+                  OnboardingButton(
+                    titleString: 'Start Writing Now',
+                    onTap: goToAuth,
+                  )
+                else
+                  OnboardingButton(
+                    titleString: currentIndex == 0 ? 'Get Started' : 'Next',
+                    onTap: () {
+                      pageController.animateToPage(
+                        currentIndex + 1,
+                        duration: 1.seconds,
+                        curve: curve,
+                      );
+                    },
+                  ),
+              ],
+            )
+                .animate(
+                  delay: 1.seconds,
+                )
+                .fade(
+                  begin: -1,
+                  duration: 1.5.seconds,
+                  curve: Sprung.overDamped,
+                )
+                .slideY(
+                  begin: 1,
+                  end: 0,
+                  duration: 1.5.seconds,
+                  curve: Sprung.overDamped,
+                ),
           ],
         ),
       ),

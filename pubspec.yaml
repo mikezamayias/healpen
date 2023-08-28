@@ -12,7 +12,6 @@ dependencies:
   collection: ^1.17.1
   cupertino_icons: ^1.0.5
   dart_openai: ^4.0.0
-  dots_indicator: ^3.0.0
   envied: ^0.3.0
   firebase_analytics: ^10.4.3
   firebase_app_check: ^0.1.4+3
@@ -42,6 +41,7 @@ dependencies:
   salomon_bottom_bar: ^3.3.1
   shared_preferences: ^2.2.0
   simple_gesture_detector: ^0.2.0
+  smooth_page_indicator: ^1.1.0
   sprung: ^3.0.1
   validated: ^2.0.0
 
