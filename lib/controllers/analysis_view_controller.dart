@@ -19,8 +19,7 @@ class AnalysisViewController {
   Stream<QuerySnapshot<Map<String, dynamic>>> get analysisStream =>
       _db.collection('analysis-temp').snapshots();
 
-  Stream<List<String>> get metricGroupingsStream =>
-      analysisStream.map((event) {
+  Stream<List<String>> get metricGroupingsStream => analysisStream.map((event) {
         _metricGroupingEntries.clear();
         for (QueryDocumentSnapshot<Map<String, dynamic>> element
             in event.docs) {

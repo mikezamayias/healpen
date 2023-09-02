@@ -34,9 +34,9 @@ class ThemeColorTile extends ConsumerWidget {
             '${newSelection.first}',
             name: 'Settings:ThemeColorTile',
           );
-          PreferencesController().themeColor.write(
-                ref.watch(themeColorProvider)
-              );
+          PreferencesController()
+              .themeColor
+              .write(ref.watch(themeColorProvider));
         },
       ),
     );

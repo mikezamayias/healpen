@@ -39,8 +39,7 @@ class AppBar extends ConsumerWidget {
         ],
       ),
     );
-    return ref.watch(enableBackButtonProvider) &&
-            automaticallyImplyLeading!
+    return ref.watch(enableBackButtonProvider) && automaticallyImplyLeading!
         ? Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
