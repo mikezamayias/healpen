@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iterum/flutter_iterum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
@@ -86,6 +87,16 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         '${mediaQuery.platformBrightness}',
         name: '_HealpenWrapperState:didChangePlatformBrightness',
       );
+      // TODO: figure a way to change the colors of smooth dot indicator on
+      //  system appearance change without restarting the app
+      if (FirebaseAuth.instance.currentUser == null ||
+          ref.watch(OnboardingController().onboardingCompletedProvider)) {
+        Iterum.revive(context);
+      }
+      ref.watch(themeProvider.notifier).state = createTheme(
+        ref.watch(themeColorProvider).color,
+        brightness(ref.watch(themeAppearanceProvider)),
+      );
       setState(() {
         getSystemUIOverlayStyle(
           context.theme,
@@ -105,20 +116,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
         ],
-        themeMode: switch (ref.watch(themeAppearanceProvider)) {
-          ThemeAppearance.system => ThemeMode.system,
-          ThemeAppearance.light => ThemeMode.light,
-          ThemeAppearance.dark => ThemeMode.dark,
-        },
-        theme: createTheme(
-          ref.watch(themeColorProvider).color,
-          switch (ref.watch(themeAppearanceProvider)) {
-            ThemeAppearance.system =>
-              WidgetsBinding.instance.platformDispatcher.platformBrightness,
-            ThemeAppearance.light => Brightness.light,
-            ThemeAppearance.dark => Brightness.dark,
-          },
-        ),
+        themeMode: themeMode(ref.watch(themeAppearanceProvider)),
+        theme: ref.watch(themeProvider),
         initialRoute: switch (FirebaseAuth.instance.currentUser == null ||
             ref.watch(OnboardingController().onboardingCompletedProvider)) {
           true => '/onboarding',
