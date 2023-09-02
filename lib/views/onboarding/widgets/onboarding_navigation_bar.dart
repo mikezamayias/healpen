@@ -25,7 +25,7 @@ class _OnboardingNavigationBarState
     PreferencesController()
         .onboardingCompleted
         .write(ref.watch(OnboardingController().onboardingCompletedProvider));
-    navigator.pushReplacementNamed('/auth');
+    navigator.pushNamed('/auth');
   }
 
   @override

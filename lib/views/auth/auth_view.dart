@@ -21,7 +21,6 @@ class AuthView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(OnboardingController().pageControllerProvider).dispose();
     final emailLinkProvider = ref.watch(
       CustomAuthProvider().emailLinkAuthProvider,
     );
