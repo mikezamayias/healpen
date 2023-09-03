@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide AppBar, Page;
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -49,7 +50,11 @@ class AppBar extends ConsumerWidget {
                 padding: EdgeInsets.zero,
                 enableFeedback: true,
                 iconSize: context.theme.textTheme.titleLarge!.fontSize,
-                onPressed: context.navigator.pop,
+                onPressed: () {
+                  HapticFeedback.vibrate().whenComplete(() {
+                    context.navigator.pop();
+                  });
+                },
                 color: context.theme.colorScheme.onPrimary,
                 icon: const FaIcon(FontAwesomeIcons.chevronLeft),
               ),

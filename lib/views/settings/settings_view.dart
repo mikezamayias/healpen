@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -59,11 +60,13 @@ class SettingsView extends ConsumerWidget {
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  context.navigator.push(
-                    MaterialPageRoute(
-                      builder: (_) => pageWidgets[title]!.$1,
-                    ),
-                  );
+                  HapticFeedback.vibrate().whenComplete(() {
+                    context.navigator.push(
+                      MaterialPageRoute(
+                        builder: (_) => pageWidgets[title]!.$1,
+                      ),
+                    );
+                  });
                 },
               ),
           // CustomListTile(
