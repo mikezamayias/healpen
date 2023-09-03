@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +28,7 @@ class _OnboardingNavigationBarState
       PreferencesController()
           .onboardingCompleted
           .write(ref.watch(OnboardingController().onboardingCompletedProvider));
-      navigator.push(
+      navigator.pushReplacement(
         PageRouteBuilder(
           transitionDuration: emphasizedDuration,
           reverseTransitionDuration: emphasizedDuration,
