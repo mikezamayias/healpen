@@ -55,7 +55,7 @@ class SignOutTile extends ConsumerWidget {
             ref.read(currentPageProvider.notifier).state =
                 PageController().writing;
             await PreferencesController().resetAll();
-            HapticFeedback.heavyImpact().whenComplete(
+            HapticFeedback.vibrate().whenComplete(
               () => Iterum.revive(context),
             );
           },
