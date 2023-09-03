@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide PageController;
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -25,14 +26,14 @@ class CustomBottomNavigationBar extends ConsumerWidget {
       ),
       child: SafeArea(
         child: PhysicalModel(
-          color: context.theme.colorScheme.surfaceVariant,
+          color: context.theme.colorScheme.primary,
           // shadowColor: context.theme.colorScheme.shadow,
           // elevation: radius,
           borderRadius: BorderRadius.all(Radius.circular(radius)),
           child: Padding(
             padding: EdgeInsets.all(gap),
             child: SalomonBottomBar(
-              duration: animationDuration.milliseconds,
+              duration: 200.milliseconds,
               curve: curve,
               margin: EdgeInsets.zero,
               itemShape: RoundedRectangleBorder(
@@ -41,12 +42,14 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               currentIndex: PageController()
                   .pages
                   .indexOf(ref.watch(currentPageProvider)),
-              onTap: (int index) => ref
-                  .watch(currentPageProvider.notifier)
-                  .state = PageController().pages[index],
+              onTap: (int index) async {
+                await HapticFeedback.vibrate();
+                ref.watch(currentPageProvider.notifier).state =
+                    PageController().pages[index];
+              },
               // selectedColorOpacity: 0,
-              selectedItemColor: context.theme.colorScheme.secondary,
-              unselectedItemColor: context.theme.colorScheme.outline,
+              selectedItemColor: context.theme.colorScheme.onPrimary,
+              unselectedItemColor: context.theme.colorScheme.onPrimary,
               items: [
                 ...PageController().pages.map(
                       (PageModel pageModel) => SalomonBottomBarItem(
