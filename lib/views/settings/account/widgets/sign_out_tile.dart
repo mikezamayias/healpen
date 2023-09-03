@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../../controllers/page_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/page_providers.dart';
@@ -54,6 +55,10 @@ class SignOutTile extends ConsumerWidget {
           (_) async {
             ref.read(currentPageProvider.notifier).state =
                 PageController().writing;
+            ref
+                .read(
+                    OnboardingController().onboardingCompletedProvider.notifier)
+                .state = false;
             await PreferencesController().resetAll();
             HapticFeedback.vibrate().whenComplete(
               () => Iterum.revive(context),
