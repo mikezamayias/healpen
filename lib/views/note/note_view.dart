@@ -33,86 +33,67 @@ class NoteView extends StatelessWidget {
         automaticallyImplyLeading: true,
         pathNames: ['Note'],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
+      body: Wrap(
+        spacing: gap, // horizontal spacing between children
+        runSpacing: gap, // vertical spacing between lines
         children: <Widget>[
-          Row(
-            children: [
-              Expanded(
-                child: CustomListTile(
-                  titleString: 'Date and Time',
-                  responsiveWidth: true,
-                  contentPadding: EdgeInsets.all(gap),
-                  subtitle: SelectableText(
-                    noteModel.timestamp.timestampFormat(),
-                    style: context.theme.textTheme.bodyLarge!.copyWith(
-                      color: context.theme.colorScheme.onBackground,
-                    ),
-                  ),
-                ),
+          CustomListTile(
+            titleString: 'Date and Time',
+            responsiveWidth: true,
+            contentPadding: EdgeInsets.all(gap),
+            subtitle: SelectableText(
+              noteModel.timestamp.timestampFormat(),
+              style: context.theme.textTheme.bodyLarge!.copyWith(
+                color: context.theme.colorScheme.onBackground,
               ),
-              SizedBox(width: gap),
-              CustomListTile(
-                responsiveWidth: true,
-                contentPadding: EdgeInsets.all(gap),
-                titleString: 'Private',
-                subtitle: Center(
-                  child: FaIcon(
-                    noteModel.isPrivate
-                        ? FontAwesomeIcons.lock
-                        : FontAwesomeIcons.lockOpen,
-                    size: context.theme.textTheme.headlineSmall!.fontSize! +
-                        context.theme.textTheme.headlineSmall!.height!,
-                    color: context.theme.colorScheme.onBackground,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-          SizedBox(height: gap),
-          Row(
-            children: [
-              Expanded(
-                child: CustomListTile(
-                  responsiveWidth: true,
-                  contentPadding: EdgeInsets.all(gap),
-                  titleString: 'Duration',
-                  subtitle: Text(
-                    noteModel.duration.writingDurationFormat(),
-                    // noteModel.timestamp.timestampFormat()
-                  ),
-                ),
-              ),
-              SizedBox(width: gap),
-              CustomListTile(
-                responsiveWidth: true,
-                contentPadding: EdgeInsets.all(gap),
-                titleString: 'Word Count',
-                subtitle: Text(
-                  noteModel.wordCount.toString(),
-                ),
-              ),
-              SizedBox(width: gap),
-              CustomListTile(
-                responsiveWidth: true,
-                contentPadding: EdgeInsets.all(gap),
-                titleString: 'Favorite',
-                subtitle: Center(
-                  child: FaIcon(
-                    noteModel.isFavorite
-                        ? FontAwesomeIcons.solidStar
-                        : FontAwesomeIcons.star,
-                    size: context.theme.textTheme.headlineSmall!.fontSize! +
-                        context.theme.textTheme.headlineSmall!.height!,
-                    color: context.theme.colorScheme.onBackground,
-                  ),
-                ),
-              ),
-            ],
+          CustomListTile(
+            responsiveWidth: true,
+            contentPadding: EdgeInsets.all(gap),
+            titleString: 'Duration',
+            subtitle: Text(
+              noteModel.duration.writingDurationFormat(),
+            ),
           ),
-          SizedBox(height: gap),
+          CustomListTile(
+            responsiveWidth: true,
+            contentPadding: EdgeInsets.all(gap),
+            titleString: 'Private',
+            subtitle: Center(
+              child: FaIcon(
+                noteModel.isPrivate
+                    ? FontAwesomeIcons.lock
+                    : FontAwesomeIcons.lockOpen,
+                size: context.theme.textTheme.headlineSmall!.fontSize! +
+                    context.theme.textTheme.headlineSmall!.height!,
+                color: context.theme.colorScheme.onBackground,
+              ),
+            ),
+          ),
+          CustomListTile(
+            responsiveWidth: true,
+            contentPadding: EdgeInsets.all(gap),
+            titleString: 'Word Count',
+            subtitle: Text(
+              noteModel.wordCount.toString(),
+            ),
+          ),
+          CustomListTile(
+            responsiveWidth: true,
+            contentPadding: EdgeInsets.all(gap),
+            titleString: 'Favorite',
+            subtitle: Center(
+              child: FaIcon(
+                noteModel.isFavorite
+                    ? FontAwesomeIcons.solidStar
+                    : FontAwesomeIcons.star,
+                size: context.theme.textTheme.headlineSmall!.fontSize! +
+                    context.theme.textTheme.headlineSmall!.height!,
+                color: context.theme.colorScheme.onBackground,
+              ),
+            ),
+          ),
           CustomListTile(
             titleString: 'Content',
             contentPadding: EdgeInsets.all(gap),
@@ -123,7 +104,6 @@ class NoteView extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: gap),
           FutureBuilder(
             future: OpenAI.instance.completion.create(
               model: model,
@@ -137,11 +117,9 @@ class NoteView extends StatelessWidget {
               stop: 'Label:',
               echo: true,
             ),
-            builder: (
-              BuildContext context,
-              AsyncSnapshot<OpenAICompletionModel>
-                  openAICompletionModelSnapshot,
-            ) {
+            builder: (BuildContext context,
+                AsyncSnapshot<OpenAICompletionModel>
+                openAICompletionModelSnapshot,) {
               String sentiment = '';
               if (openAICompletionModelSnapshot.connectionState ==
                   ConnectionState.done) {
