@@ -29,7 +29,7 @@ class AwaitingDynamicLinkState extends StatelessWidget {
           // backgroundColor: context.theme.colorScheme.error,
           // textColor: context.theme.colorScheme.onError,
           titleString: 'Something not right?',
-          subtitleString: 'Go back',
+          subtitleString: 'Start again.',
           onTap: () => context.navigator.pushReplacementNamed('/auth'),
         ),
       ],

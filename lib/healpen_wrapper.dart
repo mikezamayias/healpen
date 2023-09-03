@@ -118,8 +118,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         ],
         themeMode: themeMode(ref.watch(themeAppearanceProvider)),
         theme: ref.watch(themeProvider),
-        initialRoute: switch (FirebaseAuth.instance.currentUser == null ||
-            ref.watch(OnboardingController().onboardingCompletedProvider)) {
+        initialRoute: switch (FirebaseAuth.instance.currentUser == null &&
+            !ref.watch(OnboardingController().onboardingCompletedProvider)) {
           true => '/onboarding',
           false => switch (FirebaseAuth.instance.currentUser != null) {
               true => '/healpen',
