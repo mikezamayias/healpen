@@ -8,7 +8,7 @@ import 'theme_components/text_theme_data.dart';
 
 ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       useMaterial3: true,
-      fontFamily: GoogleFonts.lato().fontFamily,
+      fontFamily: GoogleFonts.inter().fontFamily,
       colorScheme: colorScheme,
       textTheme: textThemeData,
       // cardColor: colorScheme.primary,
@@ -113,7 +113,7 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
-          animationDuration: animationDuration.milliseconds,
+          animationDuration: 200.milliseconds,
           side: MaterialStateProperty.all(
             BorderSide(
               width: 3 * unit,

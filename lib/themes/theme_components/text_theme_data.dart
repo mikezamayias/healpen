@@ -1,68 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../utils/constants.dart';
 
 final TextTheme textThemeData = TextTheme(
-  displayLarge: GoogleFonts.lato(
+  displayLarge: TextStyle(
     fontSize: 96 * unit,
     fontWeight: FontWeight.w300,
     letterSpacing: -1.5,
   ),
-  displayMedium: GoogleFonts.lato(
+  displayMedium: TextStyle(
     fontSize: 60 * unit,
     fontWeight: FontWeight.w300,
     letterSpacing: -0.5,
   ),
-  displaySmall: GoogleFonts.lato(
+  displaySmall: TextStyle(
     fontSize: 48 * unit,
     fontWeight: FontWeight.w400,
   ),
-  headlineMedium: GoogleFonts.lato(
+  headlineMedium: TextStyle(
     fontSize: 34 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.25,
   ),
-  headlineSmall: GoogleFonts.lato(
+  headlineSmall: TextStyle(
     fontSize: 24 * unit,
     fontWeight: FontWeight.w400,
   ),
-  titleLarge: GoogleFonts.lato(
+  titleLarge: TextStyle(
     fontSize: 20 * unit,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.15,
   ),
-  titleMedium: GoogleFonts.lato(
+  titleMedium: TextStyle(
     fontSize: 16 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.15,
   ),
-  titleSmall: GoogleFonts.lato(
+  titleSmall: TextStyle(
     fontSize: 14 * unit,
     fontWeight: FontWeight.w500,
     letterSpacing: 0.1,
   ),
-  bodyLarge: GoogleFonts.lato(
+  bodyLarge: TextStyle(
     fontSize: 16 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.5,
   ),
-  bodyMedium: GoogleFonts.lato(
+  bodyMedium: TextStyle(
     fontSize: 14 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.25,
   ),
-  labelLarge: GoogleFonts.lato(
+  labelLarge: TextStyle(
     fontSize: 14 * unit,
     fontWeight: FontWeight.w500,
     letterSpacing: 1.25,
   ),
-  bodySmall: GoogleFonts.lato(
+  bodySmall: TextStyle(
     fontSize: 12 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 0.4,
   ),
-  labelSmall: GoogleFonts.lato(
+  labelSmall: TextStyle(
     fontSize: 10 * unit,
     fontWeight: FontWeight.w400,
     letterSpacing: 1.5,
