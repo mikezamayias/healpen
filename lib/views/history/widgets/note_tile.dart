@@ -118,7 +118,6 @@ class NoteTile extends StatelessWidget {
                     : FontAwesomeIcons.solidStar,
                 borderRadius: BorderRadius.circular(radius),
               ),
-              SizedBox(width: gap),
             ],
           ),
           endActionPane: ActionPane(
@@ -126,7 +125,6 @@ class NoteTile extends StatelessWidget {
             dragDismissible: true,
             extentRatio: 1,
             children: [
-              SizedBox(width: gap),
               SlidableAction(
                 onPressed: (context) {
                   final snackBarConfig = SnackBarConfig(
@@ -167,8 +165,16 @@ class NoteTile extends StatelessWidget {
             ],
           ),
           child: CustomListTile(
+            responsiveWidth: true,
             contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-            titleString: entry.content,
+            title: Text(
+              entry.content,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: context.theme.textTheme.titleMedium!.copyWith(
+                color: context.theme.colorScheme.onPrimary
+              ),
+            ),
             onTap: () => context.navigator.pushNamed(
               '/note',
               arguments: entry,
