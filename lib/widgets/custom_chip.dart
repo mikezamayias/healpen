@@ -21,8 +21,8 @@ class CustomChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        curve: curve,
-        duration: 200.milliseconds,
+        curve: standardCurve,
+        duration: standardDuration,
         padding: EdgeInsets.symmetric(
           horizontal: gap * 1.8,
           vertical: gap,

@@ -83,8 +83,8 @@ class _WritingViewState extends ConsumerState<WritingView>
                   ],
                 ),
               ).animate().fadeIn(
-                    curve: curve,
-                    duration: 200.milliseconds,
+                    curve: standardCurve,
+                    duration: standardDuration,
                   ),
           ],
         ),

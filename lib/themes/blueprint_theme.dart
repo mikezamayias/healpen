@@ -113,7 +113,7 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
-          animationDuration: 200.milliseconds,
+          animationDuration: standardDuration,
           side: MaterialStateProperty.all(
             BorderSide(
               width: 3 * unit,

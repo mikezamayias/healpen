@@ -31,8 +31,8 @@ class _ConditionalWideButtonState extends State<ConditionalWideButton> {
       elevation: radius,
       borderRadius: BorderRadius.all(Radius.circular(radius)),
       child: AnimatedContainer(
-        duration: 200.milliseconds,
-        curve: curve,
+        duration: standardDuration,
+        curve: standardCurve,
         alignment: Alignment.center,
         padding: EdgeInsets.all(gap),
         child: widget.condition ? widget.firstChild : widget.secondChild,

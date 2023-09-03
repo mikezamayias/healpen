@@ -5,15 +5,15 @@ import 'package:sprung/sprung.dart';
 import '../utils/constants.dart';
 
 extension WidgetListExtensions on List<Widget> {
-  List<Widget> animateWidgetList() => animate(interval: 10.milliseconds)
-      .fade(curve: curve)
+  List<Widget> animateWidgetList() => animate(interval: shortStandardDuration)
+      .fade(curve: standardCurve)
       .scale(
         begin: const Offset(0, 0),
-        duration: 60.milliseconds,
+        duration: shortStandardDuration,
       )
-      .slideY(begin: 0.6, curve: curve);
+      .slideY(begin: 0.6, curve: standardCurve);
 
-  List<Widget> animateLicences() => animate(interval: 200.milliseconds)
+  List<Widget> animateLicences() => animate(interval: standardDuration)
       .fade(
         begin: 0,
       )
@@ -22,20 +22,21 @@ extension WidgetListExtensions on List<Widget> {
 }
 
 extension WidgetExtensions on Widget {
-  Widget animateSlideInFromLeft() =>
-      animate().fade(duration: 200.milliseconds).slideX(begin: 1, curve: curve);
+  Widget animateSlideInFromLeft() => animate()
+      .fade(duration: standardDuration)
+      .slideX(begin: 1, curve: standardCurve);
 
   Widget animateSlideInFromRight() => animate()
-      .fade(duration: 200.milliseconds)
-      .slideX(begin: -0.6, curve: curve);
+      .fade(duration: standardDuration)
+      .slideX(begin: -0.6, curve: standardCurve);
 
   Widget animateSlideInFromBottom() => animate()
-      .fade(duration: 200.milliseconds)
-      .slideY(begin: 10, curve: curve);
+      .fade(duration: standardDuration)
+      .slideY(begin: 10, curve: standardCurve);
 
   Widget animateSlideInFromTop() => animate()
-      .fade(duration: 200.milliseconds)
-      .slideY(begin: -10, curve: curve);
+      .fade(duration: standardDuration)
+      .slideY(begin: -10, curve: standardCurve);
 
   Widget animateBottomNavigationBar(BuildContext context) =>
       animateSlideInFromTop().animate();
@@ -50,10 +51,10 @@ extension WidgetExtensions on Widget {
 
   Widget animateAppBar() => animateSlideInFromTop()
       .animate()
-      .fade(begin: -1, curve: curve)
-      .slideY(begin: -1, curve: curve)
+      .fade(begin: -1, curve: standardCurve)
+      .slideY(begin: -1, curve: standardCurve)
       .scale(
         begin: const Offset(0.6, 0.6),
-        duration: 200.milliseconds,
+        duration: standardDuration,
       );
 }
