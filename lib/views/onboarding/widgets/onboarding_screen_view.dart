@@ -16,28 +16,39 @@ class OnboardingScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SvgPicture.asset(
-          onboardingScreenModel.imagePath,
-          width: 100.w,
-          fit: BoxFit.fitWidth,
+    return Padding(
+      padding: EdgeInsets.all(gap),
+      child: Container(
+        decoration: BoxDecoration(
+          color: context.theme.colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(radius),
         ),
-        SizedBox(height: gap * 4),
-        Text(
-          onboardingScreenModel.title,
-          style: context.theme.textTheme.headlineSmall!.copyWith(
-            color: context.theme.primaryColor,
-          ),
+        padding: EdgeInsets.all(gap * 2),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SvgPicture.asset(
+              onboardingScreenModel.imagePath,
+              width: 100.w,
+              fit: BoxFit.fitWidth,
+            ),
+            SizedBox(height: gap * 4),
+            Text(
+              onboardingScreenModel.title,
+              style: context.theme.textTheme.headlineSmall!.copyWith(
+                color: context.theme.colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              onboardingScreenModel.description,
+              style: context.theme.textTheme.bodyLarge,
+            ),
+            const Spacer(),
+          ],
         ),
-        Text(
-          onboardingScreenModel.description,
-          style: context.theme.textTheme.bodyLarge,
-        ),
-        const Spacer(),
-      ],
+      ),
     );
   }
 }
