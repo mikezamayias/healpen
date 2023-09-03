@@ -10,11 +10,13 @@ import '../utils/constants.dart';
 class AppBar extends ConsumerWidget {
   final List<String> pathNames;
   final bool? automaticallyImplyLeading;
+  final VoidCallback? onBackButtonPressed;
 
   const AppBar({
     Key? key,
     required this.pathNames,
     this.automaticallyImplyLeading = false,
+    this.onBackButtonPressed,
   }) : super(key: key);
 
   @override
@@ -52,7 +54,11 @@ class AppBar extends ConsumerWidget {
                 iconSize: context.theme.textTheme.titleLarge!.fontSize,
                 onPressed: () {
                   HapticFeedback.vibrate().whenComplete(() {
-                    context.navigator.pop();
+                    if (onBackButtonPressed != null) {
+                      onBackButtonPressed!();
+                    } else {
+                      context.navigator.pop();
+                    }
                   });
                 },
                 color: context.theme.colorScheme.onPrimary,
