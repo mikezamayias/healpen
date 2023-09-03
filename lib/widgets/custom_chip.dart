@@ -22,7 +22,7 @@ class CustomChip extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         curve: curve,
-        duration: animationDuration.milliseconds,
+        duration: 200.milliseconds,
         padding: EdgeInsets.symmetric(
           horizontal: gap * 1.8,
           vertical: gap,

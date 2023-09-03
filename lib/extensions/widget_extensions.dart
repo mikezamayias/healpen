@@ -13,30 +13,28 @@ extension WidgetListExtensions on List<Widget> {
         duration: 60.milliseconds,
       );
 
-  List<Widget> animateLicences() =>
-      animate(interval: animationDuration.microseconds)
-          .fade(
-            begin: 0,
-          )
+  List<Widget> animateLicences() => animate(interval: 200.milliseconds)
+      .fade(
+        begin: 0,
+      )
           .scale(begin: const Offset(0, 0), curve: Sprung.overDamped)
           .slideX(begin: -10, curve: Sprung.overDamped);
 }
 
 extension WidgetExtensions on Widget {
-  Widget animateSlideInFromLeft() => animate()
-      .fade(duration: animationDuration.milliseconds)
-      .slideX(begin: 1, curve: curve);
+  Widget animateSlideInFromLeft() =>
+      animate().fade(duration: 200.milliseconds).slideX(begin: 1, curve: curve);
 
   Widget animateSlideInFromRight() => animate()
-      .fade(duration: animationDuration.microseconds)
+      .fade(duration: 200.milliseconds)
       .slideX(begin: -0.6, curve: curve);
 
   Widget animateSlideInFromBottom() => animate()
-      .fade(duration: animationDuration.microseconds)
+      .fade(duration: 200.milliseconds)
       .slideY(begin: 10, curve: curve);
 
   Widget animateSlideInFromTop() => animate()
-      .fade(duration: animationDuration.milliseconds)
+      .fade(duration: 200.milliseconds)
       .slideY(begin: -10, curve: curve);
 
   Widget animateBottomNavigationBar(BuildContext context) =>
@@ -56,6 +54,6 @@ extension WidgetExtensions on Widget {
       .slideY(begin: -1, curve: curve)
       .scale(
         begin: const Offset(0.6, 0.6),
-        duration: animationDuration.milliseconds,
+        duration: 200.milliseconds,
       );
 }
