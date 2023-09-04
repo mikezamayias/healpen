@@ -5,7 +5,7 @@ import 'package:sprung/sprung.dart';
 import '../utils/constants.dart';
 
 extension WidgetListExtensions on List<Widget> {
-  List<Widget> animateWidgetList() => animate(interval: shortStandardDuration)
+  List<Widget> animateWidgetList() => animate()
       .fade(curve: standardCurve)
       .scale(
         begin: const Offset(0, 0),
