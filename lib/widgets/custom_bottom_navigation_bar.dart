@@ -26,7 +26,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
       ),
       child: SafeArea(
         child: PhysicalModel(
-          color: context.theme.colorScheme.primary,
+          color: context.theme.colorScheme.primaryContainer,
           // shadowColor: context.theme.colorScheme.shadow,
           // elevation: radius,
           borderRadius: BorderRadius.all(Radius.circular(radius)),
@@ -49,22 +49,23 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                 });
               },
               // selectedColorOpacity: 0,
-              selectedItemColor: context.theme.colorScheme.onPrimary,
-              unselectedItemColor: context.theme.colorScheme.onPrimary,
+              selectedItemColor: context.theme.colorScheme.primary,
+              unselectedItemColor: context.theme.colorScheme.outline,
               items: [
                 ...PageController().pages.map(
                       (PageModel pageModel) => SalomonBottomBarItem(
                         icon: FaIcon(pageModel.icon),
                         title: Text(
                           pageModel.label.toTitleCase(),
-                          style: context.theme.textTheme.bodySmall!.copyWith(
+                          style: TextStyle(
+                            fontFamily:
+                                context.theme.textTheme.bodySmall!.fontFamily,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 0.6,
-                            color: context.theme.colorScheme.onPrimary,
                           ),
                         ),
                       ),
-                    )
+                    ),
               ],
             ),
           ),
