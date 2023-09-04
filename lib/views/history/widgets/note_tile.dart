@@ -155,7 +155,7 @@ class NoteTile extends ConsumerWidget {
                       noteModel: entry,
                     ),
                   );
-                  CustomSnackBar(snackBarConfig).showSnackBar(context,ref);
+                  CustomSnackBar(snackBarConfig).showSnackBar(context, ref);
                 },
                 backgroundColor: context.theme.colorScheme.tertiary,
                 foregroundColor: context.theme.colorScheme.onTertiary,
@@ -172,9 +172,8 @@ class NoteTile extends ConsumerWidget {
               entry.content,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: context.theme.textTheme.titleMedium!.copyWith(
-                color: context.theme.colorScheme.onPrimary
-              ),
+              style: context.theme.textTheme.titleMedium!
+                  .copyWith(color: context.theme.colorScheme.onPrimary),
             ),
             onTap: () => context.navigator.pushNamed(
               '/note',

@@ -117,9 +117,11 @@ class NoteView extends StatelessWidget {
               stop: 'Label:',
               echo: true,
             ),
-            builder: (BuildContext context,
-                AsyncSnapshot<OpenAICompletionModel>
-                openAICompletionModelSnapshot,) {
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<OpenAICompletionModel>
+                  openAICompletionModelSnapshot,
+            ) {
               String sentiment = '';
               if (openAICompletionModelSnapshot.connectionState ==
                   ConnectionState.done) {

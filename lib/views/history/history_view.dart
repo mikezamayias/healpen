@@ -74,20 +74,19 @@ class HistoryView extends ConsumerWidget {
               ]
             ].animateWidgetList();
             return ClipRRect(
-              borderRadius: BorderRadius.circular(radius),
-              // child: ListView.separated(
-              //   itemCount: widgets.length,
-              //   separatorBuilder: (_, __) => SizedBox(height: gap),
-              //   itemBuilder: (_, int index) => widgets[index],
-              // ),
-              child: SingleChildScrollView(
-                child: Wrap(
-                  spacing: gap,
-                  runSpacing: gap,
-                  children: widgets,
-                ),
-              )
-            );
+                borderRadius: BorderRadius.circular(radius),
+                // child: ListView.separated(
+                //   itemCount: widgets.length,
+                //   separatorBuilder: (_, __) => SizedBox(height: gap),
+                //   itemBuilder: (_, int index) => widgets[index],
+                // ),
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: gap,
+                    runSpacing: gap,
+                    children: widgets,
+                  ),
+                ));
           } else {
             return Column(
               children: [

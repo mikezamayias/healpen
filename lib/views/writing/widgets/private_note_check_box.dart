@@ -66,8 +66,8 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       trailingOnTap: () {
         vibrate(ref.watch(reduceHapticFeedbackProvider), () {
           ref
-            .watch(writingControllerProvider.notifier)
-            .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);
+              .watch(writingControllerProvider.notifier)
+              .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);
         });
       },
     );

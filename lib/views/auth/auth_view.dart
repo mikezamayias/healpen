@@ -84,10 +84,9 @@ class _AuthViewState extends ConsumerState<AuthView> {
           },
           child: BlueprintView(
             appBar: AppBar(
-              pathNames: const ['Sign in with magic link'],
-              automaticallyImplyLeading: true,
-              onBackButtonPressed: goBack
-            ),
+                pathNames: const ['Sign in with magic link'],
+                automaticallyImplyLeading: true,
+                onBackButtonPressed: goBack),
             body: Center(
               child: switch (state.runtimeType) {
                 Uninitialized => const UninitializedState(),

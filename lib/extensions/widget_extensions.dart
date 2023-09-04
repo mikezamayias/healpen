@@ -17,8 +17,8 @@ extension WidgetListExtensions on List<Widget> {
       .fade(
         begin: 0,
       )
-          .scale(begin: const Offset(0, 0), curve: Sprung.overDamped)
-          .slideX(begin: -10, curve: Sprung.overDamped);
+      .scale(begin: const Offset(0, 0), curve: Sprung.overDamped)
+      .slideX(begin: -10, curve: Sprung.overDamped);
 }
 
 extension WidgetExtensions on Widget {
