@@ -30,78 +30,75 @@ class HistoryView extends ConsumerWidget {
       ),
       body: StreamBuilder(
         stream: HistoryViewController().notesStream,
+        initialData: const <NoteModel>[],
         builder: (
           BuildContext context,
           AsyncSnapshot<List<NoteModel>> snapshot,
         ) {
-          if (snapshot.hasError) {
-            return Center(
-              child: CustomListTile(
-                titleString: 'Something went wrong',
-                backgroundColor: context.theme.colorScheme.error,
-                textColor: context.theme.colorScheme.onError,
-                subtitle: SelectableText(snapshot.error.toString()),
-              ),
-            );
-          }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const LoadingTile(durationTitle: 'Loading notes');
-          }
-          if (snapshot.data!.isNotEmpty) {
-            List<NoteModel> noteModels = snapshot.data!;
-            Set<String> timestamps = {
-              for (var noteModel in noteModels)
-                noteModel.timestamp.timestampFormat().split(', ').first,
-            };
-            List<List<Widget>> groupedNoteTiles = [];
-            for (var timestamp in timestamps) {
-              groupedNoteTiles.add(
-                noteModels
-                    .where((noteModel) =>
-                        noteModel.timestamp
-                            .timestampFormat()
-                            .split(', ')
-                            .first ==
-                        timestamp)
-                    .map((NoteModel e) => NoteTile(entry: e))
-                    .toList(),
+          } else {
+            if (snapshot.hasError) {
+              return Center(
+                child: CustomListTile(
+                  titleString: 'Something went wrong',
+                  backgroundColor: context.theme.colorScheme.error,
+                  textColor: context.theme.colorScheme.onError,
+                  subtitle: SelectableText(snapshot.error.toString()),
+                ),
               );
             }
-            List<Widget> widgets = <Widget>[
-              for (var i = 0; i < timestamps.length; i++) ...[
-                TextDivider(timestamps.elementAt(i)),
-                ...groupedNoteTiles[i]
-              ]
-            ].animateWidgetList();
-            return ClipRRect(
+            if (snapshot.data!.isNotEmpty) {
+              List<NoteModel> noteModels = snapshot.data!;
+              Set<String> timestamps = {
+                for (var noteModel in noteModels)
+                  noteModel.timestamp.timestampFormat().split(', ').first,
+              };
+              List<List<Widget>> groupedNoteTiles = [];
+              for (var timestamp in timestamps) {
+                groupedNoteTiles.add(
+                  noteModels
+                      .where((noteModel) =>
+                          noteModel.timestamp
+                              .timestampFormat()
+                              .split(', ')
+                              .first ==
+                          timestamp)
+                      .map((NoteModel e) => NoteTile(entry: e))
+                      .toList(),
+                );
+              }
+              List<Widget> widgets = <Widget>[
+                for (var i = 0; i < timestamps.length; i++) ...[
+                  TextDivider(timestamps.elementAt(i)),
+                  ...groupedNoteTiles[i]
+                ]
+              ].animateWidgetList();
+              return ClipRRect(
                 borderRadius: BorderRadius.circular(radius),
-                // child: ListView.separated(
-                //   itemCount: widgets.length,
-                //   separatorBuilder: (_, __) => SizedBox(height: gap),
-                //   itemBuilder: (_, int index) => widgets[index],
-                // ),
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    spacing: gap,
-                    runSpacing: gap,
-                    children: widgets,
-                  ),
-                ));
-          } else {
-            return Column(
-              children: [
-                CustomListTile(
-                  titleString: 'No notes yet',
-                  contentPadding: EdgeInsets.all(gap),
-                  subtitle: const Text('Start writing to see your notes here'),
-                  onTap: () => ref.read(currentPageProvider.notifier).state =
-                      PageController().writing,
-                  leadingIconData: FontAwesomeIcons.pencil,
-                  showcaseLeadingIcon: true,
+                child: ListView.separated(
+                  itemCount: widgets.length,
+                  separatorBuilder: (_, __) => SizedBox(height: gap),
+                  itemBuilder: (_, int index) => widgets[index],
                 ),
-                const Spacer(),
-              ],
-            );
+              );
+            } else {
+              return Column(
+                children: [
+                  CustomListTile(
+                    titleString: 'No notes yet',
+                    contentPadding: EdgeInsets.all(gap),
+                    subtitle:
+                        const Text('Start writing to see your notes here'),
+                    onTap: () => ref.read(currentPageProvider.notifier).state =
+                        PageController().writing,
+                    leadingIconData: FontAwesomeIcons.pencil,
+                    showcaseLeadingIcon: true,
+                  ),
+                  const Spacer(),
+                ],
+              );
+            }
           }
         },
       ),

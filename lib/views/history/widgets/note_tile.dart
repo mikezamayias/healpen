@@ -166,7 +166,6 @@ class NoteTile extends ConsumerWidget {
             ],
           ),
           child: CustomListTile(
-            responsiveWidth: true,
             contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
             title: Text(
               entry.content,
