@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide PageController;
-import 'package:flutter/services.dart';
 import 'package:flutter_iterum/flutter_iterum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -12,7 +11,9 @@ import '../../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../../controllers/page_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/page_providers.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_dialog.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -60,9 +61,9 @@ class SignOutTile extends ConsumerWidget {
                     OnboardingController().onboardingCompletedProvider.notifier)
                 .state = false;
             await PreferencesController().resetAll();
-            HapticFeedback.vibrate().whenComplete(
-              () => Iterum.revive(context),
-            );
+            vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+              Iterum.revive(context);
+            });
           },
         );
       },

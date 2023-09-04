@@ -69,6 +69,10 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
                   OnboardingController().onboardingCompletedProvider.notifier)
               .state = value,
         );
+    PreferencesController().reduceHapticFeedback.read().then(
+          (bool value) =>
+              ref.watch(reduceHapticFeedbackProvider.notifier).state = value,
+        );
     log(
       '${FirebaseAuth.instance.currentUser != null}',
       name: '_HealpenWrapperState:didChangeDependencies:currentUserExists',

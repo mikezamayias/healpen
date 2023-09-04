@@ -41,6 +41,10 @@ class PreferencesController {
     'enableBackButton',
     true,
   );
+  final reduceHapticFeedback = PreferenceModel<bool>(
+    'reduceHapticFeedback',
+    true,
+  );
   final onboardingCompleted = PreferenceModel<bool>(
     'onboardingCompleted',
     false,

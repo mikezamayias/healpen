@@ -78,3 +78,13 @@ ThemeMode themeMode(ThemeAppearance themeAppearance) {
     ThemeAppearance.dark => ThemeMode.dark,
   };
 }
+
+void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
+  if (!reduceHapticFeedback) {
+    HapticFeedback.vibrate().whenComplete(() {
+      callback();
+    });
+  } else {
+    callback();
+  }
+}

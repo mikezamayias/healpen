@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +10,7 @@ import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/custom_snack_bar.dart';
 
-class NoteTile extends StatelessWidget {
+class NoteTile extends ConsumerWidget {
   const NoteTile({
     super.key,
     required this.entry,
@@ -18,7 +19,7 @@ class NoteTile extends StatelessWidget {
   final NoteModel entry;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
       child: IntrinsicWidth(
@@ -64,7 +65,7 @@ class NoteTile extends StatelessWidget {
                         : 'Note marked as private!',
                     leadingIconData2: FontAwesomeIcons.solidCircleCheck,
                   );
-                  CustomSnackBar(snackBarConfig).showSnackBar(context);
+                  CustomSnackBar(snackBarConfig).showSnackBar(context, ref);
                 },
                 backgroundColor: context.theme.colorScheme.primary,
                 foregroundColor: context.theme.colorScheme.onPrimary,
@@ -109,7 +110,7 @@ class NoteTile extends StatelessWidget {
                         : 'Note marked as favorite!',
                     leadingIconData2: FontAwesomeIcons.solidCircleCheck,
                   );
-                  CustomSnackBar(snackBarConfig).showSnackBar(context);
+                  CustomSnackBar(snackBarConfig).showSnackBar(context, ref);
                 },
                 backgroundColor: context.theme.colorScheme.primary,
                 foregroundColor: context.theme.colorScheme.onPrimary,
@@ -154,7 +155,7 @@ class NoteTile extends StatelessWidget {
                       noteModel: entry,
                     ),
                   );
-                  CustomSnackBar(snackBarConfig).showSnackBar(context);
+                  CustomSnackBar(snackBarConfig).showSnackBar(context,ref);
                 },
                 backgroundColor: context.theme.colorScheme.tertiary,
                 foregroundColor: context.theme.colorScheme.onTertiary,

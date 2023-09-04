@@ -32,3 +32,10 @@ final writingAutomaticStopwatchProvider = StateProvider<bool>(
 final enableBackButtonProvider = StateProvider<bool>(
   (ref) => true,
 );
+
+/// Whether to reduce the amount of haptic feedback in the app.
+/// When set to true, the app will reduce the amount of haptic feedback.
+/// When set to false, the app will use the default amount of haptic feedback.
+final reduceHapticFeedbackProvider = StateProvider<bool>(
+  (ref) => false,
+);

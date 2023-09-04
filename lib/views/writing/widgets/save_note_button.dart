@@ -46,7 +46,7 @@ class SaveNoteButton extends ConsumerWidget {
                 titleString2: 'Note saved!',
                 leadingIconData2: FontAwesomeIcons.solidCircleCheck,
               );
-              CustomSnackBar(snackBarConfig).showSnackBar(context);
+              CustomSnackBar(snackBarConfig).showSnackBar(context, ref);
             }
           : null,
       backgroundColor:

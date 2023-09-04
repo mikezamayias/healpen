@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide PageController;
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +10,8 @@ import '../../../../providers/page_providers.dart';
 import '../../../extensions/string_extensions.dart';
 import '../../../utils/constants.dart';
 import '../extensions/widget_extensions.dart';
+import '../providers/settings_providers.dart';
+import '../utils/helper_functions.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
@@ -41,10 +42,11 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               currentIndex: PageController()
                   .pages
                   .indexOf(ref.watch(currentPageProvider)),
-              onTap: (int index) async {
-                await HapticFeedback.vibrate();
-                ref.watch(currentPageProvider.notifier).state =
-                    PageController().pages[index];
+              onTap: (int index) {
+                vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+                  ref.watch(currentPageProvider.notifier).state =
+                      PageController().pages[index];
+                });
               },
               // selectedColorOpacity: 0,
               selectedItemColor: context.theme.colorScheme.onPrimary,

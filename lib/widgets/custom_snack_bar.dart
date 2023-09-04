@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
+import '../utils/helper_functions.dart';
 import 'custom_list_tile.dart';
 
 class CustomSnackBar {
@@ -11,17 +13,17 @@ class CustomSnackBar {
 
   CustomSnackBar(this._snackBarConfig);
 
-  void showSnackBar(BuildContext context) {
+  void showSnackBar(BuildContext context, WidgetRef ref) {
     final snackBar1 = _snackBarConfig.createSnackBar1();
     final snackBar2 = _snackBarConfig.createSnackBar2();
-    HapticFeedback.vibrate().whenComplete(() {
+    vibrate(ref.watch(reduceHapticFeedbackProvider), () {
       scaffoldMessengerKey.currentState!
           .showSnackBar(snackBar1)
           .closed
           .then((SnackBarClosedReason value) async {
         if (value == SnackBarClosedReason.hide) {
           _snackBarConfig.actionAfterSnackBar1().then((_) {
-            HapticFeedback.vibrate().whenComplete(() {
+            vibrate(ref.watch(reduceHapticFeedbackProvider), () {
               scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
             });
           });
