@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -56,9 +55,10 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                         icon: FaIcon(pageModel.icon),
                         title: Text(
                           pageModel.label.toTitleCase(),
-                          style: TextStyle(
-                            fontFamily:
-                                context.theme.textTheme.bodyLarge!.fontFamily,
+                          style: context.theme.textTheme.bodySmall!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 0.6,
+                            color: context.theme.colorScheme.onPrimary,
                           ),
                         ),
                       ),
