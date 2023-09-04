@@ -42,7 +42,7 @@ class WritingController extends StateNotifier<NoteModel> {
         .writingAutomaticStopwatch
         .read()
         .then((bool automaticStopwatch) {
-      state.content = text;
+      state.content = text.trim();
       log('$state', name: 'WritingController:handleTextChange');
       if (text.isNotEmpty) {
         if (!_stopwatch.isRunning) {
@@ -129,9 +129,6 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     state = state.copyWith(
       timestamp: DateTime.now().millisecondsSinceEpoch,
-    );
-    state = state.copyWith(
-      wordCount: state.content.toString().trim().split(' ').length,
     );
     return _firestore
         .collection('writing-temp')

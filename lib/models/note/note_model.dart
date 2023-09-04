@@ -18,7 +18,11 @@ class NoteModel {
     this.duration = 0,
     int? wordCount,
     int? timestamp,
-  })  : wordCount = content.trim().split(' ').length,
+  })  : wordCount = content
+            .toString()
+            .split(RegExp(r'\s+'))
+            .where((s) => RegExp(r'[a-zA-Z]').hasMatch(s))
+            .length,
         timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
 
   factory NoteModel.fromDocument(Map<String, dynamic> json) =>
