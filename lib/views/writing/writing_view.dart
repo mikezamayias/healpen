@@ -5,12 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/writing_controller.dart';
+import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
+import 'widgets/private_note_check_box.dart';
 import 'widgets/save_note_button.dart';
 import 'widgets/stopwatch_tile.dart';
-import 'widgets/private_note_check_box.dart';
 import 'widgets/writing_entry.dart';
 
 class WritingView extends ConsumerStatefulWidget {
@@ -48,6 +49,8 @@ class _WritingViewState extends ConsumerState<WritingView>
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
     final userName = user?.displayName;
+    WritingController.writingAutomaticStopwatch =
+        ref.watch(writingAutomaticStopwatchProvider);
     return BlueprintView(
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)
           ? null

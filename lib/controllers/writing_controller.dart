@@ -36,37 +36,31 @@ class WritingController extends StateNotifier<NoteModel> {
     log('shakePrivateNoteInfoProvider', name: 'WritingController');
     return true;
   });
+  static bool writingAutomaticStopwatch = false;
 
   void handleTextChange(String text) {
-    PreferencesController()
-        .writingAutomaticStopwatch
-        .read()
-        .then((bool automaticStopwatch) {
-      state.content = text.trim();
-      log('$state', name: 'WritingController:handleTextChange');
-      if (text.isNotEmpty) {
-        if (!_stopwatch.isRunning) {
-          _startTimer();
-        } else {
-          if (automaticStopwatch) {
-            _restartDelayTimer();
-          }
-        }
-      } else if (text.isEmpty) {
-        if (automaticStopwatch) {
-          if (_stopwatch.isRunning) {
-            _pauseTimerAndLogInput();
-          }
-          if (_stopwatch.elapsed.inSeconds > 0) {
-            _stopwatch.reset();
-            state =
-                state.copyWith(duration: 0); // Reset the seconds in the state
-          }
-        } else {
-          _logInput();
+    state.content = text.trim();
+    if (text.isNotEmpty) {
+      if (!_stopwatch.isRunning) {
+        _startTimer();
+      } else {
+        if (writingAutomaticStopwatch) {
+          _restartDelayTimer();
         }
       }
-    });
+    } else if (text.isEmpty) {
+      if (writingAutomaticStopwatch) {
+        if (_stopwatch.isRunning) {
+          _pauseTimerAndLogInput();
+        }
+        if (_stopwatch.elapsed.inSeconds > 0) {
+          _stopwatch.reset();
+          state = state.copyWith(duration: 0); // Reset the seconds in the state
+        }
+      } else {
+        _sentimentAnalysis();
+      }
+    }
   }
 
   void _startTimer() async {
