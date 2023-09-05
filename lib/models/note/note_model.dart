@@ -2,12 +2,23 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'note_model.g.dart';
 
-int calculateSentiment(double? score, double? magnitude) =>
-    switch ((score ?? 0) * (magnitude ?? 0)) {
-      > 0.5 => 1,
-      < -0.5 => -1,
-      _ => 0,
-    };
+int calculateSentiment(double? score, double? magnitude) {
+  double threshold = 0.5;
+  double realScore = score ?? 0;
+  double realMagnitude = magnitude ?? 0;
+
+  int signScore = 0;
+  if (realScore > 0) {
+    signScore = 1;
+  } else if (realScore < 0) {
+    signScore = -1;
+  }
+
+  // Using a ternary operator for the ceiling function behavior
+  int ceilingValue = (realMagnitude - threshold) > 0 ? 1 : 0;
+
+  return signScore * ceilingValue;
+}
 
 @JsonSerializable()
 class NoteModel {
