@@ -37,39 +37,43 @@ class CustomDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
-      title: Container(
+      title: SizedBox(
         width: 75.w,
-        decoration: BoxDecoration(
-          color: context.theme.colorScheme.background,
-          borderRadius: BorderRadius.circular(radius - gap),
-        ),
-        padding: EdgeInsets.all(gap),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               titleString,
               style: context.theme.textTheme.headlineSmall!.copyWith(
-                color: context.theme.colorScheme.onBackground,
+                color: context.theme.colorScheme.onPrimaryContainer,
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.start,
             ),
             SizedBox(
               height: gap,
             ),
-            Text(
-              contentString,
-              style: context.theme.textTheme.bodyLarge!.copyWith(
-                color: context.theme.colorScheme.onBackground,
+            Container(
+              padding: EdgeInsets.all(gap),
+              decoration: BoxDecoration(
+                color: context.theme.colorScheme.background,
+                borderRadius: BorderRadius.circular(radius - gap),
               ),
-              textAlign: TextAlign.center,
+              child: Text(
+                contentString,
+                style: context.theme.textTheme.bodyLarge!.copyWith(
+                  color: context.theme.colorScheme.onBackground,
+                ),
+                textAlign: TextAlign.start,
+              ),
             ),
           ],
         ),
       ),
-      actionsAlignment: MainAxisAlignment.center,
+      actionsAlignment: actions.length == 1
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.spaceEvenly,
       actions: actions,
     );
   }
