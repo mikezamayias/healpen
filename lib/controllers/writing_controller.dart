@@ -5,7 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:googleapis/language/v1.dart';
+import 'package:googleapis_auth/googleapis_auth.dart';
 
+import '../env/env.dart';
 import '../models/note/note_model.dart';
 import 'settings/preferences_controller.dart';
 
@@ -58,7 +61,7 @@ class WritingController extends StateNotifier<NoteModel> {
           state = state.copyWith(duration: 0); // Reset the seconds in the state
         }
       } else {
-        _sentimentAnalysis();
+        _logInput();
       }
     }
   }
@@ -82,9 +85,10 @@ class WritingController extends StateNotifier<NoteModel> {
     _delayTimer = Timer(Duration(seconds: timeWindow), _pauseTimerAndLogInput);
   }
 
-  void _pauseTimerAndLogInput() {
+  void _pauseTimerAndLogInput() async {
     _timer?.cancel();
     _stopwatch.stop();
+    updateSentimentAnalysis(await _sentimentAnalysis());
     _logInput();
   }
 
@@ -109,13 +113,12 @@ class WritingController extends StateNotifier<NoteModel> {
       _timer?.cancel();
       _delayTimer?.cancel();
     }
-    _saveNoteToFirebase().whenComplete(() {
-      textController.clear();
-      resetNote();
-    });
+    await _saveNoteToFirebase();
+    textController.clear();
+    resetNote();
   }
 
-  Future<void> _saveNoteToFirebase() {
+  Future<void> _saveNoteToFirebase() async {
     String userId = FirebaseAuth.instance.currentUser!.uid;
     log(
       state.toDocument().toString(),
@@ -138,5 +141,33 @@ class WritingController extends StateNotifier<NoteModel> {
 
   void updatePrivate(bool bool) {
     state = state.copyWith(isPrivate: bool);
+  }
+
+  Future<AnalyzeSentimentResponse> _sentimentAnalysis() async {
+    return await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
+        .documents
+        .analyzeSentiment(
+          AnalyzeSentimentRequest.fromJson(
+            {
+              'document': {
+                'type': 'PLAIN_TEXT',
+                'content': state.content,
+              },
+              'encodingType': 'UTF8',
+            },
+          ),
+        );
+  }
+
+  void updateSentimentAnalysis(AnalyzeSentimentResponse response) {
+    state = state.copyWith(
+      sentimentScore: response.documentSentiment?.score,
+      sentimentMagnitude: response.documentSentiment?.magnitude,
+      sentenceCount: response.sentences?.length,
+      sentiment: calculateSentiment(
+        response.documentSentiment?.score,
+        response.documentSentiment?.magnitude,
+      ),
+    );
   }
 }
