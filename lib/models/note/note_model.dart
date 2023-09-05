@@ -10,6 +10,7 @@ class NoteModel {
   int duration;
   int timestamp;
   int wordCount;
+  int sentimentScore;
 
   NoteModel({
     this.content = '',
@@ -18,12 +19,13 @@ class NoteModel {
     this.duration = 0,
     int? wordCount,
     int? timestamp,
+    this.sentimentScore = 0,
   })  : wordCount = content
             .toString()
             .split(RegExp(r'\s+'))
             .where((s) => RegExp(r'[a-zA-Z]').hasMatch(s))
             .length,
-        timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch;
+        timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
   factory NoteModel.fromDocument(Map<String, dynamic> json) =>
       _$NoteModelFromJson(json);
@@ -50,6 +52,8 @@ class NoteModel {
 
   @override
   String toString() {
-    return 'NoteModel(content: $content, isPrivate: $isPrivate, duration: $duration, timestamp: $timestamp, wordCount: $wordCount, isFavorite: $isFavorite)';
+    return 'NoteModel(content: $content, isPrivate: $isPrivate, '
+        'duration: $duration, timestamp: $timestamp, wordCount: $wordCount, '
+        'isFavorite: $isFavorite, sentimentScore: $sentimentScore)';
   }
 }
