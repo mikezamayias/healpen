@@ -13,7 +13,10 @@ NoteModel _$NoteModelFromJson(Map<String, dynamic> json) => NoteModel(
       duration: json['duration'] as int? ?? 0,
       wordCount: json['wordCount'] as int?,
       timestamp: json['timestamp'] as int?,
-      sentimentScore: json['sentimentScore'] as int? ?? 0,
+      sentenceCount: json['sentenceCount'] as int?,
+      sentimentScore: (json['sentimentScore'] as num?)?.toDouble(),
+      sentimentMagnitude: (json['sentimentMagnitude'] as num?)?.toDouble(),
+      sentiment: json['sentiment'] as int?,
     );
 
 Map<String, dynamic> _$NoteModelToJson(NoteModel instance) => <String, dynamic>{
@@ -24,4 +27,7 @@ Map<String, dynamic> _$NoteModelToJson(NoteModel instance) => <String, dynamic>{
       'timestamp': instance.timestamp,
       'wordCount': instance.wordCount,
       'sentimentScore': instance.sentimentScore,
+      'sentimentMagnitude': instance.sentimentMagnitude,
+      'sentenceCount': instance.sentenceCount,
+      'sentiment': instance.sentiment,
     };
