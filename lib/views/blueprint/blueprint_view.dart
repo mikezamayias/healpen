@@ -13,11 +13,13 @@ class BlueprintView extends ConsumerWidget {
   const BlueprintView({
     Key? key,
     this.appBar,
+    this.padBodyHorizontally = true,
     required this.body,
   }) : super(key: key);
 
   final Widget? appBar;
   final Widget body;
+  final bool? padBodyHorizontally;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,8 +34,8 @@ class BlueprintView extends ConsumerWidget {
           color: context.theme.colorScheme.background,
           padding: EdgeInsets.only(
             bottom: gap,
-            left: gap,
-            right: gap,
+            left: padBodyHorizontally! ? gap : 0,
+            right: padBodyHorizontally! ? gap : 0,
           ),
           child: SafeArea(
             child: Scaffold(
