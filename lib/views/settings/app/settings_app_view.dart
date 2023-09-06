@@ -7,6 +7,7 @@ import '../../../widgets/app_bar.dart';
 import '../../../widgets/text_divider.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'widgets/haptic_feedback_settings_tile.dart';
+import 'widgets/hide_app_bar_title.dart';
 import 'widgets/navigation_settings_tile.dart';
 import 'widgets/theme_appearance_tile.dart';
 import 'widgets/theme_color_tile.dart';
@@ -26,6 +27,7 @@ class SettingsAppView extends ConsumerWidget {
       const TextDivider('Navigation'),
       const EnableBackButtonSettingsTile(),
       const ReduceHapticFeedbackSettingsTile(),
+      const HideAppBarTitle(),
     ].animateWidgetList();
 
     return BlueprintView(

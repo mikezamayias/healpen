@@ -9,6 +9,7 @@ import '../../extensions/int_extensions.dart';
 import '../../extensions/widget_extensions.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/page_providers.dart';
+import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
@@ -23,6 +24,7 @@ class HistoryView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BlueprintView(
+      hideAppBarTitle: ref.watch(hideAppBarTitle),
       appBar: const AppBar(
         pathNames: [
           'Your past notes',

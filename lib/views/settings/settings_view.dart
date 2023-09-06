@@ -45,6 +45,7 @@ class SettingsView extends ConsumerWidget {
     };
 
     return BlueprintView(
+      hideAppBarTitle: ref.watch(hideAppBarTitle),
       appBar: const AppBar(
         pathNames: ['Personalize your experience'],
       ),

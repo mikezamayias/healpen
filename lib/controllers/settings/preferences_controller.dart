@@ -49,6 +49,10 @@ class PreferencesController {
     'onboardingCompleted',
     false,
   );
+  final hideAppBarTitle = PreferenceModel<bool>(
+    'hideAppBarTitle',
+    false,
+  );
 
   /// List of all preference models
   late List<PreferenceModel> _models;
