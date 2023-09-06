@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class EnableBackButtonSettingsTile extends ConsumerWidget {
@@ -21,15 +22,17 @@ class EnableBackButtonSettingsTile extends ConsumerWidget {
       ),
       trailing: Switch(
         value: ref.watch(enableBackButtonProvider),
-        onChanged: (value) async {
-          ref.read(enableBackButtonProvider.notifier).state = value;
-          PreferencesController().enableBackButton.write(
-                ref.watch(enableBackButtonProvider),
-              );
-          log(
+        onChanged: (value) {
+          vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
+            ref.read(enableBackButtonProvider.notifier).state = value;
+            await PreferencesController()
+                .enableBackButton
+                .write(ref.watch(enableBackButtonProvider));
+            log(
             '${ref.watch(enableBackButtonProvider)}',
             name: 'SettingsView:EnableBackButtonSettingsTile',
           );
+          });
         },
       ),
     );

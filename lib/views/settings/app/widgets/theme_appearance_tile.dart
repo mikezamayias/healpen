@@ -32,19 +32,23 @@ class ThemeAppearanceTile extends ConsumerWidget {
         ],
         selected: {ref.watch(themeAppearanceProvider)},
         onSelectionChanged: (Set<ThemeAppearance> newSelection) {
-          ref.watch(themeAppearanceProvider.notifier).state =
-              newSelection.first;
-          log(
-            '${newSelection.first}',
-            name: 'Settings: ThemeAppearanceTile',
-          );
-          PreferencesController().themeAppearance.write(
+          vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+            ref.watch(themeAppearanceProvider.notifier).state =
+                newSelection.first;
+            log(
+              '${newSelection.first}',
+              name: 'Settings: ThemeAppearanceTile',
+            );
+            PreferencesController()
+                .themeAppearance
+                .write(ref.watch(themeAppearanceProvider))
+                .whenComplete(() {
+              getSystemUIOverlayStyle(
+                context.theme,
                 ref.watch(themeAppearanceProvider),
               );
-          getSystemUIOverlayStyle(
-            context.theme,
-            ref.watch(themeAppearanceProvider),
-          );
+            });
+          });
         },
       ),
     );

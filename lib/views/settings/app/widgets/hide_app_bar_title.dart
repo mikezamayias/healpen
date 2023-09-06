@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class HideAppBarTitle extends ConsumerWidget {
@@ -21,15 +22,17 @@ class HideAppBarTitle extends ConsumerWidget {
       ),
       trailing: Switch(
         value: ref.watch(hideAppBarTitle),
-        onChanged: (value) async {
-          ref.read(hideAppBarTitle.notifier).state = value;
-          PreferencesController().hideAppBarTitle.write(
-            ref.watch(hideAppBarTitle),
-          );
-          log(
+        onChanged: (value) {
+          vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
+            ref.read(hideAppBarTitle.notifier).state = value;
+            await PreferencesController()
+                .hideAppBarTitle
+                .write(ref.watch(hideAppBarTitle));
+            log(
             '${ref.watch(hideAppBarTitle)}',
             name: 'SettingsView:HideAppBarTitle',
           );
+          });
         },
       ),
     );

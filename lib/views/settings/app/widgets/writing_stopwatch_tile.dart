@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class WritingStopwatchTile extends ConsumerWidget {
@@ -21,15 +22,17 @@ class WritingStopwatchTile extends ConsumerWidget {
       ),
       trailing: Switch(
         value: ref.watch(writingAutomaticStopwatchProvider),
-        onChanged: (value) async {
-          ref.read(writingAutomaticStopwatchProvider.notifier).state = value;
-          PreferencesController().writingAutomaticStopwatch.write(
-                ref.watch(writingAutomaticStopwatchProvider),
-              );
-          log(
-            '${ref.watch(writingAutomaticStopwatchProvider)}',
-            name: 'SettingsWritingView:writingResetStopwatchOnEmpty',
-          );
+        onChanged: (value) {
+          vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
+            ref.read(writingAutomaticStopwatchProvider.notifier).state = value;
+            await PreferencesController()
+                .writingAutomaticStopwatch
+                .write(ref.watch(writingAutomaticStopwatchProvider));
+            log(
+              '${ref.watch(writingAutomaticStopwatchProvider)}',
+              name: 'SettingsWritingView:writingResetStopwatchOnEmpty',
+            );
+          });
         },
       ),
     );
