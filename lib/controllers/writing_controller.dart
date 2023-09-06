@@ -232,6 +232,7 @@ Value: ''',
         .collection('writing-temp')
         .doc(userId)
         .collection('notes')
+        .where('isPrivate', isEqualTo: false)
         .get();
     for (QueryDocumentSnapshot<Map<String, dynamic>> element
         in collection.docs) {
@@ -273,7 +274,8 @@ Value: ''',
     QueryDocumentSnapshot<Map<String, dynamic>> element,
     String userId,
   ) async {
-    if (element.data().containsKey('sentiment')) {
+    if (element.data().containsKey('sentiment') ||
+        element.data()['isPrivate']) {
       _firestore
           .collection('writing-temp')
           .doc(userId)
