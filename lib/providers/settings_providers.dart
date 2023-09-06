@@ -6,11 +6,11 @@ import '../enums/app_theming.dart';
 import '../utils/helper_functions.dart';
 
 final themeAppearanceProvider = StateProvider<ThemeAppearance>(
-  (ref) => ThemeAppearance.system,
+  (ref) => PreferencesController().themeAppearance.value,
 );
 
 final themeColorProvider = StateProvider<ThemeColor>(
-  (ref) => ThemeColor.pastelOcean,
+  (ref) => PreferencesController().themeColor.value,
 );
 
 final themeProvider = StateProvider<ThemeData>(

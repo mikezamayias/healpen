@@ -27,7 +27,7 @@ class PreferencesController {
   );
   final themeColor = PreferenceModel<ThemeColor>(
     'themeColor',
-    ThemeColor.pastelOcean,
+    ThemeColor.teal,
   );
   final themeAppearance = PreferenceModel<ThemeAppearance>(
     'themeAppearance',

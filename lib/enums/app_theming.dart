@@ -9,17 +9,17 @@ enum ThemeColor {
   //   color: Color(0xFF48A9A6),
   //   name: 'Teal',
   // ),
-  pastelBlue(
+  blue(
     color: Color(0xFFA8D1F0),
-    name: 'Pastel Blue',
+    name: 'Blue',
   ),
-  pastelTeal(
+  green(
     color: Color(0xFFA4D4C9),
-    name: 'Pastel Teal',
+    name: 'Green',
   ),
-  pastelOcean(
+  teal(
     color: Color(0xFFA9D6E5),
-    name: 'Pastel Ocean',
+    name: 'Teal',
   );
 
   const ThemeColor({required this.color, required this.name});

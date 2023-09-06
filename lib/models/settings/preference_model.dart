@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controllers/settings/preferences_controller.dart';
 import '../../enums/app_theming.dart';
 
 class PreferenceModel<T> {
@@ -28,7 +29,7 @@ class PreferenceModel<T> {
     } else if (T == ThemeColor) {
       value = ThemeColor.values.firstWhere(
         (e) => e.toString() == prefsValue,
-        orElse: () => ThemeColor.pastelOcean,
+        orElse: () => PreferencesController().themeColor.value,
       ) as T;
     } else if (T == bool) {
       value = (prefs.getBool(key) ?? this.value) as T;
