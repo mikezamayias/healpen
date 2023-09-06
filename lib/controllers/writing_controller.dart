@@ -2,13 +2,11 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_openai/dart_openai.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:googleapis/language/v1.dart';
-import 'package:googleapis_auth/googleapis_auth.dart';
 
-import '../env/env.dart';
 import '../models/note/note_model.dart';
 import 'settings/preferences_controller.dart';
 
@@ -109,7 +107,8 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     _stopwatch.reset();
     _stopwatch.stop();
-    _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
+    // _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
+    _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
     if (automaticStopwatch) {
       _timer?.cancel();
       _delayTimer?.cancel();
@@ -145,36 +144,76 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(null, isPrivate: bool);
   }
 
-  Future<AnalyzeSentimentResponse> _googlesSentimentAnalysis() async {
-    return await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
-        .documents
-        .analyzeSentiment(
-          AnalyzeSentimentRequest.fromJson(
-            {
-              'document': {
-                'type': 'PLAIN_TEXT',
-                'content': state.content,
-              },
-              'encodingType': 'UTF8',
-            },
-          ),
-        );
+  // Future<AnalyzeSentimentResponse> _googlesSentimentAnalysis() async {
+  //   return await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
+  //       .documents
+  //       .analyzeSentiment(
+  //         AnalyzeSentimentRequest.fromJson(
+  //           {
+  //             'document': {
+  //               'type': 'PLAIN_TEXT',
+  //               'content': state.content,
+  //             },
+  //             'encodingType': 'UTF8',
+  //           },
+  //         ),
+  //       );
+  // }
+
+  Future<int> _openAIsSentimentAnalysis() async {
+    final labels = [
+      'Very Unpleasant',
+      'Unpleasant',
+      'Slightly Unpleasant',
+      'Neutral',
+      'Slightly Pleasant',
+      'Pleasant',
+      'Very Pleasant'
+    ];
+    final values = [-3, -2, -1, 0, 1, 2, 3];
+    OpenAICompletionModel apiResult = await OpenAI.instance.completion.create(
+      model: 'text-davinci-003',
+      prompt: '''
+Evaluate the sentiment the following text as ${values.join(', ')} for 
+${labels.join(', ')} respectively. Please return the sentiment after the 
+`Value: ` keyword.
+
+Text:```${state.content}```
+
+Value: ''',
+      temperature: 0,
+      maxTokens: 60,
+      topP: 1,
+      frequencyPenalty: 0.5,
+      presencePenalty: 0,
+      n: 1,
+      stop: 'Label:',
+      echo: true,
+    );
+    String response = apiResult.choices.first.text;
+    log(
+      response,
+      name: 'WritingController:_openAIsSentimentAnalysis():response',
+    );
+    String result = response.split('Value: ').last.trim();
+    log(
+      'Result: $result',
+      name: 'WritingController:_openAIsSentimentAnalysis()',
+    );
+    int sentiment = int.parse(result);
+    return sentiment;
   }
 
-  void _updateGooglesSentimentAnalysis(AnalyzeSentimentResponse response) {
+  void _updateOpenAIsSentimentAnalysis(
+    int sentiment
+  ) async {
     log(
       'Updating sentiment analysis',
-      name: 'WritingController:_updateGooglesSentimentAnalysis()',
+      name: 'WritingController:_updateOpenAIsSentimentAnalysis()',
     );
     state = state.copyWith(
       null,
-      sentimentScore: response.documentSentiment?.score,
-      sentimentMagnitude: response.documentSentiment?.magnitude,
-      sentenceCount: response.sentences?.length,
-      sentiment: calculateSentiment(
-        response.documentSentiment?.score,
-        response.documentSentiment?.magnitude,
-      ),
+      sentiment: sentiment,
     );
   }
 
@@ -183,7 +222,7 @@ class WritingController extends StateNotifier<NoteModel> {
       'Updating sentiment and saving note',
       name: 'WritingController:updateSentimentAndSaveNote()',
     );
-    _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
+    _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
     await _saveNoteToFirebase();
   }
 
@@ -196,18 +235,16 @@ class WritingController extends StateNotifier<NoteModel> {
         .get();
     for (QueryDocumentSnapshot<Map<String, dynamic>> element
         in collection.docs) {
-      await removeGooglesSentimentAnalysisToDocument(element, userId);
+      await addOpenAIsSentimentAnalysisToDocument(element, userId);
+      // await removeOpenAIsSentimentAnalysisToDocument(element, userId);
     }
   }
 
-  Future<void> addGooglesSentimentAnalysisToDocument(
+  Future<void> addOpenAIsSentimentAnalysisToDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
     String userId,
   ) async {
-    if (!element.data().keys.contains('sentimentScore') ||
-        !element.data().keys.contains('sentimentMagnitude') ||
-        !element.data().keys.contains('sentenceCount') ||
-        !element.data().keys.contains('sentiment')) {
+    if (!element.data().containsKey('sentiment')) {
       log(
         'Note is missing sentiment analysis, updating sentiment',
         name: 'WritingController:updateAllUserNotes():${element.id}',
@@ -217,12 +254,12 @@ class WritingController extends StateNotifier<NoteModel> {
         name: 'WritingController:updateAllUserNotes():${element.id}',
       );
       state = NoteModel.fromDocument(element.data());
+      _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
       log(
         '$state',
         name:
             'WritingController:updateAllUserNotes():${element.id}:NoteModel.fromDocument(element.data())',
       );
-      _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
       await _firestore
           .collection('writing-temp')
           .doc(userId)
@@ -232,65 +269,11 @@ class WritingController extends StateNotifier<NoteModel> {
     }
   }
 
-  Future<void> removeGooglesSentimentAnalysisToDocument(
+  Future<void> removeOpenAIsSentimentAnalysisToDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
     String userId,
   ) async {
-    if (element.data().keys.contains('sentimentScore')) {
-      _firestore
-          .collection('writing-temp')
-          .doc(userId)
-          .collection('notes')
-          .doc(element.id)
-          .update({'sentimentScore': FieldValue.delete()}).then((_) {
-        log(
-          'Note has sentimentScore, removing sentimentScore',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
-        );
-      }).catchError((error) {
-        log(
-          '$error',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
-        );
-      });
-    }
-    if (element.data().keys.contains('sentimentMagnitude')) {
-      _firestore
-          .collection('writing-temp')
-          .doc(userId)
-          .collection('notes')
-          .doc(element.id)
-          .update({'sentimentMagnitude': FieldValue.delete()}).then((_) {
-        log(
-          'Note has sentimentMagnitude, removing sentimentMagnitude',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
-        );
-      }).catchError((error) {
-        log(
-          '$error',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
-        );
-      });
-    }
-    if (element.data().keys.contains('sentenceCount')) {
-      _firestore
-          .collection('writing-temp')
-          .doc(userId)
-          .collection('notes')
-          .doc(element.id)
-          .update({'sentenceCount': FieldValue.delete()}).then((_) {
-        log(
-          'Note has sentenceCount, removing sentenceCount',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
-        );
-      }).catchError((error) {
-        log(
-          '$error',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
-        );
-      });
-    }
-    if (element.data().keys.contains('sentiment')) {
+    if (element.data().containsKey('sentiment')) {
       _firestore
           .collection('writing-temp')
           .doc(userId)
