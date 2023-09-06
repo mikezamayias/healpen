@@ -9,29 +9,31 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class EnableBackButtonSettingsTile extends ConsumerWidget {
-  const EnableBackButtonSettingsTile({Key? key}) : super(key: key);
+class ShowAppBarTitle extends ConsumerWidget {
+  const ShowAppBarTitle({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: 'Back button in app bar',
+      titleString: 'Show app bar title on main pages',
       subtitle: const Text(
-        'Turns on a back button at the top of the screen, making it simpler to return to previous pages.',
+        'Shows the title in the app bar, making it simpler to know which of '
+        'the main pages you are on. Disabling this will save space for more '
+        'information.',
       ),
       trailing: Switch(
-        value: ref.watch(enableBackButtonProvider),
+        value: ref.watch(showAppBarTitle),
         onChanged: (value) {
           vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
-            ref.read(enableBackButtonProvider.notifier).state = value;
+            ref.read(showAppBarTitle.notifier).state = value;
             await PreferencesController()
-                .enableBackButton
-                .write(ref.watch(enableBackButtonProvider));
+                .showAppBarTitle
+                .write(ref.watch(showAppBarTitle));
             log(
-            '${ref.watch(enableBackButtonProvider)}',
-            name: 'SettingsView:EnableBackButtonSettingsTile',
-          );
+              '${ref.watch(showAppBarTitle)}',
+              name: 'SettingsView:ShowAppBarTitle',
+            );
           });
         },
       ),

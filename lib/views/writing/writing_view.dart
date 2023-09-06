@@ -59,7 +59,7 @@ class _WritingViewState extends ConsumerState<WritingView>
       log('$error', name: 'Error updating all user notes');
     });
     return BlueprintView(
-      hideAppBarTitle: ref.watch(hideAppBarTitle),
+      showAppBarTitle: ref.watch(showAppBarTitle),
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)
           ? null
           : AppBar(

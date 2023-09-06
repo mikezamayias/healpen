@@ -9,28 +9,29 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class HideAppBarTitle extends ConsumerWidget {
-  const HideAppBarTitle({Key? key}) : super(key: key);
+class ShowBackButtonSettingsTile extends ConsumerWidget {
+  const ShowBackButtonSettingsTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: 'App bar title',
+      titleString: 'Show back button in app bar',
       subtitle: const Text(
-        'Hides the title in the app bar, saving space for more information.',
+        'Shows a back button at the top of the screen, making it simpler to '
+        'return to previous pages.',
       ),
       trailing: Switch(
-        value: ref.watch(hideAppBarTitle),
+        value: ref.watch(showBackButtonProvider),
         onChanged: (value) {
           vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
-            ref.read(hideAppBarTitle.notifier).state = value;
+            ref.read(showBackButtonProvider.notifier).state = value;
             await PreferencesController()
-                .hideAppBarTitle
-                .write(ref.watch(hideAppBarTitle));
+                .showBackButton
+                .write(ref.watch(showBackButtonProvider));
             log(
-            '${ref.watch(hideAppBarTitle)}',
-            name: 'SettingsView:HideAppBarTitle',
+            '${ref.watch(showBackButtonProvider)}',
+            name: 'SettingsView:ShowBackButtonSettingsTile',
           );
           });
         },

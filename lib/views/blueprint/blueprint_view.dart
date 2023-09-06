@@ -14,14 +14,14 @@ class BlueprintView extends ConsumerWidget {
     Key? key,
     this.appBar,
     this.padBodyHorizontally = true,
-    this.hideAppBarTitle = false,
+    this.showAppBarTitle = true,
     required this.body,
   }) : super(key: key);
 
   final Widget? appBar;
   final Widget body;
   final bool? padBodyHorizontally;
-  final bool? hideAppBarTitle;
+  final bool? showAppBarTitle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +35,7 @@ class BlueprintView extends ConsumerWidget {
         child: Container(
           color: context.theme.colorScheme.background,
           padding: EdgeInsets.only(
-            top: hideAppBarTitle! ? gap : 0,
+            top: showAppBarTitle! ? 0 : gap,
             bottom: gap,
             left: padBodyHorizontally! ? gap : 0,
             right: padBodyHorizontally! ? gap : 0,
@@ -43,9 +43,8 @@ class BlueprintView extends ConsumerWidget {
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.transparent,
-              appBar: hideAppBarTitle!
-                  ? null
-                  : appBar != null
+              appBar: showAppBarTitle!
+                  ? appBar != null
                       ? PreferredSize(
                           preferredSize: Size.fromHeight(100.h),
                           child: Padding(
@@ -53,6 +52,7 @@ class BlueprintView extends ConsumerWidget {
                         child: appBar!.animateAppBar(),
                       ),
                     )
+                      : null
                   : null,
               body: ScrollConfiguration(
                 behavior: ScrollConfiguration.of(context).copyWith(

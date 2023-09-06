@@ -30,8 +30,8 @@ final writingAutomaticStopwatchProvider = StateProvider<bool>(
 /// Whether to show custom navigation buttons in the app.
 /// When set to true, the app will show custom navigation buttons.
 /// When set to false, the app will show the default navigation buttons.
-final enableBackButtonProvider = StateProvider<bool>(
-  (ref) => PreferencesController().enableBackButton.value,
+final showBackButtonProvider = StateProvider<bool>(
+  (ref) => PreferencesController().showBackButton.value,
 );
 
 /// Whether to reduce the amount of haptic feedback in the app.
@@ -44,6 +44,6 @@ final reduceHapticFeedbackProvider = StateProvider<bool>(
 /// Whether to hide the app bar title.
 /// When set to true, the app bar title will be hidden.
 /// When set to false, the app bar title will be shown.
-final hideAppBarTitle = StateProvider<bool>(
-  (ref) => PreferencesController().hideAppBarTitle.value,
+final showAppBarTitle = StateProvider<bool>(
+  (ref) => PreferencesController().showAppBarTitle.value,
 );
