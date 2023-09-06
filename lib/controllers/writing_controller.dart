@@ -177,4 +177,136 @@ class WritingController extends StateNotifier<NoteModel> {
       ),
     );
   }
+
+  Future<void> updateSentimentAndSaveNote() async {
+    log(
+      'Updating sentiment and saving note',
+      name: 'WritingController:updateSentimentAndSaveNote()',
+    );
+    _updateSentimentAnalysis(await _sentimentAnalysis());
+    await _saveNoteToFirebase();
+  }
+
+  Future<void> updateAllUserNotes() async {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    QuerySnapshot<Map<String, dynamic>> collection = await _firestore
+        .collection('writing-temp')
+        .doc(userId)
+        .collection('notes')
+        .get();
+    for (QueryDocumentSnapshot<Map<String, dynamic>> element
+        in collection.docs) {
+      await removeSentimentAnalysisToDocument(element, userId);
+    }
+  }
+
+  Future<void> addSentimentAnalysisToDocument(
+    QueryDocumentSnapshot<Map<String, dynamic>> element,
+    String userId,
+  ) async {
+    if (!element.data().keys.contains('sentimentScore') ||
+        !element.data().keys.contains('sentimentMagnitude') ||
+        !element.data().keys.contains('sentenceCount') ||
+        !element.data().keys.contains('sentiment')) {
+      log(
+        'Note is missing sentiment analysis, updating sentiment',
+        name: 'WritingController:updateAllUserNotes():${element.id}',
+      );
+      log(
+        '${element.data()}',
+        name: 'WritingController:updateAllUserNotes():${element.id}',
+      );
+      state = NoteModel.fromDocument(element.data());
+      log(
+        '$state',
+        name:
+            'WritingController:updateAllUserNotes():${element.id}:NoteModel.fromDocument(element.data())',
+      );
+      _updateSentimentAnalysis(await _sentimentAnalysis());
+      await _firestore
+          .collection('writing-temp')
+          .doc(userId)
+          .collection('notes')
+          .doc(state.timestamp.toString())
+          .update(state.toDocument());
+    }
+  }
+
+  Future<void> removeSentimentAnalysisToDocument(
+    QueryDocumentSnapshot<Map<String, dynamic>> element,
+    String userId,
+  ) async {
+    if (element.data().keys.contains('sentimentScore')) {
+      _firestore
+          .collection('writing-temp')
+          .doc(userId)
+          .collection('notes')
+          .doc(element.id)
+          .update({'sentimentScore': FieldValue.delete()}).then((_) {
+        log(
+          'Note has sentimentScore, removing sentimentScore',
+          name: 'WritingController:updateAllUserNotes():${element.id}',
+        );
+      }).catchError((error) {
+        log(
+          '$error',
+          name: 'WritingController:updateAllUserNotes():${element.id}',
+        );
+      });
+    }
+    if (element.data().keys.contains('sentimentMagnitude')) {
+      _firestore
+          .collection('writing-temp')
+          .doc(userId)
+          .collection('notes')
+          .doc(element.id)
+          .update({'sentimentMagnitude': FieldValue.delete()}).then((_) {
+        log(
+          'Note has sentimentMagnitude, removing sentimentMagnitude',
+          name: 'WritingController:updateAllUserNotes():${element.id}',
+        );
+      }).catchError((error) {
+        log(
+          '$error',
+          name: 'WritingController:updateAllUserNotes():${element.id}',
+        );
+      });
+    }
+    if (element.data().keys.contains('sentenceCount')) {
+      _firestore
+          .collection('writing-temp')
+          .doc(userId)
+          .collection('notes')
+          .doc(element.id)
+          .update({'sentenceCount': FieldValue.delete()}).then((_) {
+        log(
+          'Note has sentenceCount, removing sentenceCount',
+          name: 'WritingController:updateAllUserNotes():${element.id}',
+        );
+      }).catchError((error) {
+        log(
+          '$error',
+          name: 'WritingController:updateAllUserNotes():${element.id}',
+        );
+      });
+    }
+    if (element.data().keys.contains('sentiment')) {
+      _firestore
+          .collection('writing-temp')
+          .doc(userId)
+          .collection('notes')
+          .doc(element.id)
+          .update({'sentiment': FieldValue.delete()}).then((_) {
+        log(
+          'Note has sentiment, removing sentiment',
+          name: 'WritingController:updateAllUserNotes():${element.id}',
+        );
+      }).catchError((error) {
+        log(
+          '$error',
+          name: 'WritingController:updateAllUserNotes():${element.id}',
+        );
+      });
+    }
+  }
 }
