@@ -58,7 +58,8 @@ class WritingController extends StateNotifier<NoteModel> {
         }
         if (_stopwatch.elapsed.inSeconds > 0) {
           _stopwatch.reset();
-          state = state.copyWith(duration: 0); // Reset the seconds in the state
+          state = state.copyWith(null, duration: 0); // Reset the seconds in the
+          // state
         }
       } else {
         _logInput();
@@ -72,7 +73,7 @@ class WritingController extends StateNotifier<NoteModel> {
         .read(); // Read the automatic stopwatch preference
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
+      state = state.copyWith(null, duration: _stopwatch.elapsed.inSeconds);
     });
     if (automaticStopwatch) {
       _delayTimer =
@@ -88,7 +89,6 @@ class WritingController extends StateNotifier<NoteModel> {
   void _pauseTimerAndLogInput() async {
     _timer?.cancel();
     _stopwatch.stop();
-    updateSentimentAnalysis(await _sentimentAnalysis());
     _logInput();
   }
 
@@ -99,7 +99,7 @@ class WritingController extends StateNotifier<NoteModel> {
     );
   }
 
-  Future handleSaveNote() async {
+  Future<void> handleSaveNote() async {
     bool automaticStopwatch = await PreferencesController()
         .writingAutomaticStopwatch
         .read(); // Read the automatic stopwatch preference
@@ -109,10 +109,15 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     _stopwatch.reset();
     _stopwatch.stop();
+    _updateSentimentAnalysis(await _sentimentAnalysis());
     if (automaticStopwatch) {
       _timer?.cancel();
       _delayTimer?.cancel();
     }
+    state = state.copyWith(
+      null,
+      timestamp: DateTime.now().millisecondsSinceEpoch,
+    );
     await _saveNoteToFirebase();
     textController.clear();
     resetNote();
@@ -123,9 +128,6 @@ class WritingController extends StateNotifier<NoteModel> {
     log(
       state.toDocument().toString(),
       name: '_saveEntryToFirebase(userId: $userId)',
-    );
-    state = state.copyWith(
-      timestamp: DateTime.now().millisecondsSinceEpoch,
     );
     return _firestore
         .collection('writing-temp')
@@ -140,7 +142,7 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   void updatePrivate(bool bool) {
-    state = state.copyWith(isPrivate: bool);
+    state = state.copyWith(null, isPrivate: bool);
   }
 
   Future<AnalyzeSentimentResponse> _sentimentAnalysis() async {
@@ -159,8 +161,13 @@ class WritingController extends StateNotifier<NoteModel> {
         );
   }
 
-  void updateSentimentAnalysis(AnalyzeSentimentResponse response) {
+  void _updateSentimentAnalysis(AnalyzeSentimentResponse response) {
+    log(
+      'Updating sentiment analysis',
+      name: 'WritingController:_updateSentimentAnalysis()',
+    );
     state = state.copyWith(
+      null,
       sentimentScore: response.documentSentiment?.score,
       sentimentMagnitude: response.documentSentiment?.magnitude,
       sentenceCount: response.sentences?.length,
