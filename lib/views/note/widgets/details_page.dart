@@ -6,6 +6,7 @@ import '../../../extensions/int_extensions.dart';
 import '../../../models/note/note_model.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
+import '../../../widgets/text_divider.dart';
 
 class DetailsPage extends StatelessWidget {
   final NoteModel noteModel;
@@ -22,6 +23,10 @@ class DetailsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: gap),
+            child: const TextDivider('Details'),
+          ),
           Row(
             children: [
               Expanded(

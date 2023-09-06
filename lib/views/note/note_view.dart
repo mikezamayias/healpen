@@ -42,11 +42,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
     ModalRoute.of(context)!.settings.arguments as NoteModel;
     final pages = [
       DetailsPage(noteModel: noteModel),
-      if (noteModel.sentimentMagnitude != null &&
-          noteModel.sentiment != null &&
-          noteModel.sentimentScore != null &&
-          noteModel.sentenceCount != null)
-        AnalysisPage(noteModel: noteModel)
+      if (noteModel.sentiment != null) AnalysisPage(noteModel: noteModel)
     ];
 
     return BlueprintView(
@@ -82,10 +78,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
                       : theme.colorScheme.onBackground,
                 ),
               ),
-              if (noteModel.sentimentMagnitude != null &&
-                  noteModel.sentiment != null &&
-                  noteModel.sentimentScore != null &&
-                  noteModel.sentenceCount != null)
+              if (noteModel.sentiment != null)
                 ButtonSegment(
                 value: 'analysis',
                 label: const Text('Analysis'),
