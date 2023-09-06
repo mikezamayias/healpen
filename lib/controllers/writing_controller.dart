@@ -109,7 +109,7 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     _stopwatch.reset();
     _stopwatch.stop();
-    _updateSentimentAnalysis(await _sentimentAnalysis());
+    _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
     if (automaticStopwatch) {
       _timer?.cancel();
       _delayTimer?.cancel();
@@ -145,7 +145,7 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(null, isPrivate: bool);
   }
 
-  Future<AnalyzeSentimentResponse> _sentimentAnalysis() async {
+  Future<AnalyzeSentimentResponse> _googlesSentimentAnalysis() async {
     return await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
         .documents
         .analyzeSentiment(
@@ -161,10 +161,10 @@ class WritingController extends StateNotifier<NoteModel> {
         );
   }
 
-  void _updateSentimentAnalysis(AnalyzeSentimentResponse response) {
+  void _updateGooglesSentimentAnalysis(AnalyzeSentimentResponse response) {
     log(
       'Updating sentiment analysis',
-      name: 'WritingController:_updateSentimentAnalysis()',
+      name: 'WritingController:_updateGooglesSentimentAnalysis()',
     );
     state = state.copyWith(
       null,
@@ -183,7 +183,7 @@ class WritingController extends StateNotifier<NoteModel> {
       'Updating sentiment and saving note',
       name: 'WritingController:updateSentimentAndSaveNote()',
     );
-    _updateSentimentAnalysis(await _sentimentAnalysis());
+    _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
     await _saveNoteToFirebase();
   }
 
@@ -196,11 +196,11 @@ class WritingController extends StateNotifier<NoteModel> {
         .get();
     for (QueryDocumentSnapshot<Map<String, dynamic>> element
         in collection.docs) {
-      await removeSentimentAnalysisToDocument(element, userId);
+      await removeGooglesSentimentAnalysisToDocument(element, userId);
     }
   }
 
-  Future<void> addSentimentAnalysisToDocument(
+  Future<void> addGooglesSentimentAnalysisToDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
     String userId,
   ) async {
@@ -222,7 +222,7 @@ class WritingController extends StateNotifier<NoteModel> {
         name:
             'WritingController:updateAllUserNotes():${element.id}:NoteModel.fromDocument(element.data())',
       );
-      _updateSentimentAnalysis(await _sentimentAnalysis());
+      _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
       await _firestore
           .collection('writing-temp')
           .doc(userId)
@@ -232,7 +232,7 @@ class WritingController extends StateNotifier<NoteModel> {
     }
   }
 
-  Future<void> removeSentimentAnalysisToDocument(
+  Future<void> removeGooglesSentimentAnalysisToDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
     String userId,
   ) async {
