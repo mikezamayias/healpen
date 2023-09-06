@@ -22,11 +22,15 @@ class CustomSnackBar {
           .closed
           .then((SnackBarClosedReason value) async {
         if (value == SnackBarClosedReason.hide) {
-          _snackBarConfig.actionAfterSnackBar1().then((_) {
-            vibrate(ref.watch(reduceHapticFeedbackProvider), () {
-              scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
+          if (_snackBarConfig.actionAfterSnackBar1 != null) {
+            _snackBarConfig.actionAfterSnackBar1!().then((_) {
+              if (snackBar2 != null) {
+                vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+                  scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
+                });
+              }
             });
-          });
+          }
         }
       });
     });
@@ -36,27 +40,29 @@ class CustomSnackBar {
 class SnackBarConfig {
   final String titleString1;
   final IconData leadingIconData1;
-  final List<Widget> trailingWidgets1;
-  final Future Function() actionAfterSnackBar1;
+  final List<Widget>? trailingWidgets1;
+  final Future Function()? actionAfterSnackBar1;
 
-  final String titleString2;
-  final IconData leadingIconData2;
+  final String? titleString2;
+  final IconData? leadingIconData2;
 
   SnackBarConfig({
     required this.titleString1,
     required this.leadingIconData1,
-    required this.trailingWidgets1,
-    required this.actionAfterSnackBar1,
-    required this.titleString2,
-    required this.leadingIconData2,
+    this.trailingWidgets1,
+    this.actionAfterSnackBar1,
+    this.titleString2,
+    this.leadingIconData2,
   });
 
   SnackBar createSnackBar1() {
     return createSnackBar(titleString1, leadingIconData1, trailingWidgets1);
   }
 
-  SnackBar createSnackBar2() {
-    return createSnackBar(titleString2, leadingIconData2);
+  SnackBar? createSnackBar2() {
+    return titleString2 != null && leadingIconData2 != null
+        ? createSnackBar(titleString2!, leadingIconData2!)
+        : null;
   }
 
   SnackBar createSnackBar(

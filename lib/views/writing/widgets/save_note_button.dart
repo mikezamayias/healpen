@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
 import '../../../utils/constants.dart';
+import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/custom_snack_bar.dart';
 
@@ -23,30 +24,47 @@ class SaveNoteButton extends ConsumerWidget {
       onTap: state.content.isNotEmpty
           ? () {
               final snackBarConfig = SnackBarConfig(
-                titleString1: 'Save note?',
-                leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
-                trailingWidgets1: [
-                  IconButton.filledTonal(
-                    onPressed:
-                        scaffoldMessengerKey.currentState!.hideCurrentSnackBar,
-                    icon: const FaIcon(
-                      FontAwesomeIcons.check,
-                    ),
-                  ),
-                  SizedBox(width: gap),
-                  IconButton.filledTonal(
-                    onPressed: scaffoldMessengerKey
-                        .currentState!.removeCurrentSnackBar,
-                    icon: const FaIcon(
-                      FontAwesomeIcons.xmark,
-                    ),
-                  ),
-                ],
-                actionAfterSnackBar1: writingController.handleSaveNote,
-                titleString2: 'Note saved!',
-                leadingIconData2: FontAwesomeIcons.solidCircleCheck,
+                titleString1: 'Note saved!',
+                leadingIconData1: FontAwesomeIcons.solidCircleCheck,
               );
-              CustomSnackBar(snackBarConfig).showSnackBar(context, ref);
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                barrierColor:
+                    context.theme.colorScheme.background.withOpacity(0.8),
+                builder: (BuildContext context) {
+                  return CustomDialog(
+                    titleString: 'Save note?',
+                    actions: [
+                      CustomListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: gap * 2),
+                        cornerRadius: radius - gap,
+                        responsiveWidth: true,
+                        titleString: 'Yes',
+                        onTap: () {
+                          writingController.handleSaveNote().then((_) {
+                            CustomSnackBar(snackBarConfig)
+                                .showSnackBar(context, ref);
+                          });
+                          context.navigator.pop();
+                        },
+                      ),
+                      SizedBox(width: gap),
+                      CustomListTile(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: gap * 2),
+                        cornerRadius: radius - gap,
+                        responsiveWidth: true,
+                        titleString: 'No',
+                        onTap: () {
+                          context.navigator.pop();
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
             }
           : null,
       backgroundColor:

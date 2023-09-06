@@ -7,14 +7,14 @@ import 'custom_list_tile.dart';
 
 class CustomDialog extends StatelessWidget {
   final String titleString;
-  final String contentString;
+  final String? contentString;
   final Color? backgroundColor;
-  final List<CustomListTile> actions;
+  final List<Widget> actions;
 
   const CustomDialog({
     super.key,
     required this.titleString,
-    required this.contentString,
+    this.contentString,
     this.backgroundColor,
     required this.actions,
   });
@@ -51,29 +51,27 @@ class CustomDialog extends StatelessWidget {
               ),
               textAlign: TextAlign.start,
             ),
-            SizedBox(
-              height: gap,
-            ),
-            Container(
-              padding: EdgeInsets.all(gap),
-              decoration: BoxDecoration(
-                color: context.theme.colorScheme.background,
-                borderRadius: BorderRadius.circular(radius - gap),
-              ),
-              child: Text(
-                contentString,
-                style: context.theme.textTheme.bodyLarge!.copyWith(
-                  color: context.theme.colorScheme.onBackground,
+            if (contentString != null) ...[
+              SizedBox(height: gap),
+              Container(
+                padding: EdgeInsets.all(gap),
+                decoration: BoxDecoration(
+                  color: context.theme.colorScheme.background,
+                  borderRadius: BorderRadius.circular(radius - gap),
                 ),
-                textAlign: TextAlign.start,
+                child: Text(
+                  contentString!,
+                  style: context.theme.textTheme.bodyLarge!.copyWith(
+                    color: context.theme.colorScheme.onBackground,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),
-      actionsAlignment: actions.length == 1
-          ? MainAxisAlignment.end
-          : MainAxisAlignment.spaceEvenly,
+      actionsAlignment: MainAxisAlignment.end,
       actions: actions,
     );
   }
