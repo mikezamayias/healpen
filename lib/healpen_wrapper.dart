@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iterum/flutter_iterum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'controllers/onboarding/onboarding_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
-import 'controllers/writing_controller.dart';
 import 'enums/app_theming.dart';
 import 'healpen.dart';
 import 'providers/settings_providers.dart';
@@ -49,24 +49,30 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               ref.watch(themeColorProvider.notifier).state = value,
         );
     PreferencesController().shakePrivateNoteInfo.read().then(
-          (bool value) => ref
-              .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
-              .state = value,
+          (bool value) =>
+              ref.watch(writingShakePrivateNoteInfoProvider.notifier).state = value,
         );
     PreferencesController().writingAutomaticStopwatch.read().then(
           (bool value) => ref
               .watch(writingAutomaticStopwatchProvider.notifier)
               .state = value,
         );
-    PreferencesController().enableBackButton.read().then(
+    PreferencesController().showBackButton.read().then(
           (bool value) =>
-              ref.watch(enableBackButtonProvider.notifier).state = value,
+              ref.watch(navigationShowBackButtonProvider.notifier).state = value,
         );
     PreferencesController().onboardingCompleted.read().then(
           (bool value) => ref
               .watch(
                   OnboardingController().onboardingCompletedProvider.notifier)
               .state = value,
+        );
+    PreferencesController().reduceHapticFeedback.read().then(
+          (bool value) =>
+              ref.watch(navigationReduceHapticFeedbackProvider.notifier).state = value,
+        );
+    PreferencesController().showAppBarTitle.read().then(
+          (bool value) => ref.watch(navigationShowAppBarTitle.notifier).state = value,
         );
     log(
       '${FirebaseAuth.instance.currentUser != null}',
@@ -85,6 +91,16 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       log(
         '${mediaQuery.platformBrightness}',
         name: '_HealpenWrapperState:didChangePlatformBrightness',
+      );
+      // TODO: figure a way to change the colors of smooth dot indicator on
+      //  system appearance change without restarting the app
+      if (FirebaseAuth.instance.currentUser == null ||
+          ref.watch(OnboardingController().onboardingCompletedProvider)) {
+        Iterum.revive(context);
+      }
+      ref.watch(themeProvider.notifier).state = createTheme(
+        ref.watch(themeColorProvider).color,
+        brightness(ref.watch(themeAppearanceProvider)),
       );
       setState(() {
         getSystemUIOverlayStyle(
@@ -105,22 +121,10 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
         ],
-        themeMode: switch (ref.watch(themeAppearanceProvider)) {
-          ThemeAppearance.system => ThemeMode.system,
-          ThemeAppearance.light => ThemeMode.light,
-          ThemeAppearance.dark => ThemeMode.dark,
-        },
-        theme: createTheme(
-          ref.watch(themeColorProvider).color,
-          switch (ref.watch(themeAppearanceProvider)) {
-            ThemeAppearance.system =>
-              WidgetsBinding.instance.platformDispatcher.platformBrightness,
-            ThemeAppearance.light => Brightness.light,
-            ThemeAppearance.dark => Brightness.dark,
-          },
-        ),
-        initialRoute: switch (FirebaseAuth.instance.currentUser == null ||
-            ref.watch(OnboardingController().onboardingCompletedProvider)) {
+        themeMode: themeMode(ref.watch(themeAppearanceProvider)),
+        theme: ref.watch(themeProvider),
+        initialRoute: switch (FirebaseAuth.instance.currentUser == null &&
+            !ref.watch(OnboardingController().onboardingCompletedProvider)) {
           true => '/onboarding',
           false => switch (FirebaseAuth.instance.currentUser != null) {
               true => '/healpen',

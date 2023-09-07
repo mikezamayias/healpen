@@ -63,8 +63,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1058887275393',
     projectId: 'healpen',
     storageBucket: 'healpen.appspot.com',
-    androidClientId: '1058887275393-tb4beba658al39ttq75gnc8g3mvi7e79.apps.googleusercontent.com',
-    iosClientId: '1058887275393-etpmst24vst3vcfpalvo83k4j43igbh2.apps.googleusercontent.com',
+    androidClientId:
+        '1058887275393-tb4beba658al39ttq75gnc8g3mvi7e79.apps.googleusercontent.com',
+    iosClientId:
+        '1058887275393-etpmst24vst3vcfpalvo83k4j43igbh2.apps.googleusercontent.com',
     iosBundleId: 'com.mikezamayias.healpen',
   );
 }

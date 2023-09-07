@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprung/sprung.dart';
 
+import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
 
-class CustomListTile extends StatelessWidget {
+class CustomListTile extends ConsumerWidget {
   final String? titleString;
   final String? subtitleString;
   final Widget? title;
@@ -51,7 +54,7 @@ class CustomListTile extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final padding = contentPadding ??
         EdgeInsets.symmetric(
           horizontal: gap * 2,
@@ -69,16 +72,35 @@ class CustomListTile extends StatelessWidget {
           ? GestureDetector(
               onTap: leadingOnTap,
               child: Animate(
-                effects: [
-                  if (showcaseLeadingIcon!)
-                    ShakeEffect(
-                      delay: 1.seconds,
-                      curve: Sprung.criticallyDamped,
-                      duration: 6.seconds,
-                      hz: 1,
-                      offset: const Offset(0, 3),
-                    ),
-                ],
+                effects: showcaseLeadingIcon!
+                    ? [
+                        ShakeEffect(
+                          delay: 1.seconds,
+                          curve: Sprung.criticallyDamped,
+                          duration: 6.seconds,
+                          hz: 1,
+                          offset: const Offset(0, 3),
+                        ),
+                        ShakeEffect(
+                          delay: 2.seconds,
+                          curve: Sprung.criticallyDamped,
+                          duration: 6.seconds,
+                          hz: 1,
+                          offset: const Offset(3, 0),
+                        ),
+                      ]
+                    : null,
+                onInit: showcaseLeadingIcon!
+                    ? (_) async {
+                        if (!ref
+                            .watch(navigationReduceHapticFeedbackProvider)) {
+                          await Future.delayed(
+                            1.seconds,
+                            HapticFeedback.vibrate,
+                          );
+                        }
+                      }
+                    : null,
                 child: leading ??
                     FaIcon(
                       leadingIconData!,
@@ -107,8 +129,6 @@ class CustomListTile extends StatelessWidget {
                             ? context.theme.colorScheme.onSurfaceVariant
                             : context.theme.colorScheme.onPrimary),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
           if (subtitle != null || subtitleString != null)
             subtitle != null && subtitleString == null

@@ -3,18 +3,17 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../utils/constants.dart';
-import 'custom_list_tile.dart';
 
 class CustomDialog extends StatelessWidget {
   final String titleString;
-  final String contentString;
+  final String? contentString;
   final Color? backgroundColor;
-  final List<CustomListTile> actions;
+  final List<Widget> actions;
 
   const CustomDialog({
     super.key,
     required this.titleString,
-    required this.contentString,
+    this.contentString,
     this.backgroundColor,
     required this.actions,
   });
@@ -37,39 +36,41 @@ class CustomDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(radius),
       ),
-      title: Container(
+      title: SizedBox(
         width: 75.w,
-        decoration: BoxDecoration(
-          color: context.theme.colorScheme.background,
-          borderRadius: BorderRadius.circular(radius - gap),
-        ),
-        padding: EdgeInsets.all(gap),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               titleString,
               style: context.theme.textTheme.headlineSmall!.copyWith(
-                color: context.theme.colorScheme.onBackground,
+                color: context.theme.colorScheme.onPrimaryContainer,
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.start,
             ),
-            SizedBox(
-              height: gap,
-            ),
-            Text(
-              contentString,
-              style: context.theme.textTheme.bodyLarge!.copyWith(
-                color: context.theme.colorScheme.onBackground,
+            if (contentString != null) ...[
+              SizedBox(height: gap),
+              Container(
+                padding: EdgeInsets.all(gap),
+                decoration: BoxDecoration(
+                  color: context.theme.colorScheme.background,
+                  borderRadius: BorderRadius.circular(radius - gap),
+                ),
+                child: Text(
+                  contentString!,
+                  style: context.theme.textTheme.bodyLarge!.copyWith(
+                    color: context.theme.colorScheme.onBackground,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
+            ],
           ],
         ),
       ),
-      actionsAlignment: MainAxisAlignment.center,
+      actionsAlignment: MainAxisAlignment.end,
       actions: actions,
     );
   }

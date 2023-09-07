@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -39,10 +37,10 @@ class HistoryViewController {
         _writingEntries.clear();
         for (QueryDocumentSnapshot<Map<String, dynamic>> element
             in event.docs) {
-          log(
-            '${element.data()}',
-            name: 'HistoryViewController:notesStream',
-          );
+          // log(
+          //   '${element.data()}',
+          //   name: 'HistoryViewController:notesStream',
+          // );
           _writingEntries.add(NoteModel.fromDocument(element.data()));
         }
         return _writingEntries;

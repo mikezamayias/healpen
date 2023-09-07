@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../utils/constants.dart';
@@ -21,8 +20,8 @@ class CustomChip extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        curve: curve,
-        duration: animationDuration.milliseconds,
+        curve: standardCurve,
+        duration: standardDuration,
         padding: EdgeInsets.symmetric(
           horizontal: gap * 1.8,
           vertical: gap,

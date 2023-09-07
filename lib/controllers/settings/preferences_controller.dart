@@ -15,7 +15,7 @@ class PreferencesController {
       themeColor,
       themeAppearance,
       writingAutomaticStopwatch,
-      enableBackButton,
+      showBackButton,
       onboardingCompleted,
     ];
   }
@@ -27,7 +27,7 @@ class PreferencesController {
   );
   final themeColor = PreferenceModel<ThemeColor>(
     'themeColor',
-    ThemeColor.pastelOcean,
+    ThemeColor.teal,
   );
   final themeAppearance = PreferenceModel<ThemeAppearance>(
     'themeAppearance',
@@ -37,13 +37,21 @@ class PreferencesController {
     'writingAutomaticStopwatch',
     false,
   );
-  final enableBackButton = PreferenceModel<bool>(
-    'enableBackButton',
+  final showBackButton = PreferenceModel<bool>(
+    'showBackButton',
     true,
+  );
+  final reduceHapticFeedback = PreferenceModel<bool>(
+    'reduceHapticFeedback',
+    false,
   );
   final onboardingCompleted = PreferenceModel<bool>(
     'onboardingCompleted',
     false,
+  );
+  final showAppBarTitle = PreferenceModel<bool>(
+    'showAppBarTitle',
+    true,
   );
 
   /// List of all preference models

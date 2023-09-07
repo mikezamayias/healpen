@@ -61,3 +61,30 @@ ThemeData createTheme(Color color, Brightness brightness) {
     ),
   );
 }
+
+Brightness brightness(ThemeAppearance themeAppearance) {
+  return switch (themeAppearance) {
+    ThemeAppearance.system =>
+      WidgetsBinding.instance.platformDispatcher.platformBrightness,
+    ThemeAppearance.light => Brightness.light,
+    ThemeAppearance.dark => Brightness.dark,
+  };
+}
+
+ThemeMode themeMode(ThemeAppearance themeAppearance) {
+  return switch (themeAppearance) {
+    ThemeAppearance.system => ThemeMode.system,
+    ThemeAppearance.light => ThemeMode.light,
+    ThemeAppearance.dark => ThemeMode.dark,
+  };
+}
+
+void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
+  if (!reduceHapticFeedback) {
+    HapticFeedback.vibrate().whenComplete(() {
+      callback();
+    });
+  } else {
+    callback();
+  }
+}

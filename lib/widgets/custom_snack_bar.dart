@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
+import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
+import '../utils/helper_functions.dart';
 import 'custom_list_tile.dart';
 
 class CustomSnackBar {
@@ -11,20 +14,26 @@ class CustomSnackBar {
 
   CustomSnackBar(this._snackBarConfig);
 
-  void showSnackBar(BuildContext context) {
+  void showSnackBar(BuildContext context, WidgetRef ref) {
     final snackBar1 = _snackBarConfig.createSnackBar1();
     final snackBar2 = _snackBarConfig.createSnackBar2();
-    HapticFeedback.vibrate().whenComplete(() {
+    vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
       scaffoldMessengerKey.currentState!
           .showSnackBar(snackBar1)
           .closed
           .then((SnackBarClosedReason value) async {
-        if (value == SnackBarClosedReason.hide) {
-          _snackBarConfig.actionAfterSnackBar1().then((_) {
-            HapticFeedback.vibrate().whenComplete(() {
-              scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
+        if (!(value == SnackBarClosedReason.remove)) {
+          if (_snackBarConfig.actionAfterSnackBar1 != null) {
+            _snackBarConfig.actionAfterSnackBar1!().then((_) {
+              if (snackBar2 != null) {
+                vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                  scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
+                });
+              }
             });
-          });
+          }
+        } else {
+          Slidable.of(context)?.close();
         }
       });
     });
@@ -34,27 +43,29 @@ class CustomSnackBar {
 class SnackBarConfig {
   final String titleString1;
   final IconData leadingIconData1;
-  final List<Widget> trailingWidgets1;
-  final Future Function() actionAfterSnackBar1;
+  final List<Widget>? trailingWidgets1;
+  final Future Function()? actionAfterSnackBar1;
 
-  final String titleString2;
-  final IconData leadingIconData2;
+  final String? titleString2;
+  final IconData? leadingIconData2;
 
   SnackBarConfig({
     required this.titleString1,
     required this.leadingIconData1,
-    required this.trailingWidgets1,
-    required this.actionAfterSnackBar1,
-    required this.titleString2,
-    required this.leadingIconData2,
+    this.trailingWidgets1,
+    this.actionAfterSnackBar1,
+    this.titleString2,
+    this.leadingIconData2,
   });
 
   SnackBar createSnackBar1() {
     return createSnackBar(titleString1, leadingIconData1, trailingWidgets1);
   }
 
-  SnackBar createSnackBar2() {
-    return createSnackBar(titleString2, leadingIconData2);
+  SnackBar? createSnackBar2() {
+    return titleString2 != null && leadingIconData2 != null
+        ? createSnackBar(titleString2!, leadingIconData2!)
+        : null;
   }
 
   SnackBar createSnackBar(
@@ -73,9 +84,11 @@ class SnackBarConfig {
             textColor: context.theme.colorScheme.onSecondary,
             titleString: titleString,
             leadingIconData: leadingIconData,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: gap * 2,
-              vertical: gap,
+            contentPadding: EdgeInsets.only(
+              top: gap,
+              bottom: gap,
+              right: trailingWidgets != null ? gap : gap * 2,
+              left: gap * 2,
             ),
             cornerRadius: radius,
             trailing: trailingWidgets != null

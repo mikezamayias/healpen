@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../utils/constants.dart';
@@ -31,8 +30,8 @@ class _ConditionalWideButtonState extends State<ConditionalWideButton> {
       elevation: radius,
       borderRadius: BorderRadius.all(Radius.circular(radius)),
       child: AnimatedContainer(
-        duration: animationDuration.milliseconds,
-        curve: curve,
+        duration: standardDuration,
+        curve: standardCurve,
         alignment: Alignment.center,
         padding: EdgeInsets.all(gap),
         child: widget.condition ? widget.firstChild : widget.secondChild,

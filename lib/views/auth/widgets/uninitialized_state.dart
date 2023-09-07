@@ -5,7 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:validated/validated.dart' as validate;
 
 import '../../../providers/custom_auth_provider.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class UninitializedState extends ConsumerWidget {
@@ -56,9 +58,11 @@ class UninitializedState extends ConsumerWidget {
             leadingIconData: FontAwesomeIcons.solidPaperPlane,
             onTap: () {
               if (formKey.currentState!.validate()) {
-                ref
-                    .watch(CustomAuthProvider().emailLinkAuthProvider)
-                    .sendLink(emailAddress);
+                vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                  ref
+                      .watch(CustomAuthProvider().emailLinkAuthProvider)
+                      .sendLink(emailAddress);
+                });
               }
             },
           ),

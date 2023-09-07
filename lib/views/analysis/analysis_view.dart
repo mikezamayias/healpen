@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/analysis_view_controller.dart';
+import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
@@ -15,6 +16,7 @@ class AnalysisView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BlueprintView(
+      showAppBarTitle: ref.watch(navigationShowAppBarTitle),
       appBar: const AppBar(
         pathNames: ['Your writing insights'],
       ),

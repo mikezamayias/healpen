@@ -5,40 +5,38 @@ import 'package:sprung/sprung.dart';
 import '../utils/constants.dart';
 
 extension WidgetListExtensions on List<Widget> {
-  List<Widget> animateWidgetList() =>
-      animate(interval: 15.milliseconds)
-          .fade(curve: curve)
-          .slideX(begin: 0.6, curve: curve)
-          .scale(
-            begin: const Offset(0, 0),
-            duration: 60.milliseconds,
-          );
+  List<Widget> animateWidgetList() => animate()
+      .fade(curve: standardCurve)
+      .scale(
+        begin: const Offset(0, 0),
+        duration: shortStandardDuration,
+      )
+      .slideY(begin: 0.6, curve: standardCurve);
 
-  List<Widget> animateLicences() =>
-      animate(interval: animationDuration.microseconds)
-          .fade(
-            begin: 0,
-          )
-          .scale(begin: const Offset(0, 0), curve: Sprung.overDamped)
-          .slideX(begin: -10, curve: Sprung.overDamped);
+  List<Widget> animateLicences() => animate(interval: standardDuration)
+      .fade(
+        begin: 0,
+      )
+      .scale(begin: const Offset(0, 0), curve: Sprung.overDamped)
+      .slideX(begin: -10, curve: Sprung.overDamped);
 }
 
 extension WidgetExtensions on Widget {
   Widget animateSlideInFromLeft() => animate()
-      .fade(duration: animationDuration.milliseconds)
-      .slideX(begin: 1, curve: curve);
+      .fade(duration: standardDuration)
+      .slideX(begin: 1, curve: standardCurve);
 
   Widget animateSlideInFromRight() => animate()
-      .fade(duration: animationDuration.microseconds)
-      .slideX(begin: -0.6, curve: curve);
+      .fade(duration: standardDuration)
+      .slideX(begin: -0.6, curve: standardCurve);
 
   Widget animateSlideInFromBottom() => animate()
-      .fade(duration: animationDuration.microseconds)
-      .slideY(begin: 10, curve: curve);
+      .fade(duration: standardDuration)
+      .slideY(begin: 10, curve: standardCurve);
 
   Widget animateSlideInFromTop() => animate()
-      .fade(duration: animationDuration.milliseconds)
-      .slideY(begin: -10, curve: curve);
+      .fade(duration: standardDuration)
+      .slideY(begin: -10, curve: standardCurve);
 
   Widget animateBottomNavigationBar(BuildContext context) =>
       animateSlideInFromTop().animate();
@@ -53,10 +51,10 @@ extension WidgetExtensions on Widget {
 
   Widget animateAppBar() => animateSlideInFromTop()
       .animate()
-      .fade(begin: -1, curve: curve)
-      .slideY(begin: -1, curve: curve)
+      .fade(begin: -1, curve: standardCurve)
+      .slideY(begin: -1, curve: standardCurve)
       .scale(
         begin: const Offset(0.6, 0.6),
-        duration: animationDuration.milliseconds,
+        duration: standardDuration,
       );
 }

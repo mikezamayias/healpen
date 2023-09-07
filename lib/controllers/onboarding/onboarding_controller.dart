@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/onboarding/onboarding_model.dart';
@@ -55,7 +56,13 @@ class OnboardingController {
       imagePath: 'assets/images/onboarding/screen_6.svg',
     ),
   ];
+
+  /// Providers
   final onboardingCompletedProvider = StateProvider<bool>((ref) => false);
+  final pageControllerProvider = StateProvider<PageController>(
+    (ref) => PageController(),
+  );
+  final currentPageIndexProvider = StateProvider<int>((ref) => 0);
 
   /// Methods
 

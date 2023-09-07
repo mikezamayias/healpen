@@ -13,11 +13,15 @@ class BlueprintView extends ConsumerWidget {
   const BlueprintView({
     Key? key,
     this.appBar,
+    this.padBodyHorizontally = true,
+    this.showAppBarTitle = true,
     required this.body,
   }) : super(key: key);
 
   final Widget? appBar;
   final Widget body;
+  final bool? padBodyHorizontally;
+  final bool? showAppBarTitle;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,21 +35,24 @@ class BlueprintView extends ConsumerWidget {
         child: Container(
           color: context.theme.colorScheme.background,
           padding: EdgeInsets.only(
+            top: showAppBarTitle! ? 0 : gap,
             bottom: gap,
-            left: gap,
-            right: gap,
+            left: padBodyHorizontally! ? gap : 0,
+            right: padBodyHorizontally! ? gap : 0,
           ),
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.transparent,
-              appBar: appBar != null
-                  ? PreferredSize(
-                      preferredSize: Size.fromHeight(100.h),
-                      child: Padding(
+              appBar: showAppBarTitle!
+                  ? appBar != null
+                      ? PreferredSize(
+                          preferredSize: Size.fromHeight(100.h),
+                          child: Padding(
                         padding: EdgeInsets.only(bottom: gap),
                         child: appBar!.animateAppBar(),
                       ),
                     )
+                      : null
                   : null,
               body: ScrollConfiguration(
                 behavior: ScrollConfiguration.of(context).copyWith(

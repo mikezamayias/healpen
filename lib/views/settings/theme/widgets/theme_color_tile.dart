@@ -7,6 +7,7 @@ import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeColorTile extends ConsumerWidget {
@@ -29,14 +30,16 @@ class ThemeColorTile extends ConsumerWidget {
         ],
         selected: {ref.watch(themeColorProvider)},
         onSelectionChanged: (Set<ThemeColor> newSelection) {
-          ref.watch(themeColorProvider.notifier).state = newSelection.first;
-          log(
-            '${newSelection.first}',
-            name: 'Settings:ThemeColorTile',
-          );
-          PreferencesController().themeColor.write(
-                ref.watch(themeColorProvider)
-              );
+          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
+            ref.watch(themeColorProvider.notifier).state = newSelection.first;
+            log(
+              '${newSelection.first}',
+              name: 'Settings:ThemeColorTile',
+            );
+            await PreferencesController()
+                .themeColor
+                .write(ref.watch(themeColorProvider));
+          });
         },
       ),
     );

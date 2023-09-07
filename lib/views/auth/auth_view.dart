@@ -5,9 +5,12 @@ import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../providers/custom_auth_provider.dart';
 import '../../utils/constants.dart';
+import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
+import '../onboarding/onboarding_view.dart';
 import 'widgets/auth_failed_state.dart';
 import 'widgets/awaiting_dynamic_link_state.dart';
 import 'widgets/sending_link_state.dart';
@@ -15,11 +18,45 @@ import 'widgets/signing_in_state.dart';
 import 'widgets/uninitialized_state.dart';
 import 'widgets/unknown_state.dart';
 
-class AuthView extends ConsumerWidget {
+class AuthView extends ConsumerStatefulWidget {
   const AuthView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AuthView> createState() => _AuthViewState();
+}
+
+class _AuthViewState extends ConsumerState<AuthView> {
+  void goBack() {
+    ref.watch(OnboardingController().pageControllerProvider.notifier).state =
+        PageController();
+    ref.watch(OnboardingController().currentPageIndexProvider.notifier).state =
+        0;
+    navigator.pushReplacement(
+      PageRouteBuilder(
+        transitionDuration: emphasizedDuration,
+        reverseTransitionDuration: emphasizedDuration,
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const OnboardingView(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+          opacity: Tween<double>(
+            begin: -1,
+            end: 1,
+          ).animate(animation),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final emailLinkProvider = ref.watch(
       CustomAuthProvider().emailLinkAuthProvider,
     );
@@ -45,26 +82,26 @@ class AuthView extends ConsumerWidget {
           '${state.runtimeType}',
           name: 'AuthView:state',
         );
-        return BlueprintView(
-          body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Sign in with magic link',
-                  style: context.theme.textTheme.headlineSmall,
-                ),
-                SizedBox(height: gap),
-                switch (state.runtimeType) {
-                  Uninitialized => const UninitializedState(),
-                  SendingLink => const SendingLinkState(),
-                  AwaitingDynamicLink => const AwaitingDynamicLinkState(),
-                  SigningIn => const SigningInState(),
-                  AuthFailed => AuthFailedState(state: state),
-                  _ => UnknownState(state: state)
-                },
-              ],
+        return WillPopScope(
+          onWillPop: () {
+            goBack();
+            return Future.value(true);
+          },
+          child: BlueprintView(
+            appBar: AppBar(
+              pathNames: const ['Sign in with magic link'],
+              automaticallyImplyLeading: true,
+              onBackButtonPressed: goBack,
+            ),
+            body: Center(
+              child: switch (state.runtimeType) {
+                Uninitialized => const UninitializedState(),
+                SendingLink => const SendingLinkState(),
+                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
+                SigningIn => const SigningInState(),
+                AuthFailed => AuthFailedState(state: state),
+                _ => UnknownState(state: state)
+              },
             ),
           ),
         );

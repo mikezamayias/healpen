@@ -3,12 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
+import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
-import 'app/settings_app_view.dart';
+import 'navigation/settings_navigation_view.dart';
+import 'theme/settings_theme_view.dart';
+import 'writing/settings_writing_view.dart';
 
 class SettingsView extends ConsumerWidget {
   const SettingsView({Key? key}) : super(key: key);
@@ -16,17 +20,21 @@ class SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Map<String, (Widget, IconData)> pageWidgets = {
-      'App': (
-        const SettingsAppView(),
-        FontAwesomeIcons.mobileScreenButton,
+      'Theme': (
+        const SettingsThemeView(),
+        FontAwesomeIcons.swatchbook,
+      ),
+      'Navigation': (
+        const SettingsNavigationView(),
+        FontAwesomeIcons.route,
       ),
       'Account': (
         const SettingsAccountView(),
         FontAwesomeIcons.userLarge,
       ),
-      'Notification': (
-        const Placeholder(),
-        FontAwesomeIcons.solidBell,
+      'Writing': (
+        const SettingsWritingView(),
+        FontAwesomeIcons.solidPenToSquare,
       ),
       'Data & Privacy': (
         const Placeholder(),
@@ -43,6 +51,7 @@ class SettingsView extends ConsumerWidget {
     };
 
     return BlueprintView(
+      showAppBarTitle: ref.watch(navigationShowAppBarTitle),
       appBar: const AppBar(
         pathNames: ['Personalize your experience'],
       ),
@@ -59,11 +68,13 @@ class SettingsView extends ConsumerWidget {
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  context.navigator.push(
-                    MaterialPageRoute(
-                      builder: (_) => pageWidgets[title]!.$1,
-                    ),
-                  );
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                    context.navigator.push(
+                      MaterialPageRoute(
+                        builder: (_) => pageWidgets[title]!.$1,
+                      ),
+                    );
+                  });
                 },
               ),
           // CustomListTile(

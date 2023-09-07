@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../utils/constants.dart';
@@ -8,7 +7,7 @@ import 'theme_components/text_theme_data.dart';
 
 ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       useMaterial3: true,
-      fontFamily: GoogleFonts.lato().fontFamily,
+      fontFamily: GoogleFonts.manrope().fontFamily,
       colorScheme: colorScheme,
       textTheme: textThemeData,
       // cardColor: colorScheme.primary,
@@ -113,7 +112,7 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       ),
       segmentedButtonTheme: SegmentedButtonThemeData(
         style: ButtonStyle(
-          animationDuration: animationDuration.milliseconds,
+          animationDuration: standardDuration,
           side: MaterialStateProperty.all(
             BorderSide(
               width: 3 * unit,

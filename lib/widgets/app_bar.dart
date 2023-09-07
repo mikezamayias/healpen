@@ -5,15 +5,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
+import '../utils/helper_functions.dart';
 
 class AppBar extends ConsumerWidget {
   final List<String> pathNames;
   final bool? automaticallyImplyLeading;
+  final VoidCallback? onBackButtonPressed;
 
   const AppBar({
     Key? key,
     required this.pathNames,
     this.automaticallyImplyLeading = false,
+    this.onBackButtonPressed,
   }) : super(key: key);
 
   @override
@@ -39,8 +42,7 @@ class AppBar extends ConsumerWidget {
         ],
       ),
     );
-    return ref.watch(enableBackButtonProvider) &&
-            automaticallyImplyLeading!
+    return ref.watch(navigationShowBackButtonProvider) && automaticallyImplyLeading!
         ? Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,7 +52,15 @@ class AppBar extends ConsumerWidget {
                 padding: EdgeInsets.zero,
                 enableFeedback: true,
                 iconSize: context.theme.textTheme.titleLarge!.fontSize,
-                onPressed: context.navigator.pop,
+                onPressed: () {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                    if (onBackButtonPressed != null) {
+                      onBackButtonPressed!();
+                    } else {
+                      context.navigator.pop();
+                    }
+                  });
+                },
                 color: context.theme.colorScheme.onPrimary,
                 icon: const FaIcon(FontAwesomeIcons.chevronLeft),
               ),
