@@ -98,19 +98,35 @@ jobs:
         run: |
           cd "build/app/outputs/apk/release"
           mv app-release.apk ${{env.BUILD_NAME}}.apk
+      - name: Build IPA
+        env:
+          HEALPEN_SIGNING_STORE_FILE: ${{ steps.android_keystore.outputs.filePath }}
+          HEALPEN_SIGNING_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          HEALPEN_SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          HEALPEN_SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        run: flutter build ipa --release
+      - name: Rename IPA
+        run: |
+          cd "build/ios/ipa"
+          mv healpen.ipa ${{env.BUILD_NAME}}.ipa
       - name: GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/${{env.BUILD_NAME}}.apk"
+          artifacts: "build/app/outputs/apk/release/${{env.BUILD_NAME}}.apk,build/app/outputs/ipa/release/${{env.BUILD_NAME}}.ipa"
           name: ${{env.BUILD_NAME}}
           tag: ${{env.BUILD_NAME}}
           body: ${{github.event.head_commit.message}}
           token: ${{secrets.github_token}}
-      - name: Upload Artifact
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{env.BUILD_NAME}}.apk
           path: build/app/outputs/apk/release/${{env.BUILD_NAME}}.apk
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{env.BUILD_NAME}}.ipa
+          path: build/ios/ipa/${{env.BUILD_NAME}}.ipa
 
   firebase_app_distribution:
     name: Upload to Firebase App Distribution
@@ -133,8 +149,8 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v3
         with:
-          name: ${{env.BUILD_NAME}}.apk
-      - name: Distribution to Testers
+          name: ${{env.BUILD_NAME}}
+      - name: Distribution to Testers (Development, Android)
         if: github.ref == 'refs/heads/development'
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
@@ -143,12 +159,30 @@ jobs:
           file: ${{env.BUILD_NAME}}.apk
           groups: testers
           releaseNotes: ${{github.event.head_commit.message}}
-      - name: Distribution to Beta Testers
+      - name: Distribution to Testers (Development, iOS)
+        if: github.ref == 'refs/heads/development'
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_IOS_APP_ID}}
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
+          file: ${{env.BUILD_NAME}}.ipa
+          groups: testers
+          releaseNotes: ${{github.event.head_commit.message}}
+      - name: Distribution to Beta Testers (Production, Android)
         if: github.ref == 'refs/heads/production'
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
           serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
           file: ${{env.BUILD_NAME}}.apk
+          groups: beta-testers
+          releaseNotes: ${{github.event.head_commit.message}}
+      - name: Distribution to Beta Testers (Production, iOS)
+        if: github.ref == 'refs/heads/production'
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_IOS_APP_ID}}
+          serviceCredentialsFileContent: ${{secrets.CREDENTIAL_FILE_CONTENT}}
+          file: ${{env.BUILD_NAME}}.ipa
           groups: beta-testers
           releaseNotes: ${{github.event.head_commit.message}}
