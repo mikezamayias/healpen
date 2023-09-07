@@ -43,7 +43,7 @@ class PreferencesController {
   );
   final reduceHapticFeedback = PreferenceModel<bool>(
     'reduceHapticFeedback',
-    true,
+    false,
   );
   final onboardingCompleted = PreferenceModel<bool>(
     'onboardingCompleted',
