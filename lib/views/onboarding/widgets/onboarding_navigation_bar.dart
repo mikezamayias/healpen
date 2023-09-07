@@ -21,6 +21,7 @@ class OnboardingNavigationBar extends ConsumerStatefulWidget {
 class _OnboardingNavigationBarState
     extends ConsumerState<OnboardingNavigationBar> {
   void goToAuth() {
+    ref.watch(OnboardingController().pageControllerProvider).dispose();
     ref
         .watch(OnboardingController().onboardingCompletedProvider.notifier)
         .state = true;
@@ -119,7 +120,12 @@ class _OnboardingNavigationBarState
               ),
               OnboardingButton(
                 titleString: 'Start Writing Now',
-                onTap: goToAuth,
+                onTap: () {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
+                    goToAuth();
+                  });
+                },
               ),
             ] else ...[
               OnboardingButton(

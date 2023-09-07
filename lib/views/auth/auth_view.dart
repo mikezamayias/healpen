@@ -5,6 +5,7 @@ import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../providers/custom_auth_provider.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
@@ -26,7 +27,11 @@ class AuthView extends ConsumerStatefulWidget {
 
 class _AuthViewState extends ConsumerState<AuthView> {
   void goBack() {
-    context.navigator.pushReplacement(
+    ref.watch(OnboardingController().pageControllerProvider.notifier).state =
+        PageController();
+    ref.watch(OnboardingController().currentPageIndexProvider.notifier).state =
+        0;
+    navigator.pushReplacement(
       PageRouteBuilder(
         transitionDuration: emphasizedDuration,
         reverseTransitionDuration: emphasizedDuration,
@@ -84,9 +89,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
           },
           child: BlueprintView(
             appBar: AppBar(
-                pathNames: const ['Sign in with magic link'],
-                automaticallyImplyLeading: true,
-                onBackButtonPressed: goBack),
+              pathNames: const ['Sign in with magic link'],
+              automaticallyImplyLeading: true,
+              onBackButtonPressed: goBack,
+            ),
             body: Center(
               child: switch (state.runtimeType) {
                 Uninitialized => const UninitializedState(),
