@@ -3,7 +3,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../utils/constants.dart';
-import 'custom_list_tile.dart';
 
 class CustomDialog extends StatelessWidget {
   final String titleString;
