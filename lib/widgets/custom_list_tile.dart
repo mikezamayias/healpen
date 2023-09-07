@@ -72,21 +72,32 @@ class CustomListTile extends ConsumerWidget {
           ? GestureDetector(
               onTap: leadingOnTap,
               child: Animate(
-                effects: [
-                  if (showcaseLeadingIcon!)
-                    ShakeEffect(
-                      delay: 1.seconds,
-                      curve: Sprung.criticallyDamped,
-                      duration: 6.seconds,
-                      hz: 1,
-                      offset: const Offset(0, 3),
-                    ),
-                ],
-                onComplete: showcaseLeadingIcon!
+                effects: showcaseLeadingIcon!
+                    ? [
+                        ShakeEffect(
+                          delay: 1.seconds,
+                          curve: Sprung.criticallyDamped,
+                          duration: 6.seconds,
+                          hz: 1,
+                          offset: const Offset(0, 3),
+                        ),
+                        ShakeEffect(
+                          delay: 2.seconds,
+                          curve: Sprung.criticallyDamped,
+                          duration: 6.seconds,
+                          hz: 1,
+                          offset: const Offset(3, 0),
+                        ),
+                      ]
+                    : null,
+                onInit: showcaseLeadingIcon!
                     ? (_) async {
                         if (!ref
                             .watch(navigationReduceHapticFeedbackProvider)) {
-                          await HapticFeedback.vibrate();
+                          await Future.delayed(
+                            1.seconds,
+                            HapticFeedback.vibrate,
+                          );
                         }
                       }
                     : null,
