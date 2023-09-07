@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
@@ -21,7 +22,7 @@ class CustomSnackBar {
           .showSnackBar(snackBar1)
           .closed
           .then((SnackBarClosedReason value) async {
-        if (value == SnackBarClosedReason.hide) {
+        if (!(value == SnackBarClosedReason.remove)) {
           if (_snackBarConfig.actionAfterSnackBar1 != null) {
             _snackBarConfig.actionAfterSnackBar1!().then((_) {
               if (snackBar2 != null) {
@@ -31,6 +32,8 @@ class CustomSnackBar {
               }
             });
           }
+        } else {
+          Slidable.of(context)?.close();
         }
       });
     });
@@ -81,9 +84,11 @@ class SnackBarConfig {
             textColor: context.theme.colorScheme.onSecondary,
             titleString: titleString,
             leadingIconData: leadingIconData,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: gap * 2,
-              vertical: gap,
+            contentPadding: EdgeInsets.only(
+              top: gap,
+              bottom: gap,
+              right: trailingWidgets != null ? gap : gap * 2,
+              left: gap * 2,
             ),
             cornerRadius: radius,
             trailing: trailingWidgets != null
