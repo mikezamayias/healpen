@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
 
-class AwaitingDynamicLinkState extends StatelessWidget {
+class AwaitingDynamicLinkState extends ConsumerWidget {
   const AwaitingDynamicLinkState({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -30,7 +33,11 @@ class AwaitingDynamicLinkState extends StatelessWidget {
           // textColor: context.theme.colorScheme.onError,
           titleString: 'Something not right?',
           subtitleString: 'Start again.',
-          onTap: () => context.navigator.pushReplacementNamed('/auth'),
+          onTap: () {
+            vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+              context.navigator.pushReplacementNamed('/auth');
+            });
+          },
         ),
       ],
     );
