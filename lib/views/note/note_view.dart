@@ -40,11 +40,11 @@ class _NoteViewState extends ConsumerState<NoteView> {
   Widget build(BuildContext context) {
     final NoteModel noteModel =
     ModalRoute.of(context)!.settings.arguments as NoteModel;
+    final showAnalysis = noteModel.sentiment != null && !noteModel.isPrivate;
     final pages = [
       DetailsPage(noteModel: noteModel),
-      if (noteModel.sentiment != null) AnalysisPage(noteModel: noteModel)
+      if (showAnalysis) AnalysisPage(noteModel: noteModel)
     ];
-
     return BlueprintView(
       appBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: gap),
@@ -65,7 +65,8 @@ class _NoteViewState extends ConsumerState<NoteView> {
               physics: const NeverScrollableScrollPhysics(),
             ),
           ),
-          SegmentedButton(
+          if (showAnalysis)
+            SegmentedButton(
             showSelectedIcon: false,
             segments: [
               ButtonSegment(
@@ -78,7 +79,6 @@ class _NoteViewState extends ConsumerState<NoteView> {
                       : theme.colorScheme.onBackground,
                 ),
               ),
-              if (noteModel.sentiment != null)
                 ButtonSegment(
                 value: 'analysis',
                 label: const Text('Analysis'),
