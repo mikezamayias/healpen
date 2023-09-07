@@ -31,6 +31,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
             .write(ref.watch(writingShakePrivateNoteInfoProvider));
         showHealpenDialog(
           context: context,
+          doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
           customDialog: CustomDialog(
             titleString: 'Private note',
             contentString:

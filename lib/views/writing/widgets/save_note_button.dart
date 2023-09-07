@@ -4,6 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
@@ -26,6 +27,7 @@ class SaveNoteButton extends ConsumerWidget {
           ? () {
               showHealpenDialog(
                 context: context,
+                doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
                 customDialog: CustomDialog(
                   titleString: 'Save note?',
                   actions: [
@@ -35,16 +37,7 @@ class SaveNoteButton extends ConsumerWidget {
                       responsiveWidth: true,
                       titleString: 'Yes',
                       onTap: () {
-                        writingController.handleSaveNote().then((_) {
-                          CustomSnackBar(
-                            SnackBarConfig(
-                              titleString1: 'Note saved!',
-                              leadingIconData1:
-                                  FontAwesomeIcons.solidCircleCheck,
-                            ),
-                          ).showSnackBar(context, ref);
-                        });
-                        context.navigator.pop();
+                        context.navigator.pop(true);
                       },
                     ),
                     SizedBox(width: gap),
@@ -59,7 +52,35 @@ class SaveNoteButton extends ConsumerWidget {
                     ),
                   ],
                 ),
-              );
+              ).then((exit) {
+                if (exit == null) return;
+                if (exit) {
+                  CustomSnackBar(
+                    SnackBarConfig(
+                      titleString1: 'Saving note...',
+                      leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
+                      trailingWidgets1: [
+                        CustomListTile(
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap,
+                          ),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          backgroundColor:
+                              context.theme.colorScheme.primaryContainer,
+                          textColor:
+                              context.theme.colorScheme.onPrimaryContainer,
+                          onTap: scaffoldMessengerKey
+                              .currentState!.removeCurrentSnackBar,
+                          titleString: 'Cancel',
+                          leadingIconData: FontAwesomeIcons.xmark,
+                        ),
+                      ],
+                      actionAfterSnackBar1: writingController.handleSaveNote,
+                    ),
+                  ).showSnackBar(context, ref);
+                }
+              });
             }
           : null,
       backgroundColor:
