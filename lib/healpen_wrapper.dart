@@ -8,7 +8,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'controllers/onboarding/onboarding_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
-import 'controllers/writing_controller.dart';
 import 'enums/app_theming.dart';
 import 'healpen.dart';
 import 'providers/settings_providers.dart';
@@ -50,9 +49,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               ref.watch(themeColorProvider.notifier).state = value,
         );
     PreferencesController().shakePrivateNoteInfo.read().then(
-          (bool value) => ref
-              .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
-              .state = value,
+          (bool value) =>
+              ref.watch(writingShakePrivateNoteInfoProvider.notifier).state = value,
         );
     PreferencesController().writingAutomaticStopwatch.read().then(
           (bool value) => ref
@@ -61,7 +59,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         );
     PreferencesController().showBackButton.read().then(
           (bool value) =>
-              ref.watch(showBackButtonProvider.notifier).state = value,
+              ref.watch(navigationShowBackButtonProvider.notifier).state = value,
         );
     PreferencesController().onboardingCompleted.read().then(
           (bool value) => ref
@@ -71,7 +69,10 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         );
     PreferencesController().reduceHapticFeedback.read().then(
           (bool value) =>
-              ref.watch(reduceHapticFeedbackProvider.notifier).state = value,
+              ref.watch(navigationReduceHapticFeedbackProvider.notifier).state = value,
+        );
+    PreferencesController().showAppBarTitle.read().then(
+          (bool value) => ref.watch(navigationShowAppBarTitle.notifier).state = value,
         );
     log(
       '${FirebaseAuth.instance.currentUser != null}',

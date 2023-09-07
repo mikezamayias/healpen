@@ -21,15 +21,15 @@ class ReduceHapticFeedbackSettingsTile extends ConsumerWidget {
         'Reduces the amount of haptic feedback in the app.',
       ),
       trailing: Switch(
-        value: ref.watch(reduceHapticFeedbackProvider),
+        value: ref.watch(navigationReduceHapticFeedbackProvider),
         onChanged: (value) {
-          vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
-            ref.read(reduceHapticFeedbackProvider.notifier).state = value;
+          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
+            ref.read(navigationReduceHapticFeedbackProvider.notifier).state = value;
             await PreferencesController()
                 .reduceHapticFeedback
-                .write(ref.watch(reduceHapticFeedbackProvider));
+                .write(ref.watch(navigationReduceHapticFeedbackProvider));
             log(
-              '${ref.watch(reduceHapticFeedbackProvider)}',
+              '${ref.watch(navigationReduceHapticFeedbackProvider)}',
               name: 'SettingsView:ReduceHapticFeedbackSettingsTile',
             );
           });

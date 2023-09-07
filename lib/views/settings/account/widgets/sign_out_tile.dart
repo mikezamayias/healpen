@@ -61,7 +61,7 @@ class SignOutTile extends ConsumerWidget {
                     OnboardingController().onboardingCompletedProvider.notifier)
                 .state = false;
             await PreferencesController().resetAll();
-            vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+            vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
               Iterum.revive(context);
             });
           },

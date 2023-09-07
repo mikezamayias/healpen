@@ -42,7 +42,7 @@ class AppBar extends ConsumerWidget {
         ],
       ),
     );
-    return ref.watch(showBackButtonProvider) && automaticallyImplyLeading!
+    return ref.watch(navigationShowBackButtonProvider) && automaticallyImplyLeading!
         ? Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,7 +53,7 @@ class AppBar extends ConsumerWidget {
                 enableFeedback: true,
                 iconSize: context.theme.textTheme.titleLarge!.fontSize,
                 onPressed: () {
-                  vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
                     if (onBackButtonPressed != null) {
                       onBackButtonPressed!();
                     } else {

@@ -16,7 +16,7 @@ class CustomSnackBar {
   void showSnackBar(BuildContext context, WidgetRef ref) {
     final snackBar1 = _snackBarConfig.createSnackBar1();
     final snackBar2 = _snackBarConfig.createSnackBar2();
-    vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+    vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
       scaffoldMessengerKey.currentState!
           .showSnackBar(snackBar1)
           .closed
@@ -25,7 +25,7 @@ class CustomSnackBar {
           if (_snackBarConfig.actionAfterSnackBar1 != null) {
             _snackBarConfig.actionAfterSnackBar1!().then((_) {
               if (snackBar2 != null) {
-                vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+                vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
                   scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
                 });
               }

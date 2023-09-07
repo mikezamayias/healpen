@@ -23,7 +23,7 @@ class WritingStopwatchTile extends ConsumerWidget {
       trailing: Switch(
         value: ref.watch(writingAutomaticStopwatchProvider),
         onChanged: (value) {
-          vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
+          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
             ref.read(writingAutomaticStopwatchProvider.notifier).state = value;
             await PreferencesController()
                 .writingAutomaticStopwatch

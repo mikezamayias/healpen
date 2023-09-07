@@ -30,7 +30,7 @@ class ThemeColorTile extends ConsumerWidget {
         ],
         selected: {ref.watch(themeColorProvider)},
         onSelectionChanged: (Set<ThemeColor> newSelection) {
-          vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
+          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
             ref.watch(themeColorProvider.notifier).state = newSelection.first;
             log(
               '${newSelection.first}',

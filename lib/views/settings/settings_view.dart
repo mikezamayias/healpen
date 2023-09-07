@@ -51,7 +51,7 @@ class SettingsView extends ConsumerWidget {
     };
 
     return BlueprintView(
-      showAppBarTitle: ref.watch(showAppBarTitle),
+      showAppBarTitle: ref.watch(navigationShowAppBarTitle),
       appBar: const AppBar(
         pathNames: ['Personalize your experience'],
       ),
@@ -68,7 +68,7 @@ class SettingsView extends ConsumerWidget {
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
                     context.navigator.push(
                       MaterialPageRoute(
                         builder: (_) => pageWidgets[title]!.$1,

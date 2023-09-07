@@ -88,7 +88,7 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Skip',
                 onTap: () {
-                  vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
                     goToAuth();
                   });
                 },
@@ -97,7 +97,7 @@ class _OnboardingNavigationBarState
                 titleString: 'Get Started',
                 onTap: () {
                   vibrate(
-                    ref.watch(reduceHapticFeedbackProvider),
+                    ref.watch(navigationReduceHapticFeedbackProvider),
                     () {
                       goToPage(currentPageIndex + 1);
                     },
@@ -110,7 +110,7 @@ class _OnboardingNavigationBarState
                 titleString: 'Back',
                 onTap: () {
                   vibrate(
-                    ref.watch(reduceHapticFeedbackProvider),
+                    ref.watch(navigationReduceHapticFeedbackProvider),
                     () {
                       goToPage(currentPageIndex - 1);
                     },
@@ -126,7 +126,7 @@ class _OnboardingNavigationBarState
                 titleString: 'Back',
                 onTap: () {
                   vibrate(
-                    ref.watch(reduceHapticFeedbackProvider),
+                    ref.watch(navigationReduceHapticFeedbackProvider),
                     () {
                       goToPage(currentPageIndex - 1);
                     },
@@ -137,7 +137,7 @@ class _OnboardingNavigationBarState
                 titleString: 'Next',
                 onTap: () {
                   vibrate(
-                    ref.watch(reduceHapticFeedbackProvider),
+                    ref.watch(navigationReduceHapticFeedbackProvider),
                     () {
                       goToPage(currentPageIndex + 1);
                     },

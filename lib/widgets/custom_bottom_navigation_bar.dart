@@ -43,7 +43,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                   .pages
                   .indexOf(ref.watch(currentPageProvider)),
               onTap: (int index) {
-                vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+                vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
                   ref.watch(currentPageProvider.notifier).state =
                       PageController().pages[index];
                 });

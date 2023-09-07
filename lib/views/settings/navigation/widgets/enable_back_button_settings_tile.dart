@@ -22,15 +22,15 @@ class ShowBackButtonSettingsTile extends ConsumerWidget {
         'return to previous pages.',
       ),
       trailing: Switch(
-        value: ref.watch(showBackButtonProvider),
+        value: ref.watch(navigationShowBackButtonProvider),
         onChanged: (value) {
-          vibrate(ref.watch(reduceHapticFeedbackProvider), () async {
-            ref.read(showBackButtonProvider.notifier).state = value;
+          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
+            ref.read(navigationShowBackButtonProvider.notifier).state = value;
             await PreferencesController()
                 .showBackButton
-                .write(ref.watch(showBackButtonProvider));
+                .write(ref.watch(navigationShowBackButtonProvider));
             log(
-            '${ref.watch(showBackButtonProvider)}',
+            '${ref.watch(navigationShowBackButtonProvider)}',
             name: 'SettingsView:ShowBackButtonSettingsTile',
           );
           });

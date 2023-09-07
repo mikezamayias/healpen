@@ -92,7 +92,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
             ],
             selected: {segments[selectedPage]},
             onSelectionChanged: (Set<String> value) {
-              vibrate(ref.watch(reduceHapticFeedbackProvider), () {
+              vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
                 setState(() {
                   selectedPage = segments.indexOf(value.first);
                   controller.animateToPage(
