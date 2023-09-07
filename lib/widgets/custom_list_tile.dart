@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprung/sprung.dart';
 
+import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
 
-class CustomListTile extends StatelessWidget {
+class CustomListTile extends ConsumerWidget {
   final String? titleString;
   final String? subtitleString;
   final Widget? title;
@@ -51,7 +54,7 @@ class CustomListTile extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final padding = contentPadding ??
         EdgeInsets.symmetric(
           horizontal: gap * 2,
@@ -79,6 +82,14 @@ class CustomListTile extends StatelessWidget {
                       offset: const Offset(0, 3),
                     ),
                 ],
+                onComplete: showcaseLeadingIcon!
+                    ? (_) async {
+                        if (!ref
+                            .watch(navigationReduceHapticFeedbackProvider)) {
+                          await HapticFeedback.vibrate();
+                        }
+                      }
+                    : null,
                 child: leading ??
                     FaIcon(
                       leadingIconData!,
