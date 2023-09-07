@@ -9,14 +9,14 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class WritingStopwatchTile extends ConsumerWidget {
-  const WritingStopwatchTile({Key? key}) : super(key: key);
+class EnableAutomaticStopwatchTile extends ConsumerWidget {
+  const EnableAutomaticStopwatchTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: 'Automatic stopwatch control',
+      titleString: 'Enable automatic stopwatch',
       subtitle: const Text(
         'Pauses the stopwatch when you stop typing and resets it when you clear all text.',
       ),

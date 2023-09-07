@@ -5,7 +5,7 @@ import '../../../extensions/widget_extensions.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
-import 'widgets/writing_stopwatch_tile.dart';
+import 'widgets/enable_automatic_stopwatch_tile.dart';
 
 class SettingsWritingView extends ConsumerWidget {
   const SettingsWritingView({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class SettingsWritingView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
-      const WritingStopwatchTile(),
+      const EnableAutomaticStopwatchTile(),
     ].animateWidgetList();
 
     return BlueprintView(
