@@ -7,6 +7,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../controllers/history_view_controller.dart';
 import '../../../models/note/note_model.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/showHealpenDialog.dart';
+import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/custom_snack_bar.dart';
 
@@ -32,40 +34,48 @@ class NoteTile extends ConsumerWidget {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  final snackBarConfig = SnackBarConfig(
-                    titleString1: entry.isPrivate
-                        ? 'Mark note as not private?'
-                        : 'Mark note as private?',
-                    leadingIconData1: entry.isPrivate
-                        ? FontAwesomeIcons.lockOpen
-                        : FontAwesomeIcons.lock,
-                    trailingWidgets1: [
-                      IconButton.filledTonal(
-                        onPressed: scaffoldMessengerKey
-                            .currentState!.hideCurrentSnackBar,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.check,
+                  showHealpenDialog(
+                    context: context,
+                    customDialog: CustomDialog(
+                      titleString: entry.isPrivate
+                          ? 'Mark note as not private?'
+                          : 'Mark note as private?',
+                      actions: [
+                        CustomListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          titleString: 'Yes',
+                          onTap: () {
+                            HistoryViewController()
+                                .noteTogglePrivate(noteModel: entry)
+                                .then((_) {
+                              CustomSnackBar(
+                                SnackBarConfig(
+                                  titleString1: entry.isPrivate
+                                      ? 'Note marked as not private!'
+                                      : 'Note marked as private!',
+                                  leadingIconData1:
+                                      FontAwesomeIcons.solidCircleCheck,
+                                ),
+                              ).showSnackBar(context, ref);
+                            });
+                            context.navigator.pop();
+                          },
                         ),
-                      ),
-                      SizedBox(width: gap),
-                      IconButton.filledTonal(
-                        onPressed: scaffoldMessengerKey
-                            .currentState!.removeCurrentSnackBar,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.xmark,
+                        SizedBox(width: gap),
+                        CustomListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          titleString: 'No',
+                          onTap: context.navigator.pop,
                         ),
-                      ),
-                    ],
-                    actionAfterSnackBar1: () =>
-                        HistoryViewController().noteTogglePrivate(
-                      noteModel: entry,
+                      ],
                     ),
-                    titleString2: entry.isPrivate
-                        ? 'Note marked as not private!'
-                        : 'Note marked as private!',
-                    leadingIconData2: FontAwesomeIcons.solidCircleCheck,
                   );
-                  CustomSnackBar(snackBarConfig).showSnackBar(context, ref);
                 },
                 backgroundColor: context.theme.colorScheme.primary,
                 foregroundColor: context.theme.colorScheme.onPrimary,
@@ -77,40 +87,50 @@ class NoteTile extends ConsumerWidget {
               SizedBox(width: gap),
               SlidableAction(
                 onPressed: (context) {
-                  final snackBarConfig = SnackBarConfig(
-                    titleString1: entry.isFavorite
-                        ? 'Mark note as not favorite?'
-                        : 'Mark note as favorite?',
-                    leadingIconData1: entry.isFavorite
-                        ? FontAwesomeIcons.star
-                        : FontAwesomeIcons.solidStar,
-                    actionAfterSnackBar1: () =>
-                        HistoryViewController().noteToggleFavorite(
-                      noteModel: entry,
+                  showHealpenDialog(
+                    context: context,
+                    customDialog: CustomDialog(
+                      titleString: entry.isFavorite
+                          ? 'Mark note as not favorite?'
+                          : 'Mark note as favorite?',
+                      actions: [
+                        CustomListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          titleString: 'Yes',
+                          onTap: () {
+                            HistoryViewController()
+                                .noteToggleFavorite(noteModel: entry)
+                                .then((_) {
+                              CustomSnackBar(
+                                SnackBarConfig(
+                                  titleString1: entry.isFavorite
+                                      ? 'Note unmarked as favorite!'
+                                      : 'Note marked as favorite!',
+                                  leadingIconData1:
+                                      FontAwesomeIcons.solidCircleCheck,
+                                ),
+                              ).showSnackBar(context, ref);
+                            });
+                            context.navigator.pop();
+                          },
+                        ),
+                        SizedBox(width: gap),
+                        CustomListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          titleString: 'No',
+                          onTap: () {
+                            context.navigator.pop();
+                          },
+                        ),
+                      ],
                     ),
-                    trailingWidgets1: [
-                      IconButton.filledTonal(
-                        onPressed: scaffoldMessengerKey
-                            .currentState!.hideCurrentSnackBar,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.check,
-                        ),
-                      ),
-                      SizedBox(width: gap),
-                      IconButton.filledTonal(
-                        onPressed: scaffoldMessengerKey
-                            .currentState!.removeCurrentSnackBar,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.xmark,
-                        ),
-                      ),
-                    ],
-                    titleString2: entry.isFavorite
-                        ? 'Note unmarked as favorite!'
-                        : 'Note marked as favorite!',
-                    leadingIconData2: FontAwesomeIcons.solidCircleCheck,
                   );
-                  CustomSnackBar(snackBarConfig).showSnackBar(context, ref);
                 },
                 backgroundColor: context.theme.colorScheme.primary,
                 foregroundColor: context.theme.colorScheme.onPrimary,
@@ -128,34 +148,46 @@ class NoteTile extends ConsumerWidget {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  final snackBarConfig = SnackBarConfig(
-                    titleString1: 'Delete note?',
-                    leadingIconData1: FontAwesomeIcons.trashCan,
-                    trailingWidgets1: [
-                      IconButton.filledTonal(
-                        onPressed: scaffoldMessengerKey
-                            .currentState!.hideCurrentSnackBar,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.check,
+                  showHealpenDialog(
+                    context: context,
+                    customDialog: CustomDialog(
+                      titleString: 'Delete note?',
+                      actions: [
+                        CustomListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          titleString: 'Yes',
+                          onTap: () {
+                            HistoryViewController()
+                                .deleteNote(noteModel: entry)
+                                .then((_) {
+                              CustomSnackBar(
+                                SnackBarConfig(
+                                  titleString1: 'Note deleted!',
+                                  leadingIconData1:
+                                      FontAwesomeIcons.solidCircleCheck,
+                                ),
+                              ).showSnackBar(context, ref);
+                            });
+                            context.navigator.pop();
+                          },
                         ),
-                      ),
-                      SizedBox(width: gap),
-                      IconButton.filledTonal(
-                        onPressed: scaffoldMessengerKey
-                            .currentState!.removeCurrentSnackBar,
-                        icon: const FaIcon(
-                          FontAwesomeIcons.xmark,
+                        SizedBox(width: gap),
+                        CustomListTile(
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          titleString: 'No',
+                          onTap: () {
+                            context.navigator.pop();
+                          },
                         ),
-                      ),
-                    ],
-                    titleString2: 'Note Deleted!',
-                    leadingIconData2: FontAwesomeIcons.solidCircleCheck,
-                    actionAfterSnackBar1: () =>
-                        HistoryViewController().deleteNote(
-                      noteModel: entry,
+                      ],
                     ),
                   );
-                  CustomSnackBar(snackBarConfig).showSnackBar(context, ref);
                 },
                 backgroundColor: context.theme.colorScheme.tertiary,
                 foregroundColor: context.theme.colorScheme.onTertiary,

@@ -8,6 +8,7 @@ import '../../../controllers/writing_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
+import '../../../utils/showHealpenDialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
 
@@ -29,34 +30,30 @@ class PrivateNoteCheckBox extends ConsumerWidget {
             .watch(WritingController().shakePrivateNoteInfoProvider.notifier)
             .state = false;
         PreferencesController().shakePrivateNoteInfo.write(false);
-        showDialog(
+        showHealpenDialog(
           context: context,
-          barrierDismissible: false,
-          barrierColor: context.theme.colorScheme.background.withOpacity(0.8),
-          builder: (BuildContext context) {
-            return CustomDialog(
-              titleString: 'Private note',
-              contentString:
-                  'A private note won\'t be used in analysis and will only be visible in History.',
-              actions: [
-                CustomListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-                  cornerRadius: radius - gap,
-                  responsiveWidth: true,
-                  titleString: 'Okay',
-                  onTap: () {
-                    ref
-                        .watch(WritingController()
-                            .shakePrivateNoteInfoProvider
-                            .notifier)
-                        .state = false;
-                    PreferencesController().shakePrivateNoteInfo.write(false);
-                    context.navigator.pop();
-                  },
-                )
-              ],
-            );
-          },
+          customDialog: CustomDialog(
+            titleString: 'Private note',
+            contentString:
+                'A private note won\'t be used in analysis and will only be visible in History.',
+            actions: [
+              CustomListTile(
+                contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                cornerRadius: radius - gap,
+                responsiveWidth: true,
+                titleString: 'Okay',
+                onTap: () {
+                  ref
+                      .watch(WritingController()
+                          .shakePrivateNoteInfoProvider
+                          .notifier)
+                      .state = false;
+                  PreferencesController().shakePrivateNoteInfo.write(false);
+                  context.navigator.pop();
+                },
+              )
+            ],
+          ),
         );
       },
       titleString: 'Make private',
