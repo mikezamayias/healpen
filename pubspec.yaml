@@ -14,6 +14,7 @@ dependencies:
   dart_openai: ^4.0.0
   envied: ^0.3.0
   extension_google_sign_in_as_googleapis_auth: ^2.0.11
+  feedback: ^2.6.0
   firebase_analytics: ^10.4.3
   firebase_app_check: ^0.1.4+3
   firebase_auth: ^4.6.3

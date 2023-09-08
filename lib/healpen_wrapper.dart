@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:feedback/feedback.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iterum/flutter_iterum.dart';
@@ -49,8 +50,9 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               ref.watch(themeColorProvider.notifier).state = value,
         );
     PreferencesController().shakePrivateNoteInfo.read().then(
-          (bool value) =>
-              ref.watch(writingShakePrivateNoteInfoProvider.notifier).state = value,
+          (bool value) => ref
+              .watch(writingShakePrivateNoteInfoProvider.notifier)
+              .state = value,
         );
     PreferencesController().writingAutomaticStopwatch.read().then(
           (bool value) => ref
@@ -58,8 +60,9 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               .state = value,
         );
     PreferencesController().showBackButton.read().then(
-          (bool value) =>
-              ref.watch(navigationShowBackButtonProvider.notifier).state = value,
+          (bool value) => ref
+              .watch(navigationShowBackButtonProvider.notifier)
+              .state = value,
         );
     PreferencesController().onboardingCompleted.read().then(
           (bool value) => ref
@@ -68,11 +71,13 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               .state = value,
         );
     PreferencesController().reduceHapticFeedback.read().then(
-          (bool value) =>
-              ref.watch(navigationReduceHapticFeedbackProvider.notifier).state = value,
+          (bool value) => ref
+              .watch(navigationReduceHapticFeedbackProvider.notifier)
+              .state = value,
         );
     PreferencesController().showAppBarTitle.read().then(
-          (bool value) => ref.watch(navigationShowAppBarTitle.notifier).state = value,
+          (bool value) =>
+              ref.watch(navigationShowAppBarTitle.notifier).state = value,
         );
     log(
       '${FirebaseAuth.instance.currentUser != null}',
@@ -114,29 +119,44 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   @override
   Widget build(BuildContext context) {
     return HideKeyboard(
-      child: MaterialApp(
-        title: 'Healpen',
-        scaffoldMessengerKey: scaffoldMessengerKey,
-        debugShowCheckedModeBanner: false,
-        navigatorObservers: [
-          ClearFocusNavigatorObserver(),
-        ],
-        themeMode: themeMode(ref.watch(themeAppearanceProvider)),
-        theme: ref.watch(themeProvider),
-        initialRoute: switch (FirebaseAuth.instance.currentUser == null &&
-            !ref.watch(OnboardingController().onboardingCompletedProvider)) {
-          true => '/onboarding',
-          false => switch (FirebaseAuth.instance.currentUser != null) {
-              true => '/healpen',
-              false => '/auth',
-            },
-        },
-        routes: {
-          '/onboarding': (context) => const OnboardingView(),
-          '/auth': (context) => const AuthView(),
-          '/healpen': (context) => const Healpen(),
-          '/note': (context) => const NoteView(),
-        },
+      child: BetterFeedback(
+        theme: FeedbackThemeData(
+          background: ref.watch(themeProvider).colorScheme.surfaceVariant,
+          feedbackSheetColor: ref.watch(themeProvider).colorScheme.background,
+          activeFeedbackModeColor: ref.watch(themeProvider).colorScheme.primary,
+          bottomSheetDescriptionStyle:
+              ref.watch(themeProvider).textTheme.bodyLarge!,
+          drawColors: [
+            Colors.red,
+            Colors.green,
+            Colors.blue,
+            Colors.yellow,
+          ],
+        ),
+        child: MaterialApp(
+          title: 'Healpen',
+          scaffoldMessengerKey: scaffoldMessengerKey,
+          debugShowCheckedModeBanner: false,
+          navigatorObservers: [
+            ClearFocusNavigatorObserver(),
+          ],
+          themeMode: themeMode(ref.watch(themeAppearanceProvider)),
+          theme: ref.watch(themeProvider),
+          initialRoute: switch (FirebaseAuth.instance.currentUser == null &&
+              !ref.watch(OnboardingController().onboardingCompletedProvider)) {
+            true => '/onboarding',
+            false => switch (FirebaseAuth.instance.currentUser != null) {
+                true => '/healpen',
+                false => '/auth',
+              },
+          },
+          routes: {
+            '/onboarding': (context) => const OnboardingView(),
+            '/auth': (context) => const AuthView(),
+            '/healpen': (context) => const Healpen(),
+            '/note': (context) => const NoteView(),
+          },
+        ),
       ),
     );
   }

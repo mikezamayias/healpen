@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -55,59 +56,91 @@ class SettingsView extends ConsumerWidget {
       appBar: const AppBar(
         pathNames: ['Personalize your experience'],
       ),
-      body: Wrap(
-        spacing: gap,
-        runSpacing: gap,
+      body: Stack(
         children: [
-          for (String title in pageWidgets.keys)
-            if (pageWidgets[title]!.$1 is! Placeholder)
-              CustomListTile(
-                responsiveWidth: true,
-                leadingIconData: pageWidgets[title]!.$2,
-                contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-                textColor: context.theme.colorScheme.onPrimary,
-                titleString: title,
-                onTap: () {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                    context.navigator.push(
-                      MaterialPageRoute(
-                        builder: (_) => pageWidgets[title]!.$1,
-                      ),
+          Wrap(
+            spacing: gap,
+            runSpacing: gap,
+            children: [
+              for (String title in pageWidgets.keys)
+                if (pageWidgets[title]!.$1 is! Placeholder)
+                  CustomListTile(
+                    responsiveWidth: true,
+                    leadingIconData: pageWidgets[title]!.$2,
+                    contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                    textColor: context.theme.colorScheme.onPrimary,
+                    titleString: title,
+                    onTap: () {
+                      vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                          () {
+                        context.navigator.push(
+                          MaterialPageRoute(
+                            builder: (_) => pageWidgets[title]!.$1,
+                          ),
+                        );
+                      });
+                    },
+                  ),
+              // CustomListTile(
+              //   responsiveWidth: true,
+              //   leadingIconData: FontAwesomeIcons.palette,
+              //   contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+              //   textColor: context.theme.colorScheme.onPrimary,
+              //   titleString: 'Theme',
+              //   onTap: () {
+              //     showModalBottomSheet(
+              //       context: context,
+              //       useSafeArea: true,
+              //       showDragHandle: true,
+              //       builder: (BuildContext context) {
+              //         return SafeArea(
+              //           child: Padding(
+              //             padding: EdgeInsets.symmetric(horizontal: gap),
+              //             child: Column(
+              //               mainAxisSize: MainAxisSize.min,
+              //               children: [
+              //                 const TextDivider('Theme'),
+              //                 SizedBox(height: gap),
+              //                 const ThemeColorTile(),
+              //                 SizedBox(height: gap),
+              //                 const ThemeAppearanceTile(),
+              //               ],
+              //             ),
+              //           ),
+              //         );
+              //       },
+              //     );
+              //   },
+              // ),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const Spacer(),
+              Center(
+                child: CustomListTile(
+                  responsiveWidth: true,
+                  leadingIconData: FontAwesomeIcons.solidCommentDots,
+                  contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                  textColor: context.theme.colorScheme.onPrimary,
+                  titleString: 'Feedback',
+                  onTap: () {
+                    vibrate(
+                      ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
+                        BetterFeedback.of(context)
+                            .show((UserFeedback feedback) {
+                          // Do something with the feedback
+                        });
+                      },
                     );
-                  });
-                },
+                  },
+                ),
               ),
-          // CustomListTile(
-          //   responsiveWidth: true,
-          //   leadingIconData: FontAwesomeIcons.palette,
-          //   contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-          //   textColor: context.theme.colorScheme.onPrimary,
-          //   titleString: 'Theme',
-          //   onTap: () {
-          //     showModalBottomSheet(
-          //       context: context,
-          //       useSafeArea: true,
-          //       showDragHandle: true,
-          //       builder: (BuildContext context) {
-          //         return SafeArea(
-          //           child: Padding(
-          //             padding: EdgeInsets.symmetric(horizontal: gap),
-          //             child: Column(
-          //               mainAxisSize: MainAxisSize.min,
-          //               children: [
-          //                 const TextDivider('Theme'),
-          //                 SizedBox(height: gap),
-          //                 const ThemeColorTile(),
-          //                 SizedBox(height: gap),
-          //                 const ThemeAppearanceTile(),
-          //               ],
-          //             ),
-          //           ),
-          //         );
-          //       },
-          //     );
-          //   },
-          // ),
+              SizedBox(height: gap * 2),
+            ],
+          ),
         ],
       ),
     );
