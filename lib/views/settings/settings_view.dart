@@ -118,27 +118,24 @@ class SettingsView extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               const Spacer(),
-              Center(
-                child: CustomListTile(
-                  responsiveWidth: true,
-                  leadingIconData: FontAwesomeIcons.solidCommentDots,
-                  contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-                  textColor: context.theme.colorScheme.onPrimary,
-                  titleString: 'Feedback',
-                  onTap: () {
-                    vibrate(
-                      ref.watch(navigationReduceHapticFeedbackProvider),
-                      () {
-                        BetterFeedback.of(context)
-                            .show((UserFeedback feedback) {
-                          // Do something with the feedback
-                        });
-                      },
-                    );
-                  },
-                ),
+              CustomListTile(
+                responsiveWidth: true,
+                leadingIconData: FontAwesomeIcons.solidCommentDots,
+                contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                textColor: context.theme.colorScheme.onPrimary,
+                titleString: 'Feedback',
+                onTap: () {
+                  vibrate(
+                    ref.watch(navigationReduceHapticFeedbackProvider),
+                    () {
+                      BetterFeedback.of(context)
+                          .show((UserFeedback feedback) {
+                        // Do something with the feedback
+                      });
+                    },
+                  );
+                },
               ),
-              SizedBox(height: gap * 2),
             ],
           ),
         ],
