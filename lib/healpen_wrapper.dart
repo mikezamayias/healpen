@@ -126,6 +126,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           activeFeedbackModeColor: ref.watch(themeProvider).colorScheme.primary,
           bottomSheetDescriptionStyle:
               ref.watch(themeProvider).textTheme.bodyLarge!,
+          sheetIsDraggable: false,
+          feedbackSheetHeight: 0.07,
           drawColors: [
             Colors.red,
             Colors.green,
