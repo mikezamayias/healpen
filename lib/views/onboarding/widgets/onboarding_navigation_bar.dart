@@ -89,7 +89,8 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Skip',
                 onTap: () {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
                     goToAuth();
                   });
                 },
@@ -97,12 +98,7 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Get Started',
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      goToPage(currentPageIndex + 1);
-                    },
-                  );
+                  goToPage(currentPageIndex + 1);
                 },
               ),
             ] else if (currentPageIndex ==
@@ -110,12 +106,7 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Back',
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      goToPage(currentPageIndex - 1);
-                    },
-                  );
+                  goToPage(currentPageIndex - 1);
                 },
               ),
               OnboardingButton(
@@ -131,23 +122,13 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Back',
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      goToPage(currentPageIndex - 1);
-                    },
-                  );
+                  goToPage(currentPageIndex - 1);
                 },
               ),
               OnboardingButton(
                 titleString: 'Next',
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      goToPage(currentPageIndex + 1);
-                    },
-                  );
+                  goToPage(currentPageIndex + 1);
                 },
               ),
             ],

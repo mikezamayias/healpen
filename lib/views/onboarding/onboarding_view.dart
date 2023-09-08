@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -6,7 +7,9 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
+import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
+import '../../utils/helper_functions.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/onboarding_navigation_bar.dart';
 
@@ -15,15 +18,6 @@ class OnboardingView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(OnboardingController().pageControllerProvider).addListener(() {
-      ref
-              .watch(OnboardingController().currentPageIndexProvider.notifier)
-              .state =
-          ref
-              .watch(OnboardingController().pageControllerProvider)
-              .page!
-              .round();
-    });
     return BlueprintView(
       body: Padding(
         padding: EdgeInsets.only(top: gap),
@@ -36,8 +30,18 @@ class OnboardingView extends ConsumerWidget {
                 clipBehavior: Clip.none,
                 controller:
                     ref.watch(OnboardingController().pageControllerProvider),
-                physics: const NeverScrollableScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: OnboardingController().onboardingScreenViews.length,
+                onPageChanged: (value) {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
+                    ref
+                        .watch(OnboardingController()
+                            .currentPageIndexProvider
+                            .notifier)
+                        .state = value;
+                  });
+                },
                 // depending on the current index, animate slide from left or right and opacity
                 itemBuilder: (context, index) {
                   final bool active = index ==
