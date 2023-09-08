@@ -112,7 +112,7 @@ jobs:
       - name: GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/${{env.BUILD_NAME}}.apk,build/app/outputs/ipa/release/${{env.BUILD_NAME}}.ipa"
+          artifacts: "build/app/outputs/apk/release/${{env.BUILD_NAME}}.apk,build/ios/ipa/${{env.BUILD_NAME}}.ipa"
           name: ${{env.BUILD_NAME}}
           tag: ${{env.BUILD_NAME}}
           body: ${{github.event.head_commit.message}}
