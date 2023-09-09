@@ -142,13 +142,13 @@ class SettingsView extends ConsumerWidget {
                           ref
                               .read(Feedback.screenshotPathProvider.notifier)
                               .state = feedbackScreenshotResult;
+                          context.navigator.push(
+                            MaterialPageRoute(
+                              builder: (_) => const FeedbackForm(),
+                            ),
+                          );
                         });
                       });
-                      context.navigator.push(
-                        MaterialPageRoute(
-                          builder: (_) => const FeedbackForm(),
-                        ),
-                      );
                     },
                   );
                 },
