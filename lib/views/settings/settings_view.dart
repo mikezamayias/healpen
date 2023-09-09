@@ -87,37 +87,6 @@ class SettingsView extends ConsumerWidget {
                       });
                     },
                   ),
-              // CustomListTile(
-              //   responsiveWidth: true,
-              //   leadingIconData: FontAwesomeIcons.palette,
-              //   contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-              //   textColor: context.theme.colorScheme.onPrimary,
-              //   titleString: 'Theme',
-              //   onTap: () {
-              //     showModalBottomSheet(
-              //       context: context,
-              //       useSafeArea: true,
-              //       showDragHandle: true,
-              //       builder: (BuildContext context) {
-              //         return SafeArea(
-              //           child: Padding(
-              //             padding: EdgeInsets.symmetric(horizontal: gap),
-              //             child: Column(
-              //               mainAxisSize: MainAxisSize.min,
-              //               children: [
-              //                 const TextDivider('Theme'),
-              //                 SizedBox(height: gap),
-              //                 const ThemeColorTile(),
-              //                 SizedBox(height: gap),
-              //                 const ThemeAppearanceTile(),
-              //               ],
-              //             ),
-              //           ),
-              //         );
-              //       },
-              //     );
-              //   },
-              // ),
             ],
           ),
           Column(
@@ -140,8 +109,8 @@ class SettingsView extends ConsumerWidget {
                           userFeedback.screenshot,
                         ).then((String feedbackScreenshotResult) {
                           ref
-                              .read(Feedback.screenshotPathProvider.notifier)
-                              .state = feedbackScreenshotResult;
+                              .watch(feedbackControllerProvider.notifier)
+                              .setScreenshotPath(feedbackScreenshotResult);
                           context.navigator.push(
                             MaterialPageRoute(
                               builder: (_) => const FeedbackForm(),

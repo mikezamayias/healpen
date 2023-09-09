@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -26,16 +27,17 @@ class GitHubAPI {
     String? screenshotUrl,
     List<String> labels,
   ) async {
+    log(
+      '$screenshotUrl',
+      name: 'GitHubAPI:createIssue:screenshotUrl',
+    );
     final github = GitHub(auth: Authentication.withToken(token));
     final repoSlug = RepositorySlug(owner, repo);
     final issue = IssueRequest(
       title: title,
-      body: '''
-      Body:
-      $feedbackText
-      Screenshot:
-      ${screenshotUrl != null}
-      ''',
+      body: screenshotUrl != null
+          ? 'Body:\n$feedbackText\n\nScreenshot:\n$screenshotUrl'
+          : 'Body:\n$feedbackText',
       labels: labels,
     );
     await github.issues.create(repoSlug, issue);

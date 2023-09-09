@@ -17,16 +17,11 @@ import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../blueprint/blueprint_view.dart';
 
-class FeedbackForm extends ConsumerStatefulWidget {
+class FeedbackForm extends ConsumerWidget {
   const FeedbackForm({super.key});
 
   @override
-  ConsumerState<FeedbackForm> createState() => _FeedbackFormState();
-}
-
-class _FeedbackFormState extends ConsumerState<FeedbackForm> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> widgets = [
       CustomListTile(
         contentPadding: EdgeInsets.all(gap),
@@ -41,7 +36,7 @@ class _FeedbackFormState extends ConsumerState<FeedbackForm> {
             ),
             style: context.theme.textTheme.titleLarge,
             onChanged: (String value) =>
-                ref.watch(Feedback.titleProvider.notifier).state = value,
+                ref.watch(feedbackControllerProvider.notifier).setTitle(value),
           ),
         ),
       ),
@@ -59,20 +54,21 @@ class _FeedbackFormState extends ConsumerState<FeedbackForm> {
             ),
             style: context.theme.textTheme.titleLarge,
             onChanged: (String value) =>
-                ref.watch(Feedback.bodyProvider.notifier).state = value,
+                ref.watch(feedbackControllerProvider.notifier).setBody(value),
           ),
         ),
       ),
       CustomListTile(
         titleString: 'Include Screenshot',
         contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-        trailingIconData: ref.watch(Feedback.includeScreenshotProvider)
-            ? FontAwesomeIcons.solidSquareCheck
-            : FontAwesomeIcons.square,
+        trailingIconData:
+            ref.watch(feedbackControllerProvider).includeScreenshot
+                ? FontAwesomeIcons.solidSquareCheck
+                : FontAwesomeIcons.square,
         onTap: () {
           vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-            ref.watch(Feedback.includeScreenshotProvider.notifier).state =
-                !ref.watch(Feedback.includeScreenshotProvider.notifier).state;
+            ref.watch(feedbackControllerProvider.notifier).setIncludeScreenshot(
+                !ref.watch(feedbackControllerProvider).includeScreenshot);
           });
         },
       ),
@@ -83,73 +79,46 @@ class _FeedbackFormState extends ConsumerState<FeedbackForm> {
           spacing: gap,
           runSpacing: gap,
           children: FeedbackLabel.values.map((FeedbackLabel label) {
-            // return CustomListTile(
-            //   cornerRadius: radius - gap,
-            //   responsiveWidth: true,
-            //   contentPadding: EdgeInsets.all(gap),
-            //   backgroundColor: Color(label.color),
-            //   titleString: label.name,
-            //   subtitleString: label.description,
-            //   textColor:
-            //       Color(label.color).isLight ? Colors.black : Colors.white,
-            //   leadingIconData:
-            //       ref.watch(Feedback.labelsProvider).contains(label.name)
-            //           ? FontAwesomeIcons.solidSquareCheck
-            //           : FontAwesomeIcons.square,
-            //   onTap: () {
-            //     vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-            //       log(
-            //         label.name,
-            //         name: 'FeedbackForm:tempLabels',
-            //       );
-            //       if (ref.watch(Feedback.labelsProvider).contains(label.name)) {
-            //         ref
-            //             .read(Feedback.labelsProvider.notifier)
-            //             .state
-            //             .remove(label.name);
-            //       } else {
-            //         ref
-            //             .read(Feedback.labelsProvider.notifier)
-            //             .state
-            //             .add(label.name);
-            //       }
-            //     });
-            //   },
-            // );
-            return ChoiceChip(
-              label: Text(label.name),
-              padding: EdgeInsets.all(gap),
+            return CustomListTile(
+              cornerRadius: radius - gap,
+              responsiveWidth: true,
+              contentPadding: EdgeInsets.all(gap),
               backgroundColor: Color(label.color),
-              selectedColor: Color(label.color),
-              // Ensure the background color remains the same when selected
-              labelStyle: context.theme.textTheme.titleSmall!.copyWith(
-                color: Color(label.color).isLight ? Colors.black : Colors.white,
-              ),
-              onSelected: (bool value) {
+              titleString: label.name,
+              subtitleString: label.description,
+              textColor:
+                  Color(label.color).isLight ? Colors.black : Colors.white,
+              leadingIconData: ref
+                      .watch(feedbackControllerProvider)
+                      .labels!
+                      .contains(label.name)
+                  ? FontAwesomeIcons.solidSquareCheck
+                  : FontAwesomeIcons.square,
+              onTap: () {
                 vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
                   log(
                     label.name,
-                    name: 'FeedbackForm:tempLabels',
-                  );
-                  if (ref.watch(Feedback.labelsProvider).contains(label.name)) {
-                    ref
-                        .read(Feedback.labelsProvider.notifier)
-                        .state
-                        .remove(label.name);
-                  } else {
-                    ref
-                        .read(Feedback.labelsProvider.notifier)
-                        .state
-                        .add(label.name);
-                  }
-                });
+                      name: 'FeedbackForm:label.name',
+                    );
+                    log(
+                      '${ref.watch(feedbackControllerProvider).labels!.contains(label.name)}',
+                      name: 'FeedbackForm:labelsProvider',
+                    );
+                    if (ref
+                        .watch(feedbackControllerProvider)
+                        .labels!
+                        .contains(label.name)) {
+                      ref
+                          .watch(feedbackControllerProvider.notifier)
+                          .removeLabel(label.name);
+                    } else {
+                      ref
+                          .watch(feedbackControllerProvider.notifier)
+                          .addLabel(label.name);
+                    }
+                  },
+                );
               },
-              selected: ref.watch(Feedback.labelsProvider).contains(label.name),
-              selectedShadowColor: Color(label.color),
-              shadowColor: Color(label.color),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(radius),
-              ),
             );
           }).toList(),
         ),
@@ -163,8 +132,68 @@ class _FeedbackFormState extends ConsumerState<FeedbackForm> {
             titleString: 'Submit',
             onTap: () {
               vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                createIssueFromFeedback(context);
-                // context.navigator.pop();
+                GitHubAPI api = GitHubAPI(
+                  Env.healpenGithubToken,
+                  'mikezamayias',
+                  'healpen',
+                );
+                String? screenshotUrl;
+                if (ref
+                    .watch(feedbackControllerProvider.notifier)
+                    .includeScreenshot) {
+                  assert(
+                    ref
+                            .watch(feedbackControllerProvider.notifier)
+                            .screenshotPath !=
+                        '',
+                    'Screenshot path is empty',
+                  );
+                  api
+                      .uploadScreenshotToFirebase(File(ref
+                          .watch(feedbackControllerProvider.notifier)
+                          .screenshotPath))
+                      .then((String value) => screenshotUrl = value);
+                }
+                log(
+                  '$screenshotUrl',
+                  name: 'FeedbackForm:createIssueFromFeedback:screenshotUrl',
+                );
+                log(
+                  ref.watch(feedbackControllerProvider.notifier).title,
+                  name: 'FeedbackForm:createIssueFromFeedback:title',
+                );
+                log(
+                  ref.watch(feedbackControllerProvider.notifier).body,
+                  name: 'FeedbackForm:createIssueFromFeedback:body',
+                );
+                log(
+                  ref
+                      .watch(feedbackControllerProvider.notifier)
+                      .labels
+                      .toString(),
+                  name: 'FeedbackForm:createIssueFromFeedback:labels',
+                );
+                log(
+                  ref
+                      .watch(feedbackControllerProvider.notifier)
+                      .includeScreenshot
+                      .toString(),
+                  name:
+                      'FeedbackForm:createIssueFromFeedback:includeScreenshot',
+                );
+                api
+                    .createIssue(
+                        ref.watch(feedbackControllerProvider.notifier).title,
+                        ref.watch(feedbackControllerProvider.notifier).body,
+                        screenshotUrl,
+                        ref
+                            .watch(feedbackControllerProvider.notifier)
+                            .labels!
+                            .toList())
+                    .then((value) {
+                  // ref.watch(feedbackControllerProvider.notifier).reset();
+                  // context.navigator.pop();
+                });
               });
             },
           ),
@@ -197,46 +226,6 @@ class _FeedbackFormState extends ConsumerState<FeedbackForm> {
           separatorBuilder: (_, __) => SizedBox(height: gap),
         ),
       ),
-    );
-  }
-
-  Future<void> createIssueFromFeedback(BuildContext context) async {
-    GitHubAPI api = GitHubAPI(
-      Env.healpenGithubToken,
-      'mikezamayias',
-      'healpen',
-    );
-    String? screenshotUrl;
-    if (ref.read(Feedback.includeScreenshotProvider) &&
-        ref.read(Feedback.screenshotPathProvider).isNotEmpty) {
-      screenshotUrl = await api.uploadScreenshotToFirebase(
-          File(ref.read(Feedback.screenshotPathProvider)));
-    }
-    log(
-      '$screenshotUrl',
-      name: 'screenshotUrl',
-    );
-    log(
-      ref.read(Feedback.titleProvider),
-      name: 'title',
-    );
-    log(
-      ref.read(Feedback.bodyProvider),
-      name: 'body',
-    );
-    log(
-      ref.read(Feedback.labelsProvider).toString(),
-      name: 'labels',
-    );
-    log(
-      ref.read(Feedback.includeScreenshotProvider).toString(),
-      name: 'includeScreenshotProvider',
-    );
-    await api.createIssue(
-      ref.read(Feedback.titleProvider),
-      ref.read(Feedback.bodyProvider),
-      screenshotUrl,
-      ref.read(Feedback.labelsProvider).toList(),
     );
   }
 }
