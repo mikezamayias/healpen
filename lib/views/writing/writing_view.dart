@@ -12,7 +12,7 @@ import '../blueprint/blueprint_view.dart';
 import 'widgets/private_note_check_box.dart';
 import 'widgets/save_note_button.dart';
 import 'widgets/stopwatch_tile.dart';
-import 'widgets/writing_entry.dart';
+import 'widgets/writing_text_field.dart';
 
 class WritingView extends ConsumerStatefulWidget {
   const WritingView({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class _WritingViewState extends ConsumerState<WritingView>
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            const Expanded(child: WritingEntry()),
+            const Expanded(child: WritingTextField()),
             Padding(
               padding: EdgeInsets.only(top: gap),
               child: const StopwatchTile(),
