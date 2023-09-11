@@ -25,8 +25,7 @@ class _OnboardingNavigationBarState
     ref
         .watch(OnboardingController().onboardingCompletedProvider.notifier)
         .state = true;
-    PreferencesController()
-        .onboardingCompleted
+    PreferencesController.onboardingCompleted
         .write(ref.watch(OnboardingController().onboardingCompletedProvider));
     navigator.pushReplacement(
       PageRouteBuilder(

@@ -41,41 +41,41 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   void didChangeDependencies() async {
-    PreferencesController().themeAppearance.read().then(
+    PreferencesController.themeAppearance.read().then(
           (ThemeAppearance value) =>
               ref.watch(themeAppearanceProvider.notifier).state = value,
         );
-    PreferencesController().themeColor.read().then(
+    PreferencesController.themeColor.read().then(
           (ThemeColor value) =>
               ref.watch(themeColorProvider.notifier).state = value,
         );
-    PreferencesController().shakePrivateNoteInfo.read().then(
+    PreferencesController.shakePrivateNoteInfo.read().then(
           (bool value) => ref
               .watch(writingShakePrivateNoteInfoProvider.notifier)
               .state = value,
         );
-    PreferencesController().writingAutomaticStopwatch.read().then(
+    PreferencesController.writingAutomaticStopwatch.read().then(
           (bool value) => ref
               .watch(writingAutomaticStopwatchProvider.notifier)
               .state = value,
         );
-    PreferencesController().showBackButton.read().then(
+    PreferencesController.showBackButton.read().then(
           (bool value) => ref
               .watch(navigationShowBackButtonProvider.notifier)
               .state = value,
         );
-    PreferencesController().onboardingCompleted.read().then(
+    PreferencesController.onboardingCompleted.read().then(
           (bool value) => ref
               .watch(
                   OnboardingController().onboardingCompletedProvider.notifier)
               .state = value,
         );
-    PreferencesController().reduceHapticFeedback.read().then(
+    PreferencesController.reduceHapticFeedback.read().then(
           (bool value) => ref
               .watch(navigationReduceHapticFeedbackProvider.notifier)
               .state = value,
         );
-    PreferencesController().showAppBarTitle.read().then(
+    PreferencesController.showAppBarTitle.read().then(
           (bool value) =>
               ref.watch(navigationShowAppBarTitle.notifier).state = value,
         );

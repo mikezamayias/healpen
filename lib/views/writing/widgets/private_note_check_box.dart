@@ -26,8 +26,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       leadingIconData: FontAwesomeIcons.circleInfo,
       leadingOnTap: () {
         ref.watch(writingShakePrivateNoteInfoProvider.notifier).state = false;
-        PreferencesController()
-            .shakePrivateNoteInfo
+        PreferencesController.shakePrivateNoteInfo
             .write(ref.watch(writingShakePrivateNoteInfoProvider));
         showHealpenDialog(
           context: context,
@@ -46,8 +45,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
                   ref
                       .watch(writingShakePrivateNoteInfoProvider.notifier)
                       .state = false;
-                  PreferencesController()
-                      .shakePrivateNoteInfo
+                  PreferencesController.shakePrivateNoteInfo
                       .write(ref.watch(writingShakePrivateNoteInfoProvider));
                   context.navigator.pop();
                 },

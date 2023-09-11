@@ -62,7 +62,7 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   void _startTimer() async {
-    bool automaticStopwatch = await PreferencesController()
+    bool automaticStopwatch = await PreferencesController
         .writingAutomaticStopwatch
         .read(); // Read the automatic stopwatch preference
     _stopwatch.start();
@@ -94,7 +94,7 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   Future<void> handleSaveNote() async {
-    bool automaticStopwatch = await PreferencesController()
+    bool automaticStopwatch = await PreferencesController
         .writingAutomaticStopwatch
         .read(); // Read the automatic stopwatch preference
     log(

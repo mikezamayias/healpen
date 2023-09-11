@@ -9,70 +9,57 @@ class PreferencesController {
   factory PreferencesController() => _instance;
 
   /// Private constructor
-  PreferencesController._() {
-    _models = [
-      shakePrivateNoteInfo,
-      themeColor,
-      themeAppearance,
-      writingAutomaticStopwatch,
-      showBackButton,
-      onboardingCompleted,
-    ];
-  }
+  PreferencesController._();
 
   /// Preference models
-  final shakePrivateNoteInfo = PreferenceModel<bool>(
+  static final shakePrivateNoteInfo = PreferenceModel<bool>(
     'shakePrivateNoteInfo',
     true,
   );
-  final themeColor = PreferenceModel<ThemeColor>(
+  static final themeColor = PreferenceModel<ThemeColor>(
     'themeColor',
     ThemeColor.teal,
   );
-  final themeAppearance = PreferenceModel<ThemeAppearance>(
+  static final themeAppearance = PreferenceModel<ThemeAppearance>(
     'themeAppearance',
     ThemeAppearance.system,
   );
-  final writingAutomaticStopwatch = PreferenceModel<bool>(
+  static final writingAutomaticStopwatch = PreferenceModel<bool>(
     'writingAutomaticStopwatch',
     false,
   );
-  final showBackButton = PreferenceModel<bool>(
+  static final showBackButton = PreferenceModel<bool>(
     'showBackButton',
     true,
   );
-  final reduceHapticFeedback = PreferenceModel<bool>(
+  static final reduceHapticFeedback = PreferenceModel<bool>(
     'reduceHapticFeedback',
     false,
   );
-  final onboardingCompleted = PreferenceModel<bool>(
+  static final onboardingCompleted = PreferenceModel<bool>(
     'onboardingCompleted',
     false,
   );
-  final showAppBarTitle = PreferenceModel<bool>(
+  static final showAppBarTitle = PreferenceModel<bool>(
     'showAppBarTitle',
     true,
   );
 
-  /// List of all preference models
-  late List<PreferenceModel> _models;
-
-  /// Read all preferences
-  Future<List> readAll() async {
-    return [for (PreferenceModel model in _models) await model.read()];
-  }
-
-  /// Write all preferences
-  Future<void> writeAll() async {
-    for (var model in _models) {
-      await model.write(model.value);
-    }
-  }
+  Map<String, dynamic> preferences = {
+    shakePrivateNoteInfo.key: shakePrivateNoteInfo.value,
+    themeColor.key: themeColor.value,
+    themeAppearance.key: themeAppearance.value,
+    writingAutomaticStopwatch.key: writingAutomaticStopwatch.value,
+    showBackButton.key: showBackButton.value,
+    reduceHapticFeedback.key: reduceHapticFeedback.value,
+    onboardingCompleted.key: onboardingCompleted.value,
+    showAppBarTitle.key: showAppBarTitle.value,
+  };
 
   /// Reset all preferences
   Future<void> resetAll() async {
-    for (PreferenceModel model in _models) {
-      await model.reset();
-    }
+    preferences.forEach((key, value) async {
+      await PreferenceModel(key, value).reset();
+    });
   }
 }
