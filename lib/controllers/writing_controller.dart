@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_openai/dart_openai.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,7 +27,6 @@ class WritingController extends StateNotifier<NoteModel> {
   // A factory constructor that returns the singleton instance.
   factory WritingController() => _singleton;
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Stopwatch _stopwatch = Stopwatch();
   Timer? _timer;
   Timer? _delayTimer;
@@ -52,9 +50,8 @@ class WritingController extends StateNotifier<NoteModel> {
           _pauseTimerAndLogInput();
         }
         if (_stopwatch.elapsed.inSeconds > 0) {
+          state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
           _stopwatch.reset();
-          state = state.copyWith(duration: 0); // Reset the seconds in the
-          // state
         }
       } else {
         _logInput();
@@ -156,71 +153,38 @@ Value: ''',
       echo: true,
     );
     String response = apiResult.choices.first.text;
-    log(
-      response,
-      name: 'WritingController:_openAIsSentimentAnalysis():response',
-    );
     String result = response.split('Value: ').last.trim();
-    log(
-      'Result: $result',
-      name: 'WritingController:_openAIsSentimentAnalysis()',
-    );
     int sentiment = int.parse(result);
     return sentiment;
   }
 
   void _updateOpenAIsSentimentAnalysis(int sentiment) async {
-    log(
-      'Updating sentiment analysis',
-      name: 'WritingController:_updateOpenAIsSentimentAnalysis()',
-    );
     state = state.copyWith(sentiment: sentiment);
   }
 
   Future<void> updateSentimentAndSaveNote() async {
-    log(
-      'Updating sentiment and saving note',
-      name: 'WritingController:updateSentimentAndSaveNote()',
-    );
     _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
     await FirestoreService.saveNote(state);
   }
 
   Future<void> updateAllUserNotes() async {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    QuerySnapshot<Map<String, dynamic>> collection = await _firestore
-        .collection('writing-temp')
-        .doc(userId)
-        .collection('notes')
-        .where('isPrivate', isEqualTo: false)
-        .get();
+    QuerySnapshot<Map<String, dynamic>> collection =
+        await FirestoreService.writingCollectionReference()
+            .where('isPrivate', isEqualTo: false)
+            .get();
     for (QueryDocumentSnapshot<Map<String, dynamic>> element
         in collection.docs) {
-      await addOpenAIsSentimentAnalysisToDocument(element, userId);
+      await addOpenAIsSentimentAnalysisToDocument(element);
       // await removeOpenAIsSentimentAnalysisToDocument(element, userId);
     }
   }
 
   Future<void> addOpenAIsSentimentAnalysisToDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
-    String userId,
   ) async {
     if (!element.data().containsKey('sentiment')) {
-      log(
-        'Note is missing sentiment analysis, updating sentiment',
-        name: 'WritingController:updateAllUserNotes():${element.id}',
-      );
-      log(
-        '${element.data()}',
-        name: 'WritingController:updateAllUserNotes():${element.id}',
-      );
       state = NoteModel.fromDocument(element.data());
       _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-      log(
-        '$state',
-        name:
-            'WritingController:updateAllUserNotes():${element.id}:NoteModel.fromDocument(element.data())',
-      );
       await FirestoreService.writingCollectionReference()
           .doc(state.timestamp.toString())
           .update(state.toDocument());
@@ -229,7 +193,6 @@ Value: ''',
 
   Future<void> removeOpenAIsSentimentAnalysisToDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
-    String userId,
   ) async {
     if (element.data().containsKey('sentiment') ||
         element.data()['isPrivate']) {

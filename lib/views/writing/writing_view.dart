@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_animate/flutter_animate.dart';
@@ -53,11 +51,6 @@ class _WritingViewState extends ConsumerState<WritingView>
     final userName = user?.displayName;
     WritingController.writingAutomaticStopwatch =
         ref.watch(writingAutomaticStopwatchProvider);
-    WritingController().updateAllUserNotes().then((_) {
-      log('Updated all user notes');
-    }).catchError((error) {
-      log('$error', name: 'Error updating all user notes');
-    });
     return BlueprintView(
       showAppBarTitle: ref.watch(navigationShowAppBarTitle),
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)
