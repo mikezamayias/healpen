@@ -53,7 +53,7 @@ class WritingController extends StateNotifier<NoteModel> {
         }
         if (_stopwatch.elapsed.inSeconds > 0) {
           _stopwatch.reset();
-          state = state.copyWith(null, duration: 0); // Reset the seconds in the
+          state = state.copyWith(duration: 0); // Reset the seconds in the
           // state
         }
       } else {
@@ -68,7 +68,7 @@ class WritingController extends StateNotifier<NoteModel> {
         .read(); // Read the automatic stopwatch preference
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      state = state.copyWith(null, duration: _stopwatch.elapsed.inSeconds);
+      state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
     });
     if (automaticStopwatch) {
       _delayTimer =
@@ -110,12 +110,11 @@ class WritingController extends StateNotifier<NoteModel> {
       _delayTimer?.cancel();
     }
     state = state.copyWith(
-      null,
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
     await FirestoreService.saveNote(state);
-    textController.clear();
     resetNote();
+    textController.clear();
   }
 
   void resetNote() {
@@ -123,7 +122,7 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   void updatePrivate(bool bool) {
-    state = state.copyWith(null, isPrivate: bool);
+    state = state.copyWith(isPrivate: bool);
   }
 
   Future<int> _openAIsSentimentAnalysis() async {
@@ -175,10 +174,7 @@ Value: ''',
       'Updating sentiment analysis',
       name: 'WritingController:_updateOpenAIsSentimentAnalysis()',
     );
-    state = state.copyWith(
-      null,
-      sentiment: sentiment,
-    );
+    state = state.copyWith(sentiment: sentiment);
   }
 
   Future<void> updateSentimentAndSaveNote() async {
@@ -225,10 +221,7 @@ Value: ''',
         name:
             'WritingController:updateAllUserNotes():${element.id}:NoteModel.fromDocument(element.data())',
       );
-      await _firestore
-          .collection('writing-temp')
-          .doc(userId)
-          .collection('notes')
+      await FirestoreService.writingCollectionReference()
           .doc(state.timestamp.toString())
           .update(state.toDocument());
     }
@@ -240,10 +233,7 @@ Value: ''',
   ) async {
     if (element.data().containsKey('sentiment') ||
         element.data()['isPrivate']) {
-      _firestore
-          .collection('writing-temp')
-          .doc(userId)
-          .collection('notes')
+      FirestoreService.writingCollectionReference()
           .doc(element.id)
           .update({'sentiment': FieldValue.delete()}).then((_) {
         log(

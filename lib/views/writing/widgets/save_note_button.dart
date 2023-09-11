@@ -45,62 +45,6 @@ class SaveNoteButton extends ConsumerWidget {
                   actionAfterSnackBar1: writingController.handleSaveNote,
                 ),
               ).showSnackBar(context, ref);
-              // showHealpenDialog(
-              //   context: context,
-              //   doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
-              //   customDialog: CustomDialog(
-              //     titleString: 'Save note?',
-              //     actions: [
-              //       CustomListTile(
-              //         contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-              //         cornerRadius: radius - gap,
-              //         responsiveWidth: true,
-              //         titleString: 'Yes',
-              //         onTap: () {
-              //           context.navigator.pop(true);
-              //         },
-              //       ),
-              //       SizedBox(width: gap),
-              //       CustomListTile(
-              //         contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-              //         cornerRadius: radius - gap,
-              //         responsiveWidth: true,
-              //         titleString: 'No',
-              //         onTap: () {
-              //           context.navigator.pop();
-              //         },
-              //       ),
-              //     ],
-              //   ),
-              // ).then((exit) {
-              //   if (exit == null) return;
-              //   if (exit) {
-              //     CustomSnackBar(
-              //       SnackBarConfig(
-              //         titleString1: 'Saving note...',
-              //         leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
-              //         trailingWidgets1: [
-              //           CustomListTile(
-              //             contentPadding: EdgeInsets.symmetric(
-              //               horizontal: gap,
-              //             ),
-              //             cornerRadius: radius - gap,
-              //             responsiveWidth: true,
-              //             backgroundColor:
-              //                 context.theme.colorScheme.primaryContainer,
-              //             textColor:
-              //                 context.theme.colorScheme.onPrimaryContainer,
-              //             onTap: scaffoldMessengerKey
-              //                 .currentState!.removeCurrentSnackBar,
-              //             titleString: 'Cancel',
-              //             leadingIconData: FontAwesomeIcons.xmark,
-              //           ),
-              //         ],
-              //         actionAfterSnackBar1: writingController.handleSaveNote,
-              //       ),
-              //     ).showSnackBar(context, ref);
-              //   }
-              // });
             }
           : null,
       backgroundColor:
