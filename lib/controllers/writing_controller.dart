@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/note/note_model.dart';
+import '../services/firestore_service.dart';
 import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
@@ -103,7 +104,6 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     _stopwatch.reset();
     _stopwatch.stop();
-    // _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
     _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
     if (automaticStopwatch) {
       _timer?.cancel();
@@ -113,23 +113,9 @@ class WritingController extends StateNotifier<NoteModel> {
       null,
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
-    await _saveNoteToFirebase();
+    await FirestoreService.saveNote(state);
     textController.clear();
     resetNote();
-  }
-
-  Future<void> _saveNoteToFirebase() async {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    log(
-      state.toDocument().toString(),
-      name: '_saveEntryToFirebase(userId: $userId)',
-    );
-    return _firestore
-        .collection('writing-temp')
-        .doc(userId)
-        .collection('notes')
-        .doc(state.timestamp.toString())
-        .set(state.toDocument());
   }
 
   void resetNote() {
@@ -139,22 +125,6 @@ class WritingController extends StateNotifier<NoteModel> {
   void updatePrivate(bool bool) {
     state = state.copyWith(null, isPrivate: bool);
   }
-
-  // Future<AnalyzeSentimentResponse> _googlesSentimentAnalysis() async {
-  //   return await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
-  //       .documents
-  //       .analyzeSentiment(
-  //         AnalyzeSentimentRequest.fromJson(
-  //           {
-  //             'document': {
-  //               'type': 'PLAIN_TEXT',
-  //               'content': state.content,
-  //             },
-  //             'encodingType': 'UTF8',
-  //           },
-  //         ),
-  //       );
-  // }
 
   Future<int> _openAIsSentimentAnalysis() async {
     final labels = [
@@ -200,9 +170,7 @@ Value: ''',
     return sentiment;
   }
 
-  void _updateOpenAIsSentimentAnalysis(
-    int sentiment
-  ) async {
+  void _updateOpenAIsSentimentAnalysis(int sentiment) async {
     log(
       'Updating sentiment analysis',
       name: 'WritingController:_updateOpenAIsSentimentAnalysis()',
@@ -219,7 +187,7 @@ Value: ''',
       name: 'WritingController:updateSentimentAndSaveNote()',
     );
     _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-    await _saveNoteToFirebase();
+    await FirestoreService.saveNote(state);
   }
 
   Future<void> updateAllUserNotes() async {
