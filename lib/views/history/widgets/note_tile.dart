@@ -8,6 +8,7 @@ import '../../../controllers/history_view_controller.dart';
 import '../../../models/note/note_model.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -53,10 +54,14 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'Yes',
                           onTap: () {
-                            context.navigator.pop(true);
+                            vibrate(
+                              ref.watch(navigationReduceHapticFeedbackProvider),
+                              () {
+                                context.navigator.pop(true);
+                              },
+                            );
                           },
                         ),
-                        SizedBox(width: gap),
                         CustomListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: gap * 2),
@@ -64,7 +69,12 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'No',
                           onTap: () {
-                            context.navigator.pop(false);
+                            vibrate(
+                              ref.watch(navigationReduceHapticFeedbackProvider),
+                              () {
+                                context.navigator.pop(false);
+                              },
+                            );
                           },
                         ),
                       ],
@@ -80,6 +90,31 @@ class NoteTile extends ConsumerWidget {
                           leadingIconData1: entry.isPrivate
                               ? FontAwesomeIcons.lockOpen
                               : FontAwesomeIcons.lock,
+                          trailingWidgets1: [
+                            CustomListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: gap,
+                              ),
+                              cornerRadius: radius - gap,
+                              responsiveWidth: true,
+                              backgroundColor:
+                                  context.theme.colorScheme.primaryContainer,
+                              textColor:
+                                  context.theme.colorScheme.onPrimaryContainer,
+                              onTap: () {
+                                vibrate(
+                                  ref.watch(
+                                      navigationReduceHapticFeedbackProvider),
+                                  () {
+                                    scaffoldMessengerKey
+                                        .currentState!.removeCurrentSnackBar;
+                                  },
+                                );
+                              },
+                              titleString: 'Cancel',
+                              leadingIconData: FontAwesomeIcons.xmark,
+                            ),
+                          ],
                           actionAfterSnackBar1: () async =>
                               HistoryViewController()
                                   .noteTogglePrivate(noteModel: entry),
@@ -115,10 +150,14 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'Yes',
                           onTap: () {
-                            context.navigator.pop(true);
+                            vibrate(
+                              ref.watch(navigationReduceHapticFeedbackProvider),
+                              () {
+                                context.navigator.pop(true);
+                              },
+                            );
                           },
                         ),
-                        SizedBox(width: gap),
                         CustomListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: gap * 2),
@@ -126,7 +165,12 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'No',
                           onTap: () {
-                            context.navigator.pop(false);
+                            vibrate(
+                              ref.watch(navigationReduceHapticFeedbackProvider),
+                              () {
+                                context.navigator.pop(true);
+                              },
+                            );
                           },
                         ),
                       ],
@@ -184,10 +228,14 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'Yes',
                           onTap: () {
-                            context.navigator.pop(true);
+                            vibrate(
+                              ref.watch(navigationReduceHapticFeedbackProvider),
+                              () {
+                                context.navigator.pop(true);
+                              },
+                            );
                           },
                         ),
-                        SizedBox(width: gap),
                         CustomListTile(
                           contentPadding:
                               EdgeInsets.symmetric(horizontal: gap * 2),
@@ -195,7 +243,12 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'No',
                           onTap: () {
-                            context.navigator.pop(false);
+                            vibrate(
+                              ref.watch(navigationReduceHapticFeedbackProvider),
+                              () {
+                                context.navigator.pop(false);
+                              },
+                            );
                           },
                         ),
                       ],
@@ -222,8 +275,16 @@ class NoteTile extends ConsumerWidget {
                                     context.theme.colorScheme.primaryContainer,
                                 textColor: context
                                     .theme.colorScheme.onPrimaryContainer,
-                                onTap: scaffoldMessengerKey
-                                    .currentState!.removeCurrentSnackBar,
+                                onTap: () {
+                                  vibrate(
+                                    ref.watch(
+                                        navigationReduceHapticFeedbackProvider),
+                                    () {
+                                      scaffoldMessengerKey
+                                          .currentState!.removeCurrentSnackBar;
+                                    },
+                                  );
+                                },
                                 titleString: 'Cancel',
                                 leadingIconData: FontAwesomeIcons.xmark,
                               ),
@@ -251,10 +312,17 @@ class NoteTile extends ConsumerWidget {
               style: context.theme.textTheme.titleMedium!
                   .copyWith(color: context.theme.colorScheme.onPrimary),
             ),
-            onTap: () => context.navigator.pushNamed(
-              '/note',
-              arguments: entry,
-            ),
+            onTap: () {
+              vibrate(
+                ref.watch(navigationReduceHapticFeedbackProvider),
+                () {
+                  context.navigator.pushNamed(
+                    '/note',
+                    arguments: entry,
+                  );
+                },
+              );
+            },
           ),
         ),
       ),
