@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/page_controller.dart' as page_controller;
 import 'providers/settings_providers.dart';
+import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 
@@ -24,8 +26,11 @@ class Healpen extends ConsumerWidget {
                 .state = value;
           });
         },
-        itemBuilder: (context, index) =>
-            page_controller.PageController().pages[index].widget,
+        itemBuilder: (context, index) => page_controller.PageController()
+            .pages[index]
+            .widget
+            .animate()
+            .fade(duration: emphasizedDuration, curve: emphasizedCurve),
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
     );

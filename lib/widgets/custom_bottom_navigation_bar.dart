@@ -31,8 +31,8 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           child: Padding(
             padding: EdgeInsets.all(gap),
             child: SalomonBottomBar(
-              duration: standardDuration,
-              curve: standardCurve,
+              duration: emphasizedDuration,
+              curve: emphasizedCurve,
               margin: EdgeInsets.zero,
               itemShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(radius / 2)),

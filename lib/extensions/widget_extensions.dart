@@ -32,11 +32,11 @@ extension WidgetExtensions on Widget {
 
   Widget animateSlideInFromBottom() => animate()
       .fade(duration: standardDuration)
-      .slideY(begin: 10, curve: standardCurve);
+      .slideY(begin: 1, curve: standardCurve);
 
   Widget animateSlideInFromTop() => animate()
       .fade(duration: standardDuration)
-      .slideY(begin: -10, curve: standardCurve);
+      .slideY(begin: -1, curve: standardCurve);
 
   Widget animateBottomNavigationBar(BuildContext context) =>
       animateSlideInFromTop().animate();
