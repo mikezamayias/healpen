@@ -97,3 +97,9 @@ void animateToPage(PageController pageController, int index) {
     curve: emphasizedCurve,
   );
 }
+
+void goToPage(PageController pageController, int index) {
+  pageController.jumpToPage(
+    index,
+  );
+}

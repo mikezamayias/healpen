@@ -41,7 +41,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                   ref.watch(HealpenController().currentPageIndexProvider),
               onTap: (int index) {
                 vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                  animateToPage(
+                  goToPage(
                     ref.watch(HealpenController().pageControllerProvider),
                     index,
                   );
