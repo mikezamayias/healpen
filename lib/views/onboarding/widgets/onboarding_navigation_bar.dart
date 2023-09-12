@@ -89,7 +89,7 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Get Started',
                 onTap: () {
-                  goToPage(
+                  animateToPage(
                     ref.watch(OnboardingController().pageControllerProvider),
                     currentPageIndex + 1,
                   );
@@ -100,7 +100,7 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Back',
                 onTap: () {
-                  goToPage(
+                  animateToPage(
                     ref.watch(OnboardingController().pageControllerProvider),
                     currentPageIndex - 1,
                   );
@@ -119,7 +119,7 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Back',
                 onTap: () {
-                  goToPage(
+                  animateToPage(
                     ref.watch(OnboardingController().pageControllerProvider),
                     currentPageIndex - 1,
                   );
@@ -128,7 +128,7 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Next',
                 onTap: () {
-                  goToPage(
+                  animateToPage(
                     ref.watch(OnboardingController().pageControllerProvider),
                     currentPageIndex + 1,
                   );

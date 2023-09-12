@@ -90,7 +90,7 @@ void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
   }
 }
 
-void goToPage(PageController pageController, int index) {
+void animateToPage(PageController pageController, int index) {
   pageController.animateToPage(
     index,
     duration: emphasizedDuration,
