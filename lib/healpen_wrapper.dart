@@ -120,21 +120,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   Widget build(BuildContext context) {
     return HideKeyboard(
       child: BetterFeedback(
-        theme: FeedbackThemeData(
-          background: ref.watch(themeProvider).colorScheme.surfaceVariant,
-          feedbackSheetColor: ref.watch(themeProvider).colorScheme.background,
-          activeFeedbackModeColor: ref.watch(themeProvider).colorScheme.primary,
-          bottomSheetDescriptionStyle:
-              ref.watch(themeProvider).textTheme.bodyLarge!,
-          sheetIsDraggable: false,
-          feedbackSheetHeight: 0.07,
-          drawColors: [
-            Colors.red,
-            Colors.green,
-            Colors.blue,
-            Colors.yellow,
-          ],
-        ),
+        theme: ref.watch(feedbackThemeProvider),
         child: MaterialApp(
           title: 'Healpen',
           scaffoldMessengerKey: scaffoldMessengerKey,

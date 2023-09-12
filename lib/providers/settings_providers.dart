@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,6 +18,23 @@ final themeProvider = StateProvider<ThemeData>(
   (ref) => createTheme(
     ref.watch(themeColorProvider).color,
     brightness(ref.watch(themeAppearanceProvider)),
+  ),
+);
+
+final feedbackThemeProvider = StateProvider<FeedbackThemeData>(
+  (ref) => FeedbackThemeData(
+    background: ref.watch(themeProvider).colorScheme.surfaceVariant,
+    feedbackSheetColor: ref.watch(themeProvider).colorScheme.background,
+    activeFeedbackModeColor: ref.watch(themeProvider).colorScheme.primary,
+    bottomSheetDescriptionStyle: ref.watch(themeProvider).textTheme.bodyLarge!,
+    sheetIsDraggable: true,
+    feedbackSheetHeight: 0.2,
+    drawColors: [
+      Colors.red,
+      Colors.green,
+      Colors.blue,
+      Colors.yellow,
+    ],
   ),
 );
 
