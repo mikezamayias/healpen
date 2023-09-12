@@ -6,9 +6,9 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../../../../controllers/page_controller.dart';
 import '../../../../models/page_model.dart';
-import '../../../../providers/page_providers.dart';
 import '../../../extensions/string_extensions.dart';
 import '../../../utils/constants.dart';
+import '../controllers/healpen/healpen_controller.dart';
 import '../extensions/widget_extensions.dart';
 import '../providers/settings_providers.dart';
 import '../utils/helper_functions.dart';
@@ -27,8 +27,6 @@ class CustomBottomNavigationBar extends ConsumerWidget {
       child: SafeArea(
         child: PhysicalModel(
           color: context.theme.colorScheme.surfaceVariant,
-          // shadowColor: context.theme.colorScheme.shadow,
-          // elevation: radius,
           borderRadius: BorderRadius.all(Radius.circular(radius)),
           child: Padding(
             padding: EdgeInsets.all(gap),
@@ -39,13 +37,14 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               itemShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(radius / 2)),
               ),
-              currentIndex: PageController()
-                  .pages
-                  .indexOf(ref.watch(currentPageProvider)),
+              currentIndex:
+                  ref.watch(HealpenController().currentPageIndexProvider),
               onTap: (int index) {
                 vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                  ref.watch(currentPageProvider.notifier).state =
-                      PageController().pages[index];
+                  goToPage(
+                    ref.watch(HealpenController().pageControllerProvider),
+                    index,
+                  );
                 });
               },
               // selectedColorOpacity: 0,
@@ -57,8 +56,8 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                       (PageModel pageModel) => SalomonBottomBarItem(
                         icon: FaIcon(
                           pageModel.icon,
-                          color: PageController().pages.indexOf(
-                                      ref.watch(currentPageProvider)) ==
+                          color: ref.watch(HealpenController()
+                                      .currentPageIndexProvider) ==
                                   PageController().pages.indexOf(pageModel)
                               ? context.theme.colorScheme.onPrimary
                               : context.theme.colorScheme.primary,

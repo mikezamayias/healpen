@@ -6,6 +6,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../enums/app_theming.dart';
 import '../themes/blueprint_theme.dart';
+import 'constants.dart';
 
 SystemUiOverlayStyle getSystemUIOverlayStyle(
   ThemeData theme,
@@ -87,4 +88,12 @@ void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
   } else {
     callback();
   }
+}
+
+void goToPage(PageController pageController, int index) {
+  pageController.animateToPage(
+    index,
+    duration: emphasizedDuration,
+    curve: emphasizedCurve,
+  );
 }

@@ -51,14 +51,6 @@ class _OnboardingNavigationBarState
     );
   }
 
-  void goToPage(int index) {
-    ref.watch(OnboardingController().pageControllerProvider).animateToPage(
-          index,
-          duration: emphasizedDuration,
-          curve: emphasizedCurve,
-        );
-  }
-
   @override
   Widget build(BuildContext context) {
     int currentPageIndex = ref.watch(
@@ -97,7 +89,10 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Get Started',
                 onTap: () {
-                  goToPage(currentPageIndex + 1);
+                  goToPage(
+                    ref.watch(OnboardingController().pageControllerProvider),
+                    currentPageIndex + 1,
+                  );
                 },
               ),
             ] else if (currentPageIndex ==
@@ -105,7 +100,10 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Back',
                 onTap: () {
-                  goToPage(currentPageIndex - 1);
+                  goToPage(
+                    ref.watch(OnboardingController().pageControllerProvider),
+                    currentPageIndex - 1,
+                  );
                 },
               ),
               OnboardingButton(
@@ -121,13 +119,19 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Back',
                 onTap: () {
-                  goToPage(currentPageIndex - 1);
+                  goToPage(
+                    ref.watch(OnboardingController().pageControllerProvider),
+                    currentPageIndex - 1,
+                  );
                 },
               ),
               OnboardingButton(
                 titleString: 'Next',
                 onTap: () {
-                  goToPage(currentPageIndex + 1);
+                  goToPage(
+                    ref.watch(OnboardingController().pageControllerProvider),
+                    currentPageIndex + 1,
+                  );
                 },
               ),
             ],
