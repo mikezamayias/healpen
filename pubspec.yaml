@@ -12,6 +12,7 @@ dependencies:
   collection: ^1.17.1
   cupertino_icons: ^1.0.5
   dart_openai: ^4.0.0
+  device_info_plus: ^9.0.3
   envied: ^0.3.0
   extension_google_sign_in_as_googleapis_auth: ^2.0.11
   feedback: ^2.6.0
@@ -41,6 +42,7 @@ dependencies:
   googleapis_auth: ^1.4.1
   http: ^1.1.0
   json_annotation: ^4.8.0
+  package_info_plus: ^4.1.0
   path_provider: ^2.1.1
   responsive_sizer: ^3.1.1
   rive: ^0.11.4
