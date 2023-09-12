@@ -5,7 +5,7 @@ import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, Feedback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // import 'package:http/http.dart' as http;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../controllers/feedback/feedback.dart';
@@ -104,19 +104,29 @@ class SettingsView extends ConsumerWidget {
                     ref.watch(navigationReduceHapticFeedbackProvider),
                     () {
                       BetterFeedback.of(context)
-                          .show((UserFeedback userFeedback) {
-                        writeImageToStorage(
+                          .show((UserFeedback userFeedback) async {
+                        ref
+                            .watch(feedbackControllerProvider.notifier)
+                            .bodyTextController
+                            .text = userFeedback.text;
+                        String feedbackScreenshotResult =
+                            await writeImageToStorage(
                           userFeedback.screenshot,
-                        ).then((String feedbackScreenshotResult) {
-                          ref
-                              .watch(feedbackControllerProvider.notifier)
-                              .setScreenshotPath(feedbackScreenshotResult);
+                        );
+                        ref
+                            .watch(feedbackControllerProvider.notifier)
+                            .setScreenshotPath(feedbackScreenshotResult);
+                      });
+                      ref
+                          .watch(feedbackControllerProvider.notifier)
+                          .addListener((FeedbackModel state) {
+                        if (state.screenshotPath.isNotEmpty) {
                           context.navigator.push(
                             MaterialPageRoute(
                               builder: (_) => const FeedbackForm(),
                             ),
                           );
-                        });
+                        }
                       });
                     },
                   );
