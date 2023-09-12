@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
@@ -32,8 +31,6 @@ class CustomSnackBar {
               }
             });
           }
-        } else {
-          Slidable.of(context)?.close();
         }
       });
     });
