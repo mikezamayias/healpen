@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final feedbackControllerProvider =
@@ -7,9 +8,10 @@ final feedbackControllerProvider =
 
 class FeedbackController extends StateNotifier<FeedbackModel> {
   FeedbackController._() : super(FeedbackModel(labels: []));
-  static final FeedbackController _singleton = FeedbackController._();
+  static final FeedbackController _instance = FeedbackController._();
+  factory FeedbackController() => _instance;
 
-  factory FeedbackController() => _singleton;
+  final TextEditingController bodyTextController = TextEditingController();
 
   void setTitle(String title) {
     state = state.copyWith(title: title);
@@ -49,7 +51,6 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
 
   bool get includeScreenshot => state.includeScreenshot;
 
-
   @override
   String toString() => 'FeedbackController(state: $state)';
 }
@@ -57,31 +58,31 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
 class FeedbackModel {
   String title;
   String body;
-  String screenshotPath;
   List<String>? labels;
   bool includeScreenshot;
+  String screenshotPath;
 
   FeedbackModel({
     this.title = '',
     this.body = '',
-    this.screenshotPath = '',
     this.labels,
     this.includeScreenshot = true,
+    this.screenshotPath = '',
   });
 
   FeedbackModel copyWith({
     String? title,
     String? body,
-    String? screenshotPath,
     List<String>? labels,
     bool? includeScreenshot,
+    String? screenshotPath,
   }) {
     return FeedbackModel(
       title: title ?? this.title,
       body: body ?? this.body,
-      screenshotPath: screenshotPath ?? this.screenshotPath,
       labels: labels ?? this.labels,
       includeScreenshot: includeScreenshot ?? this.includeScreenshot,
+      screenshotPath: screenshotPath ?? this.screenshotPath,
     );
   }
 
