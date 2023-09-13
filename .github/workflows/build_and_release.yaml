@@ -85,6 +85,7 @@ jobs:
       - name: Build .env file
         run: |
           echo "OPEN_AI_API_KEY=${{secrets.OPEN_AI_API_KEY}}" >> .env
+          echo "HEALPEN_GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}}" >> .env
       - name: Build generated files
         run: dart run build_runner build --delete-conflicting-outputs
       - name: Build APK
