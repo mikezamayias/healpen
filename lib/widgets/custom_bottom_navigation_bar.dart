@@ -41,10 +41,13 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                   ref.watch(HealpenController().currentPageIndexProvider),
               onTap: (int index) {
                 vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                  goToPage(
-                    ref.watch(HealpenController().pageControllerProvider),
-                    index,
-                  );
+                  ref
+                      .watch(HealpenController().pageControllerProvider)
+                      .animateToPage(
+                        index,
+                        duration: standardDuration,
+                        curve: standardCurve,
+                      );
                 });
               },
               // selectedColorOpacity: 0,
@@ -62,14 +65,23 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                               ? context.theme.colorScheme.onPrimary
                               : context.theme.colorScheme.primary,
                         ),
-                        title: Text(
-                          pageModel.label.toTitleCase(),
-                          style: TextStyle(
-                            fontFamily:
-                                context.theme.textTheme.bodySmall!.fontFamily,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.6,
-                            color: context.theme.colorScheme.onPrimary,
+                        title: AnimatedOpacity(
+                          duration: shortStandardDuration,
+                          curve: standardCurve,
+                          opacity: ref.watch(HealpenController()
+                                      .currentPageIndexProvider) ==
+                                  PageController().pages.indexOf(pageModel)
+                              ? 1
+                              : 0,
+                          child: Text(
+                            pageModel.label.toTitleCase(),
+                            style: TextStyle(
+                              fontFamily:
+                                  context.theme.textTheme.bodySmall!.fontFamily,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.6,
+                              color: context.theme.colorScheme.onPrimary,
+                            ),
                           ),
                         ),
                       ),
