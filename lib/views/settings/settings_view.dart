@@ -1,12 +1,8 @@
-import 'dart:io';
-
-import 'package:feedback/feedback.dart' hide FeedbackController;
 import 'package:flutter/material.dart' hide AppBar, ListTile, Feedback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../controllers/feedback/feedback.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
@@ -14,9 +10,9 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
+import 'feedback/settings_feedback_tile.dart';
 import 'navigation/settings_navigation_view.dart';
 import 'theme/settings_theme_view.dart';
-import 'widgets/feedback_form.dart';
 import 'writing/settings_writing_view.dart';
 
 class SettingsView extends ConsumerWidget {
@@ -60,75 +56,30 @@ class SettingsView extends ConsumerWidget {
       appBar: const AppBar(
         pathNames: ['Personalize your experience'],
       ),
-      body: Stack(
+      body: Wrap(
+        spacing: gap,
+        runSpacing: gap,
         children: [
-          Wrap(
-            spacing: gap,
-            runSpacing: gap,
-            children: [
-              for (String title in pageWidgets.keys)
-                if (pageWidgets[title]!.$1 is! Placeholder)
-                  CustomListTile(
-                    responsiveWidth: true,
-                    leadingIconData: pageWidgets[title]!.$2,
-                    contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-                    textColor: context.theme.colorScheme.onPrimary,
-                    titleString: title,
-                    onTap: () {
-                      vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
-                          () {
-                        context.navigator.push(
-                          MaterialPageRoute(
-                            builder: (_) => pageWidgets[title]!.$1,
-                          ),
-                        );
-                      });
-                    },
-                  ),
-            ],
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const Spacer(),
+          for (String title in pageWidgets.keys)
+            if (pageWidgets[title]!.$1 is! Placeholder)
               CustomListTile(
                 responsiveWidth: true,
-                leadingIconData: FontAwesomeIcons.solidCommentDots,
+                leadingIconData: pageWidgets[title]!.$2,
                 contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
                 textColor: context.theme.colorScheme.onPrimary,
-                titleString: 'Feedback',
+                titleString: title,
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      final feedbackController =
-                          ref.watch(feedbackControllerProvider.notifier);
-                      BetterFeedback.of(context)
-                          .show((UserFeedback userFeedback) {
-                        FeedbackController.writeImageToStorage(
-                                userFeedback.screenshot)
-                            .then((String screenshotPath) {
-                          feedbackController.bodyTextController.text =
-                              userFeedback.text;
-                          feedbackController.setScreenshotPath(screenshotPath);
-                          FeedbackController.uploadScreenshotToFirebase(
-                            File(feedbackController.screenshotPath),
-                          ).then((String screenshotUrl) {
-                            feedbackController.setScreenshotPath(screenshotUrl);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const FeedbackForm(),
-                              ),
-                            );
-                          });
-                        });
-                      });
-                    },
-                  );
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
+                    context.navigator.push(
+                      MaterialPageRoute(
+                        builder: (_) => pageWidgets[title]!.$1,
+                      ),
+                    );
+                  });
                 },
               ),
-            ],
-          ),
+          const SettingsFeedbackTile(),
         ],
       ),
     );
