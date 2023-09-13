@@ -1,12 +1,10 @@
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:feedback/feedback.dart';
+import 'package:feedback/feedback.dart' hide FeedbackController;
 import 'package:flutter/material.dart' hide AppBar, ListTile, Feedback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 
 import '../../controllers/feedback/feedback.dart';
 import '../../providers/settings_providers.dart';
@@ -103,30 +101,27 @@ class SettingsView extends ConsumerWidget {
                   vibrate(
                     ref.watch(navigationReduceHapticFeedbackProvider),
                     () {
+                      final feedbackController =
+                          ref.watch(feedbackControllerProvider.notifier);
                       BetterFeedback.of(context)
-                          .show((UserFeedback userFeedback) async {
-                        ref
-                            .watch(feedbackControllerProvider.notifier)
-                            .bodyTextController
-                            .text = userFeedback.text;
-                        String feedbackScreenshotResult =
-                            await writeImageToStorage(
-                          userFeedback.screenshot,
-                        );
-                        ref
-                            .watch(feedbackControllerProvider.notifier)
-                            .setScreenshotPath(feedbackScreenshotResult);
-                      });
-                      ref
-                          .watch(feedbackControllerProvider.notifier)
-                          .addListener((FeedbackModel state) {
-                        if (state.screenshotPath.isNotEmpty) {
-                          context.navigator.push(
-                            MaterialPageRoute(
-                              builder: (_) => const FeedbackForm(),
-                            ),
-                          );
-                        }
+                          .show((UserFeedback userFeedback) {
+                        FeedbackController.writeImageToStorage(
+                                userFeedback.screenshot)
+                            .then((String screenshotPath) {
+                          feedbackController.bodyTextController.text =
+                              userFeedback.text;
+                          feedbackController.setScreenshotPath(screenshotPath);
+                          FeedbackController.uploadScreenshotToFirebase(
+                            File(feedbackController.screenshotPath),
+                          ).then((String screenshotUrl) {
+                            feedbackController.setScreenshotPath(screenshotUrl);
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const FeedbackForm(),
+                              ),
+                            );
+                          });
+                        });
                       });
                     },
                   );
@@ -138,12 +133,4 @@ class SettingsView extends ConsumerWidget {
       ),
     );
   }
-}
-
-Future<String> writeImageToStorage(Uint8List feedbackScreenshot) async {
-  final Directory output = await getTemporaryDirectory();
-  final String screenshotFilePath = '${output.path}/feedback.png';
-  final File screenshotFile = File(screenshotFilePath);
-  await screenshotFile.writeAsBytes(feedbackScreenshot);
-  return screenshotFilePath;
 }

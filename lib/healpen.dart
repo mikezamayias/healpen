@@ -15,10 +15,9 @@ class Healpen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      body: PageView.builder(
+      body: PageView(
         controller: ref.watch(HealpenController().pageControllerProvider),
         physics: const NeverScrollableScrollPhysics(),
-        itemCount: page_controller.PageController().pages.length,
         onPageChanged: (value) {
           vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
             ref
@@ -26,11 +25,18 @@ class Healpen extends ConsumerWidget {
                 .state = value;
           });
         },
-        itemBuilder: (context, index) => page_controller.PageController()
-            .pages[index]
-            .widget
-            .animate()
-            .fade(duration: emphasizedDuration, curve: emphasizedCurve),
+        // itemCount: page_controller.PageController().pages.length,
+        // itemBuilder: (context, index) => page_controller.PageController()
+        //     .pages[index]
+        //     .widget
+        //     .animate()
+        //     .fade(duration: emphasizedDuration, curve: emphasizedCurve),
+        children: [
+          for (final page in page_controller.PageController().pages)
+            page.widget
+                .animate()
+                .fade(duration: emphasizedDuration, curve: emphasizedCurve),
+        ],
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
     );

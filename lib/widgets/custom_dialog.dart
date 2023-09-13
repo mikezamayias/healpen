@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../utils/constants.dart';
 import 'custom_list_tile.dart';
@@ -9,6 +10,7 @@ import 'custom_list_tile.dart';
 class CustomDialog extends StatelessWidget {
   final String titleString;
   final String? contentString;
+  final Widget? contentWidget;
   final Color? backgroundColor;
   final List<CustomListTile> actions;
 
@@ -16,9 +18,14 @@ class CustomDialog extends StatelessWidget {
     super.key,
     required this.titleString,
     this.contentString,
+    this.contentWidget,
     this.backgroundColor,
     required this.actions,
-  });
+  }) : assert(
+          contentString == null || contentWidget == null,
+          'Either contentString or contentWidget must be provided, '
+          'but not both',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -27,64 +34,68 @@ class CustomDialog extends StatelessWidget {
         sigmaX: gap * 2,
         sigmaY: gap * 2,
       ),
-      child: Dialog(
-        insetPadding: EdgeInsets.all(gap * 2),
+      child: AlertDialog(
+        insetPadding: EdgeInsets.zero,
+        titlePadding: EdgeInsets.all(gap),
+        contentPadding: EdgeInsets.zero,
+        buttonPadding: EdgeInsets.zero,
+        actionsOverflowButtonSpacing: gap,
+        actionsPadding: EdgeInsets.only(
+          left: gap,
+          right: gap,
+          bottom: gap,
+          top: contentString != null || contentWidget != null ? gap : 0,
+        ),
         elevation: 0,
         backgroundColor:
             backgroundColor ?? context.theme.colorScheme.primaryContainer,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),
-        child: Padding(
-          padding: EdgeInsets.all(gap),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                titleString,
-                style: context.theme.textTheme.headlineSmall!.copyWith(
-                  color: context.theme.colorScheme.onPrimaryContainer,
-                ),
-                textAlign: TextAlign.start,
-              ),
-              if (contentString != null) ...[
-                SizedBox(height: gap),
-                Container(
-                  padding: EdgeInsets.all(gap),
+        title: Text(
+          titleString,
+          style: context.theme.textTheme.headlineSmall!.copyWith(
+            color: context.theme.colorScheme.onPrimaryContainer,
+          ),
+          textAlign: TextAlign.start,
+        ),
+        content: contentString != null || contentWidget != null
+            ? Container(
+                width: 100.w - 2 * gap,
+                padding: EdgeInsets.symmetric(horizontal: gap),
+                child: Container(
                   decoration: BoxDecoration(
                     color: context.theme.colorScheme.background,
                     borderRadius: BorderRadius.circular(radius - gap),
                   ),
-                  child: Text(
-                    contentString!,
-                    style: context.theme.textTheme.bodyLarge!.copyWith(
-                      color: context.theme.colorScheme.onBackground,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
+                  padding: EdgeInsets.all(gap),
+                  child: contentString != null && contentWidget == null
+                      ? Text(
+                          contentString!,
+                          style: context.theme.textTheme.bodyLarge!.copyWith(
+                            color: context.theme.colorScheme.onBackground,
+                          ),
+                          textAlign: TextAlign.start,
+                        )
+                      : contentWidget,
+                ),
+              )
+            : null,
+        actions: actions.isNotEmpty
+            ? [
+                // add a sized box with width of gap between
+                // the children
+                for (int i = 0; i < actions.length; i++) ...[
+                  actions[i],
+                  if (i != actions.length - 1) SizedBox(width: gap),
+                ]
+              ]
+            : [
+                CustomListTile(
+                  titleString: 'OK',
+                  onTap: () => context.navigator.pop(),
                 ),
               ],
-              if (actions.isNotEmpty) ...[
-                Padding(
-                  padding: EdgeInsets.only(top: gap),
-                  child: Row(
-                    // add a sized box between children to add space between them
-                    children: [
-                      for (int i = 0; i < actions.length; i++) ...[
-                        actions[i],
-                        if (i != actions.length - 1) ...[
-                          SizedBox(width: gap),
-                        ],
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
       ),
     );
   }
