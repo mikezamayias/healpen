@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_animate/flutter_animate.dart';
@@ -14,7 +12,7 @@ import '../blueprint/blueprint_view.dart';
 import 'widgets/private_note_check_box.dart';
 import 'widgets/save_note_button.dart';
 import 'widgets/stopwatch_tile.dart';
-import 'widgets/writing_entry.dart';
+import 'widgets/writing_text_field.dart';
 
 class WritingView extends ConsumerStatefulWidget {
   const WritingView({Key? key}) : super(key: key);
@@ -53,11 +51,6 @@ class _WritingViewState extends ConsumerState<WritingView>
     final userName = user?.displayName;
     WritingController.writingAutomaticStopwatch =
         ref.watch(writingAutomaticStopwatchProvider);
-    WritingController().updateAllUserNotes().then((_) {
-      log('Updated all user notes');
-    }).catchError((error) {
-      log('$error', name: 'Error updating all user notes');
-    });
     return BlueprintView(
       showAppBarTitle: ref.watch(navigationShowAppBarTitle),
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)
@@ -78,7 +71,7 @@ class _WritingViewState extends ConsumerState<WritingView>
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            const Expanded(child: WritingEntry()),
+            const Expanded(child: WritingTextField()),
             Padding(
               padding: EdgeInsets.only(top: gap),
               child: const StopwatchTile(),

@@ -1,30 +1,23 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../widgets/custom_dialog.dart';
-import 'constants.dart';
+import 'helper_functions.dart';
 
-Future<T?> showHealpenDialog<T>({
+Future showHealpenDialog({
   required BuildContext context,
   required bool doVibrate,
   required CustomDialog customDialog,
 }) async {
   if (doVibrate) {
-    HapticFeedback.vibrate();
+    vibrate(doVibrate, () {});
   }
   return showDialog(
     context: context,
+    useRootNavigator: false,
     barrierDismissible: false,
+    useSafeArea: true,
     barrierColor: context.theme.colorScheme.background.withOpacity(0.5),
-    builder: (BuildContext context) => BackdropFilter(
-      filter: ImageFilter.blur(
-        sigmaX: gap * 2,
-        sigmaY: gap * 2,
-      ),
-      child: customDialog,
-    ),
+    builder: (_) => customDialog,
   );
 }

@@ -39,7 +39,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
   @override
   Widget build(BuildContext context) {
     final NoteModel noteModel =
-    ModalRoute.of(context)!.settings.arguments as NoteModel;
+        ModalRoute.of(context)!.settings.arguments as NoteModel;
     final showAnalysis = !noteModel.isPrivate;
     final pages = [
       DetailsPage(noteModel: noteModel),
@@ -66,44 +66,48 @@ class _NoteViewState extends ConsumerState<NoteView> {
             ),
           ),
           if (showAnalysis)
-            SegmentedButton(
-            showSelectedIcon: false,
-            segments: [
-              ButtonSegment(
-                value: 'details',
-                label: const Text('Details'),
-                icon: FaIcon(
-                  FontAwesomeIcons.circleInfo,
-                  color: selectedPage == 0
-                      ? theme.colorScheme.onPrimary
-                      : theme.colorScheme.onBackground,
-                ),
+            Padding(
+              padding: EdgeInsets.only(top: gap),
+              child: SegmentedButton(
+                showSelectedIcon: false,
+                segments: [
+                  ButtonSegment(
+                    value: 'details',
+                    label: const Text('Details'),
+                    icon: FaIcon(
+                      FontAwesomeIcons.circleInfo,
+                      color: selectedPage == 0
+                          ? theme.colorScheme.onPrimary
+                          : theme.colorScheme.onBackground,
+                    ),
+                  ),
+                  ButtonSegment(
+                    value: 'analysis',
+                    label: const Text('Analysis'),
+                    icon: FaIcon(
+                      FontAwesomeIcons.chartPie,
+                      color: selectedPage == 1
+                          ? theme.colorScheme.onPrimary
+                          : theme.colorScheme.onBackground,
+                    ),
+                  ),
+                ],
+                selected: {segments[selectedPage]},
+                onSelectionChanged: (Set<String> value) {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
+                    setState(() {
+                      selectedPage = segments.indexOf(value.first);
+                      controller.animateToPage(
+                        selectedPage,
+                        duration: emphasizedDuration,
+                        curve: emphasizedCurve,
+                      );
+                    });
+                  });
+                },
               ),
-                ButtonSegment(
-                value: 'analysis',
-                label: const Text('Analysis'),
-                icon: FaIcon(
-                  FontAwesomeIcons.chartPie,
-                  color: selectedPage == 1
-                      ? theme.colorScheme.onPrimary
-                      : theme.colorScheme.onBackground,
-                ),
-              ),
-            ],
-            selected: {segments[selectedPage]},
-            onSelectionChanged: (Set<String> value) {
-              vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                setState(() {
-                  selectedPage = segments.indexOf(value.first);
-                  controller.animateToPage(
-                    selectedPage,
-                    duration: emphasizedDuration,
-                    curve: emphasizedCurve,
-                  );
-                });
-              });
-            },
-          )
+            )
         ],
       ),
     );

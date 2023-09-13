@@ -6,9 +6,9 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../../../../controllers/page_controller.dart';
 import '../../../../models/page_model.dart';
-import '../../../../providers/page_providers.dart';
 import '../../../extensions/string_extensions.dart';
 import '../../../utils/constants.dart';
+import '../controllers/healpen/healpen_controller.dart';
 import '../extensions/widget_extensions.dart';
 import '../providers/settings_providers.dart';
 import '../utils/helper_functions.dart';
@@ -27,25 +27,27 @@ class CustomBottomNavigationBar extends ConsumerWidget {
       child: SafeArea(
         child: PhysicalModel(
           color: context.theme.colorScheme.surfaceVariant,
-          // shadowColor: context.theme.colorScheme.shadow,
-          // elevation: radius,
           borderRadius: BorderRadius.all(Radius.circular(radius)),
           child: Padding(
             padding: EdgeInsets.all(gap),
             child: SalomonBottomBar(
-              duration: standardDuration,
-              curve: standardCurve,
+              duration: emphasizedDuration,
+              curve: emphasizedCurve,
               margin: EdgeInsets.zero,
               itemShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(radius / 2)),
               ),
-              currentIndex: PageController()
-                  .pages
-                  .indexOf(ref.watch(currentPageProvider)),
+              currentIndex:
+                  ref.watch(HealpenController().currentPageIndexProvider),
               onTap: (int index) {
                 vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                  ref.watch(currentPageProvider.notifier).state =
-                      PageController().pages[index];
+                  ref
+                      .watch(HealpenController().pageControllerProvider)
+                      .animateToPage(
+                        index,
+                        duration: standardDuration,
+                        curve: standardCurve,
+                      );
                 });
               },
               // selectedColorOpacity: 0,
@@ -57,20 +59,29 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                       (PageModel pageModel) => SalomonBottomBarItem(
                         icon: FaIcon(
                           pageModel.icon,
-                          color: PageController().pages.indexOf(
-                                      ref.watch(currentPageProvider)) ==
+                          color: ref.watch(HealpenController()
+                                      .currentPageIndexProvider) ==
                                   PageController().pages.indexOf(pageModel)
                               ? context.theme.colorScheme.onPrimary
                               : context.theme.colorScheme.primary,
                         ),
-                        title: Text(
-                          pageModel.label.toTitleCase(),
-                          style: TextStyle(
-                            fontFamily:
-                                context.theme.textTheme.bodySmall!.fontFamily,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.6,
-                            color: context.theme.colorScheme.onPrimary,
+                        title: AnimatedOpacity(
+                          duration: shortStandardDuration,
+                          curve: standardCurve,
+                          opacity: ref.watch(HealpenController()
+                                      .currentPageIndexProvider) ==
+                                  PageController().pages.indexOf(pageModel)
+                              ? 1
+                              : 0,
+                          child: Text(
+                            pageModel.label.toTitleCase(),
+                            style: TextStyle(
+                              fontFamily:
+                                  context.theme.textTheme.bodySmall!.fontFamily,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.6,
+                              color: context.theme.colorScheme.onPrimary,
+                            ),
                           ),
                         ),
                       ),

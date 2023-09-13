@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
@@ -14,28 +13,26 @@ class CustomSnackBar {
 
   CustomSnackBar(this._snackBarConfig);
 
-  void showSnackBar(BuildContext context, WidgetRef ref) {
+  Future<void> showSnackBar(BuildContext context, WidgetRef ref) async {
     final snackBar1 = _snackBarConfig.createSnackBar1();
     final snackBar2 = _snackBarConfig.createSnackBar2();
-    vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-      scaffoldMessengerKey.currentState!
-          .showSnackBar(snackBar1)
-          .closed
-          .then((SnackBarClosedReason value) async {
-        if (!(value == SnackBarClosedReason.remove)) {
-          if (_snackBarConfig.actionAfterSnackBar1 != null) {
-            _snackBarConfig.actionAfterSnackBar1!().then((_) {
-              if (snackBar2 != null) {
-                vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                  scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
-                });
-              }
+    vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
+      final SnackBarClosedReason snackBar1ClosedReasonFuture =
+          await scaffoldMessengerKey.currentState!
+              .showSnackBar(snackBar1)
+              .closed;
+      snackBar1ClosedReasonFuture;
+      if (snackBar1ClosedReasonFuture != SnackBarClosedReason.remove) {
+        if (_snackBarConfig.actionAfterSnackBar1 != null) {
+          await _snackBarConfig.actionAfterSnackBar1!();
+
+          if (snackBar2 != null) {
+            vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+              scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
             });
           }
-        } else {
-          Slidable.of(context)?.close();
         }
-      });
+      }
     });
   }
 }
@@ -44,6 +41,7 @@ class SnackBarConfig {
   final String titleString1;
   final IconData leadingIconData1;
   final List<Widget>? trailingWidgets1;
+  final EdgeInsets? snackBarMargin;
   final Future Function()? actionAfterSnackBar1;
 
   final String? titleString2;
@@ -53,28 +51,35 @@ class SnackBarConfig {
     required this.titleString1,
     required this.leadingIconData1,
     this.trailingWidgets1,
+    this.snackBarMargin,
     this.actionAfterSnackBar1,
     this.titleString2,
     this.leadingIconData2,
   });
 
   SnackBar createSnackBar1() {
-    return createSnackBar(titleString1, leadingIconData1, trailingWidgets1);
+    return createSnackBar(
+      titleString1,
+      leadingIconData1,
+      snackBarMargin,
+      trailingWidgets1,
+    );
   }
 
   SnackBar? createSnackBar2() {
     return titleString2 != null && leadingIconData2 != null
-        ? createSnackBar(titleString2!, leadingIconData2!)
+        ? createSnackBar(titleString2!, leadingIconData2!, snackBarMargin)
         : null;
   }
 
   SnackBar createSnackBar(
     String titleString,
     IconData leadingIconData, [
+    EdgeInsets? snackBarMargin,
     List<Widget>? trailingWidgets,
   ]) {
     return SnackBar(
-      margin: EdgeInsets.all(gap),
+      margin: snackBarMargin ?? EdgeInsets.all(gap),
       padding: EdgeInsets.zero,
       duration: 3.seconds,
       content: Builder(

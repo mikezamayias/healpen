@@ -53,8 +53,7 @@ class NoteModel {
 
   Map<String, dynamic> toDocument() => _$NoteModelToJson(this);
 
-  NoteModel copyWith(
-    NoteModel? noteModel, {
+  NoteModel copyWith({
     String? content,
     bool? isPrivate,
     bool? isFavorite,
@@ -64,13 +63,13 @@ class NoteModel {
     int? sentiment,
   }) {
     return NoteModel(
-      content: noteModel?.content ?? (content ?? this.content),
-      isPrivate: noteModel?.isPrivate ?? (isPrivate ?? this.isPrivate),
-      isFavorite: noteModel?.isFavorite ?? (isFavorite ?? this.isFavorite),
-      duration: noteModel?.duration ?? (duration ?? this.duration),
-      timestamp: noteModel?.timestamp ?? (timestamp ?? this.timestamp),
-      wordCount: noteModel?.wordCount ?? (wordCount ?? this.wordCount),
-      sentiment: noteModel?.sentiment ?? (sentiment ?? this.sentiment),
+      content: content ?? this.content,
+      isPrivate: isPrivate ?? this.isPrivate,
+      isFavorite: isFavorite ?? this.isFavorite,
+      duration: duration ?? this.duration,
+      timestamp: timestamp ?? this.timestamp,
+      wordCount: wordCount ?? this.wordCount,
+      sentiment: sentiment ?? this.sentiment,
     );
   }
 

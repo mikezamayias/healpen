@@ -9,7 +9,7 @@ import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 
-class BlueprintView extends ConsumerWidget {
+class BlueprintView extends ConsumerStatefulWidget {
   const BlueprintView({
     Key? key,
     this.appBar,
@@ -24,7 +24,14 @@ class BlueprintView extends ConsumerWidget {
   final bool? showAppBarTitle;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BlueprintView> createState() => _BlueprintViewState();
+}
+
+class _BlueprintViewState extends ConsumerState<BlueprintView>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: getSystemUIOverlayStyle(
         context.theme,
@@ -35,23 +42,22 @@ class BlueprintView extends ConsumerWidget {
         child: Container(
           color: context.theme.colorScheme.background,
           padding: EdgeInsets.only(
-            top: showAppBarTitle! ? 0 : gap,
             bottom: gap,
-            left: padBodyHorizontally! ? gap : 0,
-            right: padBodyHorizontally! ? gap : 0,
+            left: widget.padBodyHorizontally! ? gap : 0,
+            right: widget.padBodyHorizontally! ? gap : 0,
           ),
           child: SafeArea(
             child: Scaffold(
               backgroundColor: Colors.transparent,
-              appBar: showAppBarTitle!
-                  ? appBar != null
+              appBar: widget.showAppBarTitle!
+                  ? widget.appBar != null
                       ? PreferredSize(
                           preferredSize: Size.fromHeight(100.h),
                           child: Padding(
-                        padding: EdgeInsets.only(bottom: gap),
-                        child: appBar!.animateAppBar(),
-                      ),
-                    )
+                            padding: EdgeInsets.only(bottom: gap),
+                            child: widget.appBar!.animateAppBar(),
+                          ),
+                        )
                       : null
                   : null,
               body: ScrollConfiguration(
@@ -59,7 +65,7 @@ class BlueprintView extends ConsumerWidget {
                   scrollbars: false,
                   overscroll: false,
                 ),
-                child: body,
+                child: widget.body,
               ),
             ),
           ),
@@ -67,4 +73,7 @@ class BlueprintView extends ConsumerWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

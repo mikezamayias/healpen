@@ -26,8 +26,7 @@ class ShowBackButtonSettingsTile extends ConsumerWidget {
         onChanged: (value) {
           vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
             ref.read(navigationShowBackButtonProvider.notifier).state = value;
-            await PreferencesController()
-                .showBackButton
+            await PreferencesController.showBackButton
                 .write(ref.watch(navigationShowBackButtonProvider));
             log(
             '${ref.watch(navigationShowBackButtonProvider)}',

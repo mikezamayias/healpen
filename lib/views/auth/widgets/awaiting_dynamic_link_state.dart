@@ -22,7 +22,7 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
           leadingIconData: FontAwesomeIcons.solidEnvelopeOpen,
           titleString: 'We\'ve sent you an email with a magic link.',
           subtitleString:
-              'Please check your email and follow the link to sign in.',
+              'Please check your email and follow the link to sign in. Don\'t forget to check your spam folder too!',
         ),
         SizedBox(height: gap),
         CustomListTile(

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
+import 'package:flutter/material.dart' hide AppBar, ListTile, Feedback;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +10,7 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
+import 'feedback/settings_feedback_tile.dart';
 import 'navigation/settings_navigation_view.dart';
 import 'theme/settings_theme_view.dart';
 import 'writing/settings_writing_view.dart';
@@ -68,7 +69,8 @@ class SettingsView extends ConsumerWidget {
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
                     context.navigator.push(
                       MaterialPageRoute(
                         builder: (_) => pageWidgets[title]!.$1,
@@ -77,37 +79,7 @@ class SettingsView extends ConsumerWidget {
                   });
                 },
               ),
-          // CustomListTile(
-          //   responsiveWidth: true,
-          //   leadingIconData: FontAwesomeIcons.palette,
-          //   contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-          //   textColor: context.theme.colorScheme.onPrimary,
-          //   titleString: 'Theme',
-          //   onTap: () {
-          //     showModalBottomSheet(
-          //       context: context,
-          //       useSafeArea: true,
-          //       showDragHandle: true,
-          //       builder: (BuildContext context) {
-          //         return SafeArea(
-          //           child: Padding(
-          //             padding: EdgeInsets.symmetric(horizontal: gap),
-          //             child: Column(
-          //               mainAxisSize: MainAxisSize.min,
-          //               children: [
-          //                 const TextDivider('Theme'),
-          //                 SizedBox(height: gap),
-          //                 const ThemeColorTile(),
-          //                 SizedBox(height: gap),
-          //                 const ThemeAppearanceTile(),
-          //               ],
-          //             ),
-          //           ),
-          //         );
-          //       },
-          //     );
-          //   },
-          // ),
+          const SettingsFeedbackTile(),
         ],
       ),
     );

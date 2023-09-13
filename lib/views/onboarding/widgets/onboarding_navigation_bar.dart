@@ -25,8 +25,7 @@ class _OnboardingNavigationBarState
     ref
         .watch(OnboardingController().onboardingCompletedProvider.notifier)
         .state = true;
-    PreferencesController()
-        .onboardingCompleted
+    PreferencesController.onboardingCompleted
         .write(ref.watch(OnboardingController().onboardingCompletedProvider));
     navigator.pushReplacement(
       PageRouteBuilder(
@@ -50,14 +49,6 @@ class _OnboardingNavigationBarState
         ),
       ),
     );
-  }
-
-  void goToPage(int index) {
-    ref.watch(OnboardingController().pageControllerProvider).animateToPage(
-          index,
-          duration: emphasizedDuration,
-          curve: emphasizedCurve,
-        );
   }
 
   @override
@@ -89,7 +80,8 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Skip',
                 onTap: () {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
                     goToAuth();
                   });
                 },
@@ -97,11 +89,9 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Get Started',
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      goToPage(currentPageIndex + 1);
-                    },
+                  animateToPage(
+                    ref.watch(OnboardingController().pageControllerProvider),
+                    currentPageIndex + 1,
                   );
                 },
               ),
@@ -110,11 +100,9 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Back',
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      goToPage(currentPageIndex - 1);
-                    },
+                  animateToPage(
+                    ref.watch(OnboardingController().pageControllerProvider),
+                    currentPageIndex - 1,
                   );
                 },
               ),
@@ -131,22 +119,18 @@ class _OnboardingNavigationBarState
               OnboardingButton(
                 titleString: 'Back',
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      goToPage(currentPageIndex - 1);
-                    },
+                  animateToPage(
+                    ref.watch(OnboardingController().pageControllerProvider),
+                    currentPageIndex - 1,
                   );
                 },
               ),
               OnboardingButton(
                 titleString: 'Next',
                 onTap: () {
-                  vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
-                    () {
-                      goToPage(currentPageIndex + 1);
-                    },
+                  animateToPage(
+                    ref.watch(OnboardingController().pageControllerProvider),
+                    currentPageIndex + 1,
                   );
                 },
               ),

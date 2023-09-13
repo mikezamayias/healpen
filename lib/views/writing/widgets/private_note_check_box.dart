@@ -25,36 +25,41 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       showcaseLeadingIcon: ref.watch(writingShakePrivateNoteInfoProvider),
       leadingIconData: FontAwesomeIcons.circleInfo,
       leadingOnTap: () {
-        ref.watch(writingShakePrivateNoteInfoProvider.notifier).state = false;
-        PreferencesController()
-            .shakePrivateNoteInfo
-            .write(ref.watch(writingShakePrivateNoteInfoProvider));
-        showHealpenDialog(
-          context: context,
-          doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
-          customDialog: CustomDialog(
-            titleString: 'Private note',
-            contentString:
-                'A private note won\'t be used in analysis and will only be visible in History.',
-            actions: [
-              CustomListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-                cornerRadius: radius - gap,
-                responsiveWidth: true,
-                titleString: 'Okay',
-                onTap: () {
-                  ref
-                      .watch(writingShakePrivateNoteInfoProvider.notifier)
-                      .state = false;
-                  PreferencesController()
-                      .shakePrivateNoteInfo
-                      .write(ref.watch(writingShakePrivateNoteInfoProvider));
-                  context.navigator.pop();
-                },
-              )
-            ],
-          ),
-        );
+        vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+          ref.watch(writingShakePrivateNoteInfoProvider.notifier).state = false;
+          PreferencesController.shakePrivateNoteInfo
+              .write(ref.watch(writingShakePrivateNoteInfoProvider));
+          showHealpenDialog(
+            context: context,
+            doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
+            customDialog: CustomDialog(
+              titleString: 'Private note',
+              contentString:
+                  'A private note won\'t be used in analysis and will only be visible in History.',
+              actions: [
+                CustomListTile(
+                  contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                  cornerRadius: radius - gap,
+                  responsiveWidth: true,
+                  titleString: 'Okay',
+                  onTap: () {
+                    vibrate(
+                      ref.watch(navigationReduceHapticFeedbackProvider),
+                      () {
+                        ref
+                            .watch(writingShakePrivateNoteInfoProvider.notifier)
+                            .state = false;
+                        PreferencesController.shakePrivateNoteInfo.write(
+                            ref.watch(writingShakePrivateNoteInfoProvider));
+                        context.navigator.pop();
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
+          );
+        });
       },
       titleString: 'Make private',
       trailingIconData: ref.watch(writingControllerProvider).isPrivate

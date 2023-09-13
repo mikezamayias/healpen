@@ -3,11 +3,11 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_openai/dart_openai.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/note/note_model.dart';
+import '../services/firestore_service.dart';
 import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
@@ -27,7 +27,6 @@ class WritingController extends StateNotifier<NoteModel> {
   // A factory constructor that returns the singleton instance.
   factory WritingController() => _singleton;
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Stopwatch _stopwatch = Stopwatch();
   Timer? _timer;
   Timer? _delayTimer;
@@ -51,9 +50,8 @@ class WritingController extends StateNotifier<NoteModel> {
           _pauseTimerAndLogInput();
         }
         if (_stopwatch.elapsed.inSeconds > 0) {
+          state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
           _stopwatch.reset();
-          state = state.copyWith(null, duration: 0); // Reset the seconds in the
-          // state
         }
       } else {
         _logInput();
@@ -62,12 +60,12 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   void _startTimer() async {
-    bool automaticStopwatch = await PreferencesController()
+    bool automaticStopwatch = await PreferencesController
         .writingAutomaticStopwatch
         .read(); // Read the automatic stopwatch preference
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      state = state.copyWith(null, duration: _stopwatch.elapsed.inSeconds);
+      state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
     });
     if (automaticStopwatch) {
       _delayTimer =
@@ -94,7 +92,7 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   Future<void> handleSaveNote() async {
-    bool automaticStopwatch = await PreferencesController()
+    bool automaticStopwatch = await PreferencesController
         .writingAutomaticStopwatch
         .read(); // Read the automatic stopwatch preference
     log(
@@ -103,33 +101,17 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     _stopwatch.reset();
     _stopwatch.stop();
-    // _updateGooglesSentimentAnalysis(await _googlesSentimentAnalysis());
     _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
     if (automaticStopwatch) {
       _timer?.cancel();
       _delayTimer?.cancel();
     }
     state = state.copyWith(
-      null,
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
-    await _saveNoteToFirebase();
-    textController.clear();
+    await FirestoreService.saveNote(state);
     resetNote();
-  }
-
-  Future<void> _saveNoteToFirebase() async {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    log(
-      state.toDocument().toString(),
-      name: '_saveEntryToFirebase(userId: $userId)',
-    );
-    return _firestore
-        .collection('writing-temp')
-        .doc(userId)
-        .collection('notes')
-        .doc(state.timestamp.toString())
-        .set(state.toDocument());
+    textController.clear();
   }
 
   void resetNote() {
@@ -137,24 +119,8 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   void updatePrivate(bool bool) {
-    state = state.copyWith(null, isPrivate: bool);
+    state = state.copyWith(isPrivate: bool);
   }
-
-  // Future<AnalyzeSentimentResponse> _googlesSentimentAnalysis() async {
-  //   return await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
-  //       .documents
-  //       .analyzeSentiment(
-  //         AnalyzeSentimentRequest.fromJson(
-  //           {
-  //             'document': {
-  //               'type': 'PLAIN_TEXT',
-  //               'content': state.content,
-  //             },
-  //             'encodingType': 'UTF8',
-  //           },
-  //         ),
-  //       );
-  // }
 
   Future<int> _openAIsSentimentAnalysis() async {
     final labels = [
@@ -187,80 +153,39 @@ Value: ''',
       echo: true,
     );
     String response = apiResult.choices.first.text;
-    log(
-      response,
-      name: 'WritingController:_openAIsSentimentAnalysis():response',
-    );
     String result = response.split('Value: ').last.trim();
-    log(
-      'Result: $result',
-      name: 'WritingController:_openAIsSentimentAnalysis()',
-    );
     int sentiment = int.parse(result);
     return sentiment;
   }
 
-  void _updateOpenAIsSentimentAnalysis(
-    int sentiment
-  ) async {
-    log(
-      'Updating sentiment analysis',
-      name: 'WritingController:_updateOpenAIsSentimentAnalysis()',
-    );
-    state = state.copyWith(
-      null,
-      sentiment: sentiment,
-    );
+  void _updateOpenAIsSentimentAnalysis(int sentiment) async {
+    state = state.copyWith(sentiment: sentiment);
   }
 
   Future<void> updateSentimentAndSaveNote() async {
-    log(
-      'Updating sentiment and saving note',
-      name: 'WritingController:updateSentimentAndSaveNote()',
-    );
     _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-    await _saveNoteToFirebase();
+    await FirestoreService.saveNote(state);
   }
 
   Future<void> updateAllUserNotes() async {
-    String userId = FirebaseAuth.instance.currentUser!.uid;
-    QuerySnapshot<Map<String, dynamic>> collection = await _firestore
-        .collection('writing-temp')
-        .doc(userId)
-        .collection('notes')
-        .where('isPrivate', isEqualTo: false)
-        .get();
+    QuerySnapshot<Map<String, dynamic>> collection =
+        await FirestoreService.writingCollectionReference()
+            .where('isPrivate', isEqualTo: false)
+            .get();
     for (QueryDocumentSnapshot<Map<String, dynamic>> element
         in collection.docs) {
-      await addOpenAIsSentimentAnalysisToDocument(element, userId);
+      await addOpenAIsSentimentAnalysisToDocument(element);
       // await removeOpenAIsSentimentAnalysisToDocument(element, userId);
     }
   }
 
   Future<void> addOpenAIsSentimentAnalysisToDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
-    String userId,
   ) async {
     if (!element.data().containsKey('sentiment')) {
-      log(
-        'Note is missing sentiment analysis, updating sentiment',
-        name: 'WritingController:updateAllUserNotes():${element.id}',
-      );
-      log(
-        '${element.data()}',
-        name: 'WritingController:updateAllUserNotes():${element.id}',
-      );
       state = NoteModel.fromDocument(element.data());
       _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-      log(
-        '$state',
-        name:
-            'WritingController:updateAllUserNotes():${element.id}:NoteModel.fromDocument(element.data())',
-      );
-      await _firestore
-          .collection('writing-temp')
-          .doc(userId)
-          .collection('notes')
+      await FirestoreService.writingCollectionReference()
           .doc(state.timestamp.toString())
           .update(state.toDocument());
     }
@@ -268,14 +193,10 @@ Value: ''',
 
   Future<void> removeOpenAIsSentimentAnalysisToDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
-    String userId,
   ) async {
     if (element.data().containsKey('sentiment') ||
         element.data()['isPrivate']) {
-      _firestore
-          .collection('writing-temp')
-          .doc(userId)
-          .collection('notes')
+      FirestoreService.writingCollectionReference()
           .doc(element.id)
           .update({'sentiment': FieldValue.delete()}).then((_) {
         log(

@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 
 enum ThemeColor {
-  // blue(
-  //   color: Color(0xFF4A90E2),
-  //   name: 'Blue',
-  // ),
-  // teal(
-  //   color: Color(0xFF48A9A6),
-  //   name: 'Teal',
-  // ),
   blue(
     color: Color(0xFFA8D1F0),
     name: 'Blue',
