@@ -150,6 +150,11 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
               );
             },
           ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(radius - gap),
+            ),
+          ),
         ),
       ),
     );
