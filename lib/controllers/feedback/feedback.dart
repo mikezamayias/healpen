@@ -34,6 +34,10 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
     state = state.copyWith(screenshotPath: screenshotPath);
   }
 
+  void setScreenshotUrl(String screenshotUrl) {
+    state = state.copyWith(screenshotUrl: screenshotUrl);
+  }
+
   void addLabel(String label) {
     state = state.copyWith(labels: [...state.labels!, label]);
   }
@@ -77,6 +81,8 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
   String get body => state.body;
 
   String get screenshotPath => state.screenshotPath;
+  
+  String get screenshotUrl => state.screenshotUrl;
 
   List<String>? get labels => state.labels;
 
@@ -163,6 +169,7 @@ class FeedbackModel {
   List<String>? labels;
   bool includeScreenshot;
   String screenshotPath;
+  String screenshotUrl;
 
   FeedbackModel({
     this.title = '',
@@ -170,6 +177,7 @@ class FeedbackModel {
     this.labels,
     this.includeScreenshot = true,
     this.screenshotPath = '',
+    this.screenshotUrl = '',
   });
 
   FeedbackModel copyWith({
@@ -178,6 +186,7 @@ class FeedbackModel {
     List<String>? labels,
     bool? includeScreenshot,
     String? screenshotPath,
+    String? screenshotUrl,
   }) {
     return FeedbackModel(
       title: title ?? this.title,
@@ -185,11 +194,12 @@ class FeedbackModel {
       labels: labels ?? this.labels,
       includeScreenshot: includeScreenshot ?? this.includeScreenshot,
       screenshotPath: screenshotPath ?? this.screenshotPath,
+      screenshotUrl: screenshotUrl ?? this.screenshotUrl,
     );
   }
 
   @override
   String toString() => 'FeedbackModel(title: $title, body: $body, '
-      'includeScreenshot: $includeScreenshot '
-      'screenshotPath: $screenshotPath, labels: $labels)';
+      'includeScreenshot: $includeScreenshot, labels: $labels, '
+      'screenshotPath: $screenshotPath, screenshotUrl: $screenshotUrl)';
 }

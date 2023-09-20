@@ -23,7 +23,6 @@ class _FeedbackFormState extends ConsumerState<FeedbackView> {
     return BlueprintView(
       appBar: const AppBar(
         pathNames: ['Settings', 'Feedback'],
-        automaticallyImplyLeading: true,
       ),
       body: Column(
         children: [

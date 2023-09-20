@@ -38,7 +38,7 @@ class SettingsFeedbackTile extends ConsumerWidget {
                 FeedbackController.uploadScreenshotToFirebase(
                   File(feedbackController.screenshotPath),
                 ).then((String screenshotUrl) {
-                  feedbackController.setScreenshotPath(screenshotUrl);
+                  feedbackController.setScreenshotUrl(screenshotUrl);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => const FeedbackView(),

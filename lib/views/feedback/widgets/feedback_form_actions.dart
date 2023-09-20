@@ -38,7 +38,7 @@ class FeedbackFormActions extends ConsumerWidget {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
                   if (feedbackController.includeScreenshot) {
-                    assert(feedbackController.screenshotPath.isNotEmpty,
+                    assert(feedbackController.screenshotUrl.isNotEmpty,
                         'Screenshot path is empty but includeScreenshot is true');
                   }
                   final api = GitHubAPI(
@@ -48,10 +48,10 @@ class FeedbackFormActions extends ConsumerWidget {
                   );
                   api
                       .createIssue(
-                    ref.read(feedbackControllerProvider.notifier).title,
-                    ref.read(feedbackControllerProvider.notifier).body,
-                    feedbackController.screenshotPath,
-                    ref.read(feedbackControllerProvider.notifier).labels!,
+                    feedbackController.title,
+                    feedbackController.body,
+                    feedbackController.screenshotUrl,
+                    feedbackController.labels!,
                   )
                       .whenComplete(
                     () {
@@ -101,7 +101,15 @@ class FeedbackFormActions extends ConsumerWidget {
           titleString: 'Cancel',
           onTap: () {
             vibrate(ref.read(navigationReduceHapticFeedbackProvider), () {
-              context.navigator.pop();
+              feedbackController.cleanUp();
+              CustomSnackBar(
+                SnackBarConfig(
+                  titleString1: 'We appreciate any feedback!',
+                  leadingIconData1: FontAwesomeIcons.solidCompass,
+                ),
+              ).showSnackBar(context, ref).then((_) {
+                context.navigator.pop();
+              });
             });
           },
         ),
