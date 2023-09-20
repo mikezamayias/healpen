@@ -12,7 +12,7 @@ class CustomDialog extends StatelessWidget {
   final String? contentString;
   final Widget? contentWidget;
   final Color? backgroundColor;
-  final List<CustomListTile> actions;
+  final List<CustomListTile>? actions;
 
   const CustomDialog({
     super.key,
@@ -20,7 +20,7 @@ class CustomDialog extends StatelessWidget {
     this.contentString,
     this.contentWidget,
     this.backgroundColor,
-    required this.actions,
+    this.actions,
   }) : assert(
           contentString == null || contentWidget == null,
           'Either contentString or contentWidget must be provided, '
@@ -81,17 +81,20 @@ class CustomDialog extends StatelessWidget {
                 ),
               )
             : null,
-        actions: actions.isNotEmpty
+        actions: actions != null && actions!.isNotEmpty
             ? [
                 // add a sized box with width of gap between
                 // the children
-                for (int i = 0; i < actions.length; i++) ...[
-                  actions[i],
-                  if (i != actions.length - 1) SizedBox(width: gap),
+                for (int i = 0; i < actions!.length; i++) ...[
+                  actions![i],
+                  if (i != actions!.length - 1) SizedBox(width: gap),
                 ]
               ]
             : [
                 CustomListTile(
+                  contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                  cornerRadius: radius - gap,
+                  responsiveWidth: true,
                   titleString: 'OK',
                   onTap: () => context.navigator.pop(),
                 ),
