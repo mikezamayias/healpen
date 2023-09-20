@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
+import '../utils/constants.dart';
 import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
@@ -123,21 +124,11 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   Future<int> _openAIsSentimentAnalysis() async {
-    final labels = [
-      'Very Unpleasant',
-      'Unpleasant',
-      'Slightly Unpleasant',
-      'Neutral',
-      'Slightly Pleasant',
-      'Pleasant',
-      'Very Pleasant'
-    ];
-    final values = [-3, -2, -1, 0, 1, 2, 3];
     OpenAICompletionModel apiResult = await OpenAI.instance.completion.create(
       model: 'text-davinci-003',
       prompt: '''
-Evaluate the sentiment the following text as ${values.join(', ')} for 
-${labels.join(', ')} respectively. Please return the sentiment after the 
+Evaluate the sentiment the following text as ${sentimentValues.join(', ')} for 
+${sentimentLabels.join(', ')} respectively. Please return the sentiment after the 
 `Value: ` keyword.
 
 Text:```${state.content}```

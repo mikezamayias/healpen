@@ -33,3 +33,17 @@ final Duration slightlyLongEmphasizedDuration = 700.milliseconds;
 
 /// The longer duration used with Emphasized curve, 1000 milliseconds.
 final Duration longEmphasizedDuration = 1000.milliseconds;
+
+/// A list of sentiment labels used in the application.
+final sentimentLabels = [
+  'Very Unpleasant',
+  'Unpleasant',
+  'Slightly Unpleasant',
+  'Neutral',
+  'Slightly Pleasant',
+  'Pleasant',
+  'Very Pleasant'
+];
+
+/// A list of sentiment values used in the application.
+final sentimentValues = [-3, -2, -1, 0, 1, 2, 3];
