@@ -56,87 +56,50 @@ class _OnboardingNavigationBarState
     int currentPageIndex = ref.watch(
       OnboardingController().currentPageIndexProvider,
     );
+    int onboardingViewsLength =
+        OnboardingController().onboardingScreenViews.length - 1;
     return Padding(
       padding: EdgeInsets.all(gap),
-      child: AnimatedSwitcher(
-        duration: emphasizedDuration,
-        reverseDuration: standardDuration,
-        switchInCurve: standardCurve,
-        switchOutCurve: standardCurve,
-        transitionBuilder: (child, animation) => FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
-        child: Row(
-          key: currentPageIndex == 0 ||
-                  currentPageIndex ==
-                      OnboardingController().onboardingScreenViews.length - 1
-              ? ValueKey<int>(currentPageIndex)
-              : null,
-          // Key ensures a new widget is detected
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (currentPageIndex == 0) ...[
-              OnboardingButton(
-                titleString: 'Skip',
-                onTap: () {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
-                      () {
-                    goToAuth();
-                  });
-                },
-              ),
-              OnboardingButton(
-                titleString: 'Get Started',
-                onTap: () {
-                  animateToPage(
-                    ref.watch(OnboardingController().pageControllerProvider),
-                    currentPageIndex + 1,
-                  );
-                },
-              ),
-            ] else if (currentPageIndex ==
-                OnboardingController().onboardingScreenViews.length - 1) ...[
-              OnboardingButton(
-                titleString: 'Back',
-                onTap: () {
-                  animateToPage(
-                    ref.watch(OnboardingController().pageControllerProvider),
-                    currentPageIndex - 1,
-                  );
-                },
-              ),
-              OnboardingButton(
-                titleString: 'Start Writing Now',
-                onTap: () {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
-                      () {
-                    goToAuth();
-                  });
-                },
-              ),
-            ] else ...[
-              OnboardingButton(
-                titleString: 'Back',
-                onTap: () {
-                  animateToPage(
-                    ref.watch(OnboardingController().pageControllerProvider),
-                    currentPageIndex - 1,
-                  );
-                },
-              ),
-              OnboardingButton(
-                titleString: 'Next',
-                onTap: () {
-                  animateToPage(
-                    ref.watch(OnboardingController().pageControllerProvider),
-                    currentPageIndex + 1,
-                  );
-                },
-              ),
-            ],
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          OnboardingButton(
+            titleString: currentPageIndex == 0 ? 'Skip' : 'Back',
+            onTap: () {
+              if (currentPageIndex == 0) {
+                vibrate(
+                  ref.watch(navigationReduceHapticFeedbackProvider),
+                  goToAuth,
+                );
+              } else {
+                animateToPage(
+                  ref.watch(OnboardingController().pageControllerProvider),
+                  currentPageIndex - 1,
+                );
+              }
+            },
+          ),
+          OnboardingButton(
+            titleString: currentPageIndex == onboardingViewsLength
+                ? 'Start Writing Now'
+                : currentPageIndex == 0
+                    ? 'Get Started'
+                    : 'Next',
+            onTap: () {
+              if (currentPageIndex == onboardingViewsLength) {
+                vibrate(
+                  ref.watch(navigationReduceHapticFeedbackProvider),
+                  goToAuth,
+                );
+              } else {
+                animateToPage(
+                  ref.watch(OnboardingController().pageControllerProvider),
+                  currentPageIndex + 1,
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }

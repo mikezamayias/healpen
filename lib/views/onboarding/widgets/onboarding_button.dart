@@ -4,24 +4,35 @@ import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class OnboardingButton extends StatelessWidget {
-  final String titleString;
+  final Widget? title;
+  final String? titleString;
   final VoidCallback? onTap;
 
   const OnboardingButton({
     super.key,
-    required this.titleString,
+    this.title,
+    this.titleString,
     this.onTap,
-  });
+  }) : assert(title != null || titleString != null);
 
   @override
   Widget build(BuildContext context) {
-    return CustomListTile(
-      responsiveWidth: true,
-      onTap: onTap,
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: gap * 2,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: AnimatedSize(
+        duration: emphasizedDuration,
+        reverseDuration: emphasizedDuration,
+        curve: emphasizedCurve,
+        child: CustomListTile(
+          responsiveWidth: true,
+          onTap: onTap,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+          ),
+          title: title,
+          titleString: titleString,
+        ),
       ),
-      titleString: titleString,
     );
   }
 }
