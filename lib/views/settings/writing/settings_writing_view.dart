@@ -5,6 +5,7 @@ import '../../../extensions/widget_extensions.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
+import 'widgets/analyze_notes_tile.dart';
 import 'widgets/enable_automatic_stopwatch_tile.dart';
 
 class SettingsWritingView extends ConsumerWidget {
@@ -14,6 +15,7 @@ class SettingsWritingView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
       const EnableAutomaticStopwatchTile(),
+      const AnalyzeNotesTile(),
     ].animateWidgetList();
 
     return BlueprintView(
