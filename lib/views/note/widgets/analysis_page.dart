@@ -18,16 +18,6 @@ class AnalysisPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final Map<int, String> sentimentLabels = {
-    //   -1: 'Negative',
-    //   0: 'Neutral',
-    //   1: 'Positive',
-    // };
-    // final Map<int, IconData> sentimentIcons = {
-    //   -1: FontAwesomeIcons.faceSadTear,
-    //   0: FontAwesomeIcons.faceMeh,
-    //   1: FontAwesomeIcons.faceSmile
-    // };
     final labels = [
       'Very Unpleasant',
       'Unpleasant',
@@ -38,8 +28,6 @@ class AnalysisPage extends StatelessWidget {
       'Very Pleasant'
     ];
     final values = [-3, -2, -1, 0, 1, 2, 3];
-    // create a `sentimentLabels` and `sentimentIcons` map based on `labels`
-    // and `values`
     final Map<int, String> sentimentLabels = {
       for (var i = 0; i < labels.length; i++) values[i]: labels[i]
     };
@@ -89,24 +77,7 @@ class AnalysisPage extends StatelessWidget {
                   // what's the range (negative, neutral, positive)
                   // https://chat.openai.com/c/53e97b3f-9812-4c68-81bf-f307cd8b8166
                   contentString: '''
-Sentiment Analysis gauges the mood behind text as positive, negative, or neutral.
-
-- Score shows the sentiment's direction.
-- Magnitude indicates its strength.''',
-//                   contentString: '''
-// Sentiment Analysis evaluates text inputs and identifies whether the sentiment behind them is positive, negative, or neutral. This app uses a specialized algorithm that factors in both the sentiment score and magnitude to arrive at a discrete result.
-//
-// - Score determines the direction of sentiment: A positive value indicates positive sentiment, a negative value indicates negative sentiment, and a value around 0 indicates neutrality.
-// - Magnitude signifies the intensity or strength of the sentiment.
-//
-// This classification aids in understanding the underlying emotion or intent of the text.''',
-                  // contentString: 'Sentiment is a score from -1 to 1 that '
-                  //     'indicates the overall emotion of a text.\n\n'
-                  //     'The score is calculated by the average sentiment '
-                  //     'of each sentence in the text.\n\n'
-                  //     'A score of -1 indicates a negative sentiment, '
-                  //     '0 indicates a neutral sentiment, '
-                  //     'and 1 indicates a positive sentiment.',
+Sentiment is a metric that indicates the overall emotional tone of the text. It ranges from -3 to 3, where -3 is the most negative and 3 is the most positive.''',
                   actions: [
                     CustomListTile(
                       contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),

@@ -45,8 +45,7 @@ class NoteModel {
             .split(RegExp(r'\s+'))
             .where((s) => RegExp(r'[a-zA-Z]').hasMatch(s))
             .length,
-        timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch ~/ 1000,
-        sentiment = sentiment ?? 0;
+        timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
   factory NoteModel.fromDocument(Map<String, dynamic> json) =>
       _$NoteModelFromJson(json);
