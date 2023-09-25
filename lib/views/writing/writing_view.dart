@@ -51,6 +51,7 @@ class _WritingViewState extends ConsumerState<WritingView>
     final userName = user?.displayName;
     WritingController.writingAutomaticStopwatch =
         ref.watch(writingAutomaticStopwatchProvider);
+    WritingController().updateAllUserNotes();
     return BlueprintView(
       showAppBarTitle: ref.watch(navigationShowAppBarTitle),
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)

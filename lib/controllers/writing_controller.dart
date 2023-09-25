@@ -159,14 +159,18 @@ Value: ''',
   }
 
   Future<void> updateAllUserNotes() async {
+    log(
+      'Updating all user notes',
+      name: 'WritingController:updateAllUserNotes()',
+    );
     QuerySnapshot<Map<String, dynamic>> collection =
         await FirestoreService.writingCollectionReference()
             .where('isPrivate', isEqualTo: false)
             .get();
     for (QueryDocumentSnapshot<Map<String, dynamic>> element
         in collection.docs) {
-      await addOpenAIsSentimentAnalysisToDocument(element);
-      // await removeOpenAIsSentimentAnalysisToDocument(element, userId);
+      // await addOpenAIsSentimentAnalysisToDocument(element);
+      await removeSentimentFromDocument(element);
     }
   }
 
@@ -182,22 +186,21 @@ Value: ''',
     }
   }
 
-  Future<void> removeOpenAIsSentimentAnalysisToDocument(
+  Future<void> removeSentimentFromDocument(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
   ) async {
-    if (element.data().containsKey('sentiment') ||
-        element.data()['isPrivate']) {
+    if (element.data().containsKey('sentiment')) {
       FirestoreService.writingCollectionReference()
           .doc(element.id)
           .update({'sentiment': FieldValue.delete()}).then((_) {
         log(
-          'Note has sentiment, removing sentiment',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
+          'Note ${element.id}, removing sentiment',
+          name: 'WritingController:removeOpenAIsSentimentAnalysisToDocument()',
         );
       }).catchError((error) {
         log(
           '$error',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
+          name: 'WritingController:removeOpenAIsSentimentAnalysisToDocument()',
         );
       });
     }
