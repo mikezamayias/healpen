@@ -5,12 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googleapis/language/v1.dart';
-import 'package:googleapis_auth/auth_io.dart';
 
-import '../env/env.dart';
-import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
-import '../models/sentence/sentence_model.dart';
 import '../services/firestore_service.dart';
 import 'settings/preferences_controller.dart';
 
@@ -161,26 +157,26 @@ class WritingController extends StateNotifier<NoteModel> {
   //   await FirestoreService.saveNote(state);
   // }
 
-  Future<void> updateAllUserNotes() async {
-    log(
-      'Updating all user notes',
-      name: 'WritingController:updateAllUserNotes()',
-    );
-    QuerySnapshot<Map<String, dynamic>> collection =
-        await FirestoreService.writingCollectionReference()
-            .where('isPrivate', isEqualTo: false)
-            .get();
-    // for (QueryDocumentSnapshot<Map<String, dynamic>> element
-    //     in collection.docs) {
-    //   await _sentimentAnalysis(element);
-    //   // await removeSentimentFromDocument(element);
-    // }
-    for (int index = 0; index < 1; index++) {
-      // for (int i = 0; i < collection.docs.length; i++) {
-      await _sentimentAnalysis(collection.docs.reversed.elementAt(index));
-      // await removeSentimentFromDocument(element);
-    }
-  }
+  // static Future<void> updateAllUserNotes() async {
+  //   log(
+  //     'Updating all user notes',
+  //     name: 'WritingController:updateAllUserNotes()',
+  //   );
+  //   QuerySnapshot<Map<String, dynamic>> collection =
+  //       await FirestoreService.writingCollectionReference()
+  //           .where('isPrivate', isEqualTo: false)
+  //           .get();
+  //   for (QueryDocumentSnapshot<Map<String, dynamic>> element
+  //       in collection.docs) {
+  //     // await _sentimentAnalysis(element);
+  //     // await removeSentimentFromDocument(element);
+  //   }
+  //   // for (int index = 0; index < 1; index++) {
+  //   //   // for (int i = 0; i < collection.docs.length; i++) {
+  //   //   await _sentimentAnalysis(collection.docs.reversed.elementAt(index));
+  //   //   // await removeSentimentFromDocument(element);
+  //   // }
+  // }
 
   // Future<void> addOpenAIsSentimentAnalysisToDocument(
   //   QueryDocumentSnapshot<Map<String, dynamic>> element,
@@ -194,57 +190,75 @@ class WritingController extends StateNotifier<NoteModel> {
   //   }
   // }
 
-  Future<AnalyzeSentimentResponse?> _sentimentAnalysis(
-    QueryDocumentSnapshot<Map<String, dynamic>> element,
-  ) async {
-    AnalyzeSentimentResponse? result;
-    if (!element.data().containsKey('sentiment')) {
-      FirestoreService.writingCollectionReference()
-          .doc(element.id)
-          .get()
-          .then((DocumentSnapshot<Map<String, dynamic>> value) async {
-        result =
-            await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
-                .documents
-                .analyzeSentiment(
-                  AnalyzeSentimentRequest.fromJson(
-                    {
-                      'document': {
-                        'type': 'PLAIN_TEXT',
-                        'content': value['content'],
-                      },
-                      'encodingType': 'UTF32',
-                    },
-                  ),
-                );
-        AnalysisModel analysisModel = AnalysisModel(
-          timestamp: element['timestamp'],
-          content: element['content'],
-          score: result!.documentSentiment!.score!,
-          magnitude: result!.documentSentiment!.magnitude!,
-          language: result!.language!,
-          sentences: [
-            for (Sentence sentence in result!.sentences!)
-              SentenceModel(
-                content: sentence.text!.content!,
-                score: sentence.sentiment!.score!,
-                magnitude: sentence.sentiment!.magnitude!,
-              ),
-          ],
-        );
-        log(
-          '${analysisModel.toJson()}',
-          name: 'WritingController:_sentimentAnalysis()',
-        );
-      }).catchError((error) {
-        log(
-          '$error',
-          name: 'WritingController:_sentimentAnalysis()',
-        );
-      });
-    }
-    return result;
-  }
+  // Future<AnalyzeSentimentResponse?> _sentimentAnalysis(
+  //   QueryDocumentSnapshot<Map<String, dynamic>> element,
+  // ) async {
+  //   AnalyzeSentimentResponse? result;
+  //   if (!element.data().containsKey('sentiment')) {
+  //     FirestoreService.writingCollectionReference()
+  //         .doc(element.id)
+  //         .get()
+  //         .then((DocumentSnapshot<Map<String, dynamic>> value) async {
+  //       result =
+  //           await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
+  //               .documents
+  //               .analyzeSentiment(
+  //                 AnalyzeSentimentRequest.fromJson(
+  //                   {
+  //                     'document': {
+  //                       'type': 'PLAIN_TEXT',
+  //                       'content': value['content'],
+  //                     },
+  //                     'encodingType': 'UTF32',
+  //                   },
+  //                 ),
+  //               );
+  //       AnalysisModel analysisModel = AnalysisModel(
+  //         timestamp: element['timestamp'],
+  //         content: element['content'],
+  //         score: result!.documentSentiment!.score!,
+  //         magnitude: result!.documentSentiment!.magnitude!,
+  //         language: result!.language!,
+  //         sentences: [
+  //           for (Sentence sentence in result!.sentences!)
+  //             SentenceModel(
+  //               content: sentence.text!.content!,
+  //               score: sentence.sentiment!.score!,
+  //               magnitude: sentence.sentiment!.magnitude!,
+  //             ),
+  //         ],
+  //       );
+  //       log(
+  //         '${analysisModel.toJson()}',
+  //         name: 'WritingController:_sentimentAnalysis()',
+  //       );
+  //       FirestoreService.analysisCollectionReference()
+  //           .doc(element.id)
+  //           .set(analysisModel.toJson());
+  //       log(
+  //         'added sentiment',
+  //         name: 'WritingController:_sentimentAnalysis():${element.id}',
+  //       );
+  //       for (SentenceModel sentence in analysisModel.sentences) {
+  //         FirestoreService.analysisCollectionReference()
+  //             .doc(element.id)
+  //             .collection('sentences')
+  //             .doc(analysisModel.sentences.indexOf(sentence).toString())
+  //             .set(sentence.toJson());
+  //       }
+  //       log(
+  //         'added sentences',
+  //         name: 'WritingController:_sentimentAnalysis():${element.id}',
+  //       );
+  //     }).catchError((error) {
+  //       log(
+  //         '$error',
+  //         name: 'WritingController:_sentimentAnalysis()',
+  //       );
+  //     });
+  //   }
+  //   return result;
+  // }
 
   void updateSentimentAnalysis(AnalyzeSentimentResponse response) {
     // state = state.copyWith(
