@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
@@ -16,6 +17,8 @@ class AnalysisViewController {
 
   /// Attributes
   final _metricGroupingEntries = <NoteModel>[];
+  static final StateProvider<List<NoteModel>> noteModelsProviders =
+      StateProvider((ref) => <NoteModel>[]);
 
   /// Methods
   Stream<QuerySnapshot<Map<String, dynamic>>> get analysisStream =>

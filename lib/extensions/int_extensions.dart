@@ -22,4 +22,8 @@ extension IntExtension on int {
 
     return '$year-$month-$day, $hour:$minute:$second';
   }
+
+  DateTime timestampToDateTime() {
+    return DateTime.fromMillisecondsSinceEpoch(this);
+  }
 }

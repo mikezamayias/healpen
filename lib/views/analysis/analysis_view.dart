@@ -1,21 +1,22 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../controllers/analysis_view_controller.dart';
+import '../../extensions/int_extensions.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
-import '../../utils/helper_functions.dart';
-import '../../utils/show_healpen_dialog.dart';
 import '../../widgets/app_bar.dart';
-import '../../widgets/custom_dialog.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';
+import 'widgets/average_overall_sentiment_tile.dart';
+import 'widgets/sentiment_spline_tile.dart';
 
 class AnalysisView extends ConsumerWidget {
   const AnalysisView({Key? key}) : super(key: key);
@@ -49,85 +50,44 @@ class AnalysisView extends ConsumerWidget {
             return const LoadingTile(durationTitle: 'Loading metrics');
           }
           if (metricGroupingsSnapshot.data!.isNotEmpty) {
-            /// show the sentiment value of each note
-            // return ListView.separated(
-            //   itemCount: metricGroupingsSnapshot.data!.length,
-            //   itemBuilder: (BuildContext context, int index) {
-            //     return CustomListTile(
-            //       titleString: 'Sentiment value',
-            //       leadingIconData: FontAwesomeIcons.solidChartBar,
-            //       trailing: Text(
-            //         metricGroupingsSnapshot.data![index],
-            //         style: context.theme.textTheme.bodyLarge,
-            //       ),
-            //     );
-            //   },
-            //   separatorBuilder: (_, __) => SizedBox(height: gap),
-            // );
-            /// calculate the average sentiment value of all notes
-            /// and show it as a single tile
-            double averageSentimentValue = 0.0;
-            for (NoteModel note in metricGroupingsSnapshot.data!) {
-              averageSentimentValue += note.sentiment!;
-            }
-            averageSentimentValue /= metricGroupingsSnapshot.data!.length;
-            return Column(
-              children: [
-                CustomListTile(
-                  contentPadding: EdgeInsets.all(gap),
-                  titleString: 'Average overall sentiment',
-                  subtitle: Padding(
-                    padding: EdgeInsets.only(bottom: gap),
-                    child: SfSlider(
-                      min: sentimentValues.min,
-                      max: sentimentValues.max,
-                      value: averageSentimentValue,
-                      interval: 1,
-                      showTicks: true,
-                      showLabels: true,
-                      showDividers: true,
-                      enableTooltip: true,
-                      minorTicksPerInterval: 0,
-                      shouldAlwaysShowTooltip: false,
-                      // labelFormatterCallback: (actualValue, formattedText) {
-                      //   return sentimentLabels[int.parse(formattedText) + 3];
-                      // },
-                      tooltipTextFormatterCallback: (actualValue,
-                              formattedText) =>
-                          sentimentLabels[averageSentimentValue.toInt() + 3],
-                      labelPlacement: LabelPlacement.onTicks,
-                      onChanged: (dynamic value) {
-                        vibrate(
-                          ref.watch(navigationReduceHapticFeedbackProvider),
-                          () {},
-                        );
-                      },
-                    ),
-                  ),
-                  leadingIconData: FontAwesomeIcons.circleInfo,
-                  leadingOnTap: () {
-                    /// explain to the user what they are seeing
-                    showHealpenDialog(
-                      context: context,
-                      doVibrate:
-                          ref.watch(navigationReduceHapticFeedbackProvider),
-                      customDialog: const CustomDialog(
-                        titleString: 'What is this?',
-                        contentString:
-                            'This is the average sentiment value of all '
-                            'your notes. It is calculated by adding up the '
-                            'sentiment value of each note and dividing it by the '
-                            'number of notes you have written.',
-                      ),
-                    );
-                  },
-                  trailing: Text(
-                    averageSentimentValue.toStringAsFixed(2),
-                    style: context.theme.textTheme.bodyLarge,
-                  ),
-                ),
-                SizedBox(height: gap),
-              ],
+            return FutureBuilder(
+              future: Future.delayed(
+                standardDuration,
+                () {
+                  ref
+                          .read(AnalysisViewController.noteModelsProviders.notifier)
+                          .state =
+                      metricGroupingsSnapshot.data!
+                          .sortedBy<num>((element) => element.timestamp);
+                  log(
+                    '${ref.watch(AnalysisViewController.noteModelsProviders.notifier).state.first.timestamp.timestampToDateTime()}',
+                    name: 'AnalysisView:futureBuilder',
+                  );
+                  log(
+                    '${ref.watch(AnalysisViewController.noteModelsProviders.notifier).state.last.timestamp.timestampToDateTime()}',
+                    name: 'AnalysisView:futureBuilder',
+                  );
+                },
+              ),
+              builder: (context, snapshot) {
+                return AnimatedSize(
+                  duration: emphasizedDuration,
+                  reverseDuration: emphasizedDuration,
+                  curve: emphasizedCurve,
+                  child: ref
+                          .read(AnalysisViewController.noteModelsProviders)
+                          .isNotEmpty
+                      ? Column(
+                          children: [
+                            const AverageOverallSentimentTile(),
+                            SizedBox(height: gap),
+                            const SplineSentimentTile(),
+                            SizedBox(height: gap),
+                          ],
+                        )
+                      : const LoadingTile(durationTitle: 'Loading metrics'),
+                );
+              },
             );
           } else {
             return const CustomListTile(
