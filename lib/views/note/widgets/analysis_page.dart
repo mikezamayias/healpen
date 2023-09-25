@@ -53,14 +53,16 @@ class AnalysisPage extends StatelessWidget {
             titleString: 'Sentiment',
             contentPadding: EdgeInsets.all(gap),
             subtitle: SelectableText(
-              sentimentLabels[noteModel.sentiment]!,
+              // sentimentLabels[noteModel.sentiment]!,
+              sentimentLabels[noteModel.timestamp]!,
               style: context.theme.textTheme.bodyLarge!.copyWith(
                 color: context.theme.colorScheme.onBackground,
               ),
             ),
             // trailingIconData: sentimentIcons[noteModel.sentiment],
             trailing: FaIcon(
-              sentimentIcons[noteModel.sentiment],
+              // sentimentIcons[noteModel.sentiment],
+              sentimentIcons[noteModel.timestamp],
               color: context.theme.colorScheme.onBackground,
               size: radius * 2,
             ),

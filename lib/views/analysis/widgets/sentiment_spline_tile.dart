@@ -51,7 +51,8 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
       for (int i = 0; i < sentimentData.length; i++)
         ChartData(
           sentimentData[i].timestamp.timestampToDateTime(),
-          sentimentData[i].sentiment!,
+          // sentimentData[i].sentiment!,
+          sentimentData[i].timestamp,
         ),
     ];
     return CustomListTile(

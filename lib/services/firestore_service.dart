@@ -25,6 +25,17 @@ class FirestoreService {
         .collection('notes');
   }
 
+  static CollectionReference<Map<String, dynamic>> analysisCollectionReference(
+    String noteId,
+  ) {
+    return FirebaseFirestore.instance
+        .collection('writing-temp')
+        .doc(currentUser.uid)
+        .collection('notes')
+        .doc(noteId)
+        .collection('analysis');
+  }
+
   static Future<void> saveNote(NoteModel noteModel) async {
     log(
       '${noteModel.toJson()}',

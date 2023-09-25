@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -102,4 +103,25 @@ void goToPage(PageController pageController, int index) {
   pageController.jumpToPage(
     index,
   );
+}
+
+/// Calculates the combined sentiment value based on the given magnitude and score.
+/// The magnitude is normalized to a value between 0 and 1, and then multiplied by the score and 5.
+/// The result is returned as a double with 2 decimal places.
+///
+/// [magnitude] The magnitude of the sentiment.
+/// [score] The score of the sentiment.
+///
+/// Returns
+/// [clippedResult] The combined sentiment value as a double with 2 decimal places.
+double combinedSentimentValue(double magnitude, double score) {
+  log('$score', name: 'SentenceModel:score');
+  log('$magnitude', name: 'SentenceModel:magnitude');
+  double normalizedMagnitude = (magnitude / 2).clamp(0, 1);
+  log('$normalizedMagnitude', name: 'SentenceModel:normalizedMagnitude');
+  double result = normalizedMagnitude * score * 5;
+  log('$result', name: 'SentenceModel:result');
+  double clippedResult = (result * 100).truncate() / 100;
+  log('$clippedResult', name: 'SentenceModel:clippedResult');
+  return clippedResult;
 }

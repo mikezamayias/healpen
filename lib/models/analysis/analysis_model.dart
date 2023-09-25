@@ -1,28 +1,30 @@
-import 'dart:developer';
-
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../utils/helper_functions.dart';
+import '../sentence/sentence_model.dart';
 
 part 'analysis_model.g.dart';
 
 @JsonSerializable()
 class AnalysisModel {
-  int? timestamp;
-  String? content;
-  double? score;
-  double? magnitude;
+  int timestamp;
+  String content;
+  double score;
+  double magnitude;
   double? sentiment;
-  String? language;
-  List<AnalysisModel>? sentences;
+  String language;
+  @JsonKey(includeToJson: false)
+  List<SentenceModel> sentences;
 
   AnalysisModel({
-    this.timestamp,
-    this.content,
-    this.score,
-    this.magnitude,
-    this.sentiment,
-    this.language,
-    this.sentences,
-  });
+    this.timestamp = 0,
+    this.content = '',
+    this.score = 0,
+    this.magnitude = 0,
+    double? sentiment,
+    this.language = '',
+    this.sentences = const [],
+  }) : sentiment = combinedSentimentValue(magnitude, score);
 
   factory AnalysisModel.fromJson(Map<String, dynamic> json) =>
       _$AnalysisModelFromJson(json);
@@ -45,7 +47,7 @@ class AnalysisModel {
     double? magnitude,
     double? sentiment,
     String? language,
-    List<AnalysisModel>? sentences,
+    List<SentenceModel>? sentences,
   }) {
     return AnalysisModel(
       timestamp: timestamp ?? this.timestamp,
@@ -56,26 +58,5 @@ class AnalysisModel {
       language: language ?? this.language,
       sentences: sentences ?? this.sentences,
     );
-  }
-
-  /// Calculates the combined sentiment value based on the given magnitude and score.
-  /// The magnitude is normalized to a value between 0 and 1, and then multiplied by the score and 5.
-  /// The result is returned as a double with 2 decimal places.
-  ///
-  /// [magnitude] The magnitude of the sentiment.
-  /// [score] The score of the sentiment.
-  ///
-  /// Returns
-  /// [clippedResult] The combined sentiment value as a double with 2 decimal places.
-  double combinedSentimentValue(double magnitude, double score) {
-    log('$score', name: 'AnalysisModel:score');
-    log('$magnitude', name: 'AnalysisModel:magnitude');
-    double normalizedMagnitude = (magnitude / 2).clamp(0, 1);
-    log('$normalizedMagnitude', name: 'AnalysisModel:normalizedMagnitude');
-    double result = normalizedMagnitude * score * 5;
-    log('$result', name: 'AnalysisModel:result');
-    double clippedResult = (result * 100).truncate() / 100;
-    log('$clippedResult', name: 'AnalysisModel:clippedResult');
-    return clippedResult;
   }
 }

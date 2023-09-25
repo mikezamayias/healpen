@@ -25,7 +25,8 @@ class AverageOverallSentimentTile extends ConsumerWidget {
       for (NoteModel element in ref
           .watch(AnalysisViewController.noteModelsProviders.notifier)
           .state)
-        element.sentiment!
+        // element.sentiment!
+        element.timestamp
     ].average;
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),

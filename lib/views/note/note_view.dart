@@ -40,7 +40,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
   Widget build(BuildContext context) {
     final NoteModel noteModel =
         ModalRoute.of(context)!.settings.arguments as NoteModel;
-    final showAnalysis = !noteModel.isPrivate && noteModel.sentiment != null;
+    final showAnalysis = !noteModel.isPrivate;
     final pages = [
       DetailsPage(noteModel: noteModel),
       if (showAnalysis) AnalysisPage(noteModel: noteModel)

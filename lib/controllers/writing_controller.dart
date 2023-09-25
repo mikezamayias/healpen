@@ -2,13 +2,16 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:googleapis/language/v1.dart';
+import 'package:googleapis_auth/auth_io.dart';
 
+import '../env/env.dart';
+import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
+import '../models/sentence/sentence_model.dart';
 import '../services/firestore_service.dart';
-import '../utils/constants.dart';
 import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
@@ -102,7 +105,7 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     _stopwatch.reset();
     _stopwatch.stop();
-    _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
+    // await _sentimentAnalysis();
     if (automaticStopwatch) {
       _timer?.cancel();
       _delayTimer?.cancel();
@@ -123,40 +126,40 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(isPrivate: bool);
   }
 
-  Future<int> _openAIsSentimentAnalysis() async {
-    OpenAICompletionModel apiResult = await OpenAI.instance.completion.create(
-      model: 'text-davinci-003',
-      prompt: '''
-Evaluate the sentiment the following text as ${sentimentValues.join(', ')} for 
-${sentimentLabels.join(', ')} respectively. Please return the sentiment after the 
-`Value: ` keyword.
+//   Future<int> _openAIsSentimentAnalysis() async {
+//     OpenAICompletionModel apiResult = await OpenAI.instance.completion.create(
+//       model: 'text-davinci-003',
+//       prompt: '''
+// Evaluate the sentiment the following text as ${sentimentValues.join(', ')} for
+// ${sentimentLabels.join(', ')} respectively. Please return the sentiment after the
+// `Value: ` keyword.
 
-Text:```${state.content}```
+// Text:```${state.content}```
 
-Value: ''',
-      temperature: 0,
-      maxTokens: 60,
-      topP: 1,
-      frequencyPenalty: 0.5,
-      presencePenalty: 0,
-      n: 1,
-      stop: 'Label:',
-      echo: true,
-    );
-    String response = apiResult.choices.first.text;
-    String result = response.split('Value: ').last.trim();
-    int sentiment = int.parse(result);
-    return sentiment;
-  }
+// Value: ''',
+//       temperature: 0,
+//       maxTokens: 60,
+//       topP: 1,
+//       frequencyPenalty: 0.5,
+//       presencePenalty: 0,
+//       n: 1,
+//       stop: 'Label:',
+//       echo: true,
+//     );
+//     String response = apiResult.choices.first.text;
+//     String result = response.split('Value: ').last.trim();
+//     int sentiment = int.parse(result);
+//     return sentiment;
+//   }
 
-  void _updateOpenAIsSentimentAnalysis(int sentiment) async {
-    state = state.copyWith(sentiment: sentiment);
-  }
+  // void _updateOpenAIsSentimentAnalysis(int sentiment) async {
+  //   state = state.copyWith(sentiment: sentiment);
+  // }
 
-  Future<void> updateSentimentAndSaveNote() async {
-    _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-    await FirestoreService.saveNote(state);
-  }
+  // Future<void> updateSentimentAndSaveNote() async {
+  //   _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
+  //   await FirestoreService.saveNote(state);
+  // }
 
   Future<void> updateAllUserNotes() async {
     log(
@@ -167,23 +170,92 @@ Value: ''',
         await FirestoreService.writingCollectionReference()
             .where('isPrivate', isEqualTo: false)
             .get();
-    for (QueryDocumentSnapshot<Map<String, dynamic>> element
-        in collection.docs) {
-      // await addOpenAIsSentimentAnalysisToDocument(element);
-      await removeSentimentFromDocument(element);
+    // for (QueryDocumentSnapshot<Map<String, dynamic>> element
+    //     in collection.docs) {
+    //   await _sentimentAnalysis(element);
+    //   // await removeSentimentFromDocument(element);
+    // }
+    for (int index = 0; index < 1; index++) {
+      // for (int i = 0; i < collection.docs.length; i++) {
+      await _sentimentAnalysis(collection.docs.reversed.elementAt(index));
+      // await removeSentimentFromDocument(element);
     }
   }
 
-  Future<void> addOpenAIsSentimentAnalysisToDocument(
+  // Future<void> addOpenAIsSentimentAnalysisToDocument(
+  //   QueryDocumentSnapshot<Map<String, dynamic>> element,
+  // ) async {
+  //   if (!element.data().containsKey('sentiment')) {
+  //     state = NoteModel.fromDocument(element.data());
+  //     // _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
+  //     await FirestoreService.writingCollectionReference()
+  //         .doc(state.timestamp.toString())
+  //         .update(state.toDocument());
+  //   }
+  // }
+
+  Future<AnalyzeSentimentResponse?> _sentimentAnalysis(
     QueryDocumentSnapshot<Map<String, dynamic>> element,
   ) async {
+    AnalyzeSentimentResponse? result;
     if (!element.data().containsKey('sentiment')) {
-      state = NoteModel.fromDocument(element.data());
-      _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-      await FirestoreService.writingCollectionReference()
-          .doc(state.timestamp.toString())
-          .update(state.toDocument());
+      FirestoreService.writingCollectionReference()
+          .doc(element.id)
+          .get()
+          .then((DocumentSnapshot<Map<String, dynamic>> value) async {
+        result =
+            await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
+                .documents
+                .analyzeSentiment(
+                  AnalyzeSentimentRequest.fromJson(
+                    {
+                      'document': {
+                        'type': 'PLAIN_TEXT',
+                        'content': value['content'],
+                      },
+                      'encodingType': 'UTF32',
+                    },
+                  ),
+                );
+        AnalysisModel analysisModel = AnalysisModel(
+          timestamp: element['timestamp'],
+          content: element['content'],
+          score: result!.documentSentiment!.score!,
+          magnitude: result!.documentSentiment!.magnitude!,
+          language: result!.language!,
+          sentences: [
+            for (Sentence sentence in result!.sentences!)
+              SentenceModel(
+                content: sentence.text!.content!,
+                score: sentence.sentiment!.score!,
+                magnitude: sentence.sentiment!.magnitude!,
+              ),
+          ],
+        );
+        log(
+          '${analysisModel.toJson()}',
+          name: 'WritingController:_sentimentAnalysis()',
+        );
+      }).catchError((error) {
+        log(
+          '$error',
+          name: 'WritingController:_sentimentAnalysis()',
+        );
+      });
     }
+    return result;
+  }
+
+  void updateSentimentAnalysis(AnalyzeSentimentResponse response) {
+    // state = state.copyWith(
+    //   sentimentScore: response.documentSentiment?.score,
+    //   sentimentMagnitude: response.documentSentiment?.magnitude,
+    //   sentenceCount: response.sentences?.length,
+    //   sentiment: calculateSentiment(
+    //     response.documentSentiment?.score,
+    //     response.documentSentiment?.magnitude,
+    //   ),
+    // );
   }
 
   Future<void> removeSentimentFromDocument(
