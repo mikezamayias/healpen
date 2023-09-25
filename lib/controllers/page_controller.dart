@@ -18,7 +18,7 @@ class PageController {
     pages = [
       // home,
       writing,
-      analysis,
+      // analysis,
       history,
       settings,
     ];
