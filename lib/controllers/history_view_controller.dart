@@ -41,7 +41,7 @@ class HistoryViewController {
           //   '${element.data()}',
           //   name: 'HistoryViewController:notesStream',
           // );
-          _writingEntries.add(NoteModel.fromDocument(element.data()));
+          _writingEntries.add(NoteModel.fromJson(element.data()));
         }
         return _writingEntries;
       });

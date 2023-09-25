@@ -35,7 +35,7 @@ class AnalysisViewController {
             '${element.data()} - ${element.data().values.first} - ${element.id}',
             name: 'AnalysisViewController:metricsStream',
           );
-          _metricGroupingEntries.add(NoteModel.fromDocument(element.data()));
+          _metricGroupingEntries.add(NoteModel.fromJson(element.data()));
         }
         return _metricGroupingEntries;
       });

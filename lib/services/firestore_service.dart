@@ -27,11 +27,11 @@ class FirestoreService {
 
   static Future<void> saveNote(NoteModel noteModel) async {
     log(
-      '${noteModel.toDocument()}',
+      '${noteModel.toJson()}',
       name: 'FirestoreService:saveNote() - note to save',
     );
     await writingCollectionReference()
         .doc('${noteModel.timestamp}')
-        .set(noteModel.toDocument());
+        .set(noteModel.toJson());
   }
 }

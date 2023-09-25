@@ -47,10 +47,10 @@ class NoteModel {
             .length,
         timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-  factory NoteModel.fromDocument(Map<String, dynamic> json) =>
+  factory NoteModel.fromJson(Map<String, dynamic> json) =>
       _$NoteModelFromJson(json);
 
-  Map<String, dynamic> toDocument() => _$NoteModelToJson(this);
+  Map<String, dynamic> toJson() => _$NoteModelToJson(this);
 
   NoteModel copyWith({
     String? content,
