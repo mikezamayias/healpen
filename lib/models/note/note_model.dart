@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'note_model.g.dart';
 
-// int calculateSentiment(double? score, double? magnitude) {
 //   double threshold = 0.5;
 //   double realScore = score ?? 0;
 //   double realMagnitude = magnitude ?? 0;
@@ -28,7 +27,6 @@ class NoteModel {
   int duration;
   int timestamp;
   int? wordCount;
-  int? sentiment;
 
   NoteModel({
     this.content = '',
@@ -38,8 +36,6 @@ class NoteModel {
     int? wordCount,
     int? timestamp,
     int? sentenceCount,
-    int? sentiment,
-    double? sentimentMagnitude,
   })  : wordCount = content
             .toString()
             .split(RegExp(r'\s+'))
@@ -59,7 +55,6 @@ class NoteModel {
     int? duration,
     int? timestamp,
     int? wordCount,
-    int? sentiment,
   }) {
     return NoteModel(
       content: content ?? this.content,
@@ -68,7 +63,6 @@ class NoteModel {
       duration: duration ?? this.duration,
       timestamp: timestamp ?? this.timestamp,
       wordCount: wordCount ?? this.wordCount,
-      sentiment: sentiment ?? this.sentiment,
     );
   }
 
@@ -77,7 +71,6 @@ class NoteModel {
     return 'NoteModel('
         'content: $content, isPrivate: $isPrivate, isFavorite: $isFavorite, '
         'duration: $duration, timestamp: $timestamp, wordCount: $wordCount, '
-        'sentiment: $sentiment'
         ')';
   }
 }
