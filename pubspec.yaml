@@ -41,6 +41,7 @@ dependencies:
   googleapis: ^11.4.0
   googleapis_auth: ^1.4.1
   http: ^1.1.0
+  intl: ^0.18.1
   json_annotation: ^4.8.0
   package_info_plus: ^4.1.0
   path_provider: ^2.1.1
@@ -51,6 +52,7 @@ dependencies:
   simple_gesture_detector: ^0.2.0
   smooth_page_indicator: ^1.1.0
   sprung: ^3.0.1
+  syncfusion_flutter_charts: ^23.1.36
   syncfusion_flutter_sliders: ^23.1.36
   validated: ^2.0.0
 
