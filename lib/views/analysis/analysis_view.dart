@@ -1,14 +1,10 @@
-import 'dart:developer';
-
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/analysis_view_controller.dart';
-import '../../extensions/int_extensions.dart';
-import '../../models/note/note_model.dart';
+import '../../models/analysis/analysis_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
@@ -32,7 +28,7 @@ class AnalysisView extends ConsumerWidget {
         stream: AnalysisViewController().metricGroupingsStream,
         builder: (
           BuildContext context,
-          AsyncSnapshot<List<NoteModel>> metricGroupingsSnapshot,
+          AsyncSnapshot<List<AnalysisModel>> metricGroupingsSnapshot,
         ) {
           if (metricGroupingsSnapshot.hasError) {
             return Center(
@@ -50,44 +46,20 @@ class AnalysisView extends ConsumerWidget {
             return const LoadingTile(durationTitle: 'Loading metrics');
           }
           if (metricGroupingsSnapshot.data!.isNotEmpty) {
-            return FutureBuilder(
-              future: Future.delayed(
-                standardDuration,
-                () {
-                  ref
-                          .read(AnalysisViewController.noteModelsProviders.notifier)
-                          .state =
-                      metricGroupingsSnapshot.data!
-                          .sortedBy<num>((element) => element.timestamp);
-                  log(
-                    '${ref.watch(AnalysisViewController.noteModelsProviders.notifier).state.first.timestamp.timestampToDateTime()}',
-                    name: 'AnalysisView:futureBuilder',
-                  );
-                  log(
-                    '${ref.watch(AnalysisViewController.noteModelsProviders.notifier).state.last.timestamp.timestampToDateTime()}',
-                    name: 'AnalysisView:futureBuilder',
-                  );
-                },
-              ),
-              builder: (context, snapshot) {
-                return AnimatedSize(
-                  duration: emphasizedDuration,
-                  reverseDuration: emphasizedDuration,
-                  curve: emphasizedCurve,
-                  child: ref
-                          .read(AnalysisViewController.noteModelsProviders)
-                          .isNotEmpty
-                      ? Column(
-                          children: [
-                            const AverageOverallSentimentTile(),
-                            SizedBox(height: gap),
-                            const SplineSentimentTile(),
-                            SizedBox(height: gap),
-                          ],
-                        )
-                      : const LoadingTile(durationTitle: 'Loading metrics'),
-                );
-              },
+            return AnimatedSize(
+              duration: emphasizedDuration,
+              reverseDuration: emphasizedDuration,
+              curve: emphasizedCurve,
+              child: AnalysisViewController.analysisModelList.isNotEmpty
+                  ? Column(
+                      children: [
+                        const AverageOverallSentimentTile(),
+                        SizedBox(height: gap),
+                        const SplineSentimentTile(),
+                        SizedBox(height: gap),
+                      ],
+                    )
+                  : const LoadingTile(durationTitle: 'Loading metrics'),
             );
           } else {
             return const CustomListTile(

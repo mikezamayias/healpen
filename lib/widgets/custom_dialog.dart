@@ -119,7 +119,10 @@ class _CustomDialogState extends ConsumerState<CustomDialog> {
               ]
             : [
                 CustomListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: gap * 2,
+                    vertical: gap,
+                  ),
                   cornerRadius: radius - gap,
                   responsiveWidth: true,
                   titleString: 'OK',

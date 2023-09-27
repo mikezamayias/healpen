@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../../controllers/analysis_view_controller.dart';
-import '../../../models/note/note_model.dart';
+import '../../../models/analysis/analysis_model.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
@@ -22,11 +22,8 @@ class AverageOverallSentimentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double averageSentimentValue = [
-      for (NoteModel element in ref
-          .watch(AnalysisViewController.noteModelsProviders.notifier)
-          .state)
-        // element.sentiment!
-        element.timestamp
+      for (AnalysisModel element in AnalysisViewController.analysisModelList)
+        element.sentiment!,
     ].average;
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
