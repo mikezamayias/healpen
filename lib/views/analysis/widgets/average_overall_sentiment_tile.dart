@@ -72,7 +72,9 @@ class AverageOverallSentimentTile extends ConsumerWidget {
       },
       trailing: Text(
         averageSentimentValue.toStringAsFixed(2),
-        style: context.theme.textTheme.bodyLarge,
+        style: context.theme.textTheme.bodyLarge?.copyWith(
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
