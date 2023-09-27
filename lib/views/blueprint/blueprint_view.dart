@@ -43,6 +43,7 @@ class _BlueprintViewState extends ConsumerState<BlueprintView>
           color: context.theme.colorScheme.background,
           padding: EdgeInsets.only(
             bottom: gap,
+            top: gap,
             left: widget.padBodyHorizontally! ? gap : 0,
             right: widget.padBodyHorizontally! ? gap : 0,
           ),

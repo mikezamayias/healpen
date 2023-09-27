@@ -18,13 +18,13 @@ class CustomBottomNavigationBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: gap,
-        right: gap,
-        bottom: gap,
-      ),
-      child: SafeArea(
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: gap,
+          right: gap,
+          bottom: gap,
+        ),
         child: PhysicalModel(
           color: context.theme.colorScheme.surfaceVariant,
           borderRadius: BorderRadius.all(Radius.circular(radius)),
