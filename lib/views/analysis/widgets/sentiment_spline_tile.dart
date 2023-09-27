@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -7,7 +6,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../controllers/analysis_view_controller.dart';
 import '../../../extensions/int_extensions.dart';
-import '../../../models/analysis/analysis_model.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/text_divider.dart';
@@ -24,9 +22,11 @@ class SplineSentimentTile extends ConsumerStatefulWidget {
 
 class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
   Set<int> selectedPeriodRange = {0};
+  final animationDuration = 0;
+  final sentimentData = AnalysisViewController.analysisModelList;
+  final sentimentDataLength = AnalysisViewController.analysisModelList.length;
   @override
   Widget build(BuildContext context) {
-    int sentimentDataLength = AnalysisViewController.analysisModelList.length;
     Map<int, String> periodRanges = {
       0: 'all time',
       1: 'last week',
@@ -43,10 +43,6 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
       4: 180,
       5: 365,
     };
-    List<AnalysisModel> sentimentData =
-        AnalysisViewController.analysisModelList.sublist(
-      sentimentDataLength - periodRangeValues[selectedPeriodRange.first]!,
-    );
     final chartData = <ChartData>[
       for (int i = 0; i < sentimentData.length; i++)
         ChartData(
@@ -56,7 +52,7 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
     ];
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: 'Sentiment Line',
+      titleString: 'Sentiment Curve',
       enableSubtitleWrapper: false,
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -69,31 +65,33 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
             ),
             child: SfCartesianChart(
               primaryYAxis: NumericAxis(
-                minimum: sentimentValues.min.toDouble(),
-                maximum: sentimentValues.max.toDouble(),
                 interval: 1,
                 isVisible: true,
+                opposedPosition: false,
               ),
               primaryXAxis: DateTimeCategoryAxis(
-                dateFormat: DateFormat.yMMMd(),
-                interval: 7,
+                dateFormat: DateFormat('MMM dd\nyyyy'),
                 isVisible: true,
-                labelRotation: -45,
-                labelAlignment: LabelAlignment.center,
               ),
               series: <ChartSeries<ChartData, DateTime>>[
                 // Renders spline chart
                 SplineSeries<ChartData, DateTime>(
                   color: theme.colorScheme.primary,
-                  dataSource: chartData,
+                  dataSource: chartData.sublist(
+                    sentimentDataLength -
+                        periodRangeValues[selectedPeriodRange.first]!,
+                  ),
+                  enableTooltip: true,
+                  sortingOrder: SortingOrder.ascending,
+                  sortFieldValueMapper: (ChartData data, _) => data.x,
                   splineType: SplineType.natural,
                   cardinalSplineTension: 0.9,
                   xValueMapper: (ChartData data, _) => data.x,
                   yValueMapper: (ChartData data, _) => data.y,
-                  animationDuration: 1000,
+                  animationDuration: animationDuration.toDouble(),
                   trendlines: <Trendline>[
                     Trendline(
-                      animationDuration: 1000,
+                      animationDuration: animationDuration.toDouble(),
                       type: TrendlineType.polynomial,
                       polynomialOrder: 6,
                       width: 3,
@@ -107,7 +105,7 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
             ),
           ),
           SizedBox(height: gap),
-          const TextDivider('Time Period'),
+          const TextDivider('Time Range'),
           SizedBox(height: gap),
           SegmentedButton<int>(
             segments: [
