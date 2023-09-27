@@ -18,7 +18,8 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CustomListTile(
+        CustomListTile(
+          contentPadding: EdgeInsets.all(gap),
           leadingIconData: FontAwesomeIcons.solidEnvelopeOpen,
           titleString: 'We\'ve sent you an email with a magic link.',
           explanationString:
@@ -26,9 +27,10 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
         ),
         SizedBox(height: gap),
         CustomListTile(
+          contentPadding: EdgeInsets.all(gap),
           responsiveWidth: true,
           leadingIconData: FontAwesomeIcons.arrowLeft,
-          selectableText: true,
+          selectableText: false,
           // backgroundColor: context.theme.colorScheme.error,
           // textColor: context.theme.colorScheme.onError,
           titleString: 'Something not right?',

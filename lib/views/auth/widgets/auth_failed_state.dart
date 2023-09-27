@@ -30,6 +30,7 @@ class AuthFailedState extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomListTile(
+          contentPadding: EdgeInsets.all(gap),
           leadingIconData: FontAwesomeIcons.circleExclamation,
           selectableText: true,
           backgroundColor: context.theme.colorScheme.error,

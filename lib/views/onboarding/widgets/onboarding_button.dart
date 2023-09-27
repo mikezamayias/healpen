@@ -28,6 +28,7 @@ class OnboardingButton extends StatelessWidget {
           onTap: onTap,
           contentPadding: EdgeInsets.symmetric(
             horizontal: gap * 2,
+            vertical: gap,
           ),
           title: title,
           titleString: titleString,

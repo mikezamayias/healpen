@@ -19,6 +19,7 @@ class UnknownState extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomListTile(
+          contentPadding: EdgeInsets.all(gap),
           leadingIconData: FontAwesomeIcons.solidCircleQuestion,
           selectableText: true,
           backgroundColor: context.theme.colorScheme.tertiary,
@@ -33,6 +34,10 @@ class UnknownState extends StatelessWidget {
           selectableText: true,
           // backgroundColor: context.theme.colorScheme.error,
           // textColor: context.theme.colorScheme.onError,
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
           titleString: 'Go back',
           onTap: () => context.navigator.pushReplacementNamed('/auth'),
         ),
