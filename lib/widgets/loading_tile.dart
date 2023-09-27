@@ -17,13 +17,12 @@ class LoadingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
+      contentPadding: EdgeInsets.all(gap * 2),
       backgroundColor: context.theme.colorScheme.surfaceVariant,
       textColor: context.theme.colorScheme.onSurfaceVariant,
       cornerRadius: radius,
       titleString: durationTitle,
-      leading: CircularProgressIndicator(
-        value: value,
-      ),
+      leading: CircularProgressIndicator(value: value),
     );
   }
 }
