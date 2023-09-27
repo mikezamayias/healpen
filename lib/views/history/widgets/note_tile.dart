@@ -30,12 +30,20 @@ class NoteTile extends ConsumerWidget {
         child: Slidable(
           key: ValueKey(entry.timestamp.toString()),
           startActionPane: ActionPane(
-            extentRatio: 1,
             motion: const ScrollMotion(),
-            dragDismissible: false,
+            dragDismissible: true,
+            extentRatio: 0.6,
             children: [
               SlidableAction(
-                autoClose: false,
+                icon: entry.isPrivate
+                    ? FontAwesomeIcons.lockOpen
+                    : FontAwesomeIcons.lock,
+                autoClose: true,
+                backgroundColor: context.theme.colorScheme.primary,
+                foregroundColor: context.theme.colorScheme.onPrimary,
+                borderRadius: BorderRadius.circular(radius),
+                padding: EdgeInsets.all(gap),
+                spacing: gap,
                 onPressed: (context) {
                   showHealpenDialog(
                     context: context,
@@ -130,16 +138,18 @@ class NoteTile extends ConsumerWidget {
                     }
                   });
                 },
-                backgroundColor: context.theme.colorScheme.primary,
-                foregroundColor: context.theme.colorScheme.onPrimary,
-                icon: entry.isPrivate
-                    ? FontAwesomeIcons.lockOpen
-                    : FontAwesomeIcons.lock,
-                borderRadius: BorderRadius.circular(radius),
               ),
               SizedBox(width: gap),
               SlidableAction(
-                autoClose: false,
+                icon: entry.isFavorite
+                    ? FontAwesomeIcons.solidStar
+                    : FontAwesomeIcons.star,
+                autoClose: true,
+                backgroundColor: context.theme.colorScheme.primary,
+                foregroundColor: context.theme.colorScheme.onPrimary,
+                borderRadius: BorderRadius.circular(radius),
+                padding: EdgeInsets.all(gap),
+                spacing: gap,
                 onPressed: (context) {
                   showHealpenDialog(
                     context: context,
@@ -209,22 +219,24 @@ class NoteTile extends ConsumerWidget {
                     },
                   );
                 },
-                backgroundColor: context.theme.colorScheme.primary,
-                foregroundColor: context.theme.colorScheme.onPrimary,
-                icon: entry.isFavorite
-                    ? FontAwesomeIcons.solidStar
-                    : FontAwesomeIcons.star,
-                borderRadius: BorderRadius.circular(radius),
               ),
+              SizedBox(width: gap),
             ],
           ),
           endActionPane: ActionPane(
             motion: const ScrollMotion(),
             dragDismissible: true,
-            extentRatio: 1,
+            extentRatio: 0.6,
             children: [
+              SizedBox(width: gap),
               SlidableAction(
-                autoClose: false,
+                icon: FontAwesomeIcons.trashCan,
+                autoClose: true,
+                backgroundColor: context.theme.colorScheme.tertiary,
+                foregroundColor: context.theme.colorScheme.onTertiary,
+                borderRadius: BorderRadius.circular(radius),
+                padding: EdgeInsets.all(gap),
+                spacing: gap,
                 onPressed: (context) {
                   showHealpenDialog(
                     context: context,
@@ -315,11 +327,6 @@ class NoteTile extends ConsumerWidget {
                     },
                   );
                 },
-                backgroundColor: context.theme.colorScheme.tertiary,
-                foregroundColor: context.theme.colorScheme.onTertiary,
-                icon: FontAwesomeIcons.trashCan,
-                borderRadius: BorderRadius.circular(radius),
-                padding: EdgeInsets.zero,
               ),
             ],
           ),
