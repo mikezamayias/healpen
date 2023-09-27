@@ -38,12 +38,7 @@ class DetailsPage extends StatelessWidget {
                       titleString: 'Date and Time',
                       responsiveWidth: true,
                       contentPadding: EdgeInsets.all(gap),
-                      subtitle: SelectableText(
-                        noteModel.timestamp.timestampFormat(),
-                        style: context.theme.textTheme.bodyLarge!.copyWith(
-                          color: context.theme.colorScheme.onBackground,
-                        ),
-                      ),
+                      explanationString: noteModel.timestamp.timestampFormat(),
                     ),
                   ),
                   SizedBox(width: gap),
@@ -52,9 +47,8 @@ class DetailsPage extends StatelessWidget {
                       responsiveWidth: true,
                       contentPadding: EdgeInsets.all(gap),
                       titleString: 'Duration',
-                      subtitle: Text(
-                        noteModel.duration.writingDurationFormat(),
-                      ),
+                      explanationString:
+                          noteModel.duration.writingDurationFormat(),
                     ),
                   ),
                 ],
@@ -105,12 +99,7 @@ class DetailsPage extends StatelessWidget {
               CustomListTile(
                 titleString: 'Content',
                 contentPadding: EdgeInsets.all(gap),
-                subtitle: SelectableText(
-                  noteModel.content,
-                  style: context.theme.textTheme.bodyLarge!.copyWith(
-                    color: context.theme.colorScheme.onBackground,
-                  ),
-                ),
+                explanationString: noteModel.content,
               ),
             ],
           ),
