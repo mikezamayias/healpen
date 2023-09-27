@@ -24,7 +24,7 @@ class UnknownState extends StatelessWidget {
           backgroundColor: context.theme.colorScheme.tertiary,
           textColor: context.theme.colorScheme.onTertiary,
           titleString: 'Unknown state',
-          subtitleString: '${state.runtimeType}',
+          explanationString: '${state.runtimeType}',
         ),
         SizedBox(height: gap),
         CustomListTile(

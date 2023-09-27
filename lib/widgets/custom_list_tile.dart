@@ -11,7 +11,7 @@ import '../utils/constants.dart';
 
 class CustomListTile extends ConsumerWidget {
   final String? titleString;
-  final String? subtitleString;
+  final String? explanationString;
   final Widget? title;
   final Widget? subtitle;
   final Widget? leading;
@@ -33,7 +33,7 @@ class CustomListTile extends ConsumerWidget {
   const CustomListTile({
     Key? key,
     this.titleString,
-    this.subtitleString,
+    this.explanationString,
     this.leadingIconData,
     this.trailing,
     this.leading,
@@ -60,136 +60,161 @@ class CustomListTile extends ConsumerWidget {
           horizontal: gap * 2,
           vertical: gap,
         );
-    final listTile = ListTile(
-      dense: false,
-      onTap: null,
-      onLongPress: null,
-      contentPadding: padding,
-      minLeadingWidth: 0,
-      minVerticalPadding: 0,
-      horizontalTitleGap: padding.horizontal / 2,
-      leading: leading != null || leadingIconData != null
-          ? GestureDetector(
-              onTap: leadingOnTap,
-              child: Animate(
-                effects: showcaseLeadingIcon!
-                    ? [
-                        ShakeEffect(
-                          delay: 1.seconds,
-                          curve: Sprung.criticallyDamped,
-                          duration: 6.seconds,
-                          hz: 1,
-                          offset: const Offset(0, 3),
-                        ),
-                        ShakeEffect(
-                          delay: 2.seconds,
-                          curve: Sprung.criticallyDamped,
-                          duration: 6.seconds,
-                          hz: 1,
-                          offset: const Offset(3, 0),
-                        ),
-                      ]
-                    : null,
-                onInit: showcaseLeadingIcon!
-                    ? (_) async {
-                        if (!ref
-                            .watch(navigationReduceHapticFeedbackProvider)) {
-                          await Future.delayed(
-                            1.seconds,
-                            HapticFeedback.vibrate,
-                          );
-                        }
-                      }
-                    : null,
-                child: leading ??
-                    FaIcon(
-                      leadingIconData!,
-                      color: textColor ??
-                          (leadingOnTap != null
-                              ? context.theme.colorScheme.primary
-                              : onTap == null
-                                  ? context.theme.colorScheme.onSurfaceVariant
-                                  : context.theme.colorScheme.onPrimary),
-                      size: context.theme.textTheme.titleLarge!.fontSize,
-                    ),
-              ),
-            )
-          : null,
-      title: Column(
+    final listTile = Padding(
+      padding: padding,
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (title != null || titleString != null)
-            title ??
-                Text(
-                  titleString!,
-                  style: context.theme.textTheme.titleLarge!.copyWith(
-                    color: textColor ??
-                        (onTap == null
-                            ? context.theme.colorScheme.onSurfaceVariant
-                            : context.theme.colorScheme.onPrimary),
+          Row(
+            children: [
+              if (leading != null || leadingIconData != null)
+                Padding(
+                  padding: (title != null || titleString != null)
+                      ? EdgeInsets.only(
+                          right: padding.horizontal / 4 < gap
+                              ? gap
+                              : padding.horizontal / 4,
+                        )
+                      : EdgeInsets.zero,
+                  child: GestureDetector(
+                    onTap: leadingOnTap,
+                    child: Animate(
+                      effects: showcaseLeadingIcon!
+                          ? [
+                              ShakeEffect(
+                                delay: 1.seconds,
+                                curve: Sprung.criticallyDamped,
+                                duration: 6.seconds,
+                                hz: 1,
+                                offset: const Offset(0, 3),
+                              ),
+                              ShakeEffect(
+                                delay: 2.seconds,
+                                curve: Sprung.criticallyDamped,
+                                duration: 6.seconds,
+                                hz: 1,
+                                offset: const Offset(3, 0),
+                              ),
+                            ]
+                          : null,
+                      onInit: showcaseLeadingIcon!
+                          ? (_) async {
+                              if (!ref.watch(
+                                  navigationReduceHapticFeedbackProvider)) {
+                                await Future.delayed(
+                                  1.seconds,
+                                  HapticFeedback.vibrate,
+                                );
+                              }
+                            }
+                          : null,
+                      child: leading ??
+                          FaIcon(
+                            leadingIconData!,
+                            color: textColor ??
+                                (leadingOnTap != null
+                                    ? context.theme.colorScheme.primary
+                                    : onTap == null
+                                        ? context
+                                            .theme.colorScheme.onSurfaceVariant
+                                        : context.theme.colorScheme.onPrimary),
+                            size: context.theme.textTheme.titleLarge!.fontSize,
+                          ),
+                    ),
                   ),
                 ),
-          if (subtitle != null || subtitleString != null)
-            subtitle != null && subtitleString == null
-                ? Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: padding.vertical / 2),
-                      child: enableSubtitleWrapper!
-                          ? Container(
-                              padding: EdgeInsets.all(gap),
-                              decoration: BoxDecoration(
-                                color: context.theme.colorScheme.surface,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(radius - gap),
-                                ),
-                              ),
-                              child: subtitle,
-                            )
-                          : subtitle!,
-                    ),
-                  )
-                : selectableText!
-                    ? SelectableText(
-                        subtitleString!,
-                        style: context.theme.textTheme.titleMedium!.copyWith(
-                          color: textColor ??
-                              (onTap == null
-                                  ? context.theme.colorScheme.onSurfaceVariant
-                                  : context.theme.colorScheme.onPrimary),
-                        ),
-                      )
-                    : Text(
-                        subtitleString!,
-                        style: context.theme.textTheme.titleMedium!.copyWith(
+              if (title != null || titleString != null)
+                Expanded(
+                  child: title ??
+                      Text(
+                        titleString!,
+                        style: context.theme.textTheme.titleLarge!.copyWith(
                           color: textColor ??
                               (onTap == null
                                   ? context.theme.colorScheme.onSurfaceVariant
                                   : context.theme.colorScheme.onPrimary),
                         ),
                       ),
-        ],
-      ),
-      trailing: trailing != null || trailingIconData != null
-          ? GestureDetector(
-              onTap: trailingOnTap,
-              child: trailing ??
-                  (trailingOnTap != null
-                      ? FaIcon(
-                          trailingIconData!,
-                          color: textColor ?? context.theme.colorScheme.primary,
-                          size: context.theme.textTheme.titleLarge!.fontSize,
+                ),
+              if (trailing != null || trailingIconData != null)
+                Padding(
+                  padding: (title != null || titleString != null)
+                      ? EdgeInsets.only(left: padding.horizontal / 2)
+                      : EdgeInsets.zero,
+                  child: GestureDetector(
+                    onTap: trailingOnTap,
+                    child: trailing ??
+                        (trailingOnTap != null
+                            ? FaIcon(
+                                trailingIconData!,
+                                color: textColor ??
+                                    context.theme.colorScheme.primary,
+                                size: context
+                                    .theme.textTheme.titleLarge!.fontSize,
+                              )
+                            : FaIcon(
+                                trailingIconData!,
+                                color: textColor ??
+                                    (onTap == null
+                                        ? context
+                                            .theme.colorScheme.onSurfaceVariant
+                                        : context.theme.colorScheme.onPrimary),
+                                size: context
+                                    .theme.textTheme.titleLarge!.fontSize,
+                              )),
+                  ),
+                ),
+            ],
+          ),
+          if (subtitle != null)
+            Flexible(
+              child: Padding(
+                padding: EdgeInsets.only(top: padding.vertical / 2),
+                child: Container(
+                  padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
+                  decoration: enableSubtitleWrapper!
+                      ? BoxDecoration(
+                          color: context.theme.colorScheme.surface,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(radius - gap),
+                          ),
                         )
-                      : FaIcon(
-                          trailingIconData!,
-                          color: textColor ??
-                              (onTap == null
+                      : null,
+                  child: subtitle!,
+                ),
+              ),
+            ),
+          if (explanationString != null)
+            Flexible(
+              child: Padding(
+                padding: EdgeInsets.only(top: padding.vertical / 2),
+                child: Container(
+                  padding: EdgeInsets.all(gap),
+                  decoration: BoxDecoration(
+                    color: context.theme.colorScheme.surface,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(radius - gap),
+                    ),
+                  ),
+                  child: SelectableText(
+                    explanationString!,
+                    enableInteractiveSelection: selectableText!,
+                    style: context.theme.textTheme.titleMedium!.copyWith(
+                      color: textColor ??
+                          (onTap == null
+                              ? context.theme.colorScheme.onSurfaceVariant
+                              : enableSubtitleWrapper!
                                   ? context.theme.colorScheme.onSurfaceVariant
                                   : context.theme.colorScheme.onPrimary),
-                          size: context.theme.textTheme.titleLarge!.fontSize,
-                        )),
-            )
-          : null,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
     return GestureDetector(
       onTap: onTap,

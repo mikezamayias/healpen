@@ -17,14 +17,13 @@ class ReduceHapticFeedbackSettingsTile extends ConsumerWidget {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Reduce haptic feedback',
-      subtitle: const Text(
-        'Reduces the amount of haptic feedback in the app.',
-      ),
+      explanationString: 'Reduces the amount of haptic feedback in the app.',
       trailing: Switch(
         value: ref.watch(navigationReduceHapticFeedbackProvider),
         onChanged: (value) {
           vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
-            ref.read(navigationReduceHapticFeedbackProvider.notifier).state = value;
+            ref.read(navigationReduceHapticFeedbackProvider.notifier).state =
+                value;
             await PreferencesController.reduceHapticFeedback
                 .write(ref.watch(navigationReduceHapticFeedbackProvider));
             log(

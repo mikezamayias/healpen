@@ -21,7 +21,7 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
         const CustomListTile(
           leadingIconData: FontAwesomeIcons.solidEnvelopeOpen,
           titleString: 'We\'ve sent you an email with a magic link.',
-          subtitleString:
+          explanationString:
               'Please check your email and follow the link to sign in. Don\'t forget to check your spam folder too!',
         ),
         SizedBox(height: gap),
@@ -32,7 +32,7 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
           // backgroundColor: context.theme.colorScheme.error,
           // textColor: context.theme.colorScheme.onError,
           titleString: 'Something not right?',
-          subtitleString: 'Start again.',
+          explanationString: 'Start again.',
           onTap: () {
             vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
               context.navigator.pushReplacementNamed('/auth');

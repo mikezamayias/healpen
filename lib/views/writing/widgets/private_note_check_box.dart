@@ -19,7 +19,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.symmetric(horizontal: gap),
+      contentPadding: EdgeInsets.all(gap),
       backgroundColor: context.theme.colorScheme.surface,
       responsiveWidth: true,
       showcaseLeadingIcon: ref.watch(writingShakePrivateNoteInfoProvider),
@@ -38,7 +38,10 @@ class PrivateNoteCheckBox extends ConsumerWidget {
                   'A private note won\'t be used in analysis and will only be visible in History.',
               actions: [
                 CustomListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: gap * 2,
+                    vertical: gap,
+                  ),
                   cornerRadius: radius - gap,
                   responsiveWidth: true,
                   titleString: 'Okay',

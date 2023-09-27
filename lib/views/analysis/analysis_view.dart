@@ -92,7 +92,7 @@ class AnalysisView extends ConsumerWidget {
           } else {
             return const CustomListTile(
               titleString: 'No metrics yet',
-              subtitleString: 'Start writing to see your metrics!',
+              explanationString: 'Start writing to see your metrics!',
               leadingIconData: FontAwesomeIcons.solidChartBar,
             );
           }

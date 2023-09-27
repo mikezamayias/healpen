@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
 import 'custom_list_tile.dart';
@@ -13,10 +11,10 @@ class CustomSnackBar {
 
   CustomSnackBar(this._snackBarConfig);
 
-  Future<void> showSnackBar(BuildContext context, WidgetRef ref) async {
+  Future<void> showSnackBar(BuildContext context) async {
     final snackBar1 = _snackBarConfig.createSnackBar1();
     final snackBar2 = _snackBarConfig.createSnackBar2();
-    vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
+    vibrate(_snackBarConfig.vibrate, () async {
       final SnackBarClosedReason snackBar1ClosedReasonFuture =
           await scaffoldMessengerKey.currentState!
               .showSnackBar(snackBar1)
@@ -27,7 +25,7 @@ class CustomSnackBar {
           await _snackBarConfig.actionAfterSnackBar1!();
 
           if (snackBar2 != null) {
-            vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+            vibrate(_snackBarConfig.vibrate, () {
               scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
             });
           }
@@ -38,6 +36,7 @@ class CustomSnackBar {
 }
 
 class SnackBarConfig {
+  final bool vibrate;
   final String titleString1;
   final IconData leadingIconData1;
   final List<Widget>? trailingWidgets1;
@@ -48,6 +47,7 @@ class SnackBarConfig {
   final IconData? leadingIconData2;
 
   SnackBarConfig({
+    required this.vibrate,
     required this.titleString1,
     required this.leadingIconData1,
     this.trailingWidgets1,
@@ -89,11 +89,8 @@ class SnackBarConfig {
             textColor: context.theme.colorScheme.onSecondary,
             titleString: titleString,
             leadingIconData: leadingIconData,
-            contentPadding: EdgeInsets.only(
-              top: gap,
-              bottom: gap,
-              right: trailingWidgets != null ? gap : gap * 2,
-              left: gap * 2,
+            contentPadding: EdgeInsets.all(
+              trailingWidgets != null ? gap : gap * 2,
             ),
             cornerRadius: radius,
             trailing: trailingWidgets != null

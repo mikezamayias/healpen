@@ -48,8 +48,10 @@ class NoteTile extends ConsumerWidget {
                       contentString: entry.content,
                       actions: [
                         CustomListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap * 2,
+                            vertical: gap,
+                          ),
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
                           titleString: 'Yes',
@@ -63,8 +65,10 @@ class NoteTile extends ConsumerWidget {
                           },
                         ),
                         CustomListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap * 2,
+                            vertical: gap,
+                          ),
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
                           titleString: 'No',
@@ -84,6 +88,8 @@ class NoteTile extends ConsumerWidget {
                     if (exit) {
                       CustomSnackBar(
                         SnackBarConfig(
+                          vibrate:
+                              ref.watch(navigationReduceHapticFeedbackProvider),
                           titleString1: entry.isPrivate
                               ? 'Marking note as not private...'
                               : 'Marking note as private...',
@@ -93,7 +99,8 @@ class NoteTile extends ConsumerWidget {
                           trailingWidgets1: [
                             CustomListTile(
                               contentPadding: EdgeInsets.symmetric(
-                                horizontal: gap,
+                                horizontal: gap * 2,
+                                vertical: gap,
                               ),
                               cornerRadius: radius - gap,
                               responsiveWidth: true,
@@ -119,7 +126,7 @@ class NoteTile extends ConsumerWidget {
                               HistoryViewController()
                                   .noteTogglePrivate(noteModel: entry),
                         ),
-                      ).showSnackBar(context, ref);
+                      ).showSnackBar(context);
                     }
                   });
                 },
@@ -144,8 +151,10 @@ class NoteTile extends ConsumerWidget {
                           : 'Mark note as favorite?',
                       actions: [
                         CustomListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap * 2,
+                            vertical: gap,
+                          ),
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
                           titleString: 'Yes',
@@ -159,8 +168,10 @@ class NoteTile extends ConsumerWidget {
                           },
                         ),
                         CustomListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap * 2,
+                            vertical: gap,
+                          ),
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
                           titleString: 'No',
@@ -181,6 +192,8 @@ class NoteTile extends ConsumerWidget {
                       if (exit) {
                         CustomSnackBar(
                           SnackBarConfig(
+                            vibrate: ref
+                                .watch(navigationReduceHapticFeedbackProvider),
                             titleString1: entry.isFavorite
                                 ? 'Marking note as not favorite...'
                                 : 'Marking note as favorite...',
@@ -191,7 +204,7 @@ class NoteTile extends ConsumerWidget {
                                 HistoryViewController()
                                     .noteToggleFavorite(noteModel: entry),
                           ),
-                        ).showSnackBar(context, ref);
+                        ).showSnackBar(context);
                       }
                     },
                   );
@@ -222,8 +235,10 @@ class NoteTile extends ConsumerWidget {
                       contentString: 'You cannot undo this action.',
                       actions: [
                         CustomListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap * 2,
+                            vertical: gap,
+                          ),
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
                           titleString: 'Yes',
@@ -237,8 +252,10 @@ class NoteTile extends ConsumerWidget {
                           },
                         ),
                         CustomListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: gap * 2),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap * 2,
+                            vertical: gap,
+                          ),
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
                           titleString: 'No',
@@ -259,6 +276,8 @@ class NoteTile extends ConsumerWidget {
                       if (exit) {
                         CustomSnackBar(
                           SnackBarConfig(
+                            vibrate: ref
+                                .watch(navigationReduceHapticFeedbackProvider),
                             titleString1: 'Deleting note...',
                             leadingIconData1: FontAwesomeIcons.trashCan,
                             actionAfterSnackBar1: () async =>
@@ -267,7 +286,8 @@ class NoteTile extends ConsumerWidget {
                             trailingWidgets1: [
                               CustomListTile(
                                 contentPadding: EdgeInsets.symmetric(
-                                  horizontal: gap,
+                                  horizontal: gap * 2,
+                                  vertical: gap,
                                 ),
                                 cornerRadius: radius - gap,
                                 responsiveWidth: true,
@@ -290,7 +310,7 @@ class NoteTile extends ConsumerWidget {
                               ),
                             ],
                           ),
-                        ).showSnackBar(context, ref);
+                        ).showSnackBar(context);
                       }
                     },
                   );
@@ -304,7 +324,10 @@ class NoteTile extends ConsumerWidget {
             ],
           ),
           child: CustomListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: gap * 2,
+              vertical: gap,
+            ),
             title: Text(
               entry.content,
               maxLines: 1,

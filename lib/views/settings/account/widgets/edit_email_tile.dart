@@ -119,7 +119,7 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
                                       context.theme.colorScheme.error,
                                   textColor: context.theme.colorScheme.onError,
                                   titleString: 'Something went wrong!',
-                                  subtitleString: error.toString(),
+                                  explanationString: error.toString(),
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: gap,
                                     horizontal: gap * 2,

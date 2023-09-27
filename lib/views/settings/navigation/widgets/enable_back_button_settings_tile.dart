@@ -17,10 +17,9 @@ class ShowBackButtonSettingsTile extends ConsumerWidget {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Show back button in app bar',
-      subtitle: const Text(
-        'Shows a back button at the top of the screen, making it simpler to '
-        'return to previous pages.',
-      ),
+      explanationString:
+          'Shows a back button at the top of the screen, making it simpler to '
+          'return to previous pages.',
       trailing: Switch(
         value: ref.watch(navigationShowBackButtonProvider),
         onChanged: (value) {
@@ -29,9 +28,9 @@ class ShowBackButtonSettingsTile extends ConsumerWidget {
             await PreferencesController.showBackButton
                 .write(ref.watch(navigationShowBackButtonProvider));
             log(
-            '${ref.watch(navigationShowBackButtonProvider)}',
-            name: 'SettingsView:ShowBackButtonSettingsTile',
-          );
+              '${ref.watch(navigationShowBackButtonProvider)}',
+              name: 'SettingsView:ShowBackButtonSettingsTile',
+            );
           });
         },
       ),

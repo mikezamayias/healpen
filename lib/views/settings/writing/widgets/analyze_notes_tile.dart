@@ -64,9 +64,8 @@ class _AnalyzeNotesTileState extends ConsumerState<AnalyzeNotesTile> {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Analyze notes',
-      subtitle: const Text(
-        'Update analysis of existing notes and analyze new ones.',
-      ),
+      explanationString:
+          'Update analysis of existing notes and analyze new ones.',
       onTap: () {
         vibrate(
           ref.watch(navigationReduceHapticFeedbackProvider),
@@ -77,7 +76,7 @@ class _AnalyzeNotesTileState extends ConsumerState<AnalyzeNotesTile> {
                 cornerRadius: radius - gap,
                 contentPadding: EdgeInsets.all(gap),
                 titleString: 'Removing previous analysis...',
-                subtitleString:
+                explanationString:
                     'This may take a while depending on the number of notes.',
                 leading: const CircularProgressIndicator(),
               ),
@@ -86,7 +85,7 @@ class _AnalyzeNotesTileState extends ConsumerState<AnalyzeNotesTile> {
                 cornerRadius: radius - gap,
                 contentPadding: EdgeInsets.all(gap),
                 titleString: 'Analyzing notes...',
-                subtitleString:
+                explanationString:
                     'This may take a while depending on the number of notes.',
                 leading: const CircularProgressIndicator(),
               ),
@@ -95,7 +94,7 @@ class _AnalyzeNotesTileState extends ConsumerState<AnalyzeNotesTile> {
                 cornerRadius: radius - gap,
                 contentPadding: EdgeInsets.all(gap),
                 titleString: 'Completed',
-                subtitleString: 'All notes have been analyzed.',
+                explanationString: 'All notes have been analyzed.',
                 leadingIconData: FontAwesomeIcons.check,
               ),
             ];

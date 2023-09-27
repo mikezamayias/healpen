@@ -17,11 +17,10 @@ class ShowAppBarTitle extends ConsumerWidget {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Show app bar title on main pages',
-      subtitle: const Text(
-        'Shows the title in the app bar, making it simpler to know which of '
-        'the main pages you are on. Disabling this will save space for more '
-        'information.',
-      ),
+      explanationString:
+          'Shows the title in the app bar, making it simpler to know which of '
+          'the main pages you are on. Disabling this will save space for more '
+          'information.',
       trailing: Switch(
         value: ref.watch(navigationShowAppBarTitle),
         onChanged: (value) {

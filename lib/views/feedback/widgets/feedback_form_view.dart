@@ -95,7 +95,7 @@ class FeedbackFormView extends ConsumerWidget {
                       contentPadding: EdgeInsets.all(gap),
                       backgroundColor: Color(label.color),
                       titleString: label.name,
-                      subtitleString: label.description,
+                      explanationString: label.description,
                       textColor: Color(label.color).isLight
                           ? Colors.black
                           : Colors.white,

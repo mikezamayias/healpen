@@ -21,7 +21,10 @@ class SettingsFeedbackTile extends ConsumerWidget {
     return CustomListTile(
       responsiveWidth: true,
       leadingIconData: FontAwesomeIcons.solidCommentDots,
-      contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: gap * 2,
+        vertical: gap,
+      ),
       textColor: context.theme.colorScheme.onPrimary,
       titleString: 'Feedback',
       onTap: () {

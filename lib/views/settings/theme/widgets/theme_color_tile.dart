@@ -16,8 +16,9 @@ class ThemeColorTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
-      titleString: 'Color',
       contentPadding: EdgeInsets.all(gap),
+      titleString: 'Color',
+      explanationString: 'Changes the color of the app.',
       enableSubtitleWrapper: false,
       subtitle: SegmentedButton<ThemeColor>(
         showSelectedIcon: false,

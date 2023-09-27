@@ -58,10 +58,12 @@ class FeedbackFormActions extends ConsumerWidget {
                       feedbackController.cleanUp();
                       CustomSnackBar(
                         SnackBarConfig(
+                          vibrate:
+                              ref.watch(navigationReduceHapticFeedbackProvider),
                           titleString1: 'Thank you for your feedback!',
                           leadingIconData1: FontAwesomeIcons.solidPaperPlane,
                         ),
-                      ).showSnackBar(context, ref).then((_) {
+                      ).showSnackBar(context).then((_) {
                         context.navigator.pop();
                       });
                     },
@@ -69,12 +71,14 @@ class FeedbackFormActions extends ConsumerWidget {
                     (Object error) {
                       CustomSnackBar(
                         SnackBarConfig(
+                          vibrate:
+                              ref.watch(navigationReduceHapticFeedbackProvider),
                           titleString1: 'Something went wrong',
                           leadingIconData1: FontAwesomeIcons.circleExclamation,
                           titleString2: error.toString(),
                           leadingIconData2: FontAwesomeIcons.circleExclamation,
                         ),
-                      ).showSnackBar(context, ref).whenComplete(() {
+                      ).showSnackBar(context).whenComplete(() {
                         context.navigator.pop();
                       });
                     },
@@ -83,11 +87,13 @@ class FeedbackFormActions extends ConsumerWidget {
                   // show an error text using labelsController and form key
                   await CustomSnackBar(
                     SnackBarConfig(
+                      vibrate:
+                          ref.watch(navigationReduceHapticFeedbackProvider),
                       snackBarMargin: EdgeInsets.zero,
                       titleString1: 'Please fill in all fields',
                       leadingIconData1: FontAwesomeIcons.circleExclamation,
                     ),
-                  ).showSnackBar(context, ref);
+                  ).showSnackBar(context);
                 }
               },
             );
@@ -104,10 +110,11 @@ class FeedbackFormActions extends ConsumerWidget {
               feedbackController.cleanUp();
               CustomSnackBar(
                 SnackBarConfig(
+                  vibrate: ref.watch(navigationReduceHapticFeedbackProvider),
                   titleString1: 'We appreciate any feedback!',
                   leadingIconData1: FontAwesomeIcons.solidCompass,
                 ),
-              ).showSnackBar(context, ref).then((_) {
+              ).showSnackBar(context).then((_) {
                 context.navigator.pop();
               });
             });
