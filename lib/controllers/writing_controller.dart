@@ -5,8 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googleapis/language/v1.dart';
+import 'package:googleapis_auth/googleapis_auth.dart';
 
+import '../env/env.dart';
+import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
+import '../models/sentence/sentence_model.dart';
 import '../services/firestore_service.dart';
 import 'settings/preferences_controller.dart';
 
@@ -190,75 +194,72 @@ class WritingController extends StateNotifier<NoteModel> {
   //   }
   // }
 
-  // Future<AnalyzeSentimentResponse?> _sentimentAnalysis(
-  //   QueryDocumentSnapshot<Map<String, dynamic>> element,
-  // ) async {
-  //   AnalyzeSentimentResponse? result;
-  //   if (!element.data().containsKey('sentiment')) {
-  //     FirestoreService.writingCollectionReference()
-  //         .doc(element.id)
-  //         .get()
-  //         .then((DocumentSnapshot<Map<String, dynamic>> value) async {
-  //       result =
-  //           await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
-  //               .documents
-  //               .analyzeSentiment(
-  //                 AnalyzeSentimentRequest.fromJson(
-  //                   {
-  //                     'document': {
-  //                       'type': 'PLAIN_TEXT',
-  //                       'content': value['content'],
-  //                     },
-  //                     'encodingType': 'UTF32',
-  //                   },
-  //                 ),
-  //               );
-  //       AnalysisModel analysisModel = AnalysisModel(
-  //         timestamp: element['timestamp'],
-  //         content: element['content'],
-  //         score: result!.documentSentiment!.score!,
-  //         magnitude: result!.documentSentiment!.magnitude!,
-  //         language: result!.language!,
-  //         sentences: [
-  //           for (Sentence sentence in result!.sentences!)
-  //             SentenceModel(
-  //               content: sentence.text!.content!,
-  //               score: sentence.sentiment!.score!,
-  //               magnitude: sentence.sentiment!.magnitude!,
-  //             ),
-  //         ],
-  //       );
-  //       log(
-  //         '${analysisModel.toJson()}',
-  //         name: 'WritingController:_sentimentAnalysis()',
-  //       );
-  //       FirestoreService.analysisCollectionReference()
-  //           .doc(element.id)
-  //           .set(analysisModel.toJson());
-  //       log(
-  //         'added sentiment',
-  //         name: 'WritingController:_sentimentAnalysis():${element.id}',
-  //       );
-  //       for (SentenceModel sentence in analysisModel.sentences) {
-  //         FirestoreService.analysisCollectionReference()
-  //             .doc(element.id)
-  //             .collection('sentences')
-  //             .doc(analysisModel.sentences.indexOf(sentence).toString())
-  //             .set(sentence.toJson());
-  //       }
-  //       log(
-  //         'added sentences',
-  //         name: 'WritingController:_sentimentAnalysis():${element.id}',
-  //       );
-  //     }).catchError((error) {
-  //       log(
-  //         '$error',
-  //         name: 'WritingController:_sentimentAnalysis()',
-  //       );
-  //     });
-  //   }
-  //   return result;
-  // }
+  Future<AnalyzeSentimentResponse?> analyzeSentiment(
+    QueryDocumentSnapshot<Map<String, dynamic>> element,
+  ) async {
+    AnalyzeSentimentResponse? result;
+    if (!element.data().containsKey('sentiment')) {
+      FirestoreService.writingCollectionReference()
+          .doc(element.id)
+          .get()
+          .then((DocumentSnapshot<Map<String, dynamic>> value) async {
+        result =
+            await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
+                .documents
+                .analyzeSentiment(
+                  AnalyzeSentimentRequest.fromJson(
+                    {
+                      'document': {
+                        'type': 'PLAIN_TEXT',
+                        'content': value['content'],
+                      },
+                      'encodingType': 'UTF32',
+                    },
+                  ),
+                );
+        AnalysisModel analysisModel = AnalysisModel(
+          timestamp: element['timestamp'],
+          content: element['content'],
+          score: result!.documentSentiment!.score!,
+          magnitude: result!.documentSentiment!.magnitude!,
+          language: result!.language!,
+          sentences: [
+            for (Sentence sentence in result!.sentences!)
+              SentenceModel(
+                content: sentence.text!.content!,
+                score: sentence.sentiment!.score!,
+                magnitude: sentence.sentiment!.magnitude!,
+              ),
+          ],
+        );
+        log(
+          '${analysisModel.toJson()}',
+          name: 'WritingController:_sentimentAnalysis()',
+        );
+        FirestoreService.analysisCollectionReference()
+            .doc(element.id)
+            .set(analysisModel.toJson());
+        log(
+          'added sentiment',
+          name: 'WritingController:_sentimentAnalysis():${element.id}',
+        );
+        for (SentenceModel sentence in analysisModel.sentences) {
+          FirestoreService.analysisCollectionReference()
+              .doc(element.id)
+              .collection('sentences')
+              .doc(analysisModel.sentences.indexOf(sentence).toString())
+              .set(sentence.toJson());
+        }
+        log(
+          'added sentences',
+          name: 'WritingController:_sentimentAnalysis():${element.id}',
+        );
+      }).catchError((error) {
+        throw error;
+      });
+    }
+    return result;
+  }
 
   void updateSentimentAnalysis(AnalyzeSentimentResponse response) {
     // state = state.copyWith(
