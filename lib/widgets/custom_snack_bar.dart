@@ -89,9 +89,7 @@ class SnackBarConfig {
             textColor: context.theme.colorScheme.onSecondary,
             titleString: titleString,
             leadingIconData: leadingIconData,
-            contentPadding: trailingWidgets != null
-                ? EdgeInsets.symmetric(horizontal: gap, vertical: gap)
-                : EdgeInsets.symmetric(horizontal: gap * 2, vertical: gap),
+            contentPadding: EdgeInsets.all(gap),
             cornerRadius: radius,
             trailing: trailingWidgets != null
                 ? Row(
