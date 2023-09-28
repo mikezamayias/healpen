@@ -1,66 +1,35 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../../controllers/writing_controller.dart';
 import '../../../../providers/settings_providers.dart';
+import '../../../../services/firestore_service.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../utils/show_healpen_dialog.dart';
 import '../../../../widgets/custom_dialog.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-final isAnalysisCompleteProvider = StateProvider<bool>((ref) => false);
+enum AnalysisProgress {
+  removingPreviousAnalysis,
+  analyzingNotes,
+  completed,
+}
 
-class AnalyzeNotesTile extends ConsumerStatefulWidget {
+final progressProvider = StateProvider<int>((ref) => 0);
+final listToAnalyzeLengthProvider = StateProvider<int>((ref) => 0);
+final analysisProgressProvider = StateProvider<AnalysisProgress>(
+    (ref) => AnalysisProgress.removingPreviousAnalysis);
+
+class AnalyzeNotesTile extends ConsumerWidget {
   const AnalyzeNotesTile({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<AnalyzeNotesTile> createState() => _AnalyzeNotesTileState();
-}
-
-class _AnalyzeNotesTileState extends ConsumerState<AnalyzeNotesTile> {
-  late PageController _pageController;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  Future<void> removePreviousAnalysis() async {
-    // Simulated delay for demonstration purposes
-    await Future.delayed(2.seconds, () {
-      _pageController.nextPage(
-        duration: longEmphasizedDuration,
-        curve: emphasizedCurve,
-      );
-    });
-    return;
-  }
-
-  Future<void> analyzeNotes() async {
-    // Simulated delay for demonstration purposes
-    await Future.delayed(2.seconds, () {
-      _pageController.nextPage(
-        duration: longEmphasizedDuration,
-        curve: emphasizedCurve,
-      );
-    });
-    ref.watch(isAnalysisCompleteProvider.notifier).state = true;
-    return;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Analyze notes',
@@ -70,100 +39,154 @@ class _AnalyzeNotesTileState extends ConsumerState<AnalyzeNotesTile> {
         vibrate(
           ref.watch(navigationReduceHapticFeedbackProvider),
           () async {
-            List<CustomListTile> children = [
-              // remove previous analysis
-              CustomListTile(
-                cornerRadius: radius - gap,
-                contentPadding: EdgeInsets.all(gap),
-                titleString: 'Removing previous analysis...',
-                explanationString:
-                    'This may take a while depending on the number of notes.',
-                leading: const CircularProgressIndicator(),
-              ),
-              // analyze notes
-              CustomListTile(
-                cornerRadius: radius - gap,
-                contentPadding: EdgeInsets.all(gap),
-                titleString: 'Analyzing notes...',
-                explanationString:
-                    'This may take a while depending on the number of notes.',
-                leading: const CircularProgressIndicator(),
-              ),
-              // completed
-              CustomListTile(
-                cornerRadius: radius - gap,
-                contentPadding: EdgeInsets.all(gap),
-                titleString: 'Completed',
-                explanationString: 'All notes have been analyzed.',
-                leadingIconData: FontAwesomeIcons.check,
-              ),
-            ];
-            ref.watch(isAnalysisCompleteProvider.notifier).state = false;
+            double total = ref.watch(listToAnalyzeLengthProvider).toDouble();
+            double progressValue =
+                total == 0 ? 0.0 : ref.watch(progressProvider) / total;
             showHealpenDialog(
               context: context,
               doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
               customDialog: CustomDialog(
-                enableContentContainer: false,
                 titleString: 'Analyzing notes',
-                contentWidget: SizedBox(
-                  height: 18.h,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(radius - gap),
-                    child: PageView(
-                      controller: _pageController,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: children
-                          .map(
-                            (child) => Padding(
-                              padding: EdgeInsets.all(gap),
-                              child: child,
-                            ),
-                          )
-                          .toList(),
-                    ),
+                enableContentContainer: false,
+                contentWidget: Padding(
+                  padding: EdgeInsets.all(gap),
+                  child: FutureBuilder(
+                    future: Future.value([
+                      removePreviousAnalysis(ref),
+                      analyzeNotes(ref),
+                    ]),
+                    builder: (context, snapshot) {
+                      return CustomListTile(
+                        backgroundColor: context.theme.colorScheme.surface,
+                        textColor: context.theme.colorScheme.onSurface,
+                        cornerRadius: radius - gap,
+                        contentPadding: EdgeInsets.all(gap),
+                        titleString: switch (
+                            ref.watch(analysisProgressProvider)) {
+                          AnalysisProgress.removingPreviousAnalysis =>
+                            'Removing previous analysis',
+                          AnalysisProgress.analyzingNotes => 'Analyzing notes',
+                          AnalysisProgress.completed => 'Completed',
+                        },
+                        // title: AnimatedSwitcher(
+                        //   duration: emphasizedDuration,
+                        //   reverseDuration: emphasizedDuration,
+                        //   switchInCurve: emphasizedCurve,
+                        //   switchOutCurve: emphasizedCurve,
+                        //   child: Text(
+                        //     switch (ref.watch(analysisProgressProvider)) {
+                        //       AnalysisProgress.removingPreviousAnalysis =>
+                        //         'Removing previous analysis',
+                        //       AnalysisProgress.analyzingNotes =>
+                        //         'Analyzing notes',
+                        //       AnalysisProgress.completed => 'Completed',
+                        //     },
+                        //   ),
+                        // ),
+                        enableSubtitleWrapper: false,
+                        subtitle: ClipRRect(
+                          borderRadius: BorderRadius.circular(radius - gap),
+                          child: LinearProgressIndicator(
+                            value: progressValue,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 actions: [
                   CustomListTile(
-                    responsiveWidth: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
                     cornerRadius: radius - gap,
+                    responsiveWidth: true,
                     titleString: 'Close',
-                    onTap: ref.watch(isAnalysisCompleteProvider)
-                        ? navigator.pop
-                        : null,
+                    onTap: switch (ref.watch(analysisProgressProvider)) {
+                      AnalysisProgress.completed => () {
+                          vibrate(
+                            ref.watch(navigationReduceHapticFeedbackProvider),
+                            () {
+                              context.navigator.pop();
+                            },
+                          );
+                        },
+                      _ => null
+                    },
                   ),
                 ],
               ),
             );
-            // // Make sure there is no sentiment values in the notes.
-            // _startProgress();
-            await removePreviousAnalysis();
-            await analyzeNotes();
           },
         );
       },
     );
   }
+}
 
-// _startProgress() async {
-//   setState(() {
-//     _progress = 0;
-//   });
-//   QuerySnapshot<Map<String, dynamic>> collection =
-//       await FirestoreService.writingCollectionReference()
-//           .where('isPrivate', isEqualTo: false)
-//           .get();
-//   int total = collection.docs.length;
-//   int count = 0;
-//   for (QueryDocumentSnapshot<Map<String, dynamic>> element
-//       in collection.docs) {
-//     // Make sure there is no sentiment values in the notes.
-//     WritingController().removeSentimentFromDocument(element);
-//     count++;
-//     setState(() {
-//       _progress = count / total;
-//     });
-//   }
-// }
+Future<void> removePreviousAnalysis(WidgetRef ref) async {
+  QuerySnapshot<Map<String, dynamic>> notesToAnalyze =
+      await FirestoreService.writingCollectionReference()
+          .where('sentiment', isNull: false)
+          .get();
+  ref.read(listToAnalyzeLengthProvider.notifier).state =
+      notesToAnalyze.docs.length;
+
+  log(
+    ref.read(listToAnalyzeLengthProvider.notifier).state.toString(),
+    name: 'removePreviousAnalysis:listToAnalyzeLength',
+  );
+  for (QueryDocumentSnapshot<Map<String, dynamic>> noteModel
+      in notesToAnalyze.docs) {
+    await WritingController().removeSentimentFromDocument(noteModel);
+    ref.read(progressProvider.notifier).state++;
+    log(
+      ref.read(progressProvider.notifier).state.toString(),
+      name: 'analyzeNotes:progress',
+    );
+  }
+  ref.read(analysisProgressProvider.notifier).state =
+      AnalysisProgress.analyzingNotes;
+  ref.read(progressProvider.notifier).state = 0;
+  log(
+    ref.read(analysisProgressProvider.notifier).state.toString(),
+    name: 'removePreviousAnalysis',
+  );
+  log(
+    ref.read(progressProvider.notifier).state.toString(),
+    name: 'analyzeNotes:progress',
+  );
+  return;
+}
+
+Future<void> analyzeNotes(WidgetRef ref) async {
+  QuerySnapshot<Map<String, dynamic>> notesToAnalyze =
+      await FirestoreService.writingCollectionReference()
+          .where('sentiment', isNull: false)
+          .get();
+  ref.read(listToAnalyzeLengthProvider.notifier).state =
+      notesToAnalyze.docs.length;
+
+  log(
+    ref.read(listToAnalyzeLengthProvider.notifier).state.toString(),
+    name: 'analyzeNotes:listToAnalyzeLength',
+  );
+  for (QueryDocumentSnapshot<Map<String, dynamic>> noteModel
+      in notesToAnalyze.docs) {
+    await WritingController().analyzeSentiment(noteModel);
+    ref.read(progressProvider.notifier).state++;
+    log(
+      ref.read(progressProvider.notifier).state.toString(),
+      name: 'analyzeNotes:progress',
+    );
+  }
+  ref.read(analysisProgressProvider.notifier).state =
+      AnalysisProgress.completed;
+  ref.read(progressProvider.notifier).state = 0;
+  log(
+    ref.read(analysisProgressProvider.notifier).state.toString(),
+    name: 'removePreviousAnalysis',
+  );
+  log(
+    ref.read(progressProvider.notifier).state.toString(),
+    name: 'analyzeNotes:progress',
+  );
+  return;
 }
