@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -115,13 +114,13 @@ void goToPage(PageController pageController, int index) {
 /// Returns
 /// [clippedResult] The combined sentiment value as a double with 2 decimal places.
 double combinedSentimentValue(double magnitude, double score) {
-  log('$score', name: 'SentenceModel:score');
-  log('$magnitude', name: 'SentenceModel:magnitude');
+  // log('$score', name: 'SentenceModel:score');
+  // log('$magnitude', name: 'SentenceModel:magnitude');
   double normalizedMagnitude = (magnitude / 2).clamp(0, 1);
-  log('$normalizedMagnitude', name: 'SentenceModel:normalizedMagnitude');
+  // log('$normalizedMagnitude', name: 'SentenceModel:normalizedMagnitude');
   double result = normalizedMagnitude * score * 5;
-  log('$result', name: 'SentenceModel:result');
+  // log('$result', name: 'SentenceModel:result');
   double clippedResult = (result * 100).truncate() / 100;
-  log('$clippedResult', name: 'SentenceModel:clippedResult');
+  // log('$clippedResult', name: 'SentenceModel:clippedResult');
   return clippedResult;
 }

@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/analysis/analysis_model.dart';
 import '../services/firestore_service.dart';
@@ -16,6 +15,7 @@ class AnalysisViewController {
 
   /// Attributes
   static final analysisModelList = <AnalysisModel>[];
+  static final isAnalysisCompleteProvider = StateProvider<bool>((ref) => false);
 
   /// Methods
   Stream<QuerySnapshot<Map<String, dynamic>>> get analysisStream =>
@@ -26,10 +26,6 @@ class AnalysisViewController {
         analysisModelList.clear();
         for (QueryDocumentSnapshot<Map<String, dynamic>> element
             in event.docs) {
-          log(
-            '${element.data()} - ${element.data().values.first} - ${element.id}',
-            name: 'AnalysisViewController:metricsStream',
-          );
           analysisModelList.add(AnalysisModel.fromJson(element.data()));
         }
         return analysisModelList;
