@@ -200,6 +200,7 @@ class CustomListTile extends ConsumerWidget {
                   ),
                   child: SelectableText(
                     explanationString!,
+                    onTap: onTap,
                     enableInteractiveSelection: selectableText!,
                     style: context.theme.textTheme.titleMedium!.copyWith(
                       color: enableSubtitleWrapper!
