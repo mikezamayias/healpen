@@ -29,200 +29,6 @@ class NoteTile extends ConsumerWidget {
       child: IntrinsicWidth(
         child: Slidable(
           key: ValueKey(entry.timestamp.toString()),
-          startActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            dragDismissible: true,
-            extentRatio: 0.6,
-            children: [
-              SlidableAction(
-                icon: entry.isPrivate
-                    ? FontAwesomeIcons.lockOpen
-                    : FontAwesomeIcons.lock,
-                autoClose: true,
-                backgroundColor: context.theme.colorScheme.primary,
-                foregroundColor: context.theme.colorScheme.onPrimary,
-                borderRadius: BorderRadius.circular(radius),
-                padding: EdgeInsets.all(gap),
-                spacing: gap,
-                onPressed: (context) {
-                  showHealpenDialog(
-                    context: context,
-                    doVibrate:
-                        ref.watch(navigationReduceHapticFeedbackProvider),
-                    customDialog: CustomDialog(
-                      titleString: entry.isPrivate
-                          ? 'Mark note as not private?'
-                          : 'Mark note as private?',
-                      contentString: entry.content,
-                      actions: [
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: gap * 2,
-                            vertical: gap,
-                          ),
-                          cornerRadius: radius - gap,
-                          responsiveWidth: true,
-                          titleString: 'Yes',
-                          onTap: () {
-                            vibrate(
-                              ref.watch(navigationReduceHapticFeedbackProvider),
-                              () {
-                                context.navigator.pop(true);
-                              },
-                            );
-                          },
-                        ),
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: gap * 2,
-                            vertical: gap,
-                          ),
-                          cornerRadius: radius - gap,
-                          responsiveWidth: true,
-                          titleString: 'No',
-                          onTap: () {
-                            vibrate(
-                              ref.watch(navigationReduceHapticFeedbackProvider),
-                              () {
-                                context.navigator.pop(false);
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ).then((exit) {
-                    if (exit == null) return;
-                    if (exit) {
-                      CustomSnackBar(
-                        SnackBarConfig(
-                          vibrate:
-                              ref.watch(navigationReduceHapticFeedbackProvider),
-                          titleString1: entry.isPrivate
-                              ? 'Marking note as not private...'
-                              : 'Marking note as private...',
-                          leadingIconData1: entry.isPrivate
-                              ? FontAwesomeIcons.lockOpen
-                              : FontAwesomeIcons.lock,
-                          trailingWidgets1: [
-                            CustomListTile(
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: gap * 2,
-                                vertical: gap,
-                              ),
-                              cornerRadius: radius - gap,
-                              responsiveWidth: true,
-                              backgroundColor:
-                                  context.theme.colorScheme.primaryContainer,
-                              textColor:
-                                  context.theme.colorScheme.onPrimaryContainer,
-                              onTap: () {
-                                vibrate(
-                                  ref.watch(
-                                      navigationReduceHapticFeedbackProvider),
-                                  () {
-                                    scaffoldMessengerKey
-                                        .currentState!.removeCurrentSnackBar;
-                                  },
-                                );
-                              },
-                              titleString: 'Cancel',
-                              leadingIconData: FontAwesomeIcons.xmark,
-                            ),
-                          ],
-                          actionAfterSnackBar1: () async =>
-                              HistoryViewController()
-                                  .noteTogglePrivate(noteModel: entry),
-                        ),
-                      ).showSnackBar(context);
-                    }
-                  });
-                },
-              ),
-              SizedBox(width: gap),
-              SlidableAction(
-                icon: entry.isFavorite
-                    ? FontAwesomeIcons.solidStar
-                    : FontAwesomeIcons.star,
-                autoClose: true,
-                backgroundColor: context.theme.colorScheme.primary,
-                foregroundColor: context.theme.colorScheme.onPrimary,
-                borderRadius: BorderRadius.circular(radius),
-                padding: EdgeInsets.all(gap),
-                spacing: gap,
-                onPressed: (context) {
-                  showHealpenDialog(
-                    context: context,
-                    doVibrate:
-                        ref.watch(navigationReduceHapticFeedbackProvider),
-                    customDialog: CustomDialog(
-                      titleString: entry.isFavorite
-                          ? 'Mark note as not favorite?'
-                          : 'Mark note as favorite?',
-                      actions: [
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: gap * 2,
-                            vertical: gap,
-                          ),
-                          cornerRadius: radius - gap,
-                          responsiveWidth: true,
-                          titleString: 'Yes',
-                          onTap: () {
-                            vibrate(
-                              ref.watch(navigationReduceHapticFeedbackProvider),
-                              () {
-                                context.navigator.pop(true);
-                              },
-                            );
-                          },
-                        ),
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: gap * 2,
-                            vertical: gap,
-                          ),
-                          cornerRadius: radius - gap,
-                          responsiveWidth: true,
-                          titleString: 'No',
-                          onTap: () {
-                            vibrate(
-                              ref.watch(navigationReduceHapticFeedbackProvider),
-                              () {
-                                context.navigator.pop(true);
-                              },
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ).then(
-                    (exit) {
-                      if (exit == null) return;
-                      if (exit) {
-                        CustomSnackBar(
-                          SnackBarConfig(
-                            vibrate: ref
-                                .watch(navigationReduceHapticFeedbackProvider),
-                            titleString1: entry.isFavorite
-                                ? 'Marking note as not favorite...'
-                                : 'Marking note as favorite...',
-                            leadingIconData1: entry.isFavorite
-                                ? FontAwesomeIcons.star
-                                : FontAwesomeIcons.solidStar,
-                            actionAfterSnackBar1: () async =>
-                                HistoryViewController()
-                                    .noteToggleFavorite(noteModel: entry),
-                          ),
-                        ).showSnackBar(context);
-                      }
-                    },
-                  );
-                },
-              ),
-              SizedBox(width: gap),
-            ],
-          ),
           endActionPane: ActionPane(
             motion: const ScrollMotion(),
             dragDismissible: true,
@@ -258,7 +64,7 @@ class NoteTile extends ConsumerWidget {
                             vibrate(
                               ref.watch(navigationReduceHapticFeedbackProvider),
                               () {
-                                context.navigator.pop(true);
+                                navigatorKey.currentState?.pop(true);
                               },
                             );
                           },
@@ -275,7 +81,7 @@ class NoteTile extends ConsumerWidget {
                             vibrate(
                               ref.watch(navigationReduceHapticFeedbackProvider),
                               () {
-                                context.navigator.pop(false);
+                                navigatorKey.currentState?.pop(false);
                               },
                             );
                           },

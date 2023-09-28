@@ -7,6 +7,7 @@ final double gap = 9 * unit;
 final double radius = 30 - gap;
 final double elevation = 0 * unit;
 final scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final navigatorKey = GlobalKey<NavigatorState>();
 
 // https://m3.material.io/styles/motion/easing-and-duration/tokens-specs#433b1153-2ea3-4fe2-9748-803a47bc97ee
 /// The curve used for most small UI animations.
