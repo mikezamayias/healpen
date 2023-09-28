@@ -31,7 +31,8 @@ class SaveNoteButton extends ConsumerWidget {
                   trailingWidgets1: [
                     CustomListTile(
                       contentPadding: EdgeInsets.symmetric(
-                        horizontal: gap,
+                        horizontal: gap * 2,
+                        vertical: gap,
                       ),
                       cornerRadius: radius - gap,
                       responsiveWidth: true,
