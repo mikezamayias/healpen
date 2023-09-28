@@ -28,7 +28,6 @@ class FeedbackFormActions extends ConsumerWidget {
       children: [
         CustomListTile(
           responsiveWidth: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
           leadingIconData: FontAwesomeIcons.solidPaperPlane,
           titleString: 'Submit',
           onTap: () {
@@ -102,7 +101,6 @@ class FeedbackFormActions extends ConsumerWidget {
         SizedBox(width: gap),
         CustomListTile(
           responsiveWidth: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
           leadingIconData: FontAwesomeIcons.xmark,
           titleString: 'Cancel',
           onTap: () {
