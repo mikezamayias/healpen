@@ -19,7 +19,7 @@ class AnalyzeNotesDialog extends ConsumerWidget {
           ref.watch(AnalysisViewController.listToAnalyzeLengthProvider);
     }
     return CustomDialog(
-      titleString: 'Updating analysis',
+      titleString: 'Updating note analysis',
       enableContentContainer: false,
       contentWidget: Padding(
         padding: EdgeInsets.all(gap),
