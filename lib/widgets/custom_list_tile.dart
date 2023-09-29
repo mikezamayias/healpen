@@ -25,6 +25,7 @@ class CustomListTile extends ConsumerWidget {
   final bool? responsiveWidth;
   final bool? showcaseLeadingIcon;
   final bool? enableSubtitleWrapper;
+  final bool? enableExplanationWrapper;
   final Color? backgroundColor;
   final Color? textColor;
   final double? cornerRadius;
@@ -49,6 +50,7 @@ class CustomListTile extends ConsumerWidget {
     this.responsiveWidth = false,
     this.showcaseLeadingIcon = false,
     this.enableSubtitleWrapper = true,
+    this.enableExplanationWrapper = true,
     this.cornerRadius,
     this.contentPadding,
   }) : super(key: key);
@@ -191,19 +193,22 @@ class CustomListTile extends ConsumerWidget {
               child: Padding(
                 padding: EdgeInsets.only(top: padding.vertical / 2),
                 child: Container(
-                  padding: EdgeInsets.all(gap),
-                  decoration: BoxDecoration(
-                    color: context.theme.colorScheme.surface,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(radius - gap),
-                    ),
-                  ),
+                  padding:
+                      enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
+                  decoration: enableExplanationWrapper!
+                      ? BoxDecoration(
+                          color: context.theme.colorScheme.surface,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(radius - gap),
+                          ),
+                        )
+                      : null,
                   child: SelectableText(
                     explanationString!,
                     onTap: onTap,
                     enableInteractiveSelection: selectableText!,
                     style: context.theme.textTheme.titleMedium!.copyWith(
-                      color: enableSubtitleWrapper!
+                      color: enableSubtitleWrapper! && onTap == null
                           ? context.theme.colorScheme.onSurfaceVariant
                           : context.theme.colorScheme.onPrimary,
                     ),
