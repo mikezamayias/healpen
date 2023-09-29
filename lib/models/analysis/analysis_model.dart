@@ -12,6 +12,7 @@ class AnalysisModel {
   double score;
   double magnitude;
   double? sentiment;
+  int wordCount;
   String language;
   @JsonKey(includeToJson: false)
   List<SentenceModel> sentences;
@@ -22,6 +23,7 @@ class AnalysisModel {
     this.score = 0,
     this.magnitude = 0,
     double? sentiment,
+    this.wordCount = 0,
     this.language = '',
     this.sentences = const [],
   }) : sentiment = combinedSentimentValue(magnitude, score);
@@ -35,8 +37,8 @@ class AnalysisModel {
   String toString() {
     return 'AnalysisModel('
         'timestamp: $timestamp, content: $content, score: $score, '
-        'magnitude: $magnitude, sentiment: $sentiment, language: $language, '
-        'sentences: $sentences'
+        'magnitude: $magnitude, sentiment: $sentiment, wordCount: $wordCount, '
+        'language: $language, sentences: $sentences'
         ')';
   }
 
@@ -46,6 +48,7 @@ class AnalysisModel {
     double? score,
     double? magnitude,
     double? sentiment,
+    int? wordCount,
     String? language,
     List<SentenceModel>? sentences,
   }) {
@@ -55,6 +58,7 @@ class AnalysisModel {
       score: score ?? this.score,
       magnitude: magnitude ?? this.magnitude,
       sentiment: sentiment ?? this.sentiment,
+      wordCount: wordCount ?? this.wordCount,
       language: language ?? this.language,
       sentences: sentences ?? this.sentences,
     );

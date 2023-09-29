@@ -53,7 +53,9 @@ class FirestoreService {
 
     // Get all documents from the analysis collection
     QuerySnapshot<Map<String, dynamic>> analysisSnapshot =
-        await analysisCollectionReference().get();
+        await analysisCollectionReference()
+            .where('wordCount', isNull: true)
+            .get();
     List<DocumentSnapshot<Map<String, dynamic>>> analysisDocuments =
         analysisSnapshot.docs;
 

@@ -220,6 +220,7 @@ class WritingController extends StateNotifier<NoteModel> {
         AnalysisModel analysisModel = AnalysisModel(
           timestamp: element['timestamp'],
           content: element['content'],
+          wordCount: element['wordCount'],
           score: result!.documentSentiment!.score!,
           magnitude: result!.documentSentiment!.magnitude!,
           language: result!.language!,
