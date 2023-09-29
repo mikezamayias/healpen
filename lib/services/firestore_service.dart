@@ -42,4 +42,16 @@ class FirestoreService {
         .doc('${noteModel.timestamp}')
         .set(noteModel.toJson());
   }
+
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getNote(
+    int timestamp,
+  ) {
+    return writingCollectionReference().doc('$timestamp').snapshots();
+  }
+
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getAnalysis(
+    int timestamp,
+  ) {
+    return analysisCollectionReference().doc('$timestamp').snapshots();
+  }
 }
