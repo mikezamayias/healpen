@@ -208,7 +208,7 @@ class CustomListTile extends ConsumerWidget {
                     onTap: onTap,
                     enableInteractiveSelection: selectableText!,
                     style: context.theme.textTheme.titleMedium!.copyWith(
-                      color: enableSubtitleWrapper! && onTap == null
+                      color: enableExplanationWrapper! || onTap == null
                           ? context.theme.colorScheme.onSurfaceVariant
                           : context.theme.colorScheme.onPrimary,
                     ),

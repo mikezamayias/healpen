@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../widgets/custom_dialog.dart';
 import 'helper_functions.dart';
 
 Future showHealpenDialog({
   required BuildContext context,
   required bool doVibrate,
-  required CustomDialog customDialog,
+  required Widget customDialog,
 }) async {
   if (doVibrate) {
     vibrate(doVibrate, () {});
