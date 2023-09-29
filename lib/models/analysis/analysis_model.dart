@@ -12,7 +12,7 @@ class AnalysisModel {
   double score;
   double magnitude;
   double? sentiment;
-  int wordCount;
+  int? wordCount;
   String language;
   @JsonKey(includeToJson: false)
   List<SentenceModel> sentences;
@@ -23,10 +23,15 @@ class AnalysisModel {
     this.score = 0,
     this.magnitude = 0,
     double? sentiment,
-    this.wordCount = 0,
+    int? wordCount,
     this.language = '',
     this.sentences = const [],
-  }) : sentiment = combinedSentimentValue(magnitude, score);
+  })  : wordCount = content
+            .toString()
+            .split(RegExp(r'\s+'))
+            .where((s) => RegExp(r'[a-zA-Z]').hasMatch(s))
+            .length,
+        sentiment = combinedSentimentValue(magnitude, score);
 
   factory AnalysisModel.fromJson(Map<String, dynamic> json) =>
       _$AnalysisModelFromJson(json);

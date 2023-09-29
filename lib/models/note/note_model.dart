@@ -26,22 +26,15 @@ class NoteModel {
   bool isFavorite;
   int duration;
   int timestamp;
-  int? wordCount;
 
   NoteModel({
     this.content = '',
     this.isPrivate = false,
     this.isFavorite = false,
     this.duration = 0,
-    int? wordCount,
     int? timestamp,
     int? sentenceCount,
-  })  : wordCount = content
-            .toString()
-            .split(RegExp(r'\s+'))
-            .where((s) => RegExp(r'[a-zA-Z]').hasMatch(s))
-            .length,
-        timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  }) : timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
   factory NoteModel.fromJson(Map<String, dynamic> json) =>
       _$NoteModelFromJson(json);
@@ -54,7 +47,6 @@ class NoteModel {
     bool? isFavorite,
     int? duration,
     int? timestamp,
-    int? wordCount,
   }) {
     return NoteModel(
       content: content ?? this.content,
@@ -62,7 +54,6 @@ class NoteModel {
       isFavorite: isFavorite ?? this.isFavorite,
       duration: duration ?? this.duration,
       timestamp: timestamp ?? this.timestamp,
-      wordCount: wordCount ?? this.wordCount,
     );
   }
 
@@ -70,7 +61,7 @@ class NoteModel {
   String toString() {
     return 'NoteModel('
         'content: $content, isPrivate: $isPrivate, isFavorite: $isFavorite, '
-        'duration: $duration, timestamp: $timestamp, wordCount: $wordCount, '
+        'duration: $duration, timestamp: $timestamp'
         ')';
   }
 }
