@@ -9,6 +9,7 @@ import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
+import '../settings/writing/widgets/analyze_notes_tile.dart';
 import 'widgets/private_note_check_box.dart';
 import 'widgets/save_note_button.dart';
 import 'widgets/stopwatch_tile.dart';
@@ -78,15 +79,23 @@ class _WritingViewState extends ConsumerState<WritingView>
               child: const StopwatchTile(),
             ),
             if (!ref.watch(WritingController().isKeyboardOpenProvider))
-              Padding(
-                padding: EdgeInsets.only(top: gap),
-                child: Row(
-                  children: [
-                    const Expanded(child: PrivateNoteCheckBox()),
-                    SizedBox(width: gap),
-                    const SaveNoteButton(),
-                  ],
-                ),
+              Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: gap),
+                    child: Row(
+                      children: [
+                        const Expanded(child: PrivateNoteCheckBox()),
+                        SizedBox(width: gap),
+                        const SaveNoteButton(),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: gap),
+                    child: const AnalyzeNotesTile(),
+                  ),
+                ],
               ).animate().fadeIn(
                     curve: standardCurve,
                     duration: standardDuration,
