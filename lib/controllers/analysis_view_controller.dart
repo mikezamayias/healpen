@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,7 +46,9 @@ class AnalysisViewController {
 
   static Future<void> removePreviousAnalysis(WidgetRef ref) async {
     QuerySnapshot<Map<String, dynamic>> notesToAnalyze =
-        await FirestoreService.writingCollectionReference().get();
+        await FirestoreService.writingCollectionReference()
+            .where('sentiment', isNull: false)
+            .get();
     ref.watch(AnalysisViewController.analysisProgressProvider.notifier).state =
         AnalysisProgress.removingPreviousAnalysis;
     ref.watch(AnalysisViewController.progressProvider.notifier).state = 0;
@@ -59,16 +63,24 @@ class AnalysisViewController {
   }
 
   static Future<void> analyzeNotes(WidgetRef ref) async {
-    QuerySnapshot<Map<String, dynamic>> notesToAnalyze =
-        await FirestoreService.writingCollectionReference().get();
+    var notesToAnalyze = await FirestoreService.getDocumentsToAnalyze();
+
     ref.watch(AnalysisViewController.analysisProgressProvider.notifier).state =
         AnalysisProgress.analyzingNotes;
     ref.watch(AnalysisViewController.progressProvider.notifier).state = 0;
     ref
         .watch(AnalysisViewController.listToAnalyzeLengthProvider.notifier)
-        .state = notesToAnalyze.docs.length;
+        .state = notesToAnalyze.length;
 
-    for (QueryDocumentSnapshot<Map<String, dynamic>> _ in notesToAnalyze.docs) {
+    for (DocumentSnapshot<Map<String, dynamic>> note in notesToAnalyze) {
+      log(
+        note.id,
+        name: 'AnalysisViewController:analyzeNotes() - note ID',
+      );
+      log(
+        note.get('content'),
+        name: 'AnalysisViewController:analyzeNotes() - note content',
+      );
       // await WritingController().analyzeSentiment(noteModel);
       await Future.delayed(standardDuration, () {
         ref.watch(AnalysisViewController.progressProvider.notifier).state++;

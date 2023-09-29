@@ -43,6 +43,30 @@ class FirestoreService {
         .set(noteModel.toJson());
   }
 
+  static Future<List<DocumentSnapshot<Map<String, dynamic>>>>
+      getDocumentsToAnalyze() async {
+    // Get all documents from the writing collection
+    QuerySnapshot<Map<String, dynamic>> writingSnapshot =
+        await writingCollectionReference().get();
+    List<DocumentSnapshot<Map<String, dynamic>>> writingDocuments =
+        writingSnapshot.docs;
+
+    // Get all documents from the analysis collection
+    QuerySnapshot<Map<String, dynamic>> analysisSnapshot =
+        await analysisCollectionReference().get();
+    List<DocumentSnapshot<Map<String, dynamic>>> analysisDocuments =
+        analysisSnapshot.docs;
+
+    // Get the IDs of the documents in the analysis collection
+    Set<String> analysisIds = analysisDocuments.map((doc) => doc.id).toSet();
+
+    // Filter the writing documents to only include those whose ID is not in the analysis collection
+    List<DocumentSnapshot<Map<String, dynamic>>> documentsToAnalyze =
+        writingDocuments.where((doc) => !analysisIds.contains(doc.id)).toList();
+
+    return documentsToAnalyze;
+  }
+
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getNote(
     int timestamp,
   ) {
