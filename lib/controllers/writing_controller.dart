@@ -4,13 +4,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googleapis/language/v1.dart';
-import 'package:googleapis_auth/googleapis_auth.dart';
 
-import '../env/env.dart';
-import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
-import '../models/sentence/sentence_model.dart';
 import '../services/firestore_service.dart';
+import 'analysis_view_controller.dart';
 import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
@@ -113,46 +110,10 @@ class WritingController extends StateNotifier<NoteModel> {
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
     await FirestoreService.saveNote(state);
-    await FirestoreService.saveAnalysis(await createNoteAnalysis());
+    await FirestoreService.saveAnalysis(
+        await AnalysisViewController.createNoteAnalysis(state));
     resetNote();
     textController.clear();
-  }
-
-  Future<AnalysisModel> createNoteAnalysis() async {
-    AnalyzeSentimentResponse result =
-        await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
-            .documents
-            .analyzeSentiment(
-              AnalyzeSentimentRequest.fromJson(
-                {
-                  'document': {
-                    'type': 'PLAIN_TEXT',
-                    'content': state.content,
-                  },
-                  'encodingType': 'UTF32',
-                },
-              ),
-            );
-    AnalysisModel analysisModel = AnalysisModel(
-      timestamp: state.timestamp,
-      content: state.content,
-      score: result.documentSentiment!.score!,
-      magnitude: result.documentSentiment!.magnitude!,
-      language: result.language!,
-      sentences: [
-        for (Sentence sentence in result.sentences!)
-          SentenceModel(
-            content: sentence.text!.content!,
-            score: sentence.sentiment!.score!,
-            magnitude: sentence.sentiment!.magnitude!,
-          ),
-      ],
-    );
-    log(
-      '${analysisModel.toJson()}',
-      name: 'FirestorService:analyzeSentiment',
-    );
-    return analysisModel;
   }
 
   void resetNote() {

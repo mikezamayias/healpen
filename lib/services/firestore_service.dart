@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../controllers/analysis_view_controller.dart';
 import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
 import '../models/sentence/sentence_model.dart';
@@ -168,14 +169,17 @@ class FirestoreService {
         .doc(note.id)
         .get()
         .then((DocumentSnapshot<Map<String, dynamic>> value) async {
-      AnalysisModel analysisModel = AnalysisModel.fromJson(
-        NoteModel.fromJson(value.data()!).toJson(),
+      // AnalysisModel analysisModel = AnalysisModel.fromJson(
+      //   NoteModel.fromJson(value.data()!).toJson(),
+      // );
+      final analysisModel = await AnalysisViewController.createNoteAnalysis(
+        NoteModel.fromJson(value.data()!),
+      );
+      log(
+        '${analysisModel.toJson()}',
+        name: 'FirestorService:analyzeSentiment:analysisModel',
       );
       analysisCollectionReference().doc(note.id).set(analysisModel.toJson());
-      log(
-        'added sentiment',
-        name: 'FirestorService:analyzeSentiment:${note.id}',
-      );
       for (SentenceModel sentence in analysisModel.sentences) {
         analysisCollectionReference()
             .doc(note.id)

@@ -2,8 +2,13 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:googleapis/language/v1.dart';
+import 'package:googleapis_auth/googleapis_auth.dart';
 
+import '../env/env.dart';
 import '../models/analysis/analysis_model.dart';
+import '../models/note/note_model.dart';
+import '../models/sentence/sentence_model.dart';
 import '../providers/settings_providers.dart';
 import '../services/firestore_service.dart';
 import 'settings/preferences_controller.dart';
@@ -64,10 +69,8 @@ class AnalysisViewController {
         note.get('content'),
         name: 'AnalysisViewController:removePreviousAnalysis() - note content',
       );
-      FirestoreService.removeAnalysisFromWritingDocument(note).whenComplete(
-        () =>
-            ref.watch(AnalysisViewController.progressProvider.notifier).state++,
-      );
+      await FirestoreService.removeAnalysisFromWritingDocument(note);
+      ref.watch(AnalysisViewController.progressProvider.notifier).state++;
     }
   }
 
@@ -91,21 +94,55 @@ class AnalysisViewController {
         name: 'AnalysisViewController:analyzeNotes() - note content',
       );
       // await WritingController().analyzeSentiment(noteModel);
-      FirestoreService.analyzeSentiment(note).whenComplete(
-        () =>
-            ref.watch(AnalysisViewController.progressProvider.notifier).state++,
-      );
+      await FirestoreService.analyzeSentiment(note);
+      ref.watch(AnalysisViewController.progressProvider.notifier).state++;
     }
   }
 
   static Future<void> completed(WidgetRef ref) async {
-    await AnalysisViewController.removePreviousAnalysis(ref);
+    // await AnalysisViewController.removePreviousAnalysis(ref);
     await AnalysisViewController.analyzeNotes(ref);
     ref.watch(AnalysisViewController.analysisProgressProvider.notifier).state =
         AnalysisProgress.completed;
-
     ref.read(showAnalyzeNotesButtonProvider.notifier).state = false;
     await PreferencesController.showAnalyzeNotesButton
         .write(ref.watch(showAnalyzeNotesButtonProvider));
+  }
+
+  static Future<AnalysisModel> createNoteAnalysis(NoteModel noteModel) async {
+    AnalyzeSentimentResponse result =
+        await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
+            .documents
+            .analyzeSentiment(
+              AnalyzeSentimentRequest.fromJson(
+                {
+                  'document': {
+                    'type': 'PLAIN_TEXT',
+                    'content': noteModel.content,
+                  },
+                  'encodingType': 'UTF32',
+                },
+              ),
+            );
+    AnalysisModel analysisModel = AnalysisModel(
+      timestamp: noteModel.timestamp,
+      content: noteModel.content,
+      score: result.documentSentiment!.score!,
+      magnitude: result.documentSentiment!.magnitude!,
+      language: result.language!,
+      sentences: [
+        for (Sentence sentence in result.sentences!)
+          SentenceModel(
+            content: sentence.text!.content!,
+            score: sentence.sentiment!.score!,
+            magnitude: sentence.sentiment!.magnitude!,
+          ),
+      ],
+    );
+    log(
+      '${analysisModel.toJson()}',
+      name: 'FirestorService:analyzeSentiment',
+    );
+    return analysisModel;
   }
 }
