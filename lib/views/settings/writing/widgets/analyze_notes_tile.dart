@@ -18,9 +18,6 @@ class AnalyzeNotesTile extends ConsumerWidget {
       contentPadding: EdgeInsets.all(gap),
       cornerRadius: radius - gap,
       titleString: 'Update note analysis',
-      enableExplanationWrapper: false,
-      explanationString:
-          'Update analysis of existing notes and analyze new ones. This may take a while.',
       onTap: () {
         vibrate(
           ref.watch(navigationReduceHapticFeedbackProvider),
