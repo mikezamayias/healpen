@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../models/note/note_model.dart';
+import '../../../models/analysis/analysis_model.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/text_divider.dart';
 
 class AnalysisPage extends StatelessWidget {
-  final NoteModel noteModel;
+  final AnalysisModel analysisModel;
 
   const AnalysisPage({
     super.key,
-    required this.noteModel,
+    required this.analysisModel,
   });
 
   @override
@@ -53,8 +53,7 @@ class AnalysisPage extends StatelessWidget {
             titleString: 'Sentiment',
             contentPadding: EdgeInsets.all(gap),
             subtitle: SelectableText(
-              // sentimentLabels[noteModel.sentiment]!,
-              sentimentLabels[noteModel.timestamp]!,
+              '${sentimentLabels[analysisModel.sentiment]}',
               style: context.theme.textTheme.bodyLarge!.copyWith(
                 color: context.theme.colorScheme.onBackground,
               ),
@@ -62,7 +61,7 @@ class AnalysisPage extends StatelessWidget {
             // trailingIconData: sentimentIcons[noteModel.sentiment],
             trailing: FaIcon(
               // sentimentIcons[noteModel.sentiment],
-              sentimentIcons[noteModel.timestamp],
+              sentimentIcons[analysisModel.timestamp],
               color: context.theme.colorScheme.onBackground,
               size: radius * 2,
             ),
@@ -82,7 +81,6 @@ class AnalysisPage extends StatelessWidget {
 Sentiment is a metric that indicates the overall emotional tone of the text. It ranges from -3 to 3, where -3 is the most negative and 3 is the most positive.''',
                   actions: [
                     CustomListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
                       cornerRadius: radius - gap,
                       responsiveWidth: true,
                       titleString: 'Okay',
@@ -92,47 +90,6 @@ Sentiment is a metric that indicates the overall emotional tone of the text. It 
                 ),
               );
             },
-          ),
-          SizedBox(height: gap),
-          Row(
-            children: [
-              CustomListTile(
-                responsiveWidth: true,
-                contentPadding: EdgeInsets.all(gap),
-                titleString: 'Words',
-                subtitle: Text(
-                  noteModel.wordCount.toString(),
-                ),
-                leadingIconData: FontAwesomeIcons.circleInfo,
-                leadingOnTap: () {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    barrierColor:
-                        context.theme.colorScheme.background.withOpacity(0.8),
-                    builder: (BuildContext context) => CustomDialog(
-                      titleString: 'Words',
-                      // explain what's words, how it's calculated, and
-                      // what's the range (negative, neutral, positive)
-                      contentString: 'The "Words" metric indicates the text'
-                          'word count.\n\n'
-                          'Word count is calculated by the number of '
-                          'words in the text.',
-                      actions: [
-                        CustomListTile(
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: gap * 2),
-                          cornerRadius: radius - gap,
-                          responsiveWidth: true,
-                          titleString: 'Okay',
-                          onTap: context.navigator.pop,
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
           ),
         ],
       ),

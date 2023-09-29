@@ -1,13 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../models/analysis/analysis_model.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/settings_providers.dart';
+import '../../services/firestore_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/analysis_page.dart';
 import 'widgets/details_page.dart';
@@ -41,10 +45,6 @@ class _NoteViewState extends ConsumerState<NoteView> {
     final NoteModel noteModel =
         ModalRoute.of(context)!.settings.arguments as NoteModel;
     final showAnalysis = !noteModel.isPrivate;
-    final pages = [
-      DetailsPage(noteModel: noteModel),
-      if (showAnalysis) AnalysisPage(noteModel: noteModel)
-    ];
     return BlueprintView(
       appBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: gap),
@@ -57,12 +57,46 @@ class _NoteViewState extends ConsumerState<NoteView> {
       body: Column(
         children: [
           Expanded(
-            child: PageView.builder(
+            child: PageView(
               clipBehavior: Clip.none,
               controller: controller,
-              itemCount: pages.length,
-              itemBuilder: (BuildContext context, int index) => pages[index],
               physics: const NeverScrollableScrollPhysics(),
+              children: [
+                StreamBuilder(
+                    stream: FirestoreService.getNote(noteModel.timestamp),
+                    builder: (
+                      context,
+                      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                          noteStream,
+                    ) =>
+                        switch (noteStream.connectionState) {
+                          ConnectionState.active => DetailsPage(
+                              noteModel:
+                                  NoteModel.fromJson(noteStream.data!.data()!),
+                            ),
+                          _ => const LoadingTile(durationTitle: 'Loading Note'),
+                        }),
+                // if (showAnalysis) AnalysisPage(noteModel: noteModel)
+                if (showAnalysis)
+                  StreamBuilder(
+                    stream: FirestoreService.getAnalysis(noteModel.timestamp),
+                    builder: (
+                      context,
+                      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                          analysisStream,
+                    ) =>
+                        switch (analysisStream.connectionState) {
+                      ConnectionState.active => AnalysisPage(
+                          analysisModel: AnalysisModel.fromJson(
+                            analysisStream.data!.data()!,
+                          ),
+                        ),
+                      _ => const LoadingTile(
+                          durationTitle: 'Loading Analysis',
+                        ),
+                    },
+                  ),
+              ],
             ),
           ),
           if (showAnalysis)
