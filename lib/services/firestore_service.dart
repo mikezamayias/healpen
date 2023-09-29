@@ -2,10 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:googleapis/language/v1.dart';
-import 'package:googleapis_auth/googleapis_auth.dart';
 
-import '../env/env.dart';
 import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
 import '../models/sentence/sentence_model.dart';
@@ -46,6 +43,16 @@ class FirestoreService {
     await writingCollectionReference()
         .doc('${noteModel.timestamp}')
         .set(noteModel.toJson());
+  }
+
+  static Future<void> saveAnalysis(AnalysisModel analysisModel) async {
+    log(
+      '${analysisModel.toJson()}',
+      name: 'FirestoreService:saveAnalysis() - analysis to save',
+    );
+    await analysisCollectionReference()
+        .doc('${analysisModel.timestamp}')
+        .set(analysisModel.toJson());
   }
 
   static Future<List<DocumentSnapshot<Map<String, dynamic>>>>
@@ -157,42 +164,12 @@ class FirestoreService {
   static Future<void> analyzeSentiment(
     DocumentSnapshot<Map<String, dynamic>> note,
   ) async {
-    AnalyzeSentimentResponse? result;
     writingCollectionReference()
         .doc(note.id)
         .get()
         .then((DocumentSnapshot<Map<String, dynamic>> value) async {
-      result = await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
-          .documents
-          .analyzeSentiment(
-            AnalyzeSentimentRequest.fromJson(
-              {
-                'document': {
-                  'type': 'PLAIN_TEXT',
-                  'content': value['content'],
-                },
-                'encodingType': 'UTF32',
-              },
-            ),
-          );
-      AnalysisModel analysisModel = AnalysisModel(
-        timestamp: note['timestamp'],
-        content: note['content'],
-        score: result!.documentSentiment!.score!,
-        magnitude: result!.documentSentiment!.magnitude!,
-        language: result!.language!,
-        sentences: [
-          for (Sentence sentence in result!.sentences!)
-            SentenceModel(
-              content: sentence.text!.content!,
-              score: sentence.sentiment!.score!,
-              magnitude: sentence.sentiment!.magnitude!,
-            ),
-        ],
-      );
-      log(
-        '${analysisModel.toJson()}',
-        name: 'FirestorService:analyzeSentiment',
+      AnalysisModel analysisModel = AnalysisModel.fromJson(
+        NoteModel.fromJson(value.data()!).toJson(),
       );
       analysisCollectionReference().doc(note.id).set(analysisModel.toJson());
       log(

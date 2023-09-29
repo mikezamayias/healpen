@@ -30,27 +30,34 @@ final writingAutomaticStopwatchProvider = StateProvider<bool>(
 /// Whether to shake the private note info icon when the app starts.
 /// When set to true, the device will shake when the user saves a private note.
 /// When set to false, the device will not shake when the user saves a private note.
-final writingShakePrivateNoteInfoProvider = StateProvider<bool>(
+final shakePrivateNoteInfoProvider = StateProvider<bool>(
   (ref) => PreferencesController.shakePrivateNoteInfo.value,
+);
+
+/// Whether to show the analyze notes button in the app.
+/// When set to true, the app will show the analyze notes button.
+/// When set to false, the app will hide the analyze notes button.
+final showAnalyzeNotesButtonProvider = StateProvider<bool>(
+  (ref) => PreferencesController.showAnalyzeNotesButton.value,
 );
 
 /// Whether to show custom navigation buttons in the app.
 /// When set to true, the app will show custom navigation buttons.
 /// When set to false, the app will show the default navigation buttons.
 final navigationShowBackButtonProvider = StateProvider<bool>(
-  (ref) => PreferencesController.showBackButton.value,
+  (ref) => PreferencesController.navigationShowBackButton.value,
 );
 
 /// Whether to reduce the amount of haptic feedback in the app.
 /// When set to true, the app will reduce the amount of haptic feedback.
 /// When set to false, the app will use the default amount of haptic feedback.
 final navigationReduceHapticFeedbackProvider = StateProvider<bool>(
-  (ref) => PreferencesController.reduceHapticFeedback.value,
+  (ref) => PreferencesController.navigationReduceHapticFeedback.value,
 );
 
 /// Whether to hide the app bar title.
 /// When set to true, the app bar title will be hidden.
 /// When set to false, the app bar title will be shown.
 final navigationShowAppBarTitle = StateProvider<bool>(
-  (ref) => PreferencesController.showAppBarTitle.value,
+  (ref) => PreferencesController.navigationShowAppBarTitle.value,
 );

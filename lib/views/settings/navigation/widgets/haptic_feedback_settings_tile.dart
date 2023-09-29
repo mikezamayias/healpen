@@ -24,7 +24,7 @@ class ReduceHapticFeedbackSettingsTile extends ConsumerWidget {
           vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
             ref.read(navigationReduceHapticFeedbackProvider.notifier).state =
                 value;
-            await PreferencesController.reduceHapticFeedback
+            await PreferencesController.navigationReduceHapticFeedback
                 .write(ref.watch(navigationReduceHapticFeedbackProvider));
             log(
               '${ref.watch(navigationReduceHapticFeedbackProvider)}',

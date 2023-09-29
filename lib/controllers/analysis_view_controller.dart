@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/analysis/analysis_model.dart';
+import '../providers/settings_providers.dart';
 import '../services/firestore_service.dart';
+import 'settings/preferences_controller.dart';
 
 enum AnalysisProgress {
   removingPreviousAnalysis,
@@ -101,5 +103,9 @@ class AnalysisViewController {
     await AnalysisViewController.analyzeNotes(ref);
     ref.watch(AnalysisViewController.analysisProgressProvider.notifier).state =
         AnalysisProgress.completed;
+
+    ref.read(showAnalyzeNotesButtonProvider.notifier).state = false;
+    await PreferencesController.showAnalyzeNotesButton
+        .write(ref.watch(showAnalyzeNotesButtonProvider));
   }
 }

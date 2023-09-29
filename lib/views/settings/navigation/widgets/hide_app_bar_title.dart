@@ -26,7 +26,7 @@ class ShowAppBarTitle extends ConsumerWidget {
         onChanged: (value) {
           vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
             ref.read(navigationShowAppBarTitle.notifier).state = value;
-            await PreferencesController.showAppBarTitle
+            await PreferencesController.navigationShowAppBarTitle
                 .write(ref.watch(navigationShowAppBarTitle));
             log(
               '${ref.watch(navigationShowAppBarTitle)}',

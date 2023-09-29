@@ -91,10 +91,11 @@ class _WritingViewState extends ConsumerState<WritingView>
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: gap),
-                    child: const AnalyzeNotesTile(),
-                  ),
+                  if (ref.watch(showAnalyzeNotesButtonProvider))
+                    Padding(
+                      padding: EdgeInsets.only(top: gap),
+                      child: const AnalyzeNotesTile(),
+                    ),
                 ],
               ).animate().fadeIn(
                     curve: standardCurve,
