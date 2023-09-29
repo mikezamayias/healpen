@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/analysis/analysis_model.dart';
 import '../services/firestore_service.dart';
-import '../utils/constants.dart';
 
 enum AnalysisProgress {
   removingPreviousAnalysis,
@@ -45,20 +44,28 @@ class AnalysisViewController {
       });
 
   static Future<void> removePreviousAnalysis(WidgetRef ref) async {
-    QuerySnapshot<Map<String, dynamic>> notesToAnalyze =
-        await FirestoreService.writingCollectionReference()
-            .where('sentiment', isNull: false)
-            .get();
+    final documentsToRemoveAnalysis =
+        await FirestoreService.getWritingDocumentsToRemoveAnalysis();
     ref.watch(AnalysisViewController.analysisProgressProvider.notifier).state =
         AnalysisProgress.removingPreviousAnalysis;
     ref.watch(AnalysisViewController.progressProvider.notifier).state = 0;
     ref
         .watch(AnalysisViewController.listToAnalyzeLengthProvider.notifier)
-        .state = notesToAnalyze.docs.length;
-    for (QueryDocumentSnapshot<Map<String, dynamic>> _ in notesToAnalyze.docs) {
-      await Future.delayed(standardDuration, () {
-        ref.watch(AnalysisViewController.progressProvider.notifier).state++;
-      });
+        .state = documentsToRemoveAnalysis.length;
+    for (DocumentSnapshot<Map<String, dynamic>> note
+        in documentsToRemoveAnalysis) {
+      log(
+        note.id,
+        name: 'AnalysisViewController:removePreviousAnalysis() - note ID',
+      );
+      log(
+        note.get('content'),
+        name: 'AnalysisViewController:removePreviousAnalysis() - note content',
+      );
+      FirestoreService.removeAnalysisFromWritingDocument(note).whenComplete(
+        () =>
+            ref.watch(AnalysisViewController.progressProvider.notifier).state++,
+      );
     }
   }
 
@@ -82,9 +89,10 @@ class AnalysisViewController {
         name: 'AnalysisViewController:analyzeNotes() - note content',
       );
       // await WritingController().analyzeSentiment(noteModel);
-      await Future.delayed(standardDuration, () {
-        ref.watch(AnalysisViewController.progressProvider.notifier).state++;
-      });
+      FirestoreService.analyzeSentiment(note).whenComplete(
+        () =>
+            ref.watch(AnalysisViewController.progressProvider.notifier).state++,
+      );
     }
   }
 
