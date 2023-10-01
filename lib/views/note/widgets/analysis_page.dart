@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,6 +42,7 @@ class AnalysisPage extends StatelessWidget {
       2: FontAwesomeIcons.faceLaugh,
       3: FontAwesomeIcons.faceLaughBeam,
     };
+    log('$analysisModel');
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: gap),
       child: Column(
@@ -53,7 +56,15 @@ class AnalysisPage extends StatelessWidget {
             titleString: 'Sentiment',
             contentPadding: EdgeInsets.all(gap),
             subtitle: SelectableText(
-              '${sentimentLabels[analysisModel.sentiment]}',
+              switch (analysisModel.sentiment!) {
+                >= 3 => 'Very Positive',
+                >= 2 => 'Positive',
+                >= 1 => 'Slightly Positive',
+                >= 0 => 'Neutral',
+                >= -1 => 'Slightly Negative',
+                >= -2 => 'Negative',
+                _ => 'Very Negative',
+              },
               style: context.theme.textTheme.bodyLarge!.copyWith(
                 color: context.theme.colorScheme.onBackground,
               ),
