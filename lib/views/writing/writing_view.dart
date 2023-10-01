@@ -97,7 +97,14 @@ class _WritingViewState extends ConsumerState<WritingView>
                       child: const AnalyzeNotesTile(),
                     ),
                 ],
-              ).animate().fadeIn(
+              )
+                  .animate()
+                  .fadeIn(
+                    curve: standardCurve,
+                    duration: standardDuration,
+                  )
+                  .slideY(
+                    begin: gap,
                     curve: standardCurve,
                     duration: standardDuration,
                   ),
