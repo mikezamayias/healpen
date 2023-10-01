@@ -10,6 +10,7 @@ import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
+import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/average_overall_sentiment_tile.dart';
 import 'widgets/sentiment_spline_tile.dart';
@@ -42,21 +43,23 @@ class AnalysisView extends ConsumerWidget {
                 ),
               );
             } else {
-              ref.watch(AnalysisViewController.analysisModelListProvider).clear();
+              ref
+                  .watch(AnalysisViewController.analysisModelListProvider)
+                  .clear();
               for (QueryDocumentSnapshot<Map<String, dynamic>> element
                   in analysisSnapshot.data!.docs) {
                 ref.watch(AnalysisViewController.analysisModelListProvider).add(
                       AnalysisModel.fromJson(element.data()),
                     );
               }
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const AverageOverallSentimentTile(),
-                    Gap(gap),
-                    const SplineSentimentTile(),
-                  ],
-                ),
+              return Column(
+                children: [
+                  const TextDivider('Mood Exploration'),
+                  Expanded(child: Container()),
+                  Gap(gap),
+                  const TextDivider('Writing Patterns'),
+                  Expanded(child: Container()),
+                ],
               );
             }
           }
