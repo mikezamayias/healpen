@@ -1,7 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/analysis_view_controller.dart';
 import '../../models/analysis/analysis_model.dart';
@@ -25,48 +24,38 @@ class AnalysisView extends ConsumerWidget {
         pathNames: ['Your writing insights'],
       ),
       body: StreamBuilder(
-        stream: AnalysisViewController().metricGroupingsStream,
+        stream: AnalysisViewController.analysisStream(),
         builder: (
           BuildContext context,
-          AsyncSnapshot<List<AnalysisModel>> metricGroupingsSnapshot,
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> analysisSnapshot,
         ) {
-          if (metricGroupingsSnapshot.hasError) {
-            return Center(
-              child: CustomListTile(
-                titleString: 'Something went wrong',
-                backgroundColor: context.theme.colorScheme.error,
-                textColor: context.theme.colorScheme.onError,
-                subtitle:
-                    SelectableText(metricGroupingsSnapshot.error.toString()),
-              ),
-            );
-          }
-          if (metricGroupingsSnapshot.connectionState ==
-              ConnectionState.waiting) {
+          if (analysisSnapshot.data == null) {
             return const LoadingTile(durationTitle: 'Loading metrics');
-          }
-          if (metricGroupingsSnapshot.data!.isNotEmpty) {
-            return AnimatedSize(
-              duration: emphasizedDuration,
-              reverseDuration: emphasizedDuration,
-              curve: emphasizedCurve,
-              child: AnalysisViewController.analysisModelList.isNotEmpty
-                  ? Column(
-                      children: [
-                        const AverageOverallSentimentTile(),
-                        SizedBox(height: gap),
-                        const SplineSentimentTile(),
-                        SizedBox(height: gap),
-                      ],
-                    )
-                  : const LoadingTile(durationTitle: 'Loading metrics'),
-            );
           } else {
-            return const CustomListTile(
-              titleString: 'No metrics yet',
-              explanationString: 'Start writing to see your metrics!',
-              leadingIconData: FontAwesomeIcons.solidChartBar,
-            );
+            if (analysisSnapshot.data!.docs.isEmpty) {
+              return const CustomListTile(
+                titleString: 'No analysis found',
+                subtitle: Text(
+                  'You have no analysis yet. '
+                  'Try writing a few notes to get started.',
+                ),
+              );
+            } else {
+              for (QueryDocumentSnapshot<Map<String, dynamic>> element
+                  in analysisSnapshot.data!.docs) {
+                AnalysisViewController.analysisModelList.add(
+                  AnalysisModel.fromJson(element.data()),
+                );
+              }
+              return Column(
+                children: [
+                  const AverageOverallSentimentTile(),
+                  SizedBox(height: gap),
+                  const SplineSentimentTile(),
+                  SizedBox(height: gap),
+                ],
+              );
+            }
           }
         },
       ),
