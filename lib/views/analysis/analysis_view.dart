@@ -12,8 +12,6 @@ import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
 import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
-import 'widgets/average_overall_sentiment_tile.dart';
-import 'widgets/sentiment_spline_tile.dart';
 
 class AnalysisView extends ConsumerWidget {
   const AnalysisView({Key? key}) : super(key: key);
