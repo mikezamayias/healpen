@@ -64,14 +64,19 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
               borderRadius: BorderRadius.circular(radius - gap),
             ),
             child: SfCartesianChart(
+              tooltipBehavior: TooltipBehavior(
+                enable: true,
+              ),
               primaryYAxis: NumericAxis(
                 interval: 1,
                 isVisible: true,
                 opposedPosition: false,
+                name: 'Sentiment',
               ),
               primaryXAxis: DateTimeCategoryAxis(
                 dateFormat: DateFormat('MMM dd\nyyyy'),
                 isVisible: true,
+                name: 'Date',
               ),
               series: <ChartSeries<ChartData, DateTime>>[
                 // Renders spline chart
