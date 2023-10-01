@@ -34,21 +34,12 @@ class AnalysisViewController {
   static final progressProvider = StateProvider<int>((ref) => 0);
   static final listToAnalyzeLengthProvider = StateProvider<int>((ref) => 0);
   static final analysisProgressProvider = StateProvider<AnalysisProgress>(
-      (ref) => AnalysisProgress.removingPreviousAnalysis);
+    (ref) => AnalysisProgress.removingPreviousAnalysis,
+  );
 
   /// Methods
-  Stream<QuerySnapshot<Map<String, dynamic>>> get analysisStream =>
+  static Stream<QuerySnapshot<Map<String, dynamic>>> analysisStream() =>
       FirestoreService.analysisCollectionReference().snapshots();
-
-  Stream<List<AnalysisModel>> get metricGroupingsStream =>
-      analysisStream.map((event) {
-        analysisModelList.clear();
-        for (QueryDocumentSnapshot<Map<String, dynamic>> element
-            in event.docs) {
-          analysisModelList.add(AnalysisModel.fromJson(element.data()));
-        }
-        return analysisModelList;
-      });
 
   static Future<void> removePreviousAnalysis(WidgetRef ref) async {
     final documentsToRemoveAnalysis =
