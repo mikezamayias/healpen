@@ -23,10 +23,11 @@ class SplineSentimentTile extends ConsumerStatefulWidget {
 class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
   Set<int> selectedPeriodRange = {0};
   final animationDuration = 0;
-  final sentimentData = AnalysisViewController.analysisModelList;
-  final sentimentDataLength = AnalysisViewController.analysisModelList.length;
   @override
   Widget build(BuildContext context) {
+    final sentimentData =
+        ref.watch(AnalysisViewController.analysisModelListProvider);
+    final sentimentDataLength = sentimentData.length;
     Map<int, String> periodRanges = {
       0: 'all time',
       1: 'last week',
@@ -64,9 +65,6 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
               borderRadius: BorderRadius.circular(radius - gap),
             ),
             child: SfCartesianChart(
-              tooltipBehavior: TooltipBehavior(
-                enable: true,
-              ),
               primaryYAxis: NumericAxis(
                 interval: 1,
                 isVisible: true,

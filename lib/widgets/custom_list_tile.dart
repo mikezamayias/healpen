@@ -12,6 +12,7 @@ import '../utils/constants.dart';
 class CustomListTile extends ConsumerWidget {
   final String? titleString;
   final String? explanationString;
+  final String? subtitleString;
   final Widget? title;
   final Widget? subtitle;
   final Widget? leading;
@@ -35,6 +36,7 @@ class CustomListTile extends ConsumerWidget {
     Key? key,
     this.titleString,
     this.explanationString,
+    this.subtitleString,
     this.leadingIconData,
     this.trailing,
     this.leading,
@@ -166,7 +168,7 @@ class CustomListTile extends ConsumerWidget {
                 ),
             ],
           ),
-          if (subtitle != null)
+          if (subtitle != null || subtitleString != null)
             Flexible(
               child: Padding(
                 padding: EdgeInsets.only(top: padding.vertical / 2),
@@ -180,35 +182,32 @@ class CustomListTile extends ConsumerWidget {
                           ),
                         )
                       : null,
-                  child: subtitle!,
+                  child: subtitle != null && subtitleString == null
+                      ? subtitle!
+                      : SelectableText(
+                          subtitleString!,
+                          onTap: onTap,
+                          enableInteractiveSelection: selectableText!,
+                          style: context.theme.textTheme.titleMedium!.copyWith(
+                            color: enableExplanationWrapper! || onTap == null
+                                ? context.theme.colorScheme.onSurfaceVariant
+                                : context.theme.colorScheme.onPrimary,
+                          ),
+                        ),
                 ),
               ),
             ),
           if (explanationString != null)
-            Flexible(
-              child: Padding(
-                padding: EdgeInsets.only(top: padding.vertical / 2),
-                child: Container(
-                  padding:
-                      enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
-                  decoration: enableExplanationWrapper!
-                      ? BoxDecoration(
-                          color: context.theme.colorScheme.surface,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(radius - gap),
-                          ),
-                        )
-                      : null,
-                  child: SelectableText(
-                    explanationString!,
-                    onTap: onTap,
-                    enableInteractiveSelection: selectableText!,
-                    style: context.theme.textTheme.titleMedium!.copyWith(
-                      color: enableExplanationWrapper! || onTap == null
-                          ? context.theme.colorScheme.onSurfaceVariant
-                          : context.theme.colorScheme.onPrimary,
-                    ),
-                  ),
+            Padding(
+              padding: EdgeInsets.only(top: padding.vertical / 2),
+              child: SelectableText(
+                explanationString!,
+                onTap: onTap,
+                enableInteractiveSelection: selectableText!,
+                style: TextStyle(
+                  color: enableExplanationWrapper! || onTap == null
+                      ? context.theme.colorScheme.onSurfaceVariant
+                      : context.theme.colorScheme.onPrimary,
                 ),
               ),
             ),

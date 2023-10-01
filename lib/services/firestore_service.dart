@@ -82,16 +82,16 @@ class FirestoreService {
     return documentsToAnalyze;
   }
 
-  static Stream<DocumentSnapshot<Map<String, dynamic>>> getNote(
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getNote(
     int timestamp,
   ) {
-    return writingCollectionReference().doc('$timestamp').snapshots();
+    return writingCollectionReference().doc('$timestamp').get();
   }
 
-  static Stream<DocumentSnapshot<Map<String, dynamic>>> getAnalysis(
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getAnalysis(
     int timestamp,
   ) {
-    return analysisCollectionReference().doc('$timestamp').snapshots();
+    return analysisCollectionReference().doc('$timestamp').get();
   }
 
   static Future<void> removeAnalysisFromWritingDocument(

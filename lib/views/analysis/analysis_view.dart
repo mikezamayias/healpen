@@ -43,9 +43,9 @@ class AnalysisView extends ConsumerWidget {
             } else {
               for (QueryDocumentSnapshot<Map<String, dynamic>> element
                   in analysisSnapshot.data!.docs) {
-                AnalysisViewController.analysisModelList.add(
-                  AnalysisModel.fromJson(element.data()),
-                );
+                ref.watch(AnalysisViewController.analysisModelListProvider).add(
+                      AnalysisModel.fromJson(element.data()),
+                    );
               }
               return Column(
                 children: [

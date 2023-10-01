@@ -29,7 +29,9 @@ class AnalysisViewController {
   AnalysisViewController._internal();
 
   /// Attributes
-  static final analysisModelList = <AnalysisModel>[];
+  static final analysisModelListProvider = StateProvider(
+    (ref) => <AnalysisModel>[],
+  );
   static final isAnalysisCompleteProvider = StateProvider<bool>((ref) => false);
   static final progressProvider = StateProvider<int>((ref) => 0);
   static final listToAnalyzeLengthProvider = StateProvider<int>((ref) => 0);

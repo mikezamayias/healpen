@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -7,11 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/settings_providers.dart';
-import '../../services/firestore_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
-import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/analysis_page.dart';
 import 'widgets/details_page.dart';
@@ -42,8 +39,10 @@ class _NoteViewState extends ConsumerState<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    final NoteModel noteModel =
-        ModalRoute.of(context)!.settings.arguments as NoteModel;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final NoteModel noteModel = args['noteModel'] as NoteModel;
+    final AnalysisModel analysisModel = args['analysisModel'];
     final showAnalysis = !noteModel.isPrivate;
     return BlueprintView(
       appBar: Padding(
@@ -62,40 +61,8 @@ class _NoteViewState extends ConsumerState<NoteView> {
               controller: controller,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                StreamBuilder(
-                    stream: FirestoreService.getNote(noteModel.timestamp),
-                    builder: (
-                      context,
-                      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                          noteStream,
-                    ) =>
-                        switch (noteStream.connectionState) {
-                          ConnectionState.active => DetailsPage(
-                              noteModel:
-                                  NoteModel.fromJson(noteStream.data!.data()!),
-                            ),
-                          _ => const LoadingTile(durationTitle: 'Loading Note'),
-                        }),
-                // if (showAnalysis) AnalysisPage(noteModel: noteModel)
-                if (showAnalysis)
-                  StreamBuilder(
-                    stream: FirestoreService.getAnalysis(noteModel.timestamp),
-                    builder: (
-                      context,
-                      AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
-                          analysisStream,
-                    ) =>
-                        switch (analysisStream.connectionState) {
-                      ConnectionState.active => AnalysisPage(
-                          analysisModel: AnalysisModel.fromJson(
-                            analysisStream.data!.data()!,
-                          ),
-                        ),
-                      _ => const LoadingTile(
-                          durationTitle: 'Loading Analysis',
-                        ),
-                    },
-                  ),
+                DetailsPage(noteModel: noteModel),
+                if (showAnalysis) AnalysisPage(analysisModel: analysisModel),
               ],
             ),
           ),
@@ -103,6 +70,13 @@ class _NoteViewState extends ConsumerState<NoteView> {
             Padding(
               padding: EdgeInsets.only(top: gap),
               child: SegmentedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(radius),
+                    ),
+                  ),
+                ),
                 showSelectedIcon: false,
                 segments: [
                   ButtonSegment(

@@ -22,7 +22,8 @@ class AverageOverallSentimentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double averageSentimentValue = [
-      for (AnalysisModel element in AnalysisViewController.analysisModelList)
+      for (AnalysisModel element
+          in ref.watch(AnalysisViewController.analysisModelListProvider))
         element.sentiment!,
     ].average;
     return CustomListTile(

@@ -5,8 +5,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/history_view_controller.dart';
+import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
 import '../../../providers/settings_providers.dart';
+import '../../../services/firestore_service.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -149,10 +151,16 @@ class NoteTile extends ConsumerWidget {
             onTap: () {
               vibrate(
                 ref.watch(navigationReduceHapticFeedbackProvider),
-                () {
+                () async {
                   context.navigator.pushNamed(
                     '/note',
-                    arguments: entry,
+                    arguments: {
+                      'noteModel': entry,
+                      'analysisModel': AnalysisModel.fromJson(
+                        (await FirestoreService.getAnalysis(entry.timestamp))
+                            .data()!,
+                      ),
+                    },
                   );
                 },
               );
