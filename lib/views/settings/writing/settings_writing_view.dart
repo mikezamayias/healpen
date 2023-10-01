@@ -16,7 +16,8 @@ class SettingsWritingView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
       const EnableAutomaticStopwatchTile(),
-      if (ref.watch(showAnalyzeNotesButtonProvider)) const AnalyzeNotesTile(),
+      if (ref.watch(writingShowAnalyzeNotesButtonProvider))
+        const AnalyzeNotesTile(),
     ].animateWidgetList();
 
     return BlueprintView(

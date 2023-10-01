@@ -44,14 +44,14 @@ class PreferencesController {
     'navigationShowAppBarTitle',
     true,
   );
-  static final showAnalyzeNotesButton = PreferenceModel<bool>(
-    'showAnalyzeNotesButton',
+  static final writingShowAnalyzeNotesButton = PreferenceModel<bool>(
+    'writingShowAnalyzeNotesButton',
     true,
   );
 
   Map<String, dynamic> preferences = {
     shakePrivateNoteInfo.key: shakePrivateNoteInfo.value,
-    showAnalyzeNotesButton.key: showAnalyzeNotesButton.value,
+    writingShowAnalyzeNotesButton.key: writingShowAnalyzeNotesButton.value,
     writingAutomaticStopwatch.key: writingAutomaticStopwatch.value,
     navigationShowAppBarTitle.key: navigationShowAppBarTitle.value,
     navigationShowBackButton.key: navigationShowBackButton.value,

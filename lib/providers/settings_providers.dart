@@ -27,18 +27,18 @@ final writingAutomaticStopwatchProvider = StateProvider<bool>(
   (ref) => PreferencesController.writingAutomaticStopwatch.value,
 );
 
+/// Whether to show the analyze notes button in the app.
+/// When set to true, the app will show the analyze notes button.
+/// When set to false, the app will hide the analyze notes button.
+final writingShowAnalyzeNotesButtonProvider = StateProvider<bool>(
+  (ref) => PreferencesController.writingShowAnalyzeNotesButton.value,
+);
+
 /// Whether to shake the private note info icon when the app starts.
 /// When set to true, the device will shake when the user saves a private note.
 /// When set to false, the device will not shake when the user saves a private note.
 final shakePrivateNoteInfoProvider = StateProvider<bool>(
   (ref) => PreferencesController.shakePrivateNoteInfo.value,
-);
-
-/// Whether to show the analyze notes button in the app.
-/// When set to true, the app will show the analyze notes button.
-/// When set to false, the app will hide the analyze notes button.
-final showAnalyzeNotesButtonProvider = StateProvider<bool>(
-  (ref) => PreferencesController.showAnalyzeNotesButton.value,
 );
 
 /// Whether to show custom navigation buttons in the app.

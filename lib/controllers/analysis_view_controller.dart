@@ -104,9 +104,9 @@ class AnalysisViewController {
     await AnalysisViewController.analyzeNotes(ref);
     ref.watch(AnalysisViewController.analysisProgressProvider.notifier).state =
         AnalysisProgress.completed;
-    ref.read(showAnalyzeNotesButtonProvider.notifier).state = false;
-    await PreferencesController.showAnalyzeNotesButton
-        .write(ref.watch(showAnalyzeNotesButtonProvider));
+    ref.read(writingShowAnalyzeNotesButtonProvider.notifier).state = false;
+    await PreferencesController.writingShowAnalyzeNotesButton
+        .write(ref.watch(writingShowAnalyzeNotesButtonProvider));
   }
 
   static Future<AnalysisModel> createNoteAnalysis(NoteModel noteModel) async {

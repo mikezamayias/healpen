@@ -78,9 +78,10 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           (bool value) =>
               ref.watch(navigationShowAppBarTitle.notifier).state = value,
         );
-    PreferencesController.showAnalyzeNotesButton.read().then(
-          (bool value) =>
-              ref.watch(showAnalyzeNotesButtonProvider.notifier).state = value,
+    PreferencesController.writingShowAnalyzeNotesButton.read().then(
+          (bool value) => ref
+              .watch(writingShowAnalyzeNotesButtonProvider.notifier)
+              .state = value,
         );
     log(
       '${FirebaseAuth.instance.currentUser != null}',

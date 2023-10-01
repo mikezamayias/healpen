@@ -91,7 +91,7 @@ class _WritingViewState extends ConsumerState<WritingView>
                       ],
                     ),
                   ),
-                  if (ref.watch(showAnalyzeNotesButtonProvider))
+                  if (ref.watch(writingShowAnalyzeNotesButtonProvider))
                     Padding(
                       padding: EdgeInsets.only(top: gap),
                       child: const AnalyzeNotesTile(),
