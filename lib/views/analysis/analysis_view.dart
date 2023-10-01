@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/analysis_view_controller.dart';
 import '../../models/analysis/analysis_model.dart';
@@ -41,19 +42,21 @@ class AnalysisView extends ConsumerWidget {
                 ),
               );
             } else {
+              ref.watch(AnalysisViewController.analysisModelListProvider).clear();
               for (QueryDocumentSnapshot<Map<String, dynamic>> element
                   in analysisSnapshot.data!.docs) {
                 ref.watch(AnalysisViewController.analysisModelListProvider).add(
                       AnalysisModel.fromJson(element.data()),
                     );
               }
-              return Column(
-                children: [
-                  const AverageOverallSentimentTile(),
-                  SizedBox(height: gap),
-                  const SplineSentimentTile(),
-                  SizedBox(height: gap),
-                ],
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const AverageOverallSentimentTile(),
+                    Gap(gap),
+                    const SplineSentimentTile(),
+                  ],
+                ),
               );
             }
           }

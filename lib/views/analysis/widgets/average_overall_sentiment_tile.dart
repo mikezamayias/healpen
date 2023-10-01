@@ -21,6 +21,15 @@ class AverageOverallSentimentTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final labels = [
+      'Very Unpleasant',
+      'Unpleasant',
+      'Slightly Unpleasant',
+      'Neutral',
+      'Slightly Pleasant',
+      'Pleasant',
+      'Very Pleasant'
+    ];
     double averageSentimentValue = [
       for (AnalysisModel element
           in ref.watch(AnalysisViewController.analysisModelListProvider))
@@ -29,32 +38,53 @@ class AverageOverallSentimentTile extends ConsumerWidget {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Average overall sentiment',
-      subtitle: Padding(
-        padding: EdgeInsets.only(bottom: gap),
-        child: SfSlider(
-          min: sentimentValues.min,
-          max: sentimentValues.max,
-          value: averageSentimentValue,
-          interval: 1,
-          showTicks: true,
-          showLabels: true,
-          showDividers: true,
-          enableTooltip: true,
-          minorTicksPerInterval: 0,
-          shouldAlwaysShowTooltip: false,
-          // labelFormatterCallback: (actualValue, formattedText) {
-          //   return sentimentLabels[int.parse(formattedText) + 3];
-          // },
-          tooltipTextFormatterCallback: (actualValue, formattedText) =>
-              sentimentLabels[averageSentimentValue.toInt() + 3],
-          labelPlacement: LabelPlacement.onTicks,
-          onChanged: (dynamic value) {
-            vibrate(
-              ref.watch(navigationReduceHapticFeedbackProvider),
-              () {},
-            );
-          },
-        ),
+      subtitle: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(bottom: gap),
+            child: SfSlider(
+              min: sentimentValues.min,
+              max: sentimentValues.max,
+              value: averageSentimentValue,
+              interval: 1,
+              showTicks: true,
+              showLabels: true,
+              showDividers: true,
+              enableTooltip: false,
+              minorTicksPerInterval: 0,
+              shouldAlwaysShowTooltip: false,
+              // labelFormatterCallback: (actualValue, formattedText) {
+              //   return sentimentLabels[int.parse(formattedText) + 3];
+              // },
+              tooltipTextFormatterCallback: (actualValue, formattedText) =>
+                  sentimentLabels[averageSentimentValue.toInt() + 3],
+              labelPlacement: LabelPlacement.onTicks,
+              onChanged: (dynamic value) {
+                vibrate(
+                  ref.watch(navigationReduceHapticFeedbackProvider),
+                  () {},
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: gap),
+            child: Text(
+              switch (averageSentimentValue) {
+                >= 3 => labels[5],
+                >= 2 => labels[5],
+                >= 1 => labels[4],
+                >= 0 => labels[3],
+                >= -1 => labels[2],
+                >= -2 => labels[1],
+                _ => labels[0],
+              },
+              style: context.theme.textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
       leadingIconData: FontAwesomeIcons.circleInfo,
       leadingOnTap: () {
