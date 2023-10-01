@@ -57,11 +57,7 @@ class CustomListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final padding = contentPadding ??
-        EdgeInsets.symmetric(
-          horizontal: gap * 2,
-          vertical: gap,
-        );
+    final padding = contentPadding ?? EdgeInsets.all(gap);
     final listTile = Padding(
       padding: padding,
       child: Column(
