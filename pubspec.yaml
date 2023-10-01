@@ -55,6 +55,7 @@ dependencies:
   syncfusion_flutter_charts: ^23.1.36
   syncfusion_flutter_sliders: ^23.1.36
   validated: ^2.0.0
+  word_cloud: ^1.0.1
 
 dev_dependencies:
   build_runner: ^2.4.6
