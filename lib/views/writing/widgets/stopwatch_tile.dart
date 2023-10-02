@@ -17,7 +17,7 @@ class StopwatchTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.all(gap),
+      contentPadding: EdgeInsets.zero,
       backgroundColor: context.theme.colorScheme.surface,
       textColor: context.theme.colorScheme.onSurface,
       titleString: 'Stopwatch',
