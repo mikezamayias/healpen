@@ -53,10 +53,12 @@ class AnalysisView extends ConsumerWidget {
               return Column(
                 children: [
                   const TextDivider('Mood Exploration'),
-                  Expanded(child: Container()),
+                  Gap(gap),
+                  const Spacer(),
                   Gap(gap),
                   const TextDivider('Writing Patterns'),
-                  Expanded(child: Container()),
+                  Gap(gap),
+                  const Spacer(),
                 ],
               );
             }
