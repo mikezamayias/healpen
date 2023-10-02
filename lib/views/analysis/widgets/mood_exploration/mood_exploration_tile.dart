@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../analysis_section.dart';
+import 'emotional_echo_tile.dart';
+import 'mood_journey_tile.dart';
+import 'word_cloud_tile.dart';
 
 class MoodExploration extends ConsumerWidget {
   const MoodExploration({super.key});
@@ -21,7 +24,7 @@ class MoodExploration extends ConsumerWidget {
         (
           titleString: 'Word Cloud',
           explanationString: 'See the most frequent words in your notes',
-          content: null,
+          content: WordCloudTile(),
         ),
 
         /// This widget could be represented by a mood ring or color spectrum.
@@ -32,7 +35,7 @@ class MoodExploration extends ConsumerWidget {
           titleString: 'Emotional Echo',
           explanationString: 'The color of this ring changes according to your '
               'mood',
-          content: null,
+          content: EmotionalEchoTile(),
         ),
 
         /// Instead of a line graph, consider a river or stream graph.
@@ -42,7 +45,7 @@ class MoodExploration extends ConsumerWidget {
         (
           titleString: 'Mood Journey',
           explanationString: 'See how your mood has changed over time',
-          content: null,
+          content: MoodJourneyTile(),
         ),
       ],
     );

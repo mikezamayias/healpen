@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../analysis_section.dart';
+import 'journal_length_tile.dart';
+import 'journaling_rhythm_tile.dart';
 import 'writing_flow_time_tile.dart';
 
 class WritingPatternsTile extends ConsumerWidget {
@@ -26,7 +28,7 @@ class WritingPatternsTile extends ConsumerWidget {
         (
           titleString: 'Journaling Rhythm',
           explanationString: 'See how often you write',
-          content: null,
+          content: JournalingRhythmTile(),
         ),
 
         /// Length of Entries Breakdown Widget:
@@ -38,7 +40,7 @@ class WritingPatternsTile extends ConsumerWidget {
         (
           titleString: 'Journal Length',
           explanationString: 'See how long your entries are',
-          content: null,
+          content: JournalLengthTile(),
         ),
 
         /// Time Spent Writing Breakdown Widget:
