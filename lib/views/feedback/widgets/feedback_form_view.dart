@@ -107,7 +107,7 @@ class FeedbackFormView extends ConsumerWidget {
                           : FontAwesomeIcons.square,
                       onTap: () {
                         vibrate(
-                          ref.watch(navigationReduceHapticFeedbackProvider),
+                          ref.watch(navigationEnableHapticFeedbackProvider),
                           () {
                             if (ref
                                 .watch(feedbackControllerProvider)
@@ -138,7 +138,7 @@ class FeedbackFormView extends ConsumerWidget {
                         : FontAwesomeIcons.square,
                 onTap: () {
                   vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
+                    ref.watch(navigationEnableHapticFeedbackProvider),
                     () {
                       feedbackController.setIncludeScreenshot(!ref
                           .watch(feedbackControllerProvider)

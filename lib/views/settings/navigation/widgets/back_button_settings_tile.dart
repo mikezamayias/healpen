@@ -9,21 +9,21 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class ShowBackButtonSettingsTile extends ConsumerWidget {
-  const ShowBackButtonSettingsTile({Key? key}) : super(key: key);
+class BackButtonSettingsTile extends ConsumerWidget {
+  const BackButtonSettingsTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: 'Show back button in app bar',
+      titleString: 'Enable back button in app bar',
       explanationString:
           'Shows a back button at the top of the screen, making it simpler to '
           'return to previous pages.',
       trailing: Switch(
         value: ref.watch(navigationShowBackButtonProvider),
         onChanged: (value) {
-          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
             ref.read(navigationShowBackButtonProvider.notifier).state = value;
             await PreferencesController.navigationShowBackButton
                 .write(ref.watch(navigationShowBackButtonProvider));

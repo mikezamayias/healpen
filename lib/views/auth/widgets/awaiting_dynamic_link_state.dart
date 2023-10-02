@@ -36,7 +36,7 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
           titleString: 'Something not right?',
           explanationString: 'Start again.',
           onTap: () {
-            vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+            vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
               context.navigator.pushReplacementNamed('/auth');
             });
           },

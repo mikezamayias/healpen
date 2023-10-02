@@ -9,27 +9,27 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class EnableAutomaticStopwatchTile extends ConsumerWidget {
-  const EnableAutomaticStopwatchTile({Key? key}) : super(key: key);
+class HapticFeedbackSettingsTile extends ConsumerWidget {
+  const HapticFeedbackSettingsTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      enableSubtitleWrapper: true,
-      titleString: 'Enable automatic stopwatch',
-      explanationString:
-          'Pauses the stopwatch when you stop typing and resets it when you clear all text.',
+      titleString: 'Enable haptic feedback',
+      explanationString: 'Enables haptic feedback for buttons and other '
+          'elements.',
       trailing: Switch(
-        value: ref.watch(writingAutomaticStopwatchProvider),
+        value: ref.watch(navigationEnableHapticFeedbackProvider),
         onChanged: (value) {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
-            ref.read(writingAutomaticStopwatchProvider.notifier).state = value;
-            await PreferencesController.writingAutomaticStopwatch
-                .write(ref.watch(writingAutomaticStopwatchProvider));
+            ref.read(navigationEnableHapticFeedbackProvider.notifier).state =
+                value;
+            await PreferencesController.navigationEnableHapticFeedback
+                .write(ref.watch(navigationEnableHapticFeedbackProvider));
             log(
-              '${ref.watch(writingAutomaticStopwatchProvider)}',
-              name: 'SettingsWritingView:writingResetStopwatchOnEmpty',
+              '${ref.watch(navigationEnableHapticFeedbackProvider)}',
+              name: 'HapticFeedbackSettingsTile',
             );
           });
         },

@@ -32,9 +32,13 @@ class PreferencesController {
     'navigationShowBackButton',
     true,
   );
-  static final navigationReduceHapticFeedback = PreferenceModel<bool>(
-    'navigationReduceHapticFeedback',
-    false,
+  static final navigationShowInfoButtons = PreferenceModel<bool>(
+    'navigationShowInfoButtons',
+    true,
+  );
+  static final navigationEnableHapticFeedback = PreferenceModel<bool>(
+    'navigationEnableHapticFeedback',
+    true,
   );
   static final onboardingCompleted = PreferenceModel<bool>(
     'onboardingCompleted',
@@ -55,7 +59,7 @@ class PreferencesController {
     writingAutomaticStopwatch.key: writingAutomaticStopwatch.value,
     navigationShowAppBarTitle.key: navigationShowAppBarTitle.value,
     navigationShowBackButton.key: navigationShowBackButton.value,
-    navigationReduceHapticFeedback.key: navigationReduceHapticFeedback.value,
+    navigationEnableHapticFeedback.key: navigationEnableHapticFeedback.value,
     themeColor.key: themeColor.value,
     themeAppearance.key: themeAppearance.value,
     onboardingCompleted.key: onboardingCompleted.value,

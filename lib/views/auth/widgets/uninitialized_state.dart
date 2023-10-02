@@ -61,7 +61,7 @@ class UninitializedState extends ConsumerWidget {
             leadingIconData: FontAwesomeIcons.solidPaperPlane,
             onTap: () {
               if (formKey.currentState!.validate()) {
-                vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
                   ref
                       .watch(CustomAuthProvider().emailLinkAuthProvider)
                       .sendLink(emailAddress);

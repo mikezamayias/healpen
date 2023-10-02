@@ -102,7 +102,7 @@ class CustomListTile extends ConsumerWidget {
                       onInit: showcaseLeadingIcon!
                           ? (_) async {
                               if (!ref.watch(
-                                  navigationReduceHapticFeedbackProvider)) {
+                                  navigationEnableHapticFeedbackProvider)) {
                                 await Future.delayed(
                                   1.seconds,
                                   HapticFeedback.vibrate,

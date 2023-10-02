@@ -150,7 +150,7 @@ class NoteTile extends ConsumerWidget {
             ),
             onTap: () {
               vibrate(
-                ref.watch(navigationReduceHapticFeedbackProvider),
+                ref.watch(navigationEnableHapticFeedbackProvider),
                 () async {
                   context.navigator.pushNamed(
                     '/note',

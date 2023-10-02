@@ -69,12 +69,12 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                     leadingIconData: FontAwesomeIcons.circleInfo,
                     leadingOnTap: () {
                       vibrate(
-                        ref.watch(navigationReduceHapticFeedbackProvider),
+                        ref.watch(navigationEnableHapticFeedbackProvider),
                         () {
                           showHealpenDialog(
                             context: context,
                             doVibrate: ref
-                                .watch(navigationReduceHapticFeedbackProvider),
+                                .watch(navigationEnableHapticFeedbackProvider),
                             customDialog: CustomDialog(
                               titleString: widget.tileData[index].titleString,
                               contentString:
@@ -89,7 +89,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                 controller: pageController,
                 onPageChanged: (int index) {
                   vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
+                    ref.watch(navigationEnableHapticFeedbackProvider),
                     () {},
                   );
                 },

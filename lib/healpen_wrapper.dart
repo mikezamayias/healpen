@@ -69,9 +69,9 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
                   OnboardingController().onboardingCompletedProvider.notifier)
               .state = value,
         );
-    PreferencesController.navigationReduceHapticFeedback.read().then(
+    PreferencesController.navigationEnableHapticFeedback.read().then(
           (bool value) => ref
-              .watch(navigationReduceHapticFeedbackProvider.notifier)
+              .watch(navigationEnableHapticFeedbackProvider.notifier)
               .state = value,
         );
     PreferencesController.navigationShowAppBarTitle.read().then(

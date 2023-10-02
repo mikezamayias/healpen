@@ -25,13 +25,13 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       showcaseLeadingIcon: ref.watch(shakePrivateNoteInfoProvider),
       leadingIconData: FontAwesomeIcons.circleInfo,
       leadingOnTap: () {
-        vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
           ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
           PreferencesController.shakePrivateNoteInfo
               .write(ref.watch(shakePrivateNoteInfoProvider));
           showHealpenDialog(
             context: context,
-            doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
+            doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
             customDialog: CustomDialog(
               titleString: 'Private note',
               contentString:
@@ -47,7 +47,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
                   titleString: 'Okay',
                   onTap: () {
                     vibrate(
-                      ref.watch(navigationReduceHapticFeedbackProvider),
+                      ref.watch(navigationEnableHapticFeedbackProvider),
                       () {
                         ref.watch(shakePrivateNoteInfoProvider.notifier).state =
                             false;
@@ -68,7 +68,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           ? FontAwesomeIcons.solidSquareCheck
           : FontAwesomeIcons.square,
       trailingOnTap: () {
-        vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
           ref
               .watch(writingControllerProvider.notifier)
               .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);

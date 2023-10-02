@@ -32,7 +32,7 @@ class FeedbackFormActions extends ConsumerWidget {
           titleString: 'Submit',
           onTap: () {
             vibrate(
-              ref.read(navigationReduceHapticFeedbackProvider),
+              ref.read(navigationEnableHapticFeedbackProvider),
               () async {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
@@ -58,7 +58,7 @@ class FeedbackFormActions extends ConsumerWidget {
                       CustomSnackBar(
                         SnackBarConfig(
                           vibrate:
-                              ref.watch(navigationReduceHapticFeedbackProvider),
+                              ref.watch(navigationEnableHapticFeedbackProvider),
                           titleString1: 'Thank you for your feedback!',
                           leadingIconData1: FontAwesomeIcons.solidPaperPlane,
                         ),
@@ -71,7 +71,7 @@ class FeedbackFormActions extends ConsumerWidget {
                       CustomSnackBar(
                         SnackBarConfig(
                           vibrate:
-                              ref.watch(navigationReduceHapticFeedbackProvider),
+                              ref.watch(navigationEnableHapticFeedbackProvider),
                           titleString1: 'Something went wrong',
                           leadingIconData1: FontAwesomeIcons.circleExclamation,
                           titleString2: error.toString(),
@@ -87,7 +87,7 @@ class FeedbackFormActions extends ConsumerWidget {
                   await CustomSnackBar(
                     SnackBarConfig(
                       vibrate:
-                          ref.watch(navigationReduceHapticFeedbackProvider),
+                          ref.watch(navigationEnableHapticFeedbackProvider),
                       snackBarMargin: EdgeInsets.zero,
                       titleString1: 'Please fill in all fields',
                       leadingIconData1: FontAwesomeIcons.circleExclamation,
@@ -104,11 +104,11 @@ class FeedbackFormActions extends ConsumerWidget {
           leadingIconData: FontAwesomeIcons.xmark,
           titleString: 'Cancel',
           onTap: () {
-            vibrate(ref.read(navigationReduceHapticFeedbackProvider), () {
+            vibrate(ref.read(navigationEnableHapticFeedbackProvider), () {
               feedbackController.cleanUp();
               CustomSnackBar(
                 SnackBarConfig(
-                  vibrate: ref.watch(navigationReduceHapticFeedbackProvider),
+                  vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
                   titleString1: 'We appreciate any feedback!',
                   leadingIconData1: FontAwesomeIcons.solidCompass,
                 ),

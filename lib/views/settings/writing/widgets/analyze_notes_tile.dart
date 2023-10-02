@@ -21,12 +21,12 @@ class AnalyzeNotesTile extends ConsumerWidget {
       explanationString: 'Update the analysis of all your notes.',
       onTap: () {
         vibrate(
-          ref.watch(navigationReduceHapticFeedbackProvider),
+          ref.watch(navigationEnableHapticFeedbackProvider),
           () async {
             AnalysisViewController.completed(ref);
             showHealpenDialog(
               context: context,
-              doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
+              doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
               customDialog: const AnalyzeNotesDialog(),
             );
           },

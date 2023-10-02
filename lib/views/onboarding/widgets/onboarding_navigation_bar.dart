@@ -68,7 +68,7 @@ class _OnboardingNavigationBarState
             onTap: () {
               if (currentPageIndex == 0) {
                 vibrate(
-                  ref.watch(navigationReduceHapticFeedbackProvider),
+                  ref.watch(navigationEnableHapticFeedbackProvider),
                   goToAuth,
                 );
               } else {
@@ -88,7 +88,7 @@ class _OnboardingNavigationBarState
             onTap: () {
               if (currentPageIndex == onboardingViewsLength) {
                 vibrate(
-                  ref.watch(navigationReduceHapticFeedbackProvider),
+                  ref.watch(navigationEnableHapticFeedbackProvider),
                   goToAuth,
                 );
               } else {

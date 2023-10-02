@@ -66,7 +66,7 @@ class AnalyzeNotesDialog extends ConsumerWidget {
               ref.watch(AnalysisViewController.analysisProgressProvider)) {
             AnalysisProgress.completed => () {
                 vibrate(
-                  ref.watch(navigationReduceHapticFeedbackProvider),
+                  ref.watch(navigationEnableHapticFeedbackProvider),
                   () {
                     context.navigator.pop();
                   },

@@ -29,7 +29,7 @@ class SettingsFeedbackTile extends ConsumerWidget {
       titleString: 'Feedback',
       onTap: () {
         vibrate(
-          ref.watch(navigationReduceHapticFeedbackProvider),
+          ref.watch(navigationEnableHapticFeedbackProvider),
           () {
             final feedbackController =
                 ref.watch(feedbackControllerProvider.notifier);

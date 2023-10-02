@@ -61,7 +61,7 @@ class AverageOverallSentimentTile extends ConsumerWidget {
               labelPlacement: LabelPlacement.onTicks,
               onChanged: (dynamic value) {
                 vibrate(
-                  ref.watch(navigationReduceHapticFeedbackProvider),
+                  ref.watch(navigationEnableHapticFeedbackProvider),
                   () {},
                 );
               },
@@ -91,7 +91,7 @@ class AverageOverallSentimentTile extends ConsumerWidget {
         /// explain to the user what they are seeing
         showHealpenDialog(
           context: context,
-          doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
+          doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
           customDialog: const CustomDialog(
             titleString: 'What is this?',
             contentString: 'This is the average sentiment value of all '

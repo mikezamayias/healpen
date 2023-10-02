@@ -48,7 +48,7 @@ class AuthFailedState extends ConsumerWidget {
           // textColor: context.theme.colorScheme.onError,
           titleString: 'Go back',
           onTap: () {
-            vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+            vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
               context.navigator.pushReplacementNamed('/auth');
             });
           },

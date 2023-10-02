@@ -72,7 +72,7 @@ class SettingsView extends ConsumerWidget {
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
                       () {
                     context.navigator.push(
                       MaterialPageRoute(
