@@ -53,7 +53,7 @@ class AnalysisView extends ConsumerWidget {
               }
               return Column(
                 children: [
-                  const Expanded(child: MoodExplorationTile()),
+                  const Expanded(child: MoodExploration()),
                   Gap(gap),
                   const Expanded(child: WritingPatternsTile()),
                 ],

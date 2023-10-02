@@ -52,7 +52,7 @@ class CustomListTile extends ConsumerWidget {
     this.responsiveWidth = false,
     this.showcaseLeadingIcon = false,
     this.enableSubtitleWrapper = true,
-    this.enableExplanationWrapper = true,
+    this.enableExplanationWrapper = false,
     this.cornerRadius,
     this.contentPadding,
   }) : super(key: key);
@@ -189,7 +189,7 @@ class CustomListTile extends ConsumerWidget {
                           onTap: onTap,
                           enableInteractiveSelection: selectableText!,
                           style: context.theme.textTheme.titleMedium!.copyWith(
-                            color: enableExplanationWrapper! || onTap == null
+                            color: enableSubtitleWrapper! || onTap == null
                                 ? context.theme.colorScheme.onSurfaceVariant
                                 : context.theme.colorScheme.onPrimary,
                           ),
@@ -198,16 +198,30 @@ class CustomListTile extends ConsumerWidget {
               ),
             ),
           if (explanationString != null)
-            Padding(
-              padding: EdgeInsets.only(top: padding.vertical / 2),
-              child: SelectableText(
-                explanationString!,
-                onTap: onTap,
-                enableInteractiveSelection: selectableText!,
-                style: TextStyle(
-                  color: enableExplanationWrapper! || onTap == null
-                      ? context.theme.colorScheme.onSurfaceVariant
-                      : context.theme.colorScheme.onPrimary,
+            Flexible(
+              child: Padding(
+                padding: EdgeInsets.only(top: padding.vertical / 2),
+                child: Container(
+                  padding:
+                      enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
+                  decoration: enableExplanationWrapper!
+                      ? BoxDecoration(
+                          color: context.theme.colorScheme.surface,
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(radius - gap),
+                          ),
+                        )
+                      : null,
+                  child: SelectableText(
+                    explanationString!,
+                    onTap: onTap,
+                    enableInteractiveSelection: selectableText!,
+                    style: TextStyle(
+                      color: enableExplanationWrapper! || onTap == null
+                          ? context.theme.colorScheme.onSurfaceVariant
+                          : context.theme.colorScheme.onPrimary,
+                    ),
+                  ),
                 ),
               ),
             ),
