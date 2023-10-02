@@ -43,7 +43,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
           borderRadius: BorderRadius.circular(radius - gap),
         ),
         child: Column(
-          children: [
+          children: <Widget>[
             Expanded(
               child: PageView.builder(
                 itemCount: widget.tileData.length,

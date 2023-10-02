@@ -10,7 +10,7 @@ class MoodExploration extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const AnalysisSection(
       sectionName: 'Mood Exploration',
-      tileData: [
+      tileData: <({String explanationString, String titleString})>[
         /// This widget could be represented by a word cloud.
         /// You could add interactivity, for example, users could tap on a word
         /// to see the entries where it was used.

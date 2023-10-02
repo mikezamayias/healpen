@@ -10,7 +10,7 @@ class WritingPatternsTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const AnalysisSection(
       sectionName: 'Writing Patterns',
-      tileData: [
+      tileData: <({String explanationString, String titleString})>[
         /// Frequency Breakdown Widget
         /// Instead of a conventional bar graph, you can use a calendar
         /// heat map. Each day of the week will be a column, and each week
