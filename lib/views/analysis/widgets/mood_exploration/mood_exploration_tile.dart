@@ -9,11 +9,11 @@ class MoodExploration extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const AnalysisSection(
-      sectionName: 'Mood Exploration',
+      sectionName: 'Exploration',
       tileData: <({
         String explanationString,
         String titleString,
-        Widget? content
+        Widget? content,
       })>[
         /// This widget could be represented by a word cloud.
         /// You could add interactivity, for example, users could tap on a word

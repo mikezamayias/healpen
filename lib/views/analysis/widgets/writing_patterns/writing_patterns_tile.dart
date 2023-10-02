@@ -10,11 +10,11 @@ class WritingPatternsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const AnalysisSection(
-      sectionName: 'Writing Patterns',
+      sectionName: 'Patterns',
       tileData: <({
         String explanationString,
         String titleString,
-        Widget? content
+        Widget? content,
       })>[
         /// Frequency Breakdown Widget
         /// Instead of a conventional bar graph, you can use a calendar

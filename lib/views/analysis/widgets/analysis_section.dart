@@ -32,10 +32,13 @@ class AnalysisSection extends ConsumerStatefulWidget {
 
 class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
   late PageController pageController;
+  int currentPage = 0;
 
   @override
   void initState() {
-    pageController = PageController();
+    pageController = PageController(
+      initialPage: currentPage,
+    );
     super.initState();
   }
 
@@ -43,7 +46,30 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
   Widget build(BuildContext context) {
     return CustomListTile(
       titleString: widget.sectionName,
+      trailing: Text(widget.tileData.elementAt(currentPage).titleString),
       enableSubtitleWrapper: false,
+      leadingIconData: ref.watch(navigationShowInfoButtonsProvider)
+          ? FontAwesomeIcons.circleInfo
+          : null,
+      leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
+          ? () {
+              vibrate(
+                ref.watch(navigationEnableHapticFeedbackProvider),
+                () {
+                  showHealpenDialog(
+                    context: context,
+                    doVibrate:
+                        ref.watch(navigationEnableHapticFeedbackProvider),
+                    customDialog: CustomDialog(
+                      titleString: widget.tileData[currentPage].titleString,
+                      contentString:
+                          widget.tileData[currentPage].explanationString,
+                    ),
+                  );
+                },
+              );
+            }
+          : null,
       subtitle: Container(
         padding: EdgeInsets.symmetric(vertical: gap),
         decoration: BoxDecoration(
@@ -57,46 +83,17 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                 itemCount: widget.tileData.length,
                 itemBuilder: (BuildContext context, int index) => Padding(
                   padding: EdgeInsets.symmetric(horizontal: gap),
-                  child: CustomListTile(
-                    contentPadding: EdgeInsets.zero,
-                    backgroundColor: theme.colorScheme.surface,
-                    titleString: widget.tileData[index].titleString,
-                    enableSubtitleWrapper: false,
-                    subtitle: Padding(
-                      padding: EdgeInsets.only(top: gap),
-                      child: widget.tileData[index].content,
-                    ),
-                    leadingIconData:
-                        ref.watch(navigationShowInfoButtonsProvider)
-                            ? FontAwesomeIcons.circleInfo
-                            : null,
-                    leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
-                        ? () {
-                            vibrate(
-                              ref.watch(navigationEnableHapticFeedbackProvider),
-                              () {
-                                showHealpenDialog(
-                                  context: context,
-                                  doVibrate: ref.watch(
-                                      navigationEnableHapticFeedbackProvider),
-                                  customDialog: CustomDialog(
-                                    titleString:
-                                        widget.tileData[index].titleString,
-                                    contentString: widget
-                                        .tileData[index].explanationString,
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        : null,
-                  ),
+                  child: widget.tileData[index].content,
                 ),
                 controller: pageController,
                 onPageChanged: (int index) {
                   vibrate(
                     ref.watch(navigationEnableHapticFeedbackProvider),
-                    () {},
+                    () {
+                      setState(() {
+                        currentPage = index;
+                      });
+                    },
                   );
                 },
               ),
