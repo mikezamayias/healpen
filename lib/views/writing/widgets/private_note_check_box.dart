@@ -23,47 +23,52 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       backgroundColor: context.theme.colorScheme.surface,
       responsiveWidth: true,
       showcaseLeadingIcon: ref.watch(shakePrivateNoteInfoProvider),
-      leadingIconData: FontAwesomeIcons.circleInfo,
-      leadingOnTap: () {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-          ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
-          PreferencesController.shakePrivateNoteInfo
-              .write(ref.watch(shakePrivateNoteInfoProvider));
-          showHealpenDialog(
-            context: context,
-            doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
-            customDialog: CustomDialog(
-              titleString: 'Private note',
-              contentString:
-                  'A private note won\'t be used in analysis and will only be visible in History.',
-              actions: [
-                CustomListTile(
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: gap * 2,
-                    vertical: gap,
+      leadingIconData: ref.watch(navigationShowInfoButtonsProvider)
+          ? FontAwesomeIcons.circleInfo
+          : FontAwesomeIcons.lock,
+      leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
+          ? () {
+              vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+                ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
+                PreferencesController.shakePrivateNoteInfo
+                    .write(ref.watch(shakePrivateNoteInfoProvider));
+                showHealpenDialog(
+                  context: context,
+                  doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+                  customDialog: CustomDialog(
+                    titleString: 'Private note',
+                    contentString:
+                        'A private note won\'t be used in analysis and will only be visible in History.',
+                    actions: [
+                      CustomListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: gap * 2,
+                          vertical: gap,
+                        ),
+                        cornerRadius: radius - gap,
+                        responsiveWidth: true,
+                        titleString: 'Okay',
+                        onTap: () {
+                          vibrate(
+                            ref.watch(navigationEnableHapticFeedbackProvider),
+                            () {
+                              ref
+                                  .watch(shakePrivateNoteInfoProvider.notifier)
+                                  .state = false;
+                              PreferencesController.shakePrivateNoteInfo.write(
+                                  ref.watch(shakePrivateNoteInfoProvider));
+                              context.navigator.pop();
+                            },
+                          );
+                        },
+                      )
+                    ],
                   ),
-                  cornerRadius: radius - gap,
-                  responsiveWidth: true,
-                  titleString: 'Okay',
-                  onTap: () {
-                    vibrate(
-                      ref.watch(navigationEnableHapticFeedbackProvider),
-                      () {
-                        ref.watch(shakePrivateNoteInfoProvider.notifier).state =
-                            false;
-                        PreferencesController.shakePrivateNoteInfo
-                            .write(ref.watch(shakePrivateNoteInfoProvider));
-                        context.navigator.pop();
-                      },
-                    );
-                  },
-                )
-              ],
-            ),
-          );
-        });
-      },
-      titleString: 'Make private',
+                );
+              });
+            }
+          : null,
+      titleString: 'Private note',
       trailingIconData: ref.watch(writingControllerProvider).isPrivate
           ? FontAwesomeIcons.solidSquareCheck
           : FontAwesomeIcons.square,

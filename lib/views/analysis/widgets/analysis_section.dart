@@ -66,24 +66,30 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                       padding: EdgeInsets.only(top: gap),
                       child: widget.tileData[index].content,
                     ),
-                    leadingIconData: FontAwesomeIcons.circleInfo,
-                    leadingOnTap: () {
-                      vibrate(
-                        ref.watch(navigationEnableHapticFeedbackProvider),
-                        () {
-                          showHealpenDialog(
-                            context: context,
-                            doVibrate: ref
-                                .watch(navigationEnableHapticFeedbackProvider),
-                            customDialog: CustomDialog(
-                              titleString: widget.tileData[index].titleString,
-                              contentString:
-                                  widget.tileData[index].explanationString,
-                            ),
-                          );
-                        },
-                      );
-                    },
+                    leadingIconData:
+                        ref.watch(navigationShowInfoButtonsProvider)
+                            ? FontAwesomeIcons.circleInfo
+                            : null,
+                    leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
+                        ? () {
+                            vibrate(
+                              ref.watch(navigationEnableHapticFeedbackProvider),
+                              () {
+                                showHealpenDialog(
+                                  context: context,
+                                  doVibrate: ref.watch(
+                                      navigationEnableHapticFeedbackProvider),
+                                  customDialog: CustomDialog(
+                                    titleString:
+                                        widget.tileData[index].titleString,
+                                    contentString: widget
+                                        .tileData[index].explanationString,
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        : null,
                   ),
                 ),
                 controller: pageController,
