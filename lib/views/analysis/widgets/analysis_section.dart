@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
+import '../../../utils/show_healpen_dialog.dart';
+import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class AnalysisSection extends ConsumerStatefulWidget {
@@ -53,16 +56,33 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                     contentPadding: EdgeInsets.zero,
                     backgroundColor: theme.colorScheme.surface,
                     titleString: widget.tileData[index].titleString,
-                    enableSubtitleWrapper: false,
-                    subtitle: Text(
-                      widget.tileData[index].explanationString,
-                    ),
+                    leadingIconData: FontAwesomeIcons.circleInfo,
+                    leadingOnTap: () {
+                      vibrate(
+                        ref.watch(navigationReduceHapticFeedbackProvider),
+                        () {
+                          showHealpenDialog(
+                            context: context,
+                            doVibrate: ref
+                                .watch(navigationReduceHapticFeedbackProvider),
+                            customDialog: CustomDialog(
+                              titleString:
+                                  'What is ${widget.tileData[index].titleString}?',
+                              contentString:
+                                  widget.tileData[index].explanationString,
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
                 controller: pageController,
                 onPageChanged: (int index) {
                   vibrate(
-                      ref.watch(navigationReduceHapticFeedbackProvider), () {});
+                    ref.watch(navigationReduceHapticFeedbackProvider),
+                    () {},
+                  );
                 },
               ),
             ),
@@ -71,6 +91,8 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
               controller: pageController,
               count: widget.tileData.length,
               effect: ExpandingDotsEffect(
+                dotHeight: gap,
+                dotWidth: gap,
                 activeDotColor: context.theme.colorScheme.primary,
                 dotColor: context.theme.colorScheme.surfaceVariant,
               ),
