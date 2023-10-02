@@ -10,13 +10,18 @@ class MoodExploration extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const AnalysisSection(
       sectionName: 'Mood Exploration',
-      tileData: <({String explanationString, String titleString})>[
+      tileData: <({
+        String explanationString,
+        String titleString,
+        Widget? content
+      })>[
         /// This widget could be represented by a word cloud.
         /// You could add interactivity, for example, users could tap on a word
         /// to see the entries where it was used.
         (
           titleString: 'Word Cloud',
           explanationString: 'See the most frequent words in your notes',
+          content: null,
         ),
 
         /// This widget could be represented by a mood ring or color spectrum.
@@ -27,6 +32,7 @@ class MoodExploration extends ConsumerWidget {
           titleString: 'Emotional Echo',
           explanationString: 'The color of this ring changes according to your '
               'mood',
+          content: null,
         ),
 
         /// Instead of a line graph, consider a river or stream graph.
@@ -36,6 +42,7 @@ class MoodExploration extends ConsumerWidget {
         (
           titleString: 'Mood Journey',
           explanationString: 'See how your mood has changed over time',
+          content: null,
         ),
       ],
     );

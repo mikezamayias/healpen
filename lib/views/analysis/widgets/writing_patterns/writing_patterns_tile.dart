@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../analysis_section.dart';
+import 'writing_flow_time_tile.dart';
 
 class WritingPatternsTile extends ConsumerWidget {
   const WritingPatternsTile({super.key});
@@ -10,7 +11,11 @@ class WritingPatternsTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const AnalysisSection(
       sectionName: 'Writing Patterns',
-      tileData: <({String explanationString, String titleString})>[
+      tileData: <({
+        String explanationString,
+        String titleString,
+        Widget? content
+      })>[
         /// Frequency Breakdown Widget
         /// Instead of a conventional bar graph, you can use a calendar
         /// heat map. Each day of the week will be a column, and each week
@@ -21,6 +26,7 @@ class WritingPatternsTile extends ConsumerWidget {
         (
           titleString: 'Journaling Rhythm',
           explanationString: 'See how often you write',
+          content: null,
         ),
 
         /// Length of Entries Breakdown Widget:
@@ -32,6 +38,7 @@ class WritingPatternsTile extends ConsumerWidget {
         (
           titleString: 'Journal Length',
           explanationString: 'See how long your entries are',
+          content: null,
         ),
 
         /// Time Spent Writing Breakdown Widget:
@@ -42,6 +49,7 @@ class WritingPatternsTile extends ConsumerWidget {
         (
           titleString: 'Writing Flow Time',
           explanationString: 'See when you write',
+          content: WritingFlowTimeTile(),
         ),
       ],
     );

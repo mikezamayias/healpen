@@ -13,7 +13,12 @@ import '../../../widgets/custom_list_tile.dart';
 
 class AnalysisSection extends ConsumerStatefulWidget {
   final String sectionName;
-  final List<({String titleString, String explanationString})> tileData;
+  final List<
+      ({
+        String titleString,
+        String explanationString,
+        Widget? content,
+      })> tileData;
 
   const AnalysisSection({
     super.key,
@@ -56,6 +61,11 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                     contentPadding: EdgeInsets.zero,
                     backgroundColor: theme.colorScheme.surface,
                     titleString: widget.tileData[index].titleString,
+                    enableSubtitleWrapper: false,
+                    subtitle: Padding(
+                      padding: EdgeInsets.only(top: gap),
+                      child: widget.tileData[index].content,
+                    ),
                     leadingIconData: FontAwesomeIcons.circleInfo,
                     leadingOnTap: () {
                       vibrate(
@@ -66,8 +76,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                             doVibrate: ref
                                 .watch(navigationReduceHapticFeedbackProvider),
                             customDialog: CustomDialog(
-                              titleString:
-                                  'What is ${widget.tileData[index].titleString}?',
+                              titleString: widget.tileData[index].titleString,
                               contentString:
                                   widget.tileData[index].explanationString,
                             ),
