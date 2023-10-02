@@ -10,8 +10,9 @@ import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
-import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
+import 'widgets/mood_exploration/mood_exploration_tile.dart';
+import 'widgets/writing_patterns/writing_patterns_tile.dart';
 
 class AnalysisView extends ConsumerWidget {
   const AnalysisView({Key? key}) : super(key: key);
@@ -52,13 +53,9 @@ class AnalysisView extends ConsumerWidget {
               }
               return Column(
                 children: [
-                  const TextDivider('Mood Exploration'),
+                  const Expanded(child: MoodExplorationTile()),
                   Gap(gap),
-                  const Spacer(),
-                  Gap(gap),
-                  const TextDivider('Writing Patterns'),
-                  Gap(gap),
-                  const Spacer(),
+                  const Expanded(child: WritingPatternsTile()),
                 ],
               );
             }
