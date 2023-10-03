@@ -18,15 +18,6 @@ class MoodExploration extends ConsumerWidget {
         String titleString,
         Widget? content,
       })>[
-        /// This widget could be represented by a word cloud.
-        /// You could add interactivity, for example, users could tap on a word
-        /// to see the entries where it was used.
-        (
-          titleString: 'Word Cloud',
-          explanationString: 'See the most frequent words in your notes',
-          content: WordCloudTile(),
-        ),
-
         /// This widget could be represented by a mood ring or color spectrum.
         /// The color changes according to the inferred mood from the journal
         /// entries, giving a quick and intuitive view of the user's mood based
@@ -36,6 +27,15 @@ class MoodExploration extends ConsumerWidget {
           explanationString: 'The color of this ring changes according to your '
               'mood',
           content: EmotionalEchoTile(),
+        ),
+
+        /// This widget could be represented by a word cloud.
+        /// You could add interactivity, for example, users could tap on a word
+        /// to see the entries where it was used.
+        (
+          titleString: 'Word Cloud',
+          explanationString: 'See the most frequent words in your notes',
+          content: WordCloudTile(),
         ),
 
         /// Instead of a line graph, consider a river or stream graph.
