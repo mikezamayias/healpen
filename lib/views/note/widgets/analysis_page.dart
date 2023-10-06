@@ -19,56 +19,20 @@ class AnalysisPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labels = [
-      'Very Unpleasant',
-      'Unpleasant',
-      'Slightly Unpleasant',
-      'Neutral',
-      'Slightly Pleasant',
-      'Pleasant',
-      'Very Pleasant'
-    ];
-    final sentimentIcons = [
-      FontAwesomeIcons.faceSadTear,
-      FontAwesomeIcons.faceFrown,
-      FontAwesomeIcons.faceFrownOpen,
-      FontAwesomeIcons.faceMeh,
-      FontAwesomeIcons.faceSmile,
-      FontAwesomeIcons.faceLaugh,
-      FontAwesomeIcons.faceLaughBeam,
-    ];
     log('$analysisModel');
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: gap),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: gap),
-            child: const TextDivider('Analysis'),
-          ),
+          const TextDivider('Analysis'),
+          Gap(gap),
           CustomListTile(
             titleString: 'Sentiment',
             contentPadding: EdgeInsets.all(gap),
-            subtitleString: switch (analysisModel.sentiment!) {
-              >= 3 => labels[5],
-              >= 2 => labels[5],
-              >= 1 => labels[4],
-              >= 0 => labels[3],
-              >= -1 => labels[2],
-              >= -2 => labels[1],
-              _ => labels[0],
-            },
+            subtitleString: getSentimentLabel(analysisModel.sentiment!),
             leading: FaIcon(
-              switch (analysisModel.sentiment!) {
-                >= 3 => sentimentIcons[5],
-                >= 2 => sentimentIcons[5],
-                >= 1 => sentimentIcons[4],
-                >= 0 => sentimentIcons[3],
-                >= -1 => sentimentIcons[2],
-                >= -2 => sentimentIcons[1],
-                _ => sentimentIcons[0],
-              },
+              getSentimentIcon(analysisModel.sentiment!),
               color: context.theme.colorScheme.secondary,
               size: radius * 2,
             ),

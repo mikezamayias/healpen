@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 final double unit = 4.2.sp;
@@ -46,5 +47,30 @@ final sentimentLabels = [
   'Very Pleasant'
 ];
 
+/// A list of sentiment icons used in the application.
+final sentimentIcons = [
+  FontAwesomeIcons.faceSadTear,
+  FontAwesomeIcons.faceFrown,
+  FontAwesomeIcons.faceFrownOpen,
+  FontAwesomeIcons.faceMeh,
+  FontAwesomeIcons.faceSmile,
+  FontAwesomeIcons.faceLaugh,
+  FontAwesomeIcons.faceLaughBeam,
+];
+
 /// A list of sentiment values used in the application.
 final sentimentValues = [-3, -2, -1, 0, 1, 2, 3];
+
+/// Gets the sentiment label based on the given sentiment value.
+String getSentimentLabel(double sentiment) {
+  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
+  final label = sentimentLabels[index];
+  return label;
+}
+
+/// Gets the sentiment icon based on the given sentiment value.
+IconData getSentimentIcon(double sentiment) {
+  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
+  final icon = sentimentIcons[index];
+  return icon;
+}
