@@ -5,9 +5,10 @@ import '../../../../extensions/widget_extensions.dart';
 import '../../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
-import 'widgets/enable_back_button_settings_tile.dart';
+import 'widgets/app_bar_title_tile.dart';
+import 'widgets/back_button_settings_tile.dart';
 import 'widgets/haptic_feedback_settings_tile.dart';
-import 'widgets/hide_app_bar_title.dart';
+import 'widgets/info_button_settings_tile.dart';
 
 class SettingsNavigationView extends ConsumerWidget {
   const SettingsNavigationView({Key? key}) : super(key: key);
@@ -15,9 +16,10 @@ class SettingsNavigationView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = const [
-      ReduceHapticFeedbackSettingsTile(),
-      ShowAppBarTitle(),
-      ShowBackButtonSettingsTile(),
+      HapticFeedbackSettingsTile(),
+      AppBarTitleTitle(),
+      BackButtonSettingsTile(),
+      InfoButtonSettingsTile(),
     ].animateWidgetList();
 
     return BlueprintView(

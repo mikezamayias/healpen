@@ -50,16 +50,15 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               ref.watch(themeColorProvider.notifier).state = value,
         );
     PreferencesController.shakePrivateNoteInfo.read().then(
-          (bool value) => ref
-              .watch(writingShakePrivateNoteInfoProvider.notifier)
-              .state = value,
+          (bool value) =>
+              ref.watch(shakePrivateNoteInfoProvider.notifier).state = value,
         );
     PreferencesController.writingAutomaticStopwatch.read().then(
           (bool value) => ref
               .watch(writingAutomaticStopwatchProvider.notifier)
               .state = value,
         );
-    PreferencesController.showBackButton.read().then(
+    PreferencesController.navigationShowBackButton.read().then(
           (bool value) => ref
               .watch(navigationShowBackButtonProvider.notifier)
               .state = value,
@@ -70,14 +69,24 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
                   OnboardingController().onboardingCompletedProvider.notifier)
               .state = value,
         );
-    PreferencesController.reduceHapticFeedback.read().then(
+    PreferencesController.navigationEnableHapticFeedback.read().then(
           (bool value) => ref
-              .watch(navigationReduceHapticFeedbackProvider.notifier)
+              .watch(navigationEnableHapticFeedbackProvider.notifier)
               .state = value,
         );
-    PreferencesController.showAppBarTitle.read().then(
+    PreferencesController.navigationShowAppBarTitle.read().then(
           (bool value) =>
               ref.watch(navigationShowAppBarTitle.notifier).state = value,
+        );
+    PreferencesController.writingShowAnalyzeNotesButton.read().then(
+          (bool value) => ref
+              .watch(writingShowAnalyzeNotesButtonProvider.notifier)
+              .state = value,
+        );
+    PreferencesController.navigationShowInfoButtons.read().then(
+          (bool value) => ref
+              .watch(navigationShowInfoButtonsProvider.notifier)
+              .state = value,
         );
     log(
       '${FirebaseAuth.instance.currentUser != null}',

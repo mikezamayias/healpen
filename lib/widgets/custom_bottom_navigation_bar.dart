@@ -10,21 +10,19 @@ import '../../../extensions/string_extensions.dart';
 import '../../../utils/constants.dart';
 import '../controllers/healpen/healpen_controller.dart';
 import '../extensions/widget_extensions.dart';
-import '../providers/settings_providers.dart';
-import '../utils/helper_functions.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: gap,
-        right: gap,
-        bottom: gap,
-      ),
-      child: SafeArea(
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: gap,
+          right: gap,
+          bottom: gap,
+        ),
         child: PhysicalModel(
           color: context.theme.colorScheme.surfaceVariant,
           borderRadius: BorderRadius.all(Radius.circular(radius)),
@@ -40,15 +38,13 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               currentIndex:
                   ref.watch(HealpenController().currentPageIndexProvider),
               onTap: (int index) {
-                vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-                  ref
-                      .watch(HealpenController().pageControllerProvider)
-                      .animateToPage(
-                        index,
-                        duration: standardDuration,
-                        curve: standardCurve,
-                      );
-                });
+                ref
+                    .watch(HealpenController().pageControllerProvider)
+                    .animateToPage(
+                      index,
+                      duration: standardDuration,
+                      curve: standardCurve,
+                    );
               },
               // selectedColorOpacity: 0,
               selectedItemColor: context.theme.colorScheme.primary,

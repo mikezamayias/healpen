@@ -9,27 +9,28 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class ReduceHapticFeedbackSettingsTile extends ConsumerWidget {
-  const ReduceHapticFeedbackSettingsTile({Key? key}) : super(key: key);
+class HapticFeedbackSettingsTile extends ConsumerWidget {
+  const HapticFeedbackSettingsTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: 'Reduce haptic feedback',
-      subtitle: const Text(
-        'Reduces the amount of haptic feedback in the app.',
-      ),
+      titleString: 'Enable haptic feedback',
+      explanationString: 'Enables haptic feedback for buttons and other '
+          'elements.',
+      enableExplanationWrapper: true,
       trailing: Switch(
-        value: ref.watch(navigationReduceHapticFeedbackProvider),
+        value: ref.watch(navigationEnableHapticFeedbackProvider),
         onChanged: (value) {
-          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
-            ref.read(navigationReduceHapticFeedbackProvider.notifier).state = value;
-            await PreferencesController.reduceHapticFeedback
-                .write(ref.watch(navigationReduceHapticFeedbackProvider));
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
+            ref.read(navigationEnableHapticFeedbackProvider.notifier).state =
+                value;
+            await PreferencesController.navigationEnableHapticFeedback
+                .write(ref.watch(navigationEnableHapticFeedbackProvider));
             log(
-              '${ref.watch(navigationReduceHapticFeedbackProvider)}',
-              name: 'SettingsView:ReduceHapticFeedbackSettingsTile',
+              '${ref.watch(navigationEnableHapticFeedbackProvider)}',
+              name: 'HapticFeedbackSettingsTile',
             );
           });
         },

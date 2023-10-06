@@ -28,17 +28,16 @@ class FeedbackFormActions extends ConsumerWidget {
       children: [
         CustomListTile(
           responsiveWidth: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
           leadingIconData: FontAwesomeIcons.solidPaperPlane,
           titleString: 'Submit',
           onTap: () {
             vibrate(
-              ref.read(navigationReduceHapticFeedbackProvider),
+              ref.read(navigationEnableHapticFeedbackProvider),
               () async {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
                   if (feedbackController.includeScreenshot) {
-                    assert(feedbackController.screenshotPath.isNotEmpty,
+                    assert(feedbackController.screenshotUrl.isNotEmpty,
                         'Screenshot path is empty but includeScreenshot is true');
                   }
                   final api = GitHubAPI(
@@ -48,20 +47,22 @@ class FeedbackFormActions extends ConsumerWidget {
                   );
                   api
                       .createIssue(
-                    ref.read(feedbackControllerProvider.notifier).title,
-                    ref.read(feedbackControllerProvider.notifier).body,
-                    feedbackController.screenshotPath,
-                    ref.read(feedbackControllerProvider.notifier).labels!,
+                    feedbackController.title,
+                    feedbackController.body,
+                    feedbackController.screenshotUrl,
+                    feedbackController.labels!,
                   )
                       .whenComplete(
                     () {
                       feedbackController.cleanUp();
                       CustomSnackBar(
                         SnackBarConfig(
+                          vibrate:
+                              ref.watch(navigationEnableHapticFeedbackProvider),
                           titleString1: 'Thank you for your feedback!',
                           leadingIconData1: FontAwesomeIcons.solidPaperPlane,
                         ),
-                      ).showSnackBar(context, ref).then((_) {
+                      ).showSnackBar(context).then((_) {
                         context.navigator.pop();
                       });
                     },
@@ -69,12 +70,14 @@ class FeedbackFormActions extends ConsumerWidget {
                     (Object error) {
                       CustomSnackBar(
                         SnackBarConfig(
+                          vibrate:
+                              ref.watch(navigationEnableHapticFeedbackProvider),
                           titleString1: 'Something went wrong',
                           leadingIconData1: FontAwesomeIcons.circleExclamation,
                           titleString2: error.toString(),
                           leadingIconData2: FontAwesomeIcons.circleExclamation,
                         ),
-                      ).showSnackBar(context, ref).whenComplete(() {
+                      ).showSnackBar(context).whenComplete(() {
                         context.navigator.pop();
                       });
                     },
@@ -83,11 +86,13 @@ class FeedbackFormActions extends ConsumerWidget {
                   // show an error text using labelsController and form key
                   await CustomSnackBar(
                     SnackBarConfig(
+                      vibrate:
+                          ref.watch(navigationEnableHapticFeedbackProvider),
                       snackBarMargin: EdgeInsets.zero,
                       titleString1: 'Please fill in all fields',
                       leadingIconData1: FontAwesomeIcons.circleExclamation,
                     ),
-                  ).showSnackBar(context, ref);
+                  ).showSnackBar(context);
                 }
               },
             );
@@ -96,12 +101,20 @@ class FeedbackFormActions extends ConsumerWidget {
         SizedBox(width: gap),
         CustomListTile(
           responsiveWidth: true,
-          contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
           leadingIconData: FontAwesomeIcons.xmark,
           titleString: 'Cancel',
           onTap: () {
-            vibrate(ref.read(navigationReduceHapticFeedbackProvider), () {
-              context.navigator.pop();
+            vibrate(ref.read(navigationEnableHapticFeedbackProvider), () {
+              feedbackController.cleanUp();
+              CustomSnackBar(
+                SnackBarConfig(
+                  vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+                  titleString1: 'We appreciate any feedback!',
+                  leadingIconData1: FontAwesomeIcons.solidCompass,
+                ),
+              ).showSnackBar(context).then((_) {
+                context.navigator.pop();
+              });
             });
           },
         ),

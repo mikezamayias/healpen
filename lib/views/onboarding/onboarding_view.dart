@@ -32,7 +32,7 @@ class OnboardingView extends ConsumerWidget {
                 physics: const BouncingScrollPhysics(),
                 itemCount: OnboardingController().onboardingScreenViews.length,
                 onPageChanged: (value) {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
                       () {
                     ref
                         .watch(OnboardingController()

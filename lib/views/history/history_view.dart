@@ -60,12 +60,14 @@ class HistoryView extends ConsumerWidget {
               for (var timestamp in timestamps) {
                 groupedNoteTiles.add(
                   noteModels
-                      .where((noteModel) =>
-                          noteModel.timestamp
-                              .timestampFormat()
-                              .split(', ')
-                              .first ==
-                          timestamp)
+                      .where(
+                        (NoteModel noteModel) =>
+                            noteModel.timestamp
+                                .timestampFormat()
+                                .split(', ')
+                                .first ==
+                            timestamp,
+                      )
                       .map((NoteModel e) => NoteTile(entry: e))
                       .toList(),
                 );

@@ -838,7 +838,7 @@ packages:
     source: hosted
     version: "4.0.2"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
@@ -1306,6 +1306,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      sha256: b1c706cea163059ecfe89132ca078f83d31e54cc99ecd1fabe4810e1b1dacc95
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.1.36"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: aea119c8117953fa5decf4a313b431e556b0959cd35ff88f8fbdc0eda9bedb06
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.1.36"
+  syncfusion_flutter_sliders:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_sliders
+      sha256: "03efbc624ca881873b6bfb67048741c03a093c73729cbe83bee7007fc7897c8f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "23.1.36"
   term_glyph:
     dependency: transitive
     description:
@@ -1434,6 +1458,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  word_cloud:
+    dependency: "direct main"
+    description:
+      name: word_cloud
+      sha256: "72fe356a4534ee24d84d0b2a1dc7f93f5cebf3f909bacd9762569643c835ce74"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   xdg_directories:
     dependency: transitive
     description:

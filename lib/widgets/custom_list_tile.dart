@@ -11,6 +11,7 @@ import '../utils/constants.dart';
 
 class CustomListTile extends ConsumerWidget {
   final String? titleString;
+  final String? explanationString;
   final String? subtitleString;
   final Widget? title;
   final Widget? subtitle;
@@ -25,6 +26,7 @@ class CustomListTile extends ConsumerWidget {
   final bool? responsiveWidth;
   final bool? showcaseLeadingIcon;
   final bool? enableSubtitleWrapper;
+  final bool? enableExplanationWrapper;
   final Color? backgroundColor;
   final Color? textColor;
   final double? cornerRadius;
@@ -33,6 +35,7 @@ class CustomListTile extends ConsumerWidget {
   const CustomListTile({
     Key? key,
     this.titleString,
+    this.explanationString,
     this.subtitleString,
     this.leadingIconData,
     this.trailing,
@@ -49,147 +52,191 @@ class CustomListTile extends ConsumerWidget {
     this.responsiveWidth = false,
     this.showcaseLeadingIcon = false,
     this.enableSubtitleWrapper = true,
+    this.enableExplanationWrapper = false,
     this.cornerRadius,
     this.contentPadding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final padding = contentPadding ??
-        EdgeInsets.symmetric(
-          horizontal: gap * 2,
-          vertical: gap,
-        );
-    final listTile = ListTile(
-      dense: false,
-      onTap: null,
-      onLongPress: null,
-      contentPadding: padding,
-      minLeadingWidth: 0,
-      minVerticalPadding: 0,
-      horizontalTitleGap: padding.horizontal / 2,
-      leading: leading != null || leadingIconData != null
-          ? GestureDetector(
-              onTap: leadingOnTap,
-              child: Animate(
-                effects: showcaseLeadingIcon!
-                    ? [
-                        ShakeEffect(
-                          delay: 1.seconds,
-                          curve: Sprung.criticallyDamped,
-                          duration: 6.seconds,
-                          hz: 1,
-                          offset: const Offset(0, 3),
-                        ),
-                        ShakeEffect(
-                          delay: 2.seconds,
-                          curve: Sprung.criticallyDamped,
-                          duration: 6.seconds,
-                          hz: 1,
-                          offset: const Offset(3, 0),
-                        ),
-                      ]
-                    : null,
-                onInit: showcaseLeadingIcon!
-                    ? (_) async {
-                        if (!ref
-                            .watch(navigationReduceHapticFeedbackProvider)) {
-                          await Future.delayed(
-                            1.seconds,
-                            HapticFeedback.vibrate,
-                          );
-                        }
-                      }
-                    : null,
-                child: leading ??
-                    FaIcon(
-                      leadingIconData!,
-                      color: textColor ??
-                          (leadingOnTap != null
-                              ? context.theme.colorScheme.primary
-                              : onTap == null
-                                  ? context.theme.colorScheme.onSurfaceVariant
-                                  : context.theme.colorScheme.onPrimary),
-                      size: context.theme.textTheme.titleLarge!.fontSize,
+    final padding = contentPadding ?? EdgeInsets.all(gap);
+    final listTile = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            top: padding.vertical / 2,
+            bottom: padding.vertical / 2,
+            left: padding.horizontal / 2,
+            right: padding.horizontal / 2,
+          ),
+          child: Row(
+            children: [
+              if (leading != null || leadingIconData != null)
+                Padding(
+                  padding: (title != null || titleString != null)
+                      ? padding.horizontal == 0
+                          ? EdgeInsets.only(right: gap)
+                          : EdgeInsets.only(right: padding.horizontal / 2)
+                      : EdgeInsets.zero,
+                  child: GestureDetector(
+                    onTap: leadingOnTap,
+                    child: Animate(
+                      effects: showcaseLeadingIcon!
+                          ? [
+                              ShakeEffect(
+                                delay: 1.seconds,
+                                curve: Sprung.criticallyDamped,
+                                duration: 6.seconds,
+                                hz: 1,
+                                offset: const Offset(0, 3),
+                              ),
+                              ShakeEffect(
+                                delay: 2.seconds,
+                                curve: Sprung.criticallyDamped,
+                                duration: 6.seconds,
+                                hz: 1,
+                                offset: const Offset(3, 0),
+                              ),
+                            ]
+                          : null,
+                      onInit: showcaseLeadingIcon!
+                          ? (_) async {
+                              if (!ref.watch(
+                                  navigationEnableHapticFeedbackProvider)) {
+                                await Future.delayed(
+                                  1.seconds,
+                                  HapticFeedback.vibrate,
+                                );
+                              }
+                            }
+                          : null,
+                      child: leading ??
+                          FaIcon(
+                            leadingIconData!,
+                            color: textColor ??
+                                (leadingOnTap != null
+                                    ? context.theme.colorScheme.primary
+                                    : onTap == null
+                                        ? context
+                                            .theme.colorScheme.onSurfaceVariant
+                                        : context.theme.colorScheme.onPrimary),
+                            size: context.theme.textTheme.titleLarge!.fontSize,
+                          ),
                     ),
-              ),
-            )
-          : null,
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (title != null || titleString != null)
-            title ??
-                Text(
-                  titleString!,
-                  style: context.theme.textTheme.titleLarge!.copyWith(
-                    color: textColor ??
-                        (onTap == null
-                            ? context.theme.colorScheme.onSurfaceVariant
-                            : context.theme.colorScheme.onPrimary),
                   ),
                 ),
-          if (subtitle != null || subtitleString != null)
-            subtitle != null && subtitleString == null
-                ? Flexible(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: padding.vertical / 2),
-                      child: enableSubtitleWrapper!
-                          ? Container(
-                              padding: EdgeInsets.all(gap),
-                              decoration: BoxDecoration(
-                                color: context.theme.colorScheme.surface,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(radius - gap),
-                                ),
-                              ),
-                              child: subtitle,
-                            )
-                          : subtitle!,
-                    ),
-                  )
-                : selectableText!
-                    ? SelectableText(
-                        subtitleString!,
-                        style: context.theme.textTheme.titleMedium!.copyWith(
-                          color: textColor ??
-                              (onTap == null
-                                  ? context.theme.colorScheme.onSurfaceVariant
-                                  : context.theme.colorScheme.onPrimary),
-                        ),
-                      )
-                    : Text(
-                        subtitleString!,
-                        style: context.theme.textTheme.titleMedium!.copyWith(
+              if (title != null || titleString != null)
+                Expanded(
+                  child: title ??
+                      Text(
+                        titleString!,
+                        style: context.theme.textTheme.titleLarge!.copyWith(
                           color: textColor ??
                               (onTap == null
                                   ? context.theme.colorScheme.onSurfaceVariant
                                   : context.theme.colorScheme.onPrimary),
                         ),
                       ),
-        ],
-      ),
-      trailing: trailing != null || trailingIconData != null
-          ? GestureDetector(
-              onTap: trailingOnTap,
-              child: trailing ??
-                  (trailingOnTap != null
-                      ? FaIcon(
-                          trailingIconData!,
-                          color: textColor ?? context.theme.colorScheme.primary,
-                          size: context.theme.textTheme.titleLarge!.fontSize,
-                        )
-                      : FaIcon(
-                          trailingIconData!,
-                          color: textColor ??
-                              (onTap == null
-                                  ? context.theme.colorScheme.onSurfaceVariant
-                                  : context.theme.colorScheme.onPrimary),
-                          size: context.theme.textTheme.titleLarge!.fontSize,
-                        )),
-            )
-          : null,
+                ),
+              if (trailing != null || trailingIconData != null)
+                Padding(
+                  padding: (title != null || titleString != null)
+                      ? EdgeInsets.only(left: padding.horizontal / 2)
+                      : EdgeInsets.zero,
+                  child: GestureDetector(
+                    onTap: trailingOnTap,
+                    child: trailing ??
+                        (trailingOnTap != null
+                            ? FaIcon(
+                                trailingIconData!,
+                                color: textColor ??
+                                    context.theme.colorScheme.primary,
+                                size: context
+                                    .theme.textTheme.titleLarge!.fontSize,
+                              )
+                            : FaIcon(
+                                trailingIconData!,
+                                color: textColor ??
+                                    (onTap == null
+                                        ? context
+                                            .theme.colorScheme.onSurfaceVariant
+                                        : context.theme.colorScheme.onPrimary),
+                                size: context
+                                    .theme.textTheme.titleLarge!.fontSize,
+                              )),
+                  ),
+                ),
+            ],
+          ),
+        ),
+        if (subtitle != null || subtitleString != null)
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: gap,
+                left: gap,
+                right: gap,
+              ),
+              child: Container(
+                padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
+                decoration: enableSubtitleWrapper!
+                    ? BoxDecoration(
+                        color: context.theme.colorScheme.surface,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(radius - gap),
+                        ),
+                      )
+                    : null,
+                child: subtitle != null && subtitleString == null
+                    ? subtitle!
+                    : SelectableText(
+                        subtitleString!,
+                        onTap: onTap,
+                        enableInteractiveSelection: selectableText!,
+                        style: context.theme.textTheme.titleMedium!.copyWith(
+                          color: enableSubtitleWrapper! || onTap == null
+                              ? context.theme.colorScheme.onSurfaceVariant
+                              : context.theme.colorScheme.onPrimary,
+                        ),
+                      ),
+              ),
+            ),
+          ),
+        if (explanationString != null)
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: gap,
+                left: gap,
+                right: gap,
+              ),
+              child: Container(
+                padding: enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
+                decoration: enableExplanationWrapper!
+                    ? BoxDecoration(
+                        color: context.theme.colorScheme.surface,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(radius - gap),
+                        ),
+                      )
+                    : null,
+                child: SelectableText(
+                  explanationString!,
+                  onTap: onTap,
+                  enableInteractiveSelection: selectableText!,
+                  style: TextStyle(
+                    color: enableExplanationWrapper! || onTap == null
+                        ? context.theme.colorScheme.onSurfaceVariant
+                        : context.theme.colorScheme.onPrimary,
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
     return GestureDetector(
       onTap: onTap,

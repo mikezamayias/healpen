@@ -21,12 +21,15 @@ class SettingsFeedbackTile extends ConsumerWidget {
     return CustomListTile(
       responsiveWidth: true,
       leadingIconData: FontAwesomeIcons.solidCommentDots,
-      contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: gap * 2,
+        vertical: gap,
+      ),
       textColor: context.theme.colorScheme.onPrimary,
       titleString: 'Feedback',
       onTap: () {
         vibrate(
-          ref.watch(navigationReduceHapticFeedbackProvider),
+          ref.watch(navigationEnableHapticFeedbackProvider),
           () {
             final feedbackController =
                 ref.watch(feedbackControllerProvider.notifier);
@@ -38,7 +41,7 @@ class SettingsFeedbackTile extends ConsumerWidget {
                 FeedbackController.uploadScreenshotToFirebase(
                   File(feedbackController.screenshotPath),
                 ).then((String screenshotUrl) {
-                  feedbackController.setScreenshotPath(screenshotUrl);
+                  feedbackController.setScreenshotUrl(screenshotUrl);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (context) => const FeedbackView(),

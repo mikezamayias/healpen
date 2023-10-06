@@ -1,14 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/analysis_view_controller.dart';
+import '../../models/analysis/analysis_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';
+import 'widgets/mood_exploration/mood_exploration_tile.dart';
+import 'widgets/writing_patterns/writing_patterns_tile.dart';
 
 class AnalysisView extends ConsumerWidget {
   const AnalysisView({Key? key}) : super(key: key);
@@ -21,63 +25,40 @@ class AnalysisView extends ConsumerWidget {
         pathNames: ['Your writing insights'],
       ),
       body: StreamBuilder(
-        stream: AnalysisViewController().metricGroupingsStream,
+        stream: AnalysisViewController.analysisStream(),
         builder: (
           BuildContext context,
-          AsyncSnapshot<List<String>> metricGroupingsSnapshot,
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> analysisSnapshot,
         ) {
-          if (metricGroupingsSnapshot.hasError) {
-            return Center(
-              child: CustomListTile(
-                titleString: 'Something went wrong',
-                backgroundColor: context.theme.colorScheme.error,
-                textColor: context.theme.colorScheme.onError,
-                subtitle:
-                    SelectableText(metricGroupingsSnapshot.error.toString()),
-              ),
-            );
-          }
-
-          if (metricGroupingsSnapshot.connectionState ==
-              ConnectionState.waiting) {
+          if (analysisSnapshot.data == null) {
             return const LoadingTile(durationTitle: 'Loading metrics');
-          }
-
-          if (metricGroupingsSnapshot.data!.isNotEmpty) {
-            return Column(
-              children: metricGroupingsSnapshot.data!
-                  .asMap()
-                  .entries
-                  .map(
-                    (entry) => Expanded(
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: CustomListTile(
-                              contentPadding: EdgeInsets.all(gap),
-                              titleString: entry.value,
-                              subtitle: const Center(
-                                child: Text(
-                                  'To be implemented.',
-                                ),
-                              ),
-                            ),
-                          ),
-                          if (entry.key !=
-                              metricGroupingsSnapshot.data!.length - 1)
-                            SizedBox(height: gap),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            );
           } else {
-            return const Center(
-              child: CustomListTile(
-                titleString: 'No metrics yet',
-              ),
-            );
+            if (analysisSnapshot.data!.docs.isEmpty) {
+              return const CustomListTile(
+                titleString: 'No analysis found',
+                subtitle: Text(
+                  'You have no analysis yet. '
+                  'Try writing a few notes to get started.',
+                ),
+              );
+            } else {
+              ref
+                  .watch(AnalysisViewController.analysisModelListProvider)
+                  .clear();
+              for (QueryDocumentSnapshot<Map<String, dynamic>> element
+                  in analysisSnapshot.data!.docs) {
+                ref.watch(AnalysisViewController.analysisModelListProvider).add(
+                      AnalysisModel.fromJson(element.data()),
+                    );
+              }
+              return Column(
+                children: [
+                  const Expanded(child: MoodExploration()),
+                  Gap(gap),
+                  const Expanded(child: WritingPatternsTile()),
+                ],
+              );
+            }
           }
         },
       ),

@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:googleapis/language/v1.dart';
 
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
+import 'analysis_view_controller.dart';
 import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
@@ -101,7 +101,7 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     _stopwatch.reset();
     _stopwatch.stop();
-    _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
+    // await _sentimentAnalysis();
     if (automaticStopwatch) {
       _timer?.cancel();
       _delayTimer?.cancel();
@@ -110,6 +110,8 @@ class WritingController extends StateNotifier<NoteModel> {
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
     await FirestoreService.saveNote(state);
+    await FirestoreService.saveAnalysis(
+        await AnalysisViewController.createNoteAnalysis(state));
     resetNote();
     textController.clear();
   }
@@ -122,93 +124,83 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(isPrivate: bool);
   }
 
-  Future<int> _openAIsSentimentAnalysis() async {
-    final labels = [
-      'Very Unpleasant',
-      'Unpleasant',
-      'Slightly Unpleasant',
-      'Neutral',
-      'Slightly Pleasant',
-      'Pleasant',
-      'Very Pleasant'
-    ];
-    final values = [-3, -2, -1, 0, 1, 2, 3];
-    OpenAICompletionModel apiResult = await OpenAI.instance.completion.create(
-      model: 'text-davinci-003',
-      prompt: '''
-Evaluate the sentiment the following text as ${values.join(', ')} for 
-${labels.join(', ')} respectively. Please return the sentiment after the 
-`Value: ` keyword.
+//   Future<int> _openAIsSentimentAnalysis() async {
+//     OpenAICompletionModel apiResult = await OpenAI.instance.completion.create(
+//       model: 'text-davinci-003',
+//       prompt: '''
+// Evaluate the sentiment the following text as ${sentimentValues.join(', ')} for
+// ${sentimentLabels.join(', ')} respectively. Please return the sentiment after the
+// `Value: ` keyword.
 
-Text:```${state.content}```
+// Text:```${state.content}```
 
-Value: ''',
-      temperature: 0,
-      maxTokens: 60,
-      topP: 1,
-      frequencyPenalty: 0.5,
-      presencePenalty: 0,
-      n: 1,
-      stop: 'Label:',
-      echo: true,
-    );
-    String response = apiResult.choices.first.text;
-    String result = response.split('Value: ').last.trim();
-    int sentiment = int.parse(result);
-    return sentiment;
-  }
+// Value: ''',
+//       temperature: 0,
+//       maxTokens: 60,
+//       topP: 1,
+//       frequencyPenalty: 0.5,
+//       presencePenalty: 0,
+//       n: 1,
+//       stop: 'Label:',
+//       echo: true,
+//     );
+//     String response = apiResult.choices.first.text;
+//     String result = response.split('Value: ').last.trim();
+//     int sentiment = int.parse(result);
+//     return sentiment;
+//   }
 
-  void _updateOpenAIsSentimentAnalysis(int sentiment) async {
-    state = state.copyWith(sentiment: sentiment);
-  }
+  // void _updateOpenAIsSentimentAnalysis(int sentiment) async {
+  //   state = state.copyWith(sentiment: sentiment);
+  // }
 
-  Future<void> updateSentimentAndSaveNote() async {
-    _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-    await FirestoreService.saveNote(state);
-  }
+  // Future<void> updateSentimentAndSaveNote() async {
+  //   _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
+  //   await FirestoreService.saveNote(state);
+  // }
 
-  Future<void> updateAllUserNotes() async {
-    QuerySnapshot<Map<String, dynamic>> collection =
-        await FirestoreService.writingCollectionReference()
-            .where('isPrivate', isEqualTo: false)
-            .get();
-    for (QueryDocumentSnapshot<Map<String, dynamic>> element
-        in collection.docs) {
-      await addOpenAIsSentimentAnalysisToDocument(element);
-      // await removeOpenAIsSentimentAnalysisToDocument(element, userId);
-    }
-  }
+  // static Future<void> updateAllUserNotes() async {
+  //   log(
+  //     'Updating all user notes',
+  //     name: 'WritingController:updateAllUserNotes()',
+  //   );
+  //   QuerySnapshot<Map<String, dynamic>> collection =
+  //       await FirestoreService.writingCollectionReference()
+  //           .where('isPrivate', isEqualTo: false)
+  //           .get();
+  //   for (QueryDocumentSnapshot<Map<String, dynamic>> element
+  //       in collection.docs) {
+  //     // await _sentimentAnalysis(element);
+  //     // await removeSentimentFromDocument(element);
+  //   }
+  //   // for (int index = 0; index < 1; index++) {
+  //   //   // for (int i = 0; i < collection.docs.length; i++) {
+  //   //   await _sentimentAnalysis(collection.docs.reversed.elementAt(index));
+  //   //   // await removeSentimentFromDocument(element);
+  //   // }
+  // }
 
-  Future<void> addOpenAIsSentimentAnalysisToDocument(
-    QueryDocumentSnapshot<Map<String, dynamic>> element,
-  ) async {
-    if (!element.data().containsKey('sentiment')) {
-      state = NoteModel.fromDocument(element.data());
-      _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-      await FirestoreService.writingCollectionReference()
-          .doc(state.timestamp.toString())
-          .update(state.toDocument());
-    }
-  }
+  // Future<void> addOpenAIsSentimentAnalysisToDocument(
+  //   QueryDocumentSnapshot<Map<String, dynamic>> element,
+  // ) async {
+  //   if (!element.data().containsKey('sentiment')) {
+  //     state = NoteModel.fromDocument(element.data());
+  //     // _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
+  //     await FirestoreService.writingCollectionReference()
+  //         .doc(state.timestamp.toString())
+  //         .update(state.toDocument());
+  //   }
+  // }
 
-  Future<void> removeOpenAIsSentimentAnalysisToDocument(
-    QueryDocumentSnapshot<Map<String, dynamic>> element,
-  ) async {
-    if (element.data().containsKey('sentiment') ||
-        element.data()['isPrivate']) {
-      FirestoreService.writingCollectionReference()
-          .doc(element.id)
-          .update({'sentiment': FieldValue.delete()}).then((_) {
-        log(
-          'Note has sentiment, removing sentiment',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
-        );
-      }).catchError((error) {
-        log(
-          '$error',
-          name: 'WritingController:updateAllUserNotes():${element.id}',
-        );
-      });
-    }
+  void updateSentimentAnalysis(AnalyzeSentimentResponse response) {
+    // state = state.copyWith(
+    //   sentimentScore: response.documentSentiment?.score,
+    //   sentimentMagnitude: response.documentSentiment?.magnitude,
+    //   sentenceCount: response.sentences?.length,
+    //   sentiment: calculateSentiment(
+    //     response.documentSentiment?.score,
+    //     response.documentSentiment?.magnitude,
+    //   ),
+    // );
   }
 }

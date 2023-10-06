@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../models/analysis/analysis_model.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
@@ -38,13 +39,11 @@ class _NoteViewState extends ConsumerState<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    final NoteModel noteModel =
-        ModalRoute.of(context)!.settings.arguments as NoteModel;
+    final Map<String, dynamic> args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final NoteModel noteModel = args['noteModel'] as NoteModel;
+    final AnalysisModel analysisModel = args['analysisModel'];
     final showAnalysis = !noteModel.isPrivate;
-    final pages = [
-      DetailsPage(noteModel: noteModel),
-      if (showAnalysis) AnalysisPage(noteModel: noteModel)
-    ];
     return BlueprintView(
       appBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: gap),
@@ -57,18 +56,27 @@ class _NoteViewState extends ConsumerState<NoteView> {
       body: Column(
         children: [
           Expanded(
-            child: PageView.builder(
+            child: PageView(
               clipBehavior: Clip.none,
               controller: controller,
-              itemCount: pages.length,
-              itemBuilder: (BuildContext context, int index) => pages[index],
               physics: const NeverScrollableScrollPhysics(),
+              children: [
+                DetailsPage(noteModel: noteModel),
+                if (showAnalysis) AnalysisPage(analysisModel: analysisModel),
+              ],
             ),
           ),
           if (showAnalysis)
             Padding(
               padding: EdgeInsets.only(top: gap),
               child: SegmentedButton(
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(radius),
+                    ),
+                  ),
+                ),
                 showSelectedIcon: false,
                 segments: [
                   ButtonSegment(
@@ -94,7 +102,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
                 ],
                 selected: {segments[selectedPage]},
                 onSelectionChanged: (Set<String> value) {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
                       () {
                     setState(() {
                       selectedPage = segments.indexOf(value.first);

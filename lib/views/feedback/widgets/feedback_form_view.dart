@@ -40,10 +40,10 @@ class FeedbackFormView extends ConsumerWidget {
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.zero,
                       hintText: 'Describe the issue in a few words',
-                      hintStyle: context.theme.textTheme.titleLarge,
+                      hintStyle: context.theme.textTheme.titleMedium,
                       hintMaxLines: 2,
                     ),
-                    style: context.theme.textTheme.titleLarge,
+                    style: context.theme.textTheme.titleMedium,
                     onChanged: (String value) =>
                         feedbackController.setTitle(value),
                     validator: (String? value) {
@@ -67,9 +67,9 @@ class FeedbackFormView extends ConsumerWidget {
                     maxLines: null,
                     decoration: InputDecoration(
                       contentPadding: EdgeInsets.zero,
-                      hintStyle: context.theme.textTheme.titleLarge,
+                      hintStyle: context.theme.textTheme.titleMedium,
                     ),
-                    style: context.theme.textTheme.titleLarge,
+                    style: context.theme.textTheme.titleMedium,
                     onChanged: (String value) =>
                         feedbackController.setBody(value),
                     validator: (String? value) {
@@ -90,12 +90,12 @@ class FeedbackFormView extends ConsumerWidget {
                   runSpacing: gap,
                   children: FeedbackLabel.values.map((FeedbackLabel label) {
                     return CustomListTile(
-                      cornerRadius: radius - gap,
+                      cornerRadius: radius,
                       responsiveWidth: true,
                       contentPadding: EdgeInsets.all(gap),
                       backgroundColor: Color(label.color),
                       titleString: label.name,
-                      subtitleString: label.description,
+                      explanationString: label.description,
                       textColor: Color(label.color).isLight
                           ? Colors.black
                           : Colors.white,
@@ -107,7 +107,7 @@ class FeedbackFormView extends ConsumerWidget {
                           : FontAwesomeIcons.square,
                       onTap: () {
                         vibrate(
-                          ref.watch(navigationReduceHapticFeedbackProvider),
+                          ref.watch(navigationEnableHapticFeedbackProvider),
                           () {
                             if (ref
                                 .watch(feedbackControllerProvider)
@@ -130,15 +130,15 @@ class FeedbackFormView extends ConsumerWidget {
               ),
               SizedBox(height: gap),
               CustomListTile(
+                contentPadding: EdgeInsets.all(gap),
                 titleString: 'Include Screenshot',
-                contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
                 trailingIconData:
                     ref.watch(feedbackControllerProvider).includeScreenshot
                         ? FontAwesomeIcons.solidSquareCheck
                         : FontAwesomeIcons.square,
                 onTap: () {
                   vibrate(
-                    ref.watch(navigationReduceHapticFeedbackProvider),
+                    ref.watch(navigationEnableHapticFeedbackProvider),
                     () {
                       feedbackController.setIncludeScreenshot(!ref
                           .watch(feedbackControllerProvider)

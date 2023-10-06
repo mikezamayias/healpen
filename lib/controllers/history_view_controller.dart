@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/note/note_model.dart';
+import '../services/firestore_service.dart';
 
 class HistoryViewController {
   /// Singleton constructor
@@ -13,23 +13,13 @@ class HistoryViewController {
   HistoryViewController._internal();
 
   /// Attributes
-  final _db = FirebaseFirestore.instance;
-  final _uid = FirebaseAuth.instance.currentUser!.uid;
   final _writingEntries = <NoteModel>[];
 
   /// Methods
-  Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream => _db
-      // .collection('users')
-      // .doc(_uid)
-      // .collection('notes')
-      // .orderBy('timestamp', descending: true)
-      // .snapshots();
-      .collection('writing-temp')
-      .doc(_uid)
-      .collection('notes')
-      // .where('isPrivate', isEqualTo: false)
-      .orderBy('timestamp', descending: true)
-      .snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
+      FirestoreService.writingCollectionReference()
+          .orderBy('timestamp', descending: true)
+          .snapshots();
 
   /// Make historyStream from Stream<QuerySnapshot<Map<String, dynamic>>> to
   /// Stream<WritingModelEntry>
@@ -41,18 +31,19 @@ class HistoryViewController {
           //   '${element.data()}',
           //   name: 'HistoryViewController:notesStream',
           // );
-          _writingEntries.add(NoteModel.fromDocument(element.data()));
+          _writingEntries.add(NoteModel.fromJson(element.data()));
         }
         return _writingEntries;
       });
 
+  /// Deletes note from writing and analysis collections
   Future<void> deleteNote({
     required NoteModel noteModel,
   }) async {
-    await _db
-        .collection('writing-temp')
-        .doc(_uid)
-        .collection('notes')
+    await FirestoreService.writingCollectionReference()
+        .doc(noteModel.timestamp.toString())
+        .delete();
+    await FirestoreService.analysisCollectionReference()
         .doc(noteModel.timestamp.toString())
         .delete();
   }
@@ -60,10 +51,7 @@ class HistoryViewController {
   Future<void> noteToggleFavorite({
     required NoteModel noteModel,
   }) async {
-    await _db
-        .collection('writing-temp')
-        .doc(_uid)
-        .collection('notes')
+    await FirestoreService.writingCollectionReference()
         .doc(noteModel.timestamp.toString())
         .update({
       'isFavorite': !noteModel.isFavorite,
@@ -73,10 +61,7 @@ class HistoryViewController {
   Future<void> noteTogglePrivate({
     required NoteModel noteModel,
   }) async {
-    await _db
-        .collection('writing-temp')
-        .doc(_uid)
-        .collection('notes')
+    await FirestoreService.writingCollectionReference()
         .doc(noteModel.timestamp.toString())
         .update({
       'isPrivate': !noteModel.isPrivate,

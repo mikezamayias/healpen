@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'note_model.g.dart';
 
-// int calculateSentiment(double? score, double? magnitude) {
 //   double threshold = 0.5;
 //   double realScore = score ?? 0;
 //   double realMagnitude = magnitude ?? 0;
@@ -27,31 +26,20 @@ class NoteModel {
   bool isFavorite;
   int duration;
   int timestamp;
-  int? wordCount;
-  int? sentiment;
 
   NoteModel({
     this.content = '',
     this.isPrivate = false,
     this.isFavorite = false,
     this.duration = 0,
-    int? wordCount,
     int? timestamp,
     int? sentenceCount,
-    int? sentiment,
-    double? sentimentMagnitude,
-  })  : wordCount = content
-            .toString()
-            .split(RegExp(r'\s+'))
-            .where((s) => RegExp(r'[a-zA-Z]').hasMatch(s))
-            .length,
-        timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch ~/ 1000,
-        sentiment = sentiment ?? 0;
+  }) : timestamp = timestamp ?? DateTime.now().millisecondsSinceEpoch ~/ 1000;
 
-  factory NoteModel.fromDocument(Map<String, dynamic> json) =>
+  factory NoteModel.fromJson(Map<String, dynamic> json) =>
       _$NoteModelFromJson(json);
 
-  Map<String, dynamic> toDocument() => _$NoteModelToJson(this);
+  Map<String, dynamic> toJson() => _$NoteModelToJson(this);
 
   NoteModel copyWith({
     String? content,
@@ -59,8 +47,6 @@ class NoteModel {
     bool? isFavorite,
     int? duration,
     int? timestamp,
-    int? wordCount,
-    int? sentiment,
   }) {
     return NoteModel(
       content: content ?? this.content,
@@ -68,8 +54,6 @@ class NoteModel {
       isFavorite: isFavorite ?? this.isFavorite,
       duration: duration ?? this.duration,
       timestamp: timestamp ?? this.timestamp,
-      wordCount: wordCount ?? this.wordCount,
-      sentiment: sentiment ?? this.sentiment,
     );
   }
 
@@ -77,8 +61,7 @@ class NoteModel {
   String toString() {
     return 'NoteModel('
         'content: $content, isPrivate: $isPrivate, isFavorite: $isFavorite, '
-        'duration: $duration, timestamp: $timestamp, wordCount: $wordCount, '
-        'sentiment: $sentiment'
+        'duration: $duration, timestamp: $timestamp'
         ')';
   }
 }

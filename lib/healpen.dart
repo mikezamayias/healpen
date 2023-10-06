@@ -25,7 +25,7 @@ class Healpen extends ConsumerWidget {
         controller: ref.watch(HealpenController().pageControllerProvider),
         physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (value) {
-          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
             ref
                 .watch(HealpenController().currentPageIndexProvider.notifier)
                 .state = value;

@@ -27,10 +27,17 @@ final writingAutomaticStopwatchProvider = StateProvider<bool>(
   (ref) => PreferencesController.writingAutomaticStopwatch.value,
 );
 
+/// Whether to show the analyze notes button in the app.
+/// When set to true, the app will show the analyze notes button.
+/// When set to false, the app will hide the analyze notes button.
+final writingShowAnalyzeNotesButtonProvider = StateProvider<bool>(
+  (ref) => PreferencesController.writingShowAnalyzeNotesButton.value,
+);
+
 /// Whether to shake the private note info icon when the app starts.
 /// When set to true, the device will shake when the user saves a private note.
 /// When set to false, the device will not shake when the user saves a private note.
-final writingShakePrivateNoteInfoProvider = StateProvider<bool>(
+final shakePrivateNoteInfoProvider = StateProvider<bool>(
   (ref) => PreferencesController.shakePrivateNoteInfo.value,
 );
 
@@ -38,19 +45,26 @@ final writingShakePrivateNoteInfoProvider = StateProvider<bool>(
 /// When set to true, the app will show custom navigation buttons.
 /// When set to false, the app will show the default navigation buttons.
 final navigationShowBackButtonProvider = StateProvider<bool>(
-  (ref) => PreferencesController.showBackButton.value,
+  (ref) => PreferencesController.navigationShowBackButton.value,
+);
+
+/// Whether to show info buttons in the app.
+/// When set to true, the app will show info buttons.
+/// When set to false, the app will hide info buttons.
+final navigationShowInfoButtonsProvider = StateProvider<bool>(
+  (ref) => PreferencesController.navigationShowInfoButtons.value,
 );
 
 /// Whether to reduce the amount of haptic feedback in the app.
-/// When set to true, the app will reduce the amount of haptic feedback.
-/// When set to false, the app will use the default amount of haptic feedback.
-final navigationReduceHapticFeedbackProvider = StateProvider<bool>(
-  (ref) => PreferencesController.reduceHapticFeedback.value,
+/// When set to true, the app will enable haptic feedback.
+/// When set to false, the app will disable haptic feedback.
+final navigationEnableHapticFeedbackProvider = StateProvider<bool>(
+  (ref) => PreferencesController.navigationEnableHapticFeedback.value,
 );
 
 /// Whether to hide the app bar title.
 /// When set to true, the app bar title will be hidden.
 /// When set to false, the app bar title will be shown.
 final navigationShowAppBarTitle = StateProvider<bool>(
-  (ref) => PreferencesController.showAppBarTitle.value,
+  (ref) => PreferencesController.navigationShowAppBarTitle.value,
 );

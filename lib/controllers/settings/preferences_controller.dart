@@ -28,32 +28,41 @@ class PreferencesController {
     'writingAutomaticStopwatch',
     false,
   );
-  static final showBackButton = PreferenceModel<bool>(
-    'showBackButton',
+  static final navigationShowBackButton = PreferenceModel<bool>(
+    'navigationShowBackButton',
     true,
   );
-  static final reduceHapticFeedback = PreferenceModel<bool>(
-    'reduceHapticFeedback',
-    false,
+  static final navigationShowInfoButtons = PreferenceModel<bool>(
+    'navigationShowInfoButtons',
+    true,
+  );
+  static final navigationEnableHapticFeedback = PreferenceModel<bool>(
+    'navigationEnableHapticFeedback',
+    true,
   );
   static final onboardingCompleted = PreferenceModel<bool>(
     'onboardingCompleted',
     false,
   );
-  static final showAppBarTitle = PreferenceModel<bool>(
-    'showAppBarTitle',
+  static final navigationShowAppBarTitle = PreferenceModel<bool>(
+    'navigationShowAppBarTitle',
+    true,
+  );
+  static final writingShowAnalyzeNotesButton = PreferenceModel<bool>(
+    'writingShowAnalyzeNotesButton',
     true,
   );
 
   Map<String, dynamic> preferences = {
     shakePrivateNoteInfo.key: shakePrivateNoteInfo.value,
+    writingShowAnalyzeNotesButton.key: writingShowAnalyzeNotesButton.value,
+    writingAutomaticStopwatch.key: writingAutomaticStopwatch.value,
+    navigationShowAppBarTitle.key: navigationShowAppBarTitle.value,
+    navigationShowBackButton.key: navigationShowBackButton.value,
+    navigationEnableHapticFeedback.key: navigationEnableHapticFeedback.value,
     themeColor.key: themeColor.value,
     themeAppearance.key: themeAppearance.value,
-    writingAutomaticStopwatch.key: writingAutomaticStopwatch.value,
-    showBackButton.key: showBackButton.value,
-    reduceHapticFeedback.key: reduceHapticFeedback.value,
     onboardingCompleted.key: onboardingCompleted.value,
-    showAppBarTitle.key: showAppBarTitle.value,
   };
 
   /// Reset all preferences

@@ -19,54 +19,61 @@ class PrivateNoteCheckBox extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.symmetric(horizontal: gap),
+      contentPadding: EdgeInsets.all(gap),
       backgroundColor: context.theme.colorScheme.surface,
       responsiveWidth: true,
-      showcaseLeadingIcon: ref.watch(writingShakePrivateNoteInfoProvider),
-      leadingIconData: FontAwesomeIcons.circleInfo,
-      leadingOnTap: () {
-        vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
-          ref.watch(writingShakePrivateNoteInfoProvider.notifier).state = false;
-          PreferencesController.shakePrivateNoteInfo
-              .write(ref.watch(writingShakePrivateNoteInfoProvider));
-          showHealpenDialog(
-            context: context,
-            doVibrate: ref.watch(navigationReduceHapticFeedbackProvider),
-            customDialog: CustomDialog(
-              titleString: 'Private note',
-              contentString:
-                  'A private note won\'t be used in analysis and will only be visible in History.',
-              actions: [
-                CustomListTile(
-                  contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
-                  cornerRadius: radius - gap,
-                  responsiveWidth: true,
-                  titleString: 'Okay',
-                  onTap: () {
-                    vibrate(
-                      ref.watch(navigationReduceHapticFeedbackProvider),
-                      () {
-                        ref
-                            .watch(writingShakePrivateNoteInfoProvider.notifier)
-                            .state = false;
-                        PreferencesController.shakePrivateNoteInfo.write(
-                            ref.watch(writingShakePrivateNoteInfoProvider));
-                        context.navigator.pop();
-                      },
-                    );
-                  },
-                )
-              ],
-            ),
-          );
-        });
-      },
-      titleString: 'Make private',
+      showcaseLeadingIcon: ref.watch(shakePrivateNoteInfoProvider),
+      leadingIconData: ref.watch(navigationShowInfoButtonsProvider)
+          ? FontAwesomeIcons.circleInfo
+          : FontAwesomeIcons.lock,
+      leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
+          ? () {
+              vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+                ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
+                PreferencesController.shakePrivateNoteInfo
+                    .write(ref.watch(shakePrivateNoteInfoProvider));
+                showHealpenDialog(
+                  context: context,
+                  doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+                  customDialog: CustomDialog(
+                    titleString: 'Private note',
+                    contentString:
+                        'A private note won\'t be used in analysis and will only be visible in History.',
+                    actions: [
+                      CustomListTile(
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: gap * 2,
+                          vertical: gap,
+                        ),
+                        cornerRadius: radius - gap,
+                        responsiveWidth: true,
+                        titleString: 'Okay',
+                        onTap: () {
+                          vibrate(
+                            ref.watch(navigationEnableHapticFeedbackProvider),
+                            () {
+                              ref
+                                  .watch(shakePrivateNoteInfoProvider.notifier)
+                                  .state = false;
+                              PreferencesController.shakePrivateNoteInfo.write(
+                                  ref.watch(shakePrivateNoteInfoProvider));
+                              context.navigator.pop();
+                            },
+                          );
+                        },
+                      )
+                    ],
+                  ),
+                );
+              });
+            }
+          : null,
+      titleString: 'Private note',
       trailingIconData: ref.watch(writingControllerProvider).isPrivate
           ? FontAwesomeIcons.solidSquareCheck
           : FontAwesomeIcons.square,
       trailingOnTap: () {
-        vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
           ref
               .watch(writingControllerProvider.notifier)
               .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);

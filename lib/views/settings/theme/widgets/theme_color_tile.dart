@@ -16,8 +16,10 @@ class ThemeColorTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
-      titleString: 'Color',
       contentPadding: EdgeInsets.all(gap),
+      titleString: 'Color',
+      explanationString: 'Changes the color of the app.',
+      enableExplanationWrapper: true,
       enableSubtitleWrapper: false,
       subtitle: SegmentedButton<ThemeColor>(
         showSelectedIcon: false,
@@ -30,7 +32,7 @@ class ThemeColorTile extends ConsumerWidget {
         ],
         selected: {ref.watch(themeColorProvider)},
         onSelectionChanged: (Set<ThemeColor> newSelection) {
-          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
             ref.watch(themeColorProvider.notifier).state = newSelection.first;
             log(
               '${newSelection.first}',

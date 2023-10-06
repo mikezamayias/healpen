@@ -19,20 +19,27 @@ class UnknownState extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomListTile(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
           leadingIconData: FontAwesomeIcons.solidCircleQuestion,
-          selectableText: true,
           backgroundColor: context.theme.colorScheme.tertiary,
           textColor: context.theme.colorScheme.onTertiary,
           titleString: 'Unknown state',
-          subtitleString: '${state.runtimeType}',
+          selectableText: true,
+          enableExplanationWrapper: true,
+          explanationString: '${state.runtimeType}',
         ),
         SizedBox(height: gap),
         CustomListTile(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
           responsiveWidth: true,
           leadingIconData: FontAwesomeIcons.arrowLeft,
           selectableText: true,
-          // backgroundColor: context.theme.colorScheme.error,
-          // textColor: context.theme.colorScheme.onError,
           titleString: 'Go back',
           onTap: () => context.navigator.pushReplacementNamed('/auth'),
         ),

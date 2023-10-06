@@ -4,6 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/custom_snack_bar.dart';
@@ -19,17 +20,19 @@ class SaveNoteButton extends ConsumerWidget {
     final writingController = ref.watch(writingControllerProvider.notifier);
     return CustomListTile(
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.symmetric(horizontal: gap),
+      contentPadding: EdgeInsets.all(gap),
       onTap: state.content.isNotEmpty
           ? () {
               CustomSnackBar(
                 SnackBarConfig(
+                  vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
                   titleString1: 'Saving note...',
                   leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
                   trailingWidgets1: [
                     CustomListTile(
                       contentPadding: EdgeInsets.symmetric(
-                        horizontal: gap,
+                        horizontal: gap * 2,
+                        vertical: gap,
                       ),
                       cornerRadius: radius - gap,
                       responsiveWidth: true,
@@ -44,7 +47,7 @@ class SaveNoteButton extends ConsumerWidget {
                   ],
                   actionAfterSnackBar1: writingController.handleSaveNote,
                 ),
-              ).showSnackBar(context, ref);
+              ).showSnackBar(context);
             }
           : null,
       backgroundColor:

@@ -30,23 +30,30 @@ class AuthFailedState extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomListTile(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
           leadingIconData: FontAwesomeIcons.circleExclamation,
           selectableText: true,
+          enableExplanationWrapper: true,
           backgroundColor: context.theme.colorScheme.error,
           textColor: context.theme.colorScheme.onError,
           titleString: 'Something went wrong',
-          subtitleString: '${(state as AuthFailed).exception}'.split('] ').last,
+          explanationString:
+              '${(state as AuthFailed).exception}'.split('] ').last,
         ),
         SizedBox(height: gap),
         CustomListTile(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
           responsiveWidth: true,
           leadingIconData: FontAwesomeIcons.arrowLeft,
-          selectableText: true,
-          // backgroundColor: context.theme.colorScheme.error,
-          // textColor: context.theme.colorScheme.onError,
           titleString: 'Go back',
           onTap: () {
-            vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+            vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
               context.navigator.pushReplacementNamed('/auth');
             });
           },

@@ -65,11 +65,14 @@ class SettingsView extends ConsumerWidget {
               CustomListTile(
                 responsiveWidth: true,
                 leadingIconData: pageWidgets[title]!.$2,
-                contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+                contentPadding: EdgeInsets.symmetric(
+                  horizontal: gap * 2,
+                  vertical: gap,
+                ),
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  vibrate(ref.watch(navigationReduceHapticFeedbackProvider),
+                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
                       () {
                     context.navigator.push(
                       MaterialPageRoute(

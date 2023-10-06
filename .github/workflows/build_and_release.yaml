@@ -71,7 +71,7 @@ jobs:
         id: flutter-action
         with:
           cache: true
-          flutter-version: 3.10.6
+          flutter-version: 3.13.4
           architecture: arm64
       - name: Update pubspec version
         run: |
@@ -85,6 +85,7 @@ jobs:
       - name: Build .env file
         run: |
           echo "OPEN_AI_API_KEY=${{secrets.OPEN_AI_API_KEY}}" >> .env
+          echo "GOOGLE_APIS_KEY=${{secrets.GOOGLE_APIS_KEY}}" >> .env
           echo "HEALPEN_GITHUB_TOKEN=${{secrets.GITHUB_TOKEN}}" >> .env
       - name: Build generated files
         run: dart run build_runner build --delete-conflicting-outputs

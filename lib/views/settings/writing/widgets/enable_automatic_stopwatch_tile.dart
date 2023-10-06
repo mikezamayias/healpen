@@ -16,14 +16,15 @@ class EnableAutomaticStopwatchTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
+      enableSubtitleWrapper: true,
       titleString: 'Enable automatic stopwatch',
-      subtitle: const Text(
-        'Pauses the stopwatch when you stop typing and resets it when you clear all text.',
-      ),
+      enableExplanationWrapper: true,
+      explanationString:
+          'Pauses the stopwatch when you stop typing and resets it when you clear all text.',
       trailing: Switch(
         value: ref.watch(writingAutomaticStopwatchProvider),
         onChanged: (value) {
-          vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () async {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
             ref.read(writingAutomaticStopwatchProvider.notifier).state = value;
             await PreferencesController.writingAutomaticStopwatch
                 .write(ref.watch(writingAutomaticStopwatchProvider));

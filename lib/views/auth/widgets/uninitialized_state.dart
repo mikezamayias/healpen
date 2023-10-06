@@ -25,6 +25,10 @@ class UninitializedState extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomListTile(
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: gap * 2,
+              vertical: gap,
+            ),
             leadingIconData: FontAwesomeIcons.solidEnvelope,
             backgroundColor: context.theme.colorScheme.surfaceVariant,
             textColor: context.theme.colorScheme.onSurfaceVariant,
@@ -52,13 +56,16 @@ class UninitializedState extends ConsumerWidget {
           ),
           SizedBox(height: gap),
           CustomListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: gap * 2,
+              vertical: gap,
+            ),
             responsiveWidth: true,
             titleString: 'Send link',
             leadingIconData: FontAwesomeIcons.solidPaperPlane,
             onTap: () {
               if (formKey.currentState!.validate()) {
-                vibrate(ref.watch(navigationReduceHapticFeedbackProvider), () {
+                vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
                   ref
                       .watch(CustomAuthProvider().emailLinkAuthProvider)
                       .sendLink(emailAddress);
