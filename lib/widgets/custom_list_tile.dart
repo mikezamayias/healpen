@@ -77,7 +77,9 @@ class CustomListTile extends ConsumerWidget {
               if (leading != null || leadingIconData != null)
                 Padding(
                   padding: (title != null || titleString != null)
-                      ? EdgeInsets.only(right: padding.horizontal / 2)
+                      ? padding.horizontal == 0
+                          ? EdgeInsets.only(right: gap)
+                          : EdgeInsets.only(right: padding.horizontal / 2)
                       : EdgeInsets.zero,
                   child: GestureDetector(
                     onTap: leadingOnTap,
