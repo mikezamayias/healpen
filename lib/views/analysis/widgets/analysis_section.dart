@@ -46,6 +46,23 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
   Widget build(BuildContext context) {
     return CustomListTile(
       titleString: widget.sectionName,
+      title: Row(
+        children: [
+          Text(
+            widget.sectionName,
+            style: context.theme.textTheme.titleLarge!.copyWith(
+              color: context.theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const Spacer(),
+          Text(
+            widget.tileData.elementAt(currentPage).titleString,
+            style: TextStyle(
+              color: context.theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
       trailing: SmoothPageIndicator(
         controller: pageController,
         count: widget.tileData.length,
@@ -79,41 +96,30 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
             }
           : null,
       enableSubtitleWrapper: false,
-      subtitle: Column(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Text(widget.tileData.elementAt(currentPage).titleString),
+      subtitle: Container(
+        padding: EdgeInsets.symmetric(vertical: gap),
+        decoration: BoxDecoration(
+          color: context.theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(radius - gap),
+        ),
+        child: PageView.builder(
+          itemCount: widget.tileData.length,
+          itemBuilder: (BuildContext context, int index) => Padding(
+            padding: EdgeInsets.symmetric(horizontal: gap),
+            child: widget.tileData[index].content,
           ),
-          Gap(gap),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: gap),
-              decoration: BoxDecoration(
-                color: context.theme.colorScheme.surface,
-                borderRadius: BorderRadius.circular(radius - gap),
-              ),
-              child: PageView.builder(
-                itemCount: widget.tileData.length,
-                itemBuilder: (BuildContext context, int index) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: gap),
-                  child: widget.tileData[index].content,
-                ),
-                controller: pageController,
-                onPageChanged: (int index) {
-                  vibrate(
-                    ref.watch(navigationEnableHapticFeedbackProvider),
-                    () {
-                      setState(() {
-                        currentPage = index;
-                      });
-                    },
-                  );
-                },
-              ),
-            ),
-          ),
-        ],
+          controller: pageController,
+          onPageChanged: (int index) {
+            vibrate(
+              ref.watch(navigationEnableHapticFeedbackProvider),
+              () {
+                setState(() {
+                  currentPage = index;
+                });
+              },
+            );
+          },
+        ),
       ),
     );
   }
