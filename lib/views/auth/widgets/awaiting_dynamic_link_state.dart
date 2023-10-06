@@ -19,22 +19,26 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomListTile(
-          contentPadding: EdgeInsets.all(gap),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
+          titleString: 'We\'ve sent a link to your email',
+          subtitleString:
+              'Click the link to sign in! Please check your inbox and spam folders.',
           leadingIconData: FontAwesomeIcons.solidEnvelopeOpen,
-          titleString: 'We\'ve sent you an email with a magic link.',
-          explanationString:
-              'Please check your email and follow the link to sign in. Don\'t forget to check your spam folder too!',
         ),
         SizedBox(height: gap),
         CustomListTile(
-          contentPadding: EdgeInsets.all(gap),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
           responsiveWidth: true,
           leadingIconData: FontAwesomeIcons.arrowLeft,
-          selectableText: false,
-          // backgroundColor: context.theme.colorScheme.error,
-          // textColor: context.theme.colorScheme.onError,
           titleString: 'Something not right?',
           explanationString: 'Start again.',
+          enableExplanationWrapper: true,
           onTap: () {
             vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
               context.navigator.pushReplacementNamed('/auth');

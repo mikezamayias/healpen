@@ -60,23 +60,24 @@ class CustomListTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final padding = contentPadding ?? EdgeInsets.all(gap);
-    final listTile = Padding(
-      padding: padding,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
+    final listTile = Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            top: padding.vertical / 2,
+            bottom: padding.vertical / 2,
+            left: padding.horizontal / 2,
+            right: padding.horizontal / 2,
+          ),
+          child: Row(
             children: [
               if (leading != null || leadingIconData != null)
                 Padding(
                   padding: (title != null || titleString != null)
-                      ? EdgeInsets.only(
-                          right: padding.horizontal / 4 < gap
-                              ? gap
-                              : padding.horizontal / 4,
-                        )
+                      ? EdgeInsets.only(right: padding.horizontal / 2)
                       : EdgeInsets.zero,
                   child: GestureDetector(
                     onTap: leadingOnTap,
@@ -168,65 +169,72 @@ class CustomListTile extends ConsumerWidget {
                 ),
             ],
           ),
-          if (subtitle != null || subtitleString != null)
-            Flexible(
-              child: Padding(
-                padding: EdgeInsets.only(top: padding.vertical / 2),
-                child: Container(
-                  padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
-                  decoration: enableSubtitleWrapper!
-                      ? BoxDecoration(
-                          color: context.theme.colorScheme.surface,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(radius - gap),
-                          ),
-                        )
-                      : null,
-                  child: subtitle != null && subtitleString == null
-                      ? subtitle!
-                      : SelectableText(
-                          subtitleString!,
-                          onTap: onTap,
-                          enableInteractiveSelection: selectableText!,
-                          style: context.theme.textTheme.titleMedium!.copyWith(
-                            color: enableSubtitleWrapper! || onTap == null
-                                ? context.theme.colorScheme.onSurfaceVariant
-                                : context.theme.colorScheme.onPrimary,
-                          ),
+        ),
+        if (subtitle != null || subtitleString != null)
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: gap,
+                left: gap,
+                right: gap,
+              ),
+              child: Container(
+                padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
+                decoration: enableSubtitleWrapper!
+                    ? BoxDecoration(
+                        color: context.theme.colorScheme.surface,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(radius - gap),
                         ),
-                ),
+                      )
+                    : null,
+                child: subtitle != null && subtitleString == null
+                    ? subtitle!
+                    : SelectableText(
+                        subtitleString!,
+                        onTap: onTap,
+                        enableInteractiveSelection: selectableText!,
+                        style: context.theme.textTheme.titleMedium!.copyWith(
+                          color: enableSubtitleWrapper! || onTap == null
+                              ? context.theme.colorScheme.onSurfaceVariant
+                              : context.theme.colorScheme.onPrimary,
+                        ),
+                      ),
               ),
             ),
-          if (explanationString != null)
-            Flexible(
-              child: Padding(
-                padding: EdgeInsets.only(top: padding.vertical / 2),
-                child: Container(
-                  padding:
-                      enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
-                  decoration: enableExplanationWrapper!
-                      ? BoxDecoration(
-                          color: context.theme.colorScheme.surface,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(radius - gap),
-                          ),
-                        )
-                      : null,
-                  child: SelectableText(
-                    explanationString!,
-                    onTap: onTap,
-                    enableInteractiveSelection: selectableText!,
-                    style: TextStyle(
-                      color: enableExplanationWrapper! || onTap == null
-                          ? context.theme.colorScheme.onSurfaceVariant
-                          : context.theme.colorScheme.onPrimary,
-                    ),
+          ),
+        if (explanationString != null)
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: gap,
+                left: gap,
+                right: gap,
+              ),
+              child: Container(
+                padding: enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
+                decoration: enableExplanationWrapper!
+                    ? BoxDecoration(
+                        color: context.theme.colorScheme.surface,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(radius - gap),
+                        ),
+                      )
+                    : null,
+                child: SelectableText(
+                  explanationString!,
+                  onTap: onTap,
+                  enableInteractiveSelection: selectableText!,
+                  style: TextStyle(
+                    color: enableExplanationWrapper! || onTap == null
+                        ? context.theme.colorScheme.onSurfaceVariant
+                        : context.theme.colorScheme.onPrimary,
                   ),
                 ),
               ),
             ),
-        ],
-      ),
+          ),
+      ],
     );
     return GestureDetector(
       onTap: onTap,

@@ -26,7 +26,10 @@ class SignOutTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       responsiveWidth: true,
-      contentPadding: EdgeInsets.symmetric(horizontal: gap * 2),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: gap * 2,
+        vertical: gap,
+      ),
       titleString: 'Sign out',
       leadingIconData: FontAwesomeIcons.rightFromBracket,
       textColor: context.theme.colorScheme.onPrimary,

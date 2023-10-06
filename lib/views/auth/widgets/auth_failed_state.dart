@@ -30,9 +30,13 @@ class AuthFailedState extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomListTile(
-          contentPadding: EdgeInsets.all(gap),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
           leadingIconData: FontAwesomeIcons.circleExclamation,
           selectableText: true,
+          enableExplanationWrapper: true,
           backgroundColor: context.theme.colorScheme.error,
           textColor: context.theme.colorScheme.onError,
           titleString: 'Something went wrong',
@@ -41,11 +45,12 @@ class AuthFailedState extends ConsumerWidget {
         ),
         SizedBox(height: gap),
         CustomListTile(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: gap * 2,
+            vertical: gap,
+          ),
           responsiveWidth: true,
           leadingIconData: FontAwesomeIcons.arrowLeft,
-          selectableText: true,
-          // backgroundColor: context.theme.colorScheme.error,
-          // textColor: context.theme.colorScheme.onError,
           titleString: 'Go back',
           onTap: () {
             vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
