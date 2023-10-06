@@ -46,8 +46,16 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
   Widget build(BuildContext context) {
     return CustomListTile(
       titleString: widget.sectionName,
-      trailing: Text(widget.tileData.elementAt(currentPage).titleString),
-      enableSubtitleWrapper: false,
+      trailing: SmoothPageIndicator(
+        controller: pageController,
+        count: widget.tileData.length,
+        effect: ExpandingDotsEffect(
+          dotHeight: gap,
+          dotWidth: gap,
+          activeDotColor: context.theme.colorScheme.primary,
+          dotColor: context.theme.colorScheme.outline,
+        ),
+      ),
       leadingIconData: ref.watch(navigationShowInfoButtonsProvider)
           ? FontAwesomeIcons.circleInfo
           : null,
@@ -70,15 +78,21 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
               );
             }
           : null,
-      subtitle: Container(
-        padding: EdgeInsets.symmetric(vertical: gap),
-        decoration: BoxDecoration(
-          color: context.theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(radius - gap),
-        ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
+      enableSubtitleWrapper: false,
+      subtitle: Column(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: Text(widget.tileData.elementAt(currentPage).titleString),
+          ),
+          Gap(gap),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: gap),
+              decoration: BoxDecoration(
+                color: context.theme.colorScheme.surface,
+                borderRadius: BorderRadius.circular(radius - gap),
+              ),
               child: PageView.builder(
                 itemCount: widget.tileData.length,
                 itemBuilder: (BuildContext context, int index) => Padding(
@@ -98,19 +112,8 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                 },
               ),
             ),
-            Gap(gap),
-            SmoothPageIndicator(
-              controller: pageController,
-              count: widget.tileData.length,
-              effect: ExpandingDotsEffect(
-                dotHeight: gap,
-                dotWidth: gap,
-                activeDotColor: context.theme.colorScheme.primary,
-                dotColor: context.theme.colorScheme.surfaceVariant,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
