@@ -20,6 +20,7 @@ class BackButtonSettingsTile extends ConsumerWidget {
       explanationString:
           'Shows a back button at the top of the screen, making it simpler to '
           'return to previous pages.',
+      enableExplanationWrapper: true,
       trailing: Switch(
         value: ref.watch(navigationShowBackButtonProvider),
         onChanged: (value) {

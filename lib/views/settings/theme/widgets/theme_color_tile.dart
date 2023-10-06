@@ -19,6 +19,7 @@ class ThemeColorTile extends ConsumerWidget {
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Color',
       explanationString: 'Changes the color of the app.',
+      enableExplanationWrapper: true,
       enableSubtitleWrapper: false,
       subtitle: SegmentedButton<ThemeColor>(
         showSelectedIcon: false,

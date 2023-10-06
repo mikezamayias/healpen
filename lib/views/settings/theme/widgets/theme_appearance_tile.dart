@@ -21,6 +21,7 @@ class ThemeAppearanceTile extends ConsumerWidget {
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Appearance',
       explanationString: 'Changes the appearance of the app.',
+      enableExplanationWrapper: true,
       enableSubtitleWrapper: false,
       subtitle: SegmentedButton<ThemeAppearance>(
         showSelectedIcon: false,

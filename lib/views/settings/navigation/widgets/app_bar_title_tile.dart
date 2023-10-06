@@ -21,6 +21,7 @@ class AppBarTitleTitle extends ConsumerWidget {
           'Shows the title in the app bar, making it simpler to know which of '
           'the main pages you are on. Disabling this will save space for more '
           'information.',
+      enableExplanationWrapper: true,
       trailing: Switch(
         value: ref.watch(navigationShowAppBarTitle),
         onChanged: (value) {

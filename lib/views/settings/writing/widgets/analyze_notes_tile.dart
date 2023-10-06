@@ -17,6 +17,7 @@ class AnalyzeNotesTile extends ConsumerWidget {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
       cornerRadius: radius,
+      enableExplanationWrapper: true,
       titleString: 'Update note analysis',
       explanationString: 'Update the analysis of all your notes.',
       onTap: () {

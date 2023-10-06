@@ -19,6 +19,7 @@ class HapticFeedbackSettingsTile extends ConsumerWidget {
       titleString: 'Enable haptic feedback',
       explanationString: 'Enables haptic feedback for buttons and other '
           'elements.',
+      enableExplanationWrapper: true,
       trailing: Switch(
         value: ref.watch(navigationEnableHapticFeedbackProvider),
         onChanged: (value) {

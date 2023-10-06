@@ -19,6 +19,7 @@ class InfoButtonSettingsTile extends ConsumerWidget {
       titleString: 'Enable info buttons',
       explanationString:
           'Shows an info button on the top left corner of many elements',
+      enableExplanationWrapper: true,
       trailing: Switch(
         value: ref.watch(navigationShowInfoButtonsProvider),
         onChanged: (value) {
