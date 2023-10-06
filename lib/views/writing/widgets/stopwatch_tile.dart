@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
 import '../../../extensions/int_extensions.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
@@ -20,7 +21,9 @@ class StopwatchTile extends ConsumerWidget {
       contentPadding: EdgeInsets.zero,
       backgroundColor: context.theme.colorScheme.surface,
       textColor: context.theme.colorScheme.onSurface,
-      titleString: 'Stopwatch',
+      titleString: ref.watch(writingAutomaticStopwatchProvider)
+          ? 'Auto Stopwatch'
+          : 'Stopwatch',
       leadingIconData: FontAwesomeIcons.stopwatch,
       trailing: Text(
         ref.watch(writingControllerProvider).duration.writingDurationFormat(),
