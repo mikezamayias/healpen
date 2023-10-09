@@ -65,6 +65,6 @@ final navigationEnableHapticFeedbackProvider = StateProvider<bool>(
 /// Whether to hide the app bar title.
 /// When set to true, the app bar title will be hidden.
 /// When set to false, the app bar title will be shown.
-final navigationShowAppBarTitle = StateProvider<bool>(
+final navigationShowAppBarTitleProvider = StateProvider<bool>(
   (ref) => PreferencesController.navigationShowAppBarTitle.value,
 );
