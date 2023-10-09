@@ -23,14 +23,14 @@ class AppBarTitleTitle extends ConsumerWidget {
           'information.',
       enableExplanationWrapper: true,
       trailing: Switch(
-        value: ref.watch(navigationShowAppBarTitle),
+        value: ref.watch(navigationShowAppBarTitleProvider),
         onChanged: (value) {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
-            ref.read(navigationShowAppBarTitle.notifier).state = value;
+            ref.read(navigationShowAppBarTitleProvider.notifier).state = value;
             await PreferencesController.navigationShowAppBarTitle
-                .write(ref.watch(navigationShowAppBarTitle));
+                .write(ref.watch(navigationShowAppBarTitleProvider));
             log(
-              '${ref.watch(navigationShowAppBarTitle)}',
+              '${ref.watch(navigationShowAppBarTitleProvider)}',
               name: 'SettingsView:ShowAppBarTitle',
             );
           });

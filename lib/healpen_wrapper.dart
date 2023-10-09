@@ -75,8 +75,9 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               .state = value,
         );
     PreferencesController.navigationShowAppBarTitle.read().then(
-          (bool value) =>
-              ref.watch(navigationShowAppBarTitle.notifier).state = value,
+          (bool value) => ref
+              .watch(navigationShowAppBarTitleProvider.notifier)
+              .state = value,
         );
     PreferencesController.writingShowAnalyzeNotesButton.read().then(
           (bool value) => ref
