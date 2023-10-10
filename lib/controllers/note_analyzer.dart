@@ -11,7 +11,6 @@ import '../models/note/note_model.dart';
 import '../models/sentence/sentence_model.dart';
 import '../providers/settings_providers.dart';
 import '../services/firestore_service.dart';
-import 'analysis_view_controller.dart';
 import 'settings/preferences_controller.dart';
 
 enum AnalysisProgress {
@@ -84,7 +83,7 @@ class NoteAnalyzer {
 
   static Future<void> completed(WidgetRef ref) async {
     // await AnalysisViewController.removePreviousAnalysis(ref);
-    await AnalysisViewController.analyzeNotes(ref);
+    await NoteAnalyzer.analyzeNotes(ref);
     ref.watch(analysisProgressProvider.notifier).state =
         AnalysisProgress.completed;
     ref.read(writingShowAnalyzeNotesButtonProvider.notifier).state = false;
