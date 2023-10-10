@@ -36,6 +36,14 @@ class FirestoreService {
         .collection('notes');
   }
 
+  static CollectionReference<Map<String, dynamic>>
+      preferencesCollectionReference() {
+    return FirebaseFirestore.instance
+        .collection('preferences-temp')
+        .doc(currentUser.uid)
+        .collection('preferences');
+  }
+
   static Future<void> saveNote(NoteModel noteModel) async {
     log(
       '${noteModel.toJson()}',
@@ -55,6 +63,16 @@ class FirestoreService {
         .doc('${analysisModel.timestamp}')
         .set(analysisModel.toJson());
   }
+
+  // static Future<void> savePreferences(
+  //   PreferenceModel preference,
+  // ) async {
+  //   log(
+  //     '${preference.toJson()}',
+  //     name: 'FirestoreService:savePreferences() - preference to save',
+  //   );
+  //   await preferencesCollectionReference().add(preference.toJson());
+  // }
 
   static Future<List<DocumentSnapshot<Map<String, dynamic>>>>
       getDocumentsToAnalyze() async {
