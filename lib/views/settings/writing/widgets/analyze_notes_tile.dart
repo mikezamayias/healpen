@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../controllers/analysis_view_controller.dart';
+import '../../../../controllers/note_analyzer.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
@@ -24,7 +24,7 @@ class AnalyzeNotesTile extends ConsumerWidget {
         vibrate(
           ref.watch(navigationEnableHapticFeedbackProvider),
           () async {
-            AnalysisViewController.completed(ref);
+            NoteAnalyzer.completed(ref);
             showHealpenDialog(
               context: context,
               doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),

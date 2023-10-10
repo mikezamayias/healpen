@@ -7,7 +7,7 @@ import 'package:googleapis/language/v1.dart';
 
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
-import 'analysis_view_controller.dart';
+import 'note_analyzer.dart';
 import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
@@ -111,7 +111,7 @@ class WritingController extends StateNotifier<NoteModel> {
     );
     await FirestoreService.saveNote(state);
     await FirestoreService.saveAnalysis(
-        await AnalysisViewController.createNoteAnalysis(state));
+        await NoteAnalyzer.createNoteAnalysis(state));
     resetNote();
     textController.clear();
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../../../../controllers/analysis_view_controller.dart';
+import '../../../../controllers/note_analyzer.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
@@ -14,9 +14,9 @@ class AnalyzeNotesDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double progressValue = 0;
-    if (ref.watch(AnalysisViewController.listToAnalyzeLengthProvider) != 0) {
-      progressValue = ref.watch(AnalysisViewController.progressProvider) /
-          ref.watch(AnalysisViewController.listToAnalyzeLengthProvider);
+    if (ref.watch(NoteAnalyzer.listToAnalyzeLengthProvider) != 0) {
+      progressValue = ref.watch(NoteAnalyzer.progressProvider) /
+          ref.watch(NoteAnalyzer.listToAnalyzeLengthProvider);
     }
     return CustomDialog(
       titleString: 'Updating note analysis',
@@ -29,15 +29,14 @@ class AnalyzeNotesDialog extends ConsumerWidget {
           cornerRadius: radius - gap,
           contentPadding: EdgeInsets.all(gap),
           titleString: switch (
-              ref.watch(AnalysisViewController.analysisProgressProvider)) {
+              ref.watch(NoteAnalyzer.analysisProgressProvider)) {
             AnalysisProgress.removingPreviousAnalysis =>
               'Removing previous analysis',
             AnalysisProgress.analyzingNotes => 'Analyzing notes',
             AnalysisProgress.completed => 'Completed',
           },
           enableSubtitleWrapper: false,
-          subtitle: switch (
-              ref.watch(AnalysisViewController.analysisProgressProvider)) {
+          subtitle: switch (ref.watch(NoteAnalyzer.analysisProgressProvider)) {
             AnalysisProgress.completed => null,
             _ => ClipRRect(
                 borderRadius: BorderRadius.circular(radius),
@@ -50,10 +49,10 @@ class AnalyzeNotesDialog extends ConsumerWidget {
           },
           enableExplanationWrapper: false,
           explanationString: switch (
-              ref.watch(AnalysisViewController.analysisProgressProvider)) {
+              ref.watch(NoteAnalyzer.analysisProgressProvider)) {
             AnalysisProgress.completed => 'You can now close this dialog.',
             _ =>
-              '${ref.watch(AnalysisViewController.progressProvider)} / ${ref.watch(AnalysisViewController.listToAnalyzeLengthProvider)}\nPlease don\'t exit the app.',
+              '${ref.watch(NoteAnalyzer.progressProvider)} / ${ref.watch(NoteAnalyzer.listToAnalyzeLengthProvider)}\nPlease don\'t exit the app.',
           },
         ),
       ),
@@ -62,8 +61,7 @@ class AnalyzeNotesDialog extends ConsumerWidget {
           cornerRadius: radius - gap,
           responsiveWidth: true,
           titleString: 'Close',
-          onTap: switch (
-              ref.watch(AnalysisViewController.analysisProgressProvider)) {
+          onTap: switch (ref.watch(NoteAnalyzer.analysisProgressProvider)) {
             AnalysisProgress.completed => () {
                 vibrate(
                   ref.watch(navigationEnableHapticFeedbackProvider),

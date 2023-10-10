@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../controllers/analysis_view_controller.dart';
+import '../controllers/note_analyzer.dart';
 import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
 import '../models/sentence/sentence_model.dart';
@@ -190,7 +190,7 @@ class FirestoreService {
       // AnalysisModel analysisModel = AnalysisModel.fromJson(
       //   NoteModel.fromJson(value.data()!).toJson(),
       // );
-      final analysisModel = await AnalysisViewController.createNoteAnalysis(
+      final analysisModel = await NoteAnalyzer.createNoteAnalysis(
         NoteModel.fromJson(value.data()!),
       );
       log(
