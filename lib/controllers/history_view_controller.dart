@@ -19,6 +19,7 @@ class HistoryViewController {
   Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
       FirestoreService.writingCollectionReference()
           .orderBy('timestamp', descending: true)
+          // .limit(10)
           .snapshots();
 
   /// Make historyStream from Stream<QuerySnapshot<Map<String, dynamic>>> to
@@ -27,10 +28,6 @@ class HistoryViewController {
         _writingEntries.clear();
         for (QueryDocumentSnapshot<Map<String, dynamic>> element
             in event.docs) {
-          // log(
-          //   '${element.data()}',
-          //   name: 'HistoryViewController:notesStream',
-          // );
           _writingEntries.add(NoteModel.fromJson(element.data()));
         }
         return _writingEntries;
