@@ -6,7 +6,9 @@ import '../../../../controllers/analysis_view_controller.dart';
 import '../../../../controllers/emotional_echo_controller.dart';
 import '../../../../extensions/number_extensions.dart';
 import '../../../../models/analysis/analysis_model.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import 'emotional_echo/active_tile.dart';
 
 class EmotionalEchoTile extends ConsumerStatefulWidget {
@@ -44,13 +46,17 @@ class _EmotionalEchoTileState extends ConsumerState<EmotionalEchoTile> {
     )!;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTapDown: (_) {
-        ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
-            true;
+      onLongPress: () {
+        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+          ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
+              true;
+        });
       },
-      onTapUp: (_) {
-        ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
-            false;
+      onLongPressEnd: (_) {
+        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+          ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
+              false;
+        });
       },
       child: const EmotionalEchoActivetile(),
     );
