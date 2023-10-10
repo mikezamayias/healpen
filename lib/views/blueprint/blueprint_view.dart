@@ -41,10 +41,9 @@ class _BlueprintViewState extends ConsumerState<BlueprintView>
         onTap: () => context.focusScope.unfocus(),
         child: Container(
           color: context.theme.colorScheme.background,
-          padding: EdgeInsets.only(
-            bottom: gap,
-            left: widget.padBodyHorizontally! ? gap : 0,
-            right: widget.padBodyHorizontally! ? gap : 0,
+          padding: EdgeInsets.symmetric(
+            vertical: gap,
+            horizontal: widget.padBodyHorizontally! ? gap : 0,
           ),
           child: SafeArea(
             child: Scaffold(
