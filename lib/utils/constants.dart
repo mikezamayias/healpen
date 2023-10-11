@@ -60,17 +60,3 @@ final sentimentIcons = [
 
 /// A list of sentiment values used in the application.
 final sentimentValues = [-3, -2, -1, 0, 1, 2, 3];
-
-/// Gets the sentiment label based on the given sentiment value.
-String getSentimentLabel(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
-  final label = sentimentLabels[index];
-  return label;
-}
-
-/// Gets the sentiment icon based on the given sentiment value.
-IconData getSentimentIcon(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
-  final icon = sentimentIcons[index];
-  return icon;
-}

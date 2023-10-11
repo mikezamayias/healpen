@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import 'controllers/emotional_echo_controller.dart';
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/page_controller.dart' as page_controller;
 import 'providers/settings_providers.dart';
@@ -20,6 +22,10 @@ class Healpen extends ConsumerWidget {
             .animate()
             .fade(duration: emphasizedDuration, curve: emphasizedCurve),
     ];
+    EmotionalEchoController.goodColor = context.theme.colorScheme.primary;
+    EmotionalEchoController.badColor = context.theme.colorScheme.error;
+    EmotionalEchoController.onGoodColor = context.theme.colorScheme.onPrimary;
+    EmotionalEchoController.onBadColor = context.theme.colorScheme.onError;
     return Scaffold(
       body: PageView.builder(
         controller: ref.watch(HealpenController().pageControllerProvider),

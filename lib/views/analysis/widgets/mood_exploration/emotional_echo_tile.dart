@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../../controllers/analysis_view_controller.dart';
 import '../../../../controllers/emotional_echo_controller.dart';
@@ -11,18 +10,13 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import 'emotional_echo/active_tile.dart';
 
-class EmotionalEchoTile extends ConsumerStatefulWidget {
+class EmotionalEchoTile extends ConsumerWidget {
   const EmotionalEchoTile({
     super.key,
   });
 
   @override
-  ConsumerState<EmotionalEchoTile> createState() => _EmotionalEchoTileState();
-}
-
-class _EmotionalEchoTileState extends ConsumerState<EmotionalEchoTile> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     EmotionalEchoController.sentiment = [
       for (AnalysisModel element
           in ref.watch(AnalysisViewController.analysisModelListProvider))
@@ -30,10 +24,6 @@ class _EmotionalEchoTileState extends ConsumerState<EmotionalEchoTile> {
     ].average().toDouble();
     EmotionalEchoController.sentimentRatio =
         EmotionalEchoController.sentiment + 3 / sentimentValues.length;
-    EmotionalEchoController.goodColor = colorScheme.primary;
-    EmotionalEchoController.badColor = colorScheme.error;
-    EmotionalEchoController.onGoodColor = colorScheme.onPrimary;
-    EmotionalEchoController.onBadColor = colorScheme.onError;
     EmotionalEchoController.shapeColor = Color.lerp(
       EmotionalEchoController.badColor,
       EmotionalEchoController.goodColor,

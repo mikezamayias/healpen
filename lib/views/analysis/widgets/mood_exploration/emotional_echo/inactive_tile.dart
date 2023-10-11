@@ -5,6 +5,7 @@ import 'package:rive/rive.dart';
 
 import '../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../utils/constants.dart';
+import '../../../../../utils/helper_functions.dart';
 
 class EmotionalEchoInactiveTile extends ConsumerWidget {
   const EmotionalEchoInactiveTile({super.key});

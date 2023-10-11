@@ -124,3 +124,17 @@ double combinedSentimentValue(double magnitude, double score) {
   // log('$clippedResult', name: 'SentenceModel:clippedResult');
   return clippedResult;
 }
+
+/// Gets the sentiment label based on the given sentiment value.
+String getSentimentLabel(double sentiment) {
+  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
+  final label = sentimentLabels[index];
+  return label;
+}
+
+/// Gets the sentiment icon based on the given sentiment value.
+IconData getSentimentIcon(double sentiment) {
+  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
+  final icon = sentimentIcons[index];
+  return icon;
+}

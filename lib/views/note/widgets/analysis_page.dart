@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../models/analysis/analysis_model.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/text_divider.dart';
 
