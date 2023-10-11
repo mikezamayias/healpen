@@ -47,12 +47,12 @@ class NoteTile extends ConsumerWidget {
           () async {
             context.navigator.pushNamed(
               '/note',
-              arguments: {
-                'noteModel': entry,
-                'analysisModel': AnalysisModel.fromJson(
+              arguments: (
+                noteModel: entry,
+                analysisModel: AnalysisModel.fromJson(
                   (await FirestoreService.getAnalysis(entry.timestamp)).data()!,
                 ),
-              },
+              ),
             );
           },
         );

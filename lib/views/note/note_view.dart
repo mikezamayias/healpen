@@ -39,10 +39,12 @@ class _NoteViewState extends ConsumerState<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final NoteModel noteModel = args['noteModel'] as NoteModel;
-    final AnalysisModel analysisModel = args['analysisModel'];
+    final args = ModalRoute.of(context)!.settings.arguments as ({
+      NoteModel noteModel,
+      AnalysisModel analysisModel
+    });
+    final NoteModel noteModel = args.noteModel;
+    final AnalysisModel analysisModel = args.analysisModel;
     final showAnalysis = !noteModel.isPrivate;
     return BlueprintView(
       appBar: Padding(
