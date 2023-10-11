@@ -65,113 +65,126 @@ class CustomListTile extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(
-            top: padding.vertical / 2,
-            bottom: padding.vertical / 2,
-            left: padding.horizontal / 2,
-            right: padding.horizontal / 2,
-          ),
-          child: Row(
-            children: [
-              if (leading != null || leadingIconData != null)
-                Padding(
-                  padding: (title != null || titleString != null)
-                      ? padding.horizontal == 0
-                          ? EdgeInsets.only(right: gap)
-                          : EdgeInsets.only(right: padding.horizontal / 2)
-                      : EdgeInsets.zero,
-                  child: GestureDetector(
-                    onTap: leadingOnTap,
-                    child: Animate(
-                      effects: showcaseLeadingIcon!
-                          ? [
-                              ShakeEffect(
-                                delay: 1.seconds,
-                                curve: Sprung.criticallyDamped,
-                                duration: 6.seconds,
-                                hz: 1,
-                                offset: const Offset(0, 3),
-                              ),
-                              ShakeEffect(
-                                delay: 2.seconds,
-                                curve: Sprung.criticallyDamped,
-                                duration: 6.seconds,
-                                hz: 1,
-                                offset: const Offset(3, 0),
-                              ),
-                            ]
-                          : null,
-                      onInit: showcaseLeadingIcon!
-                          ? (_) async {
-                              if (!ref.watch(
-                                  navigationEnableHapticFeedbackProvider)) {
-                                await Future.delayed(
-                                  1.seconds,
-                                  HapticFeedback.vibrate,
-                                );
+        if (leading != null ||
+            leadingIconData != null ||
+            title != null ||
+            titleString != null ||
+            trailing != null ||
+            trailingIconData != null)
+          Padding(
+            padding: EdgeInsets.only(
+              top: padding.vertical / 2,
+              bottom: padding.vertical / 2,
+              left: padding.horizontal / 2,
+              right: padding.horizontal / 2,
+            ),
+            child: Row(
+              children: [
+                if (leading != null || leadingIconData != null)
+                  Padding(
+                    padding: (title != null || titleString != null)
+                        ? padding.horizontal == 0
+                            ? EdgeInsets.only(right: gap)
+                            : EdgeInsets.only(right: padding.horizontal / 2)
+                        : EdgeInsets.zero,
+                    child: GestureDetector(
+                      onTap: leadingOnTap,
+                      child: Animate(
+                        effects: showcaseLeadingIcon!
+                            ? [
+                                ShakeEffect(
+                                  delay: 1.seconds,
+                                  curve: Sprung.criticallyDamped,
+                                  duration: 6.seconds,
+                                  hz: 1,
+                                  offset: const Offset(0, 3),
+                                ),
+                                ShakeEffect(
+                                  delay: 2.seconds,
+                                  curve: Sprung.criticallyDamped,
+                                  duration: 6.seconds,
+                                  hz: 1,
+                                  offset: const Offset(3, 0),
+                                ),
+                              ]
+                            : null,
+                        onInit: showcaseLeadingIcon!
+                            ? (_) async {
+                                if (!ref.watch(
+                                    navigationEnableHapticFeedbackProvider)) {
+                                  await Future.delayed(
+                                    1.seconds,
+                                    HapticFeedback.vibrate,
+                                  );
+                                }
                               }
-                            }
-                          : null,
-                      child: leading ??
-                          FaIcon(
-                            leadingIconData!,
-                            color: textColor ??
-                                (leadingOnTap != null
-                                    ? context.theme.colorScheme.primary
-                                    : onTap == null
-                                        ? context
-                                            .theme.colorScheme.onSurfaceVariant
-                                        : context.theme.colorScheme.onPrimary),
-                            size: context.theme.textTheme.titleLarge!.fontSize,
-                          ),
+                            : null,
+                        child: leading ??
+                            FaIcon(
+                              leadingIconData!,
+                              color: textColor ??
+                                  (leadingOnTap != null
+                                      ? context.theme.colorScheme.primary
+                                      : onTap == null
+                                          ? context.theme.colorScheme
+                                              .onSurfaceVariant
+                                          : context
+                                              .theme.colorScheme.onPrimary),
+                              size:
+                                  context.theme.textTheme.titleLarge!.fontSize,
+                            ),
+                      ),
                     ),
                   ),
-                ),
-              if (title != null || titleString != null)
-                Expanded(
-                  child: title ??
-                      Text(
-                        titleString!,
-                        style: context.theme.textTheme.titleLarge!.copyWith(
-                          color: textColor ??
-                              (onTap == null
-                                  ? context.theme.colorScheme.onSurfaceVariant
-                                  : context.theme.colorScheme.onPrimary),
+                if (title != null || titleString != null)
+                  Expanded(
+                    child: title ??
+                        Text(
+                          titleString!,
+                          style: context.theme.textTheme.titleLarge!.copyWith(
+                            color: textColor ??
+                                (onTap == null
+                                    ? context.theme.colorScheme.onSurfaceVariant
+                                    : context.theme.colorScheme.onPrimary),
+                          ),
                         ),
-                      ),
-                ),
-              if (trailing != null || trailingIconData != null)
-                Padding(
-                  padding: (title != null || titleString != null)
-                      ? EdgeInsets.only(left: padding.horizontal / 2)
-                      : EdgeInsets.zero,
-                  child: GestureDetector(
-                    onTap: trailingOnTap,
-                    child: trailing ??
-                        (trailingOnTap != null
-                            ? FaIcon(
-                                trailingIconData!,
-                                color: textColor ??
-                                    context.theme.colorScheme.primary,
-                                size: context
-                                    .theme.textTheme.titleLarge!.fontSize,
-                              )
-                            : FaIcon(
-                                trailingIconData!,
-                                color: textColor ??
-                                    (onTap == null
-                                        ? context
-                                            .theme.colorScheme.onSurfaceVariant
-                                        : context.theme.colorScheme.onPrimary),
-                                size: context
-                                    .theme.textTheme.titleLarge!.fontSize,
-                              )),
                   ),
-                ),
-            ],
+                if (trailing != null || trailingIconData != null)
+                  Padding(
+                    padding: (title != null || titleString != null)
+                        ? EdgeInsets.only(left: padding.horizontal / 2)
+                        : EdgeInsets.zero,
+                    child: GestureDetector(
+                      onTap: trailingOnTap,
+                      child: trailing ??
+                          (trailingOnTap != null
+                              ? FaIcon(
+                                  trailingIconData!,
+                                  color: textColor ??
+                                      context.theme.colorScheme.primary,
+                                  size: context
+                                      .theme.textTheme.titleLarge!.fontSize,
+                                )
+                              : FaIcon(
+                                  trailingIconData!,
+                                  color: textColor ??
+                                      (onTap == null
+                                          ? context.theme.colorScheme
+                                              .onSurfaceVariant
+                                          : context
+                                              .theme.colorScheme.onPrimary),
+                                  size: context
+                                      .theme.textTheme.titleLarge!.fontSize,
+                                )),
+                    ),
+                  ),
+              ],
+            ),
+          )
+        else
+          SizedBox(
+            height: padding.vertical / 2,
           ),
-        ),
         if (subtitle != null || subtitleString != null)
           Flexible(
             child: Padding(
