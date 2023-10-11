@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -5,9 +8,13 @@ import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../../extensions/number_extensions.dart';
+import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
 import '../../../providers/settings_providers.dart';
+import '../../../services/firestore_service.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -115,8 +122,11 @@ class CalendarTile extends ConsumerWidget {
       todayHighlightColor: context.theme.colorScheme.secondary,
       cellBorderColor: context.theme.colorScheme.surface,
       selectionDecoration: BoxDecoration(
-        color: context.theme.colorScheme.primary.withOpacity(0.2),
         borderRadius: BorderRadius.circular(radius),
+        border: Border.all(
+          color: context.theme.colorScheme.primary,
+          width: gap / 4,
+        ),
       ),
       monthViewSettings: const MonthViewSettings(
         showAgenda: false,
@@ -131,6 +141,33 @@ class CalendarTile extends ConsumerWidget {
         bool currentMonthCheck =
             details.date.month == details.visibleDates[15].month;
         bool dateAfterTodayCheck = details.date.isAfter(DateTime.now());
+        Color? shapeColor;
+        Color? textColor;
+        if (details.appointments.isNotEmpty) {
+          List<NoteModel> dateNoteModels = [
+            ...details.appointments.map((Object e) => noteModels.where(
+                  (element) {
+                    return element.timestamp ==
+                        int.parse((e as Appointment).subject);
+                  },
+                ).first),
+          ];
+          List<AnalysisModel> dateAnalysisModels = [];
+          getDateAnalysisModels(dateNoteModels).then((value) {
+            dateAnalysisModels = value;
+          });
+
+          double sentimentRatio = getSentimentRatio(
+            [
+              for (AnalysisModel element in dateAnalysisModels)
+                element.sentiment!,
+            ].average().toDouble(),
+          );
+          log(dateAnalysisModels.toString(), name: 'dateAnalysisModels');
+          log(sentimentRatio.toString(), name: 'sentimentRatio');
+          // shapeColor = getSentimentShapeColor(sentimentRatio);
+          // textColor = getSentimentTexColor(sentimentRatio);
+        }
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -149,14 +186,19 @@ class CalendarTile extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(radius - gap),
                         color: context.theme.colorScheme.secondary,
                       )
-                    : null,
+                    : !dateAfterTodayCheck
+                        ? BoxDecoration(
+                            borderRadius: BorderRadius.circular(radius - gap),
+                            color: context.theme.colorScheme.secondaryContainer,
+                          )
+                        : null,
                 child: Text(
                   details.date.day.toString(),
                   style: context.theme.textTheme.titleLarge!.copyWith(
                     color: todayCheck
                         ? context.theme.colorScheme.onSecondary
                         : currentMonthCheck && !dateAfterTodayCheck
-                            ? context.theme.colorScheme.outline
+                            ? context.theme.colorScheme.onSecondaryContainer
                             : context.theme.colorScheme.outlineVariant,
                     fontWeight: currentMonthCheck && !dateAfterTodayCheck
                         ? FontWeight.bold
@@ -175,13 +217,13 @@ class CalendarTile extends ConsumerWidget {
                     width: gap * 3,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: context.theme.colorScheme.primary,
+                      color: shapeColor,
                     ),
                     child: Text(
                       details.appointments.length.toString(),
                       textAlign: TextAlign.center,
                       style: context.theme.textTheme.titleMedium!.copyWith(
-                        color: context.theme.colorScheme.onPrimary,
+                        color: textColor,
                         fontWeight: FontWeight.bold,
                         textBaseline: TextBaseline.alphabetic,
                       ),
@@ -193,6 +235,19 @@ class CalendarTile extends ConsumerWidget {
         );
       },
     );
+  }
+
+  Future<List<AnalysisModel>> getDateAnalysisModels(
+      List<NoteModel> dateNoteModels) async {
+    List<Future<AnalysisModel>> futures = dateNoteModels.map(
+      (NoteModel noteModel) async {
+        var data = await FirestoreService.getAnalysis(noteModel.timestamp);
+        return AnalysisModel.fromJson(data.data()!);
+      },
+    ).toList();
+
+    List<AnalysisModel> dateAnalysisModels = await Future.wait(futures);
+    return dateAnalysisModels;
   }
 }
 

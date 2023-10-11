@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../controllers/emotional_echo_controller.dart';
 import '../enums/app_theming.dart';
 import '../themes/blueprint_theme.dart';
 import 'constants.dart';
@@ -137,4 +138,27 @@ IconData getSentimentIcon(double sentiment) {
   final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
   final icon = sentimentIcons[index];
   return icon;
+}
+
+/// Get sentiment ratio based on the given sentiment value.
+double getSentimentRatio(double sentiment) {
+  return sentiment + 3 / sentimentValues.length;
+}
+
+/// Get shape color based on the given sentiment ratio value.
+Color getSentimentShapeColor(double sentimentRatio) {
+  return Color.lerp(
+    EmotionalEchoController.badColor,
+    EmotionalEchoController.goodColor,
+    sentimentRatio,
+  )!;
+}
+
+/// Get shape color based on the given sentiment ratio value.
+Color getSentimentTexColor(double sentimentRatio) {
+  return Color.lerp(
+    EmotionalEchoController.onBadColor,
+    EmotionalEchoController.onGoodColor,
+    sentimentRatio,
+  )!;
 }

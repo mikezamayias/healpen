@@ -6,7 +6,6 @@ import '../../../../controllers/emotional_echo_controller.dart';
 import '../../../../extensions/number_extensions.dart';
 import '../../../../models/analysis/analysis_model.dart';
 import '../../../../providers/settings_providers.dart';
-import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import 'emotional_echo/active_tile.dart';
 
@@ -23,17 +22,13 @@ class EmotionalEchoTile extends ConsumerWidget {
         element.sentiment!,
     ].average().toDouble();
     EmotionalEchoController.sentimentRatio =
-        EmotionalEchoController.sentiment + 3 / sentimentValues.length;
-    EmotionalEchoController.shapeColor = Color.lerp(
-      EmotionalEchoController.badColor,
-      EmotionalEchoController.goodColor,
+        getSentimentRatio(EmotionalEchoController.sentiment);
+    EmotionalEchoController.shapeColor = getSentimentShapeColor(
       EmotionalEchoController.sentimentRatio,
-    )!;
-    EmotionalEchoController.textColor = Color.lerp(
-      EmotionalEchoController.onBadColor,
-      EmotionalEchoController.onGoodColor,
+    );
+    EmotionalEchoController.textColor = getSentimentTexColor(
       EmotionalEchoController.sentimentRatio,
-    )!;
+    );
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onLongPress: () {
