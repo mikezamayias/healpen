@@ -5,8 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/history_view_controller.dart';
 import '../../controllers/page_controller.dart';
-import '../../extensions/int_extensions.dart';
-import '../../extensions/widget_extensions.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/page_providers.dart';
 import '../../providers/settings_providers.dart';
@@ -14,15 +12,19 @@ import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
-import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
-import 'widgets/note_tile.dart';
+import 'widgets/calendar_tile.dart';
 
-class HistoryView extends ConsumerWidget {
+class HistoryView extends ConsumerStatefulWidget {
   const HistoryView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HistoryView> createState() => _HistoryViewState();
+}
+
+class _HistoryViewState extends ConsumerState<HistoryView> {
+  @override
+  Widget build(BuildContext context) {
     return BlueprintView(
       showAppBarTitle: ref.watch(navigationShowAppBarTitleProvider),
       appBar: const AppBar(
@@ -51,40 +53,8 @@ class HistoryView extends ConsumerWidget {
               );
             }
             if (snapshot.data!.isNotEmpty) {
-              List<NoteModel> noteModels = snapshot.data!;
-              Set<String> timestamps = {
-                for (var noteModel in noteModels)
-                  noteModel.timestamp.timestampFormat().split(', ').first,
-              };
-              List<List<Widget>> groupedNoteTiles = [];
-              for (var timestamp in timestamps) {
-                groupedNoteTiles.add(
-                  noteModels
-                      .where(
-                        (NoteModel noteModel) =>
-                            noteModel.timestamp
-                                .timestampFormat()
-                                .split(', ')
-                                .first ==
-                            timestamp,
-                      )
-                      .map((NoteModel e) => NoteTile(entry: e))
-                      .toList(),
-                );
-              }
-              List<Widget> widgets = <Widget>[
-                for (var i = 0; i < timestamps.length; i++) ...[
-                  TextDivider(timestamps.elementAt(i)),
-                  ...groupedNoteTiles[i]
-                ]
-              ].animateWidgetList();
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(radius),
-                child: ListView.separated(
-                  itemCount: widgets.length,
-                  separatorBuilder: (_, __) => SizedBox(height: gap),
-                  itemBuilder: (_, int index) => widgets[index],
-                ),
+              return CalendarTile(
+                noteModels: snapshot.data!,
               );
             } else {
               return Column(
