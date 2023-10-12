@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -61,27 +62,39 @@ class CalendarTile extends ConsumerWidget {
                         height: 42.h,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(radius - gap),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ...details.appointments!.map(
-                                  (element) => Padding(
-                                    padding: EdgeInsets.only(bottom: gap),
-                                    child: NoteTile(
-                                      entry: noteModels.where(
-                                        (NoteModel element) {
-                                          return element.timestamp ==
-                                              int.parse(details
-                                                  .appointments!.first.subject);
-                                        },
-                                      ).first,
+                          child: StreamBuilder<
+                              QuerySnapshot<Map<String, dynamic>>>(
+                            stream: HistoryViewController
+                                .getAnalysisModelListOnDate(details.date!),
+                            builder: (
+                              BuildContext context,
+                              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                                  querySnapshot,
+                            ) {
+                              if (querySnapshot.connectionState ==
+                                  ConnectionState.active) {
+                                List<NoteTile> widgets = [
+                                  ...querySnapshot.data!.docs.map(
+                                    (e) => NoteTile(
+                                      entry: NoteModel.fromJson(e.data()),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
+                                  )
+                                ];
+                                return ListView.separated(
+                                  shrinkWrap: true,
+                                  itemBuilder:
+                                      (BuildContext context, int index) =>
+                                          widgets[index],
+                                  separatorBuilder: (_, __) =>
+                                      SizedBox(height: gap),
+                                  itemCount: widgets.length,
+                                );
+                              } else {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            },
                           ),
                         ),
                       )
