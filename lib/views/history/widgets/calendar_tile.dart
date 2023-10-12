@@ -99,7 +99,7 @@ class CalendarTile extends ConsumerWidget {
                   titleString: 'Close',
                   cornerRadius: radius - gap,
                   onTap: () {
-                    context.navigator.pop();
+                    Navigator.pop(navigatorKey.currentContext!);
                   },
                 )
               ],
