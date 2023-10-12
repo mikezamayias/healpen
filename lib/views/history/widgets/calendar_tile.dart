@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,6 +16,7 @@ import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -28,9 +32,6 @@ class CalendarTile extends ConsumerStatefulWidget {
 }
 
 class _CalendarTileState extends ConsumerState<CalendarTile> {
-  Color? shapeColor;
-  Color? textColor;
-
   @override
   Widget build(BuildContext context) {
     return SfCalendar(
@@ -136,31 +137,61 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         Padding(
           padding: EdgeInsets.only(bottom: gap),
           child: ClipOval(
-            child: AnimatedContainer(
-              duration: standardDuration,
-              curve: standardCurve,
-              // height: shapeColor == null ? 0 : gap * 3,
-              // width: shapeColor == null ? 0 : gap * 3,
-              height: details.appointments.isNotEmpty ? gap * 3 : 0,
-              width: details.appointments.isNotEmpty ? gap * 3 : 0,
-              alignment: Alignment.center,
-              decoration: details.appointments.isNotEmpty
-                  ? BoxDecoration(color: theme.colorScheme.primary)
-                  : null,
-              // : BoxDecoration(color: shapeColor),
-              child: Text(
-                '${details.appointments.length}',
-                textAlign: TextAlign.center,
-                style: context.theme.textTheme.titleMedium!.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                  // color: textColor,
-                  fontWeight: FontWeight.bold,
-                  textBaseline: TextBaseline.alphabetic,
-                ),
-              ),
-            ),
+            child: StreamBuilder(
+                stream: NoteAnalysisService()
+                    .getAnalysisEntriesListOnDate(details.date),
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<List<AnalysisModel>> analysisModelListSnapshot,
+                ) {
+                  Color? shapeColor;
+                  Color? textColor;
+                  double? dateSentiment;
+                  double? dateSentimentRatio;
+                  if (analysisModelListSnapshot.data != null &&
+                      analysisModelListSnapshot.data!.isNotEmpty) {
+                    log(
+                      '${analysisModelListSnapshot.data}',
+                      name: 'analysisModelListSnapshot',
+                    );
+                    List<AnalysisModel> analysisModelList =
+                        analysisModelListSnapshot.data!;
+                    if (analysisModelList.isNotEmpty) {
+                      dateSentiment = [
+                        for (AnalysisModel element in analysisModelList)
+                          element.sentiment!,
+                      ].average;
+                      dateSentimentRatio = getSentimentRatio(dateSentiment);
+                      shapeColor = getSentimentShapeColor(dateSentimentRatio);
+                      textColor = getSentimentTexColor(dateSentimentRatio);
+                    }
+                  }
+                  return AnimatedContainer(
+                    duration: standardDuration,
+                    curve: standardCurve,
+                    // height: shapeColor == null ? 0 : gap * 3,
+                    // width: shapeColor == null ? 0 : gap * 3,
+                    height: details.appointments.isNotEmpty ? gap * 3 : 0,
+                    width: details.appointments.isNotEmpty ? gap * 3 : 0,
+                    alignment: Alignment.center,
+                    decoration: details.appointments.isNotEmpty
+                        ? BoxDecoration(
+                            color: shapeColor ?? theme.colorScheme.primary)
+                        : null,
+                    // : BoxDecoration(color: shapeColor),
+                    child: Text(
+                      '${details.appointments.length}',
+                      textAlign: TextAlign.center,
+                      style: context.theme.textTheme.titleMedium!.copyWith(
+                        color: textColor ?? theme.colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                        textBaseline: TextBaseline.alphabetic,
+                      ),
+                    ),
+                  );
+                }),
           ),
-        ),
+        )
       ],
     );
   }
