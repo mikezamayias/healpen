@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
@@ -20,11 +21,21 @@ class HistoryViewController {
   static List<NoteModel> get notesToAnalyze =>
       noteModels.where((element) => !element.isPrivate).toList();
 
-  Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
+  static Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
       FirestoreService.writingCollectionReference()
           .orderBy('timestamp', descending: true)
           // .limit(10)
           .snapshots();
+
+  /// Get documents from Firestore of the given date
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAnalysisModelListOnDate(
+    DateTime date,
+  ) {
+    return FirestoreService.writingCollectionReference()
+        .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
+        .where('timestamp', isLessThan: date.add(1.days).millisecondsSinceEpoch)
+        .snapshots();
+  }
 
   /// Make historyStream from Stream<QuerySnapshot<Map<String, dynamic>>> to
   /// Stream<WritingModelEntry>
