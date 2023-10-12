@@ -44,15 +44,21 @@ class NoteTile extends ConsumerWidget {
         vibrate(
           ref.watch(navigationEnableHapticFeedbackProvider),
           () async {
-            context.navigator.pushNamed(
-              '/note',
-              arguments: (
-                noteModel: entry,
-                analysisModel: AnalysisModel.fromJson(
-                  (await FirestoreService.getAnalysis(entry.timestamp)).data()!,
-                ),
-              ),
+            NoteModel noteEntry = NoteModel.fromJson(
+              (await FirestoreService.getNote(entry.timestamp)).data()!,
             );
+            AnalysisModel analysisEntry = AnalysisModel.fromJson(
+              (await FirestoreService.getAnalysis(entry.timestamp)).data()!,
+            );
+            if (context.mounted) {
+              context.navigator.pushNamed(
+                '/note',
+                arguments: (
+                  noteModel: noteEntry,
+                  analysisModel: analysisEntry,
+                ),
+              );
+            }
           },
         );
       },
