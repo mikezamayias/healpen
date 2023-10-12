@@ -252,6 +252,7 @@ class CustomListTile extends ConsumerWidget {
       ],
     );
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: PhysicalModel(
         color: backgroundColor ??
