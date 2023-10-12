@@ -1,13 +1,16 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../../extensions/number_extensions.dart';
+import '../../../controllers/history_view_controller.dart';
+import '../../../extensions/int_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
 import '../../../providers/settings_providers.dart';
@@ -35,6 +38,8 @@ class CalendarTile extends ConsumerWidget {
       showDatePickerButton: false,
       view: CalendarView.month,
       maxDate: DateTime.now(),
+      minDate:
+          HistoryViewController.noteModels.last.timestamp.timestampToDateTime(),
       viewNavigationMode: ViewNavigationMode.snap,
       headerStyle: CalendarHeaderStyle(
         textStyle: context.theme.textTheme.titleLarge!.copyWith(
@@ -140,104 +145,139 @@ class CalendarTile extends ConsumerWidget {
         bool currentMonthCheck =
             details.date.month == details.visibleDates[15].month;
         bool dateAfterTodayCheck = details.date.isAfter(DateTime.now());
+        bool dateBeforeFirstRecordCheck = details.date.isBefore(
+          HistoryViewController.noteModels.last.timestamp
+              .timestampToDateTime()
+              .subtract(1.days),
+        );
         Color? shapeColor;
         Color? textColor;
-        if (details.appointments.isNotEmpty) {
-          List<NoteModel> dateNoteModels = [
-            ...details.appointments.map((Object e) => noteModels.where(
-                  (element) {
-                    return element.timestamp ==
-                        int.parse((e as Appointment).subject);
-                  },
-                ).first),
-          ];
-          List<AnalysisModel> dateAnalysisModels = [];
-          getDateAnalysisModels(dateNoteModels).then((value) {
-            dateAnalysisModels = value;
-          });
-
-          double sentimentRatio = getSentimentRatio(
-            [
-              for (AnalysisModel element in dateAnalysisModels)
-                element.sentiment!,
-            ].average().toDouble(),
-          );
-          log(dateAnalysisModels.toString(), name: 'dateAnalysisModels');
-          log(sentimentRatio.toString(), name: 'sentimentRatio');
-          // shapeColor = getSentimentShapeColor(sentimentRatio);
-          // textColor = getSentimentTexColor(sentimentRatio);
-        }
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(
-                top: gap,
-                left: gap,
-                right: gap,
-              ),
-              child: Container(
-                alignment: Alignment.center,
-                height: gap * 4,
-                width: gap * 4,
-                decoration: todayCheck
-                    ? BoxDecoration(
-                        borderRadius: BorderRadius.circular(radius - gap),
-                        color: context.theme.colorScheme.secondary,
-                      )
-                    : !dateAfterTodayCheck
-                        ? BoxDecoration(
-                            borderRadius: BorderRadius.circular(radius - gap),
-                            color: context.theme.colorScheme.secondaryContainer,
-                          )
-                        : null,
-                child: Text(
-                  details.date.day.toString(),
-                  style: context.theme.textTheme.titleLarge!.copyWith(
-                    color: todayCheck
-                        ? context.theme.colorScheme.onSecondary
-                        : currentMonthCheck && !dateAfterTodayCheck
-                            ? context.theme.colorScheme.onSecondaryContainer
-                            : context.theme.colorScheme.outlineVariant,
-                    fontWeight: currentMonthCheck && !dateAfterTodayCheck
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
-                ),
-              ),
-            ),
-            const Spacer(),
-            if (details.appointments.isNotEmpty)
-              Padding(
-                padding: EdgeInsets.only(bottom: gap),
-                child: ClipOval(
-                  child: Container(
-                    height: gap * 3,
-                    width: gap * 3,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: shapeColor,
+        List<NoteModel> dateNoteModels = [
+          ...details.appointments.map((Object e) => noteModels.where(
+                (element) {
+                  return element.timestamp ==
+                      int.parse((e as Appointment).subject);
+                },
+              ).first),
+        ];
+        return FutureBuilder<List<AnalysisModel>>(
+            future: getDateAnalysisModels(dateNoteModels),
+            builder: (
+              BuildContext context,
+              AsyncSnapshot<List<AnalysisModel>> analysisModelListSnapshot,
+            ) {
+              List<AnalysisModel> dateAnalysisModels = [];
+              if (analysisModelListSnapshot.hasData &&
+                  analysisModelListSnapshot.data!.isNotEmpty) {
+                dateAnalysisModels = analysisModelListSnapshot.data!;
+                dateAnalysisModels.sort(
+                  (AnalysisModel a, AnalysisModel b) =>
+                      a.timestamp.compareTo(b.timestamp),
+                );
+                double sentiment = [
+                  for (AnalysisModel element in dateAnalysisModels)
+                    element.sentiment!,
+                ].average;
+                double sentimentRatio = getSentimentRatio(sentiment);
+                log(
+                  sentiment.toString(),
+                  time: details.date,
+                  name:
+                      '${DateFormat('yyyy-MM-dd').format(details.date)}-sentiment',
+                );
+                log(
+                  sentimentRatio.toString(),
+                  name:
+                      '${DateFormat('yyyy-MM-dd').format(details.date)}-sentimentRatio',
+                );
+                shapeColor = getSentimentShapeColor(sentimentRatio);
+                textColor = getSentimentTexColor(sentimentRatio);
+              }
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: gap,
+                      left: gap,
+                      right: gap,
                     ),
-                    child: Text(
-                      details.appointments.length.toString(),
-                      textAlign: TextAlign.center,
-                      style: context.theme.textTheme.titleMedium!.copyWith(
-                        color: textColor,
-                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: gap * 4,
+                      width: gap * 4,
+                      decoration: todayCheck
+                          ? BoxDecoration(
+                              borderRadius: BorderRadius.circular(radius - gap),
+                              color: context.theme.colorScheme.secondary,
+                            )
+                          : !dateAfterTodayCheck
+                              ? BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.circular(radius - gap),
+                                  color: context
+                                      .theme.colorScheme.secondaryContainer,
+                                )
+                              : null,
+                      child: Text(
+                        details.date.day.toString(),
+                        style: context.theme.textTheme.titleLarge!.copyWith(
+                          color: todayCheck
+                              ? context.theme.colorScheme.onSecondary
+                              : currentMonthCheck &&
+                                      !dateAfterTodayCheck &&
+                                      !dateBeforeFirstRecordCheck
+                                  ? context
+                                      .theme.colorScheme.onSecondaryContainer
+                                  : context.theme.colorScheme.outlineVariant,
+                          fontWeight: currentMonthCheck &&
+                                  !dateAfterTodayCheck &&
+                                  !dateBeforeFirstRecordCheck
+                              ? FontWeight.bold
+                              : FontWeight.normal,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-          ],
-        );
+                  const Spacer(),
+                  if (details.appointments.isNotEmpty)
+                    Padding(
+                      padding: EdgeInsets.only(bottom: gap),
+                      child: ClipOval(
+                        child: AnimatedContainer(
+                          duration: standardDuration,
+                          curve: standardCurve,
+                          height: shapeColor == null ? 0 : gap * 3,
+                          width: shapeColor == null ? 0 : gap * 3,
+                          alignment: Alignment.center,
+                          decoration: shapeColor == null
+                              ? null
+                              : BoxDecoration(
+                                  color: shapeColor,
+                                ),
+                          child: Text(
+                            details.appointments.length.toString(),
+                            textAlign: TextAlign.center,
+                            style:
+                                context.theme.textTheme.titleMedium!.copyWith(
+                              color: textColor,
+                              fontWeight: FontWeight.bold,
+                              textBaseline: TextBaseline.alphabetic,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            });
       },
     );
   }
 
   Future<List<AnalysisModel>> getDateAnalysisModels(
-      List<NoteModel> dateNoteModels) async {
+    List<NoteModel> dateNoteModels,
+  ) async {
     List<Future<AnalysisModel>> futures = dateNoteModels.map(
       (NoteModel noteModel) async {
         var data = await FirestoreService.getAnalysis(noteModel.timestamp);

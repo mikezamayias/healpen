@@ -14,6 +14,7 @@ class HistoryViewController {
 
   /// Attributes
   final _writingEntries = <NoteModel>[];
+  static late List<NoteModel> noteModels;
 
   /// Methods
   Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>

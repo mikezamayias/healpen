@@ -53,6 +53,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
               );
             }
             if (snapshot.data!.isNotEmpty) {
+              HistoryViewController.noteModels = snapshot.data!;
               return CalendarTile(
                 noteModels: snapshot.data!,
               );
