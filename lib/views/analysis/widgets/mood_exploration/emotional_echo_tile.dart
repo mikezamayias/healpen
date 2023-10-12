@@ -47,7 +47,7 @@ class EmotionalEchoTile extends ConsumerWidget {
                 .state = false;
           });
         },
-        child: const EmotionalEchoActivetile(),
+        child: const EmotionalEchoActiveTile(),
       ),
     );
   }

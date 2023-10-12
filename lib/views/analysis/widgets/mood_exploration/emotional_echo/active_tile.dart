@@ -7,8 +7,8 @@ import '../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../utils/constants.dart';
 import 'inactive_tile.dart';
 
-class EmotionalEchoActivetile extends ConsumerWidget {
-  const EmotionalEchoActivetile({super.key});
+class EmotionalEchoActiveTile extends ConsumerWidget {
+  const EmotionalEchoActiveTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
