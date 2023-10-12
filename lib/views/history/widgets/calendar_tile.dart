@@ -42,7 +42,8 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       showNavigationArrow: false,
       showDatePickerButton: false,
       view: CalendarView.month,
-      maxDate: DateTime.now(),
+      maxDate: HistoryViewController.noteModels.first.timestamp
+          .timestampToDateTime(),
       minDate:
           HistoryViewController.noteModels.last.timestamp.timestampToDateTime(),
       viewNavigationMode: ViewNavigationMode.snap,
@@ -108,7 +109,9 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                     borderRadius: BorderRadius.circular(radius - gap),
                     color: context.theme.colorScheme.secondary,
                   )
-                : !dateAfterTodayCheck
+                : !dateAfterTodayCheck &&
+                        !dateBeforeFirstRecordCheck &&
+                        currentMonthCheck
                     ? BoxDecoration(
                         borderRadius: BorderRadius.circular(radius - gap),
                         color: context.theme.colorScheme.secondaryContainer,
@@ -231,54 +234,75 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       customDialog: CustomDialog(
         titleString: DateFormat('EEE d MMM yyyy').format(details.date!),
         enableContentContainer: false,
-        contentWidget: Padding(
-          padding: EdgeInsets.all(gap),
-          child: details.appointments!.isNotEmpty
-              ? SizedBox(
-                  height: 42.h,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(radius - gap),
-                    child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                      stream: HistoryViewController()
-                          .getNoteEntriesListOnDate(details.date!)
-                          .snapshots(includeMetadataChanges: true),
-                      builder: (
-                        BuildContext context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            querySnapshot,
-                      ) {
-                        if (querySnapshot.connectionState ==
-                            ConnectionState.active) {
-                          List<NoteTile> widgets = [
-                            ...querySnapshot.data!.docs.map(
-                              (e) => NoteTile(
-                                entry: NoteModel.fromJson(e.data()),
-                              ),
-                            )
-                          ];
-                          return ListView.separated(
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) =>
-                                widgets[index],
-                            separatorBuilder: (_, __) => SizedBox(height: gap),
-                            itemCount: widgets.length,
-                          );
-                        } else {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                      },
-                    ),
+        contentWidget: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+          stream: HistoryViewController()
+              .getNoteEntriesListOnDate(details.date!)
+              .snapshots(includeMetadataChanges: true),
+          builder: (
+            BuildContext context,
+            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> querySnapshot,
+          ) {
+            if (querySnapshot.connectionState == ConnectionState.active) {
+              List<Widget> widgets = [
+                ...querySnapshot.data!.docs.map(
+                  (e) => NoteTile(
+                    entry: NoteModel.fromJson(e.data()),
                   ),
                 )
-              : CustomListTile(
-                  responsiveWidth: true,
-                  titleString: 'No notes',
-                  cornerRadius: radius - gap,
-                  backgroundColor: context.theme.colorScheme.surface,
-                  textColor: context.theme.colorScheme.onSurface,
+              ];
+              return Padding(
+                padding: EdgeInsets.all(gap),
+                child: AnimatedCrossFade(
+                  duration: emphasizedDuration,
+                  reverseDuration: emphasizedDuration,
+                  sizeCurve: emphasizedCurve,
+                  firstCurve: emphasizedCurve,
+                  secondCurve: emphasizedCurve,
+                  firstChild: SizedBox(
+                    height: 42.h,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(radius - gap),
+                      child: widgets.isNotEmpty
+                          ? ListView.separated(
+                              shrinkWrap: true,
+                              itemBuilder: (BuildContext context, int index) =>
+                                  widgets[index].animate().fade(
+                                        duration: standardDuration,
+                                        curve: standardCurve,
+                                      ),
+                              separatorBuilder: (_, __) =>
+                                  SizedBox(height: gap),
+                              itemCount: widgets.length,
+                            )
+                          : CustomListTile(
+                              titleString: 'No notes',
+                              cornerRadius: radius - gap,
+                            ),
+                    ),
+                  ).animate().fade(
+                        duration: emphasizedDuration,
+                        curve: emphasizedCurve,
+                      ),
+                  secondChild: CustomListTile(
+                    titleString: 'No notes',
+                    cornerRadius: radius - gap,
+                    backgroundColor: context.theme.colorScheme.surface,
+                    textColor: context.theme.colorScheme.onSurface,
+                  ).animate().fade(
+                        duration: emphasizedDuration,
+                        curve: emphasizedCurve,
+                      ),
+                  crossFadeState: widgets.isNotEmpty
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
                 ),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
         ),
         actions: [
           CustomListTile(
