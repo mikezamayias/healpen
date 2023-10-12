@@ -149,6 +149,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         child: MaterialApp(
           title: 'Healpen',
           scaffoldMessengerKey: scaffoldMessengerKey,
+          navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
           navigatorObservers: [
             ClearFocusNavigatorObserver(),

@@ -15,7 +15,6 @@ import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
-import '../../../widgets/custom_snack_bar.dart';
 
 class NoteTile extends ConsumerWidget {
   const NoteTile({
@@ -78,7 +77,6 @@ class NoteTile extends ConsumerWidget {
                 padding: EdgeInsets.all(gap),
                 spacing: gap,
                 onPressed: (context) {
-                  HistoryViewController().deleteNote(noteModel: entry);
                   showHealpenDialog(
                     context: context,
                     doVibrate:
@@ -94,12 +92,19 @@ class NoteTile extends ConsumerWidget {
                           ),
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
-                          titleString: 'Yes',
+                          titleString: 'Delete',
+                          backgroundColor: context.theme.colorScheme.error,
+                          textColor: context.theme.colorScheme.onError,
                           onTap: () {
                             vibrate(
                               ref.watch(navigationEnableHapticFeedbackProvider),
                               () {
-                                navigatorKey.currentState?.pop(true);
+                                HistoryViewController()
+                                    .deleteNote(noteModel: entry)
+                                    .whenComplete(
+                                      () => Navigator.pop(
+                                          navigatorKey.currentContext!),
+                                    );
                               },
                             );
                           },
@@ -111,61 +116,18 @@ class NoteTile extends ConsumerWidget {
                           ),
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
-                          titleString: 'No',
+                          titleString: 'Go back',
                           onTap: () {
                             vibrate(
                               ref.watch(navigationEnableHapticFeedbackProvider),
                               () {
-                                navigatorKey.currentState?.pop(false);
+                                Navigator.pop(navigatorKey.currentContext!);
                               },
                             );
                           },
                         ),
                       ],
                     ),
-                  ).then(
-                    (exit) {
-                      if (exit == null) return;
-                      if (exit) {
-                        CustomSnackBar(
-                          SnackBarConfig(
-                            vibrate: ref
-                                .watch(navigationEnableHapticFeedbackProvider),
-                            titleString1: 'Deleting note...',
-                            leadingIconData1: FontAwesomeIcons.trashCan,
-                            actionAfterSnackBar1: () async =>
-                                HistoryViewController()
-                                    .deleteNote(noteModel: entry),
-                            trailingWidgets1: [
-                              CustomListTile(
-                                contentPadding: EdgeInsets.symmetric(
-                                  horizontal: gap * 2,
-                                  vertical: gap,
-                                ),
-                                cornerRadius: radius - gap,
-                                responsiveWidth: true,
-                                backgroundColor:
-                                    context.theme.colorScheme.primaryContainer,
-                                textColor: context
-                                    .theme.colorScheme.onPrimaryContainer,
-                                onTap: () {
-                                  vibrate(
-                                    ref.watch(
-                                        navigationEnableHapticFeedbackProvider),
-                                    () {
-                                      scaffoldMessengerKey
-                                          .currentState!.removeCurrentSnackBar;
-                                    },
-                                  );
-                                },
-                                titleString: 'Cancel',
-                                leadingIconData: FontAwesomeIcons.xmark,
-                              ),
-                            ],
-                          ),
-                        ).showSnackBar(context);
-                      }
-                    },
                   );
                 },
               ),
