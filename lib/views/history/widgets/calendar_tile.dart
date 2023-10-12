@@ -154,7 +154,7 @@ class CalendarTile extends ConsumerWidget {
         Color? textColor;
         List<NoteModel> dateNoteModels = [
           ...details.appointments.map((Object e) => noteModels.where(
-                (element) {
+                (NoteModel element) {
                   return element.timestamp ==
                       int.parse((e as Appointment).subject);
                 },
