@@ -1,9 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../controllers/analysis_view_controller.dart';
 import '../../../../controllers/emotional_echo_controller.dart';
-import '../../../../extensions/number_extensions.dart';
 import '../../../../models/analysis/analysis_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/helper_functions.dart';
@@ -21,7 +21,7 @@ class EmotionalEchoTile extends ConsumerWidget {
       for (AnalysisModel element
           in ref.watch(AnalysisViewController.analysisModelListProvider))
         element.sentiment!,
-    ].average().toDouble();
+    ].average;
     EmotionalEchoController.sentimentRatio =
         getSentimentRatio(EmotionalEchoController.sentiment);
     EmotionalEchoController.shapeColor = getSentimentShapeColor(

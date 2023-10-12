@@ -25,16 +25,17 @@ class HistoryViewController {
       FirestoreService.writingCollectionReference()
           .orderBy('timestamp', descending: true)
           // .limit(10)
-          .snapshots();
+          .snapshots(includeMetadataChanges: true);
 
   /// Get documents from Firestore of the given date
-  static Stream<QuerySnapshot<Map<String, dynamic>>> getAnalysisModelListOnDate(
+  Query<Map<String, dynamic>> getNoteEntriesListOnDate(
     DateTime date,
   ) {
     return FirestoreService.writingCollectionReference()
+        .orderBy('timestamp', descending: true)
         .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
-        .where('timestamp', isLessThan: date.add(1.days).millisecondsSinceEpoch)
-        .snapshots();
+        .where('timestamp',
+            isLessThan: date.add(1.days).millisecondsSinceEpoch);
   }
 
   /// Make historyStream from Stream<QuerySnapshot<Map<String, dynamic>>> to

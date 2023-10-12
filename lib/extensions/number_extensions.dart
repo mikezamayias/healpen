@@ -7,10 +7,6 @@ extension NumberExtension on Iterable<num> {
     return sum;
   }
 
-  num average() {
-    return double.parse((sum() / length).toStringAsFixed(2));
-  }
-
   num max() {
     num max = 0;
     for (num number in this) {

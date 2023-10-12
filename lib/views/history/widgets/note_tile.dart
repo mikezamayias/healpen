@@ -99,12 +99,9 @@ class NoteTile extends ConsumerWidget {
                             vibrate(
                               ref.watch(navigationEnableHapticFeedbackProvider),
                               () {
+                                Navigator.pop(navigatorKey.currentContext!);
                                 HistoryViewController()
-                                    .deleteNote(noteModel: entry)
-                                    .whenComplete(
-                                      () => Navigator.pop(
-                                          navigatorKey.currentContext!),
-                                    );
+                                    .deleteNote(noteModel: entry);
                               },
                             );
                           },
