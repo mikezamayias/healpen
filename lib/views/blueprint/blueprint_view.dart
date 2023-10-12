@@ -8,8 +8,9 @@ import '../../extensions/widget_extensions.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
+import '../../widgets/keep_alive_widget.dart';
 
-class BlueprintView extends ConsumerStatefulWidget {
+class BlueprintView extends ConsumerWidget {
   const BlueprintView({
     Key? key,
     this.appBar,
@@ -24,47 +25,42 @@ class BlueprintView extends ConsumerStatefulWidget {
   final bool? showAppBarTitle;
 
   @override
-  ConsumerState<BlueprintView> createState() => _BlueprintViewState();
-}
-
-class _BlueprintViewState extends ConsumerState<BlueprintView>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: getSystemUIOverlayStyle(
-        context.theme,
-        ref.watch(themeAppearanceProvider),
-      ),
-      child: GestureDetector(
-        onTap: () => context.focusScope.unfocus(),
-        child: Container(
-          color: context.theme.colorScheme.background,
-          padding: EdgeInsets.symmetric(
-            vertical: gap,
-            horizontal: widget.padBodyHorizontally! ? gap : 0,
-          ),
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: widget.showAppBarTitle!
-                  ? widget.appBar != null
-                      ? PreferredSize(
-                          preferredSize: Size.fromHeight(100.h),
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: gap),
-                            child: widget.appBar!.animateAppBar(),
-                          ),
-                        )
-                      : null
-                  : null,
-              body: ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  scrollbars: false,
-                  overscroll: false,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return KeepAliveWidget(
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: getSystemUIOverlayStyle(
+          context.theme,
+          ref.watch(themeAppearanceProvider),
+        ),
+        child: GestureDetector(
+          onTap: () => context.focusScope.unfocus(),
+          child: Container(
+            color: context.theme.colorScheme.background,
+            padding: EdgeInsets.symmetric(
+              vertical: gap,
+              horizontal: padBodyHorizontally! ? gap : 0,
+            ),
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: showAppBarTitle!
+                    ? appBar != null
+                        ? PreferredSize(
+                            preferredSize: Size.fromHeight(100.h),
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: gap),
+                              child: appBar!.animateAppBar(),
+                            ),
+                          )
+                        : null
+                    : null,
+                body: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(
+                    scrollbars: false,
+                    overscroll: false,
+                  ),
+                  child: body,
                 ),
-                child: widget.body,
               ),
             ),
           ),
@@ -72,7 +68,4 @@ class _BlueprintViewState extends ConsumerState<BlueprintView>
       ),
     );
   }
-
-  @override
-  bool get wantKeepAlive => true;
 }

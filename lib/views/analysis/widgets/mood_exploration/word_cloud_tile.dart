@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../widgets/keep_alive_widget.dart';
 import '../../../../widgets/to_be_implemented_tile.dart';
 
 class WordCloudTile extends ConsumerWidget {
@@ -8,7 +9,9 @@ class WordCloudTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const ToBeImplementedTile();
+    return const KeepAliveWidget(
+      child: ToBeImplementedTile(),
+    );
     // final wordCloudGenerator = WordCloudGenerator();
     // final List<Map> wordCloudData = [];
     // for (final analysisModel

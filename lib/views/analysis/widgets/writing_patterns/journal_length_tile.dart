@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../widgets/keep_alive_widget.dart';
 import '../../../../widgets/to_be_implemented_tile.dart';
 
 class JournalLengthTile extends StatelessWidget {
@@ -7,6 +8,8 @@ class JournalLengthTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ToBeImplementedTile();
+    return const KeepAliveWidget(
+      child: ToBeImplementedTile(),
+    );
   }
 }

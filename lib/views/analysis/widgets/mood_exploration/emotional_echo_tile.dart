@@ -7,6 +7,7 @@ import '../../../../extensions/number_extensions.dart';
 import '../../../../models/analysis/analysis_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/helper_functions.dart';
+import '../../../../widgets/keep_alive_widget.dart';
 import 'emotional_echo/active_tile.dart';
 
 class EmotionalEchoTile extends ConsumerWidget {
@@ -29,21 +30,25 @@ class EmotionalEchoTile extends ConsumerWidget {
     EmotionalEchoController.textColor = getSentimentTexColor(
       EmotionalEchoController.sentimentRatio,
     );
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onLongPress: () {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-          ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
-              true;
-        });
-      },
-      onLongPressEnd: (_) {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-          ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
-              false;
-        });
-      },
-      child: const EmotionalEchoActivetile(),
+    return KeepAliveWidget(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onLongPress: () {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+            ref
+                .watch(EmotionalEchoController.isPressedProvider.notifier)
+                .state = true;
+          });
+        },
+        onLongPressEnd: (_) {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+            ref
+                .watch(EmotionalEchoController.isPressedProvider.notifier)
+                .state = false;
+          });
+        },
+        child: const EmotionalEchoActivetile(),
+      ),
     );
   }
 }
