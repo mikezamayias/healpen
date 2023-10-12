@@ -31,7 +31,7 @@ class HistoryViewController {
   Query<Map<String, dynamic>> getNoteEntriesListOnDate(
     DateTime date,
   ) {
-    return FirestoreService.writingCollectionReference()
+    return FirestoreService.analysisCollectionReference()
         .orderBy('timestamp', descending: true)
         .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
         .where('timestamp',
