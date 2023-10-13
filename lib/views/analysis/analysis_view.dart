@@ -26,7 +26,7 @@ class AnalysisView extends ConsumerWidget {
         pathNames: ['Your writing insights'],
       ),
       body: StreamBuilder(
-        stream: FirestoreService.analysisCollectionReference().snapshots(),
+        stream: FirestoreService.analysisCollectionReference()!.snapshots(),
         builder: (
           BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> analysisSnapshot,

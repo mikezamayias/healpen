@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +58,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         borderRadius: BorderRadius.circular(radius),
         border: Border.all(
           color: context.theme.colorScheme.primary,
-          width: gap / 4,
+          width: gap / 3,
         ),
       ),
       monthViewSettings: const MonthViewSettings(
@@ -89,113 +87,104 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
           .timestampToDateTime()
           .subtract(1.days),
     );
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(
-            top: gap,
-            left: gap,
-            right: gap,
-          ),
-          child: AnimatedContainer(
-            duration: standardDuration,
-            curve: standardCurve,
-            alignment: Alignment.center,
-            height: gap * 4,
-            width: gap * 4,
-            decoration: todayCheck
-                ? BoxDecoration(
-                    borderRadius: BorderRadius.circular(radius - gap),
-                    color: context.theme.colorScheme.secondary,
-                  )
-                : !dateAfterTodayCheck &&
-                        !dateBeforeFirstRecordCheck &&
-                        currentMonthCheck
-                    ? BoxDecoration(
-                        borderRadius: BorderRadius.circular(radius - gap),
-                        color: context.theme.colorScheme.secondaryContainer,
-                      )
-                    : null,
-            child: Text(
-              details.date.day.toString(),
-              style: context.theme.textTheme.titleLarge!.copyWith(
-                color: todayCheck
-                    ? context.theme.colorScheme.onSecondary
-                    : currentMonthCheck &&
-                            !dateAfterTodayCheck &&
-                            !dateBeforeFirstRecordCheck
-                        ? context.theme.colorScheme.onSecondaryContainer
-                        : context.theme.colorScheme.outlineVariant,
-                fontWeight: currentMonthCheck &&
-                        !dateAfterTodayCheck &&
-                        !dateBeforeFirstRecordCheck
-                    ? FontWeight.bold
-                    : FontWeight.normal,
+    return Padding(
+      padding: EdgeInsets.all(gap / 2),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius - gap / 2),
+          color: context.theme.colorScheme.surface,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            AnimatedContainer(
+              duration: standardDuration,
+              curve: standardCurve,
+              alignment: Alignment.center,
+              height: gap * 4,
+              width: gap * 4,
+              child: Text(
+                details.date.day.toString(),
+                style: context.theme.textTheme.titleLarge!.copyWith(
+                  color: currentMonthCheck &&
+                          !dateAfterTodayCheck &&
+                          !dateBeforeFirstRecordCheck
+                      ? context.theme.colorScheme.onSecondaryContainer
+                      : context.theme.colorScheme.outlineVariant,
+                  fontWeight: currentMonthCheck &&
+                          !dateAfterTodayCheck &&
+                          !dateBeforeFirstRecordCheck &&
+                          todayCheck
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
               ),
             ),
-          ),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: gap,
+                  left: gap,
+                  right: gap,
+                ),
+                child: StreamBuilder(
+                    stream: NoteAnalysisService()
+                        .getAnalysisEntriesListOnDate(details.date),
+                    builder: (
+                      BuildContext context,
+                      AsyncSnapshot<List<AnalysisModel>>
+                          analysisModelListSnapshot,
+                    ) {
+                      Color? shapeColor;
+                      Color? textColor;
+                      double? dateSentiment;
+                      double? dateSentimentRatio;
+                      if (analysisModelListSnapshot.data != null &&
+                          analysisModelListSnapshot.data!.isNotEmpty) {
+                        // log(
+                        //   '${analysisModelListSnapshot.data}',
+                        //   name: 'analysisModelListSnapshot',
+                        // );
+                        List<AnalysisModel> analysisModelList =
+                            analysisModelListSnapshot.data!;
+                        if (analysisModelList.isNotEmpty) {
+                          dateSentiment = [
+                            for (AnalysisModel element in analysisModelList)
+                              element.sentiment!,
+                          ].average;
+                          dateSentimentRatio = getSentimentRatio(dateSentiment);
+                          shapeColor =
+                              getSentimentShapeColor(dateSentimentRatio);
+                          textColor = getSentimentTexColor(dateSentimentRatio);
+                        }
+                      }
+                      return AnimatedContainer(
+                        duration: standardDuration,
+                        curve: standardCurve,
+                        alignment: Alignment.center,
+                        decoration: details.appointments.isNotEmpty
+                            ? BoxDecoration(
+                                borderRadius: BorderRadius.circular(gap / 2),
+                                color: shapeColor ?? theme.colorScheme.primary,
+                              )
+                            : null,
+                        // : BoxDecoration(color: shapeColor),
+                        child: Text(
+                          '${details.appointments.length}',
+                          textAlign: TextAlign.center,
+                          style: context.theme.textTheme.titleMedium!.copyWith(
+                            color: textColor ?? theme.colorScheme.onPrimary,
+                            fontWeight: FontWeight.bold,
+                            textBaseline: TextBaseline.alphabetic,
+                          ),
+                        ),
+                      );
+                    }),
+              ),
+            )
+          ],
         ),
-        const Spacer(),
-        Padding(
-          padding: EdgeInsets.only(bottom: gap),
-          child: ClipOval(
-            child: StreamBuilder(
-                stream: NoteAnalysisService()
-                    .getAnalysisEntriesListOnDate(details.date),
-                builder: (
-                  BuildContext context,
-                  AsyncSnapshot<List<AnalysisModel>> analysisModelListSnapshot,
-                ) {
-                  Color? shapeColor;
-                  Color? textColor;
-                  double? dateSentiment;
-                  double? dateSentimentRatio;
-                  if (analysisModelListSnapshot.data != null &&
-                      analysisModelListSnapshot.data!.isNotEmpty) {
-                    log(
-                      '${analysisModelListSnapshot.data}',
-                      name: 'analysisModelListSnapshot',
-                    );
-                    List<AnalysisModel> analysisModelList =
-                        analysisModelListSnapshot.data!;
-                    if (analysisModelList.isNotEmpty) {
-                      dateSentiment = [
-                        for (AnalysisModel element in analysisModelList)
-                          element.sentiment!,
-                      ].average;
-                      dateSentimentRatio = getSentimentRatio(dateSentiment);
-                      shapeColor = getSentimentShapeColor(dateSentimentRatio);
-                      textColor = getSentimentTexColor(dateSentimentRatio);
-                    }
-                  }
-                  return AnimatedContainer(
-                    duration: standardDuration,
-                    curve: standardCurve,
-                    // height: shapeColor == null ? 0 : gap * 3,
-                    // width: shapeColor == null ? 0 : gap * 3,
-                    height: details.appointments.isNotEmpty ? gap * 3 : 0,
-                    width: details.appointments.isNotEmpty ? gap * 3 : 0,
-                    alignment: Alignment.center,
-                    decoration: details.appointments.isNotEmpty
-                        ? BoxDecoration(
-                            color: shapeColor ?? theme.colorScheme.primary)
-                        : null,
-                    // : BoxDecoration(color: shapeColor),
-                    child: Text(
-                      '${details.appointments.length}',
-                      textAlign: TextAlign.center,
-                      style: context.theme.textTheme.titleMedium!.copyWith(
-                        color: textColor ?? theme.colorScheme.onPrimary,
-                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
-                    ),
-                  );
-                }),
-          ),
-        )
-      ],
+      ),
     );
   }
 

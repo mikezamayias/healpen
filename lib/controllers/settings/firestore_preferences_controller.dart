@@ -14,14 +14,10 @@ class FirestorePreferencesController {
   /// Factory constructor to return the singleton instance.
   factory FirestorePreferencesController() => instance;
 
-  /// Firestore collection reference for storing preferences.
-  final _preferenceCollection =
-      FirestoreService.preferencesCollectionReference();
-
   /// Method to save a single preference to Firestore.
   Future<void> savePreference(PreferenceModel preferenceModel) async {
     // Update the Firestore document with the new preference.
-    await _preferenceCollection.update({
+    await FirestoreService.preferencesCollectionReference()!.update({
       preferenceModel.key: [ThemeColor, ThemeAppearance]
               .contains(preferenceModel.value.runtimeType)
           ? preferenceModel.value.toString()
@@ -37,25 +33,24 @@ class FirestorePreferencesController {
   }
 
   /// Method to get all preferences from Firestore.
-  Future<List<PreferenceModel>> getPreferences() async {
-    // Fetch preferences from Firestore.
-    final preferences = await _preferenceCollection.get();
+  Stream<List<PreferenceModel>>? getPreferences() {
+    if (FirestoreService.preferencesCollectionReference() == null) return null;
+    return FirestoreService.preferencesCollectionReference()!
+        .snapshots()
+        .map((snapshot) {
+      final Map<String, dynamic>? data = snapshot.data();
+      if (data == null) {
+        return [];
+      }
 
-    // Extract data into a Map.
-    final Map<String, dynamic>? data = preferences.data();
-    List<PreferenceModel> result = [];
-
-    // If data exists, convert and map it to a list of PreferenceModel.
-    if (data != null) {
-      result = data
+      return data
           .map((key, value) {
             var valueToSave = _convertValue(value);
             return MapEntry(key, PreferenceModel(key, valueToSave));
           })
           .values
           .toList();
-    }
-    return result;
+    });
   }
 
   /// Method to get a single preference from Firestore.
@@ -63,7 +58,8 @@ class FirestorePreferencesController {
     PreferenceModel<T> preferenceModel,
   ) async {
     // Fetch preferences from Firestore.
-    final preferences = await _preferenceCollection.get();
+    final preferences =
+        await FirestoreService.preferencesCollectionReference()!.get();
 
     // Extract data into a Map.
     final Map<String, dynamic>? data = preferences.data();

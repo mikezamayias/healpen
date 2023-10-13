@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
-import '../../../controllers/settings/firestore_preferences_controller.dart';
-import '../../../controllers/settings/preferences_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
@@ -26,9 +24,6 @@ class _OnboardingNavigationBarState
     ref
         .watch(OnboardingController().onboardingCompletedProvider.notifier)
         .state = true;
-    await FirestorePreferencesController().savePreference(
-        PreferencesController.onboardingCompleted.withValue(
-            ref.watch(OnboardingController().onboardingCompletedProvider)));
     navigator.pushReplacement(
       PageRouteBuilder(
         transitionDuration: emphasizedDuration,

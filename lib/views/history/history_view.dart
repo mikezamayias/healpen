@@ -68,61 +68,84 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                   if (i == 0 || i == sentimentLabels.length - 1)
                     sentimentLabels[i]
               ];
-              return Column(
-                children: [
-                  Expanded(
-                    child: CalendarTile(
-                      noteModels: HistoryViewController.notesToAnalyze,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(gap),
-                    height: gap,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(radius),
-                      gradient: LinearGradient(
-                        colors: <Color>[
-                          EmotionalEchoController.goodColor,
-                          EmotionalEchoController.badColor,
-                        ],
-                        begin: Alignment.centerRight,
-                        end: Alignment.centerLeft,
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(radius),
+                  color: context.theme.colorScheme.surfaceVariant,
+                ),
+                padding: EdgeInsets.all(gap),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: CalendarTile(
+                        noteModels: HistoryViewController.notesToAnalyze,
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: numScale.map(
-                      (String label) {
-                        return Text(
-                          label,
-                          style: context.theme.textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: getSentimentShapeColor(
-                              numScale.indexOf(label) / numScale.length,
+                    Gap(gap),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(radius - gap),
+                        color: context.theme.colorScheme.surface,
+                      ),
+                      padding: EdgeInsets.all(gap),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(gap),
+                            height: gap,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(radius),
+                              gradient: LinearGradient(
+                                colors: <Color>[
+                                  EmotionalEchoController.goodColor,
+                                  EmotionalEchoController.badColor,
+                                ],
+                                begin: Alignment.centerRight,
+                                end: Alignment.centerLeft,
+                              ),
                             ),
                           ),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: labelScale.map(
-                      (String label) {
-                        return Text(
-                          label,
-                          style: context.theme.textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: getSentimentShapeColor(
-                              labelScale.indexOf(label) / labelScale.length,
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: numScale.map(
+                              (String label) {
+                                return Text(
+                                  label,
+                                  style: context.theme.textTheme.bodyMedium!
+                                      .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: getSentimentShapeColor(
+                                      numScale.indexOf(label) / numScale.length,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ).toList(),
                           ),
-                        );
-                      },
-                    ).toList(),
-                  )
-                ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: labelScale.map(
+                              (String label) {
+                                return Text(
+                                  label,
+                                  style: context.theme.textTheme.bodyMedium!
+                                      .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: getSentimentShapeColor(
+                                      labelScale.indexOf(label) /
+                                          labelScale.length,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               );
             } else {
               return Column(

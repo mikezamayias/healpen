@@ -22,7 +22,7 @@ class HistoryViewController {
       noteModels.where((element) => !element.isPrivate).toList();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
-      FirestoreService.writingCollectionReference()
+      FirestoreService.writingCollectionReference()!
           .orderBy('timestamp', descending: true)
           // .limit(10)
           .snapshots(includeMetadataChanges: true);
@@ -31,7 +31,7 @@ class HistoryViewController {
   Query<Map<String, dynamic>> getNoteEntriesListOnDate(
     DateTime date,
   ) {
-    return FirestoreService.analysisCollectionReference()
+    return FirestoreService.analysisCollectionReference()!
         .orderBy('timestamp', descending: true)
         .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
         .where('timestamp',
@@ -53,10 +53,10 @@ class HistoryViewController {
   Future<void> deleteNote({
     required NoteModel noteModel,
   }) async {
-    await FirestoreService.writingCollectionReference()
+    await FirestoreService.writingCollectionReference()!
         .doc(noteModel.timestamp.toString())
         .delete();
-    await FirestoreService.analysisCollectionReference()
+    await FirestoreService.analysisCollectionReference()!
         .doc(noteModel.timestamp.toString())
         .delete();
   }
@@ -64,7 +64,7 @@ class HistoryViewController {
   Future<void> noteToggleFavorite({
     required NoteModel noteModel,
   }) async {
-    await FirestoreService.writingCollectionReference()
+    await FirestoreService.writingCollectionReference()!
         .doc(noteModel.timestamp.toString())
         .update({
       'isFavorite': !noteModel.isFavorite,
@@ -74,7 +74,7 @@ class HistoryViewController {
   Future<void> noteTogglePrivate({
     required NoteModel noteModel,
   }) async {
-    await FirestoreService.writingCollectionReference()
+    await FirestoreService.writingCollectionReference()!
         .doc(noteModel.timestamp.toString())
         .update({
       'isPrivate': !noteModel.isPrivate,
