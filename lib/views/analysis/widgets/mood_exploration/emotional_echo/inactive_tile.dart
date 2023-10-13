@@ -9,6 +9,7 @@ import '../../../../../utils/helper_functions.dart';
 
 class EmotionalEchoInactiveTile extends ConsumerWidget {
   const EmotionalEchoInactiveTile({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Stack(
@@ -49,10 +50,13 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
                 child: Opacity(
                   opacity: value,
                   child: Text(
-                    getSentimentLabel(EmotionalEchoController.sentiment),
+                    getSentimentLabel(EmotionalEchoController.sentimentRatio)
+                        .split(' ')
+                        .join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(
                       color: EmotionalEchoController.textColor,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               );
