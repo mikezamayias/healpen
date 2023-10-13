@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
@@ -25,8 +26,9 @@ class InfoButtonSettingsTile extends ConsumerWidget {
         onChanged: (value) {
           vibrate(ref.watch(navigationShowInfoButtonsProvider), () async {
             ref.read(navigationShowInfoButtonsProvider.notifier).state = value;
-            await PreferencesController.navigationShowInfoButtons
-                .write(ref.watch(navigationShowInfoButtonsProvider));
+            await FirestorePreferencesController.instance.savePreference(
+                PreferencesController.navigationShowInfoButtons
+                    .withValue(ref.watch(navigationShowInfoButtonsProvider)));
             log(
               '${ref.watch(navigationShowInfoButtonsProvider)}',
               name: 'InfoButtonSettingsTile',

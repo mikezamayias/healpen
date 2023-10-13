@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
@@ -26,8 +27,10 @@ class EnableAutomaticStopwatchTile extends ConsumerWidget {
         onChanged: (value) {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
             ref.read(writingAutomaticStopwatchProvider.notifier).state = value;
-            await PreferencesController.writingAutomaticStopwatch
-                .write(ref.watch(writingAutomaticStopwatchProvider));
+            await FirestorePreferencesController.instance.savePreference(
+              PreferencesController.writingAutomaticStopwatch
+                  .withValue(ref.watch(writingAutomaticStopwatchProvider)),
+            );
             log(
               '${ref.watch(writingAutomaticStopwatchProvider)}',
               name: 'SettingsWritingView:writingResetStopwatchOnEmpty',

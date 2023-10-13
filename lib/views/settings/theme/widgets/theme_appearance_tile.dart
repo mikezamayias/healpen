@@ -4,6 +4,7 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
@@ -41,8 +42,9 @@ class ThemeAppearanceTile extends ConsumerWidget {
               '${newSelection.first}',
               name: 'Settings: ThemeAppearanceTile',
             );
-            PreferencesController.themeAppearance
-                .write(ref.watch(themeAppearanceProvider))
+            FirestorePreferencesController.instance
+                .savePreference(PreferencesController.themeAppearance
+                    .withValue(ref.watch(themeAppearanceProvider)))
                 .whenComplete(() {
               getSystemUIOverlayStyle(
                 context.theme,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
 import '../../../controllers/writing_controller.dart';
 import '../../../providers/settings_providers.dart';
@@ -28,13 +29,17 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           : FontAwesomeIcons.lock,
       leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
           ? () {
-              vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+              vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
+                  () async {
                 ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
-                PreferencesController.shakePrivateNoteInfo
-                    .write(ref.watch(shakePrivateNoteInfoProvider));
-                showHealpenDialog(
-                  context: context,
-                  doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+                await FirestorePreferencesController().savePreference(
+                  PreferencesController.shakePrivateNoteInfo
+                      .withValue(ref.watch(shakePrivateNoteInfoProvider)),
+                );
+                if (context.mounted) {
+                  showHealpenDialog(
+                    context: context,
+                    doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
                   customDialog: CustomDialog(
                     titleString: 'Private note',
                     contentString:
@@ -51,20 +56,27 @@ class PrivateNoteCheckBox extends ConsumerWidget {
                         onTap: () {
                           vibrate(
                             ref.watch(navigationEnableHapticFeedbackProvider),
-                            () {
-                              ref
-                                  .watch(shakePrivateNoteInfoProvider.notifier)
+                              () async {
+                                ref
+                                    .watch(shakePrivateNoteInfoProvider.notifier)
                                   .state = false;
-                              PreferencesController.shakePrivateNoteInfo.write(
-                                  ref.watch(shakePrivateNoteInfoProvider));
-                              context.navigator.pop();
-                            },
-                          );
+                                await FirestorePreferencesController()
+                                    .savePreference(
+                                  PreferencesController.shakePrivateNoteInfo
+                                      .withValue(ref
+                                          .watch(shakePrivateNoteInfoProvider)),
+                                );
+                                if (context.mounted) {
+                                  context.navigator.pop();
+                                }
+                              },
+                            );
                         },
                       )
                     ],
                   ),
                 );
+                }
               });
             }
           : null,

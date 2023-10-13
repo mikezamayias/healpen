@@ -101,14 +101,4 @@ class PreferencesController {
       provider: OnboardingController().onboardingCompletedProvider
     ),
   ];
-
-  /// Reset all preferences
-  Future<void> resetAll() async {
-    for (({PreferenceModel preferenceModel, StateProvider provider}) element
-        in preferences) {
-      await element.preferenceModel.reset();
-      ProviderContainer().read(element.provider).state =
-          element.preferenceModel.value;
-    }
-  }
 }

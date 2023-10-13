@@ -19,7 +19,7 @@ class FirestorePreferencesController {
       FirestoreService.preferencesCollectionReference();
 
   /// Method to save a single preference to Firestore.
-  Future<void> savePreference<T>(PreferenceModel<T> preferenceModel) async {
+  Future<void> savePreference(PreferenceModel preferenceModel) async {
     // Update the Firestore document with the new preference.
     await _preferenceCollection.update({
       preferenceModel.key: [ThemeColor, ThemeAppearance]
@@ -56,6 +56,24 @@ class FirestorePreferencesController {
           .toList();
     }
     return result;
+  }
+
+  /// Method to get a single preference from Firestore.
+  Future<PreferenceModel?> getPreference<T>(
+    PreferenceModel<T> preferenceModel,
+  ) async {
+    // Fetch preferences from Firestore.
+    final preferences = await _preferenceCollection.get();
+
+    // Extract data into a Map.
+    final Map<String, dynamic>? data = preferences.data();
+
+    // If data exists, convert and map it to a list of PreferenceModel.
+    if (data != null) {
+      var valueToSave = _convertValue(data[preferenceModel.key]);
+      return PreferenceModel(preferenceModel.key, valueToSave);
+    }
+    return null;
   }
 
   /// Utility method to convert Firestore values into the appropriate Dart

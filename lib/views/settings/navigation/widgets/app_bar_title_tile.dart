@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
@@ -27,8 +28,9 @@ class AppBarTitleTitle extends ConsumerWidget {
         onChanged: (value) {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
             ref.read(navigationShowAppBarTitleProvider.notifier).state = value;
-            await PreferencesController.navigationShowAppBarTitle
-                .write(ref.watch(navigationShowAppBarTitleProvider));
+            await FirestorePreferencesController.instance.savePreference(
+                PreferencesController.navigationShowAppBarTitle
+                    .withValue(ref.watch(navigationShowAppBarTitleProvider)));
             log(
               '${ref.watch(navigationShowAppBarTitleProvider)}',
               name: 'SettingsView:ShowAppBarTitle',

@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
@@ -26,8 +27,9 @@ class HapticFeedbackSettingsTile extends ConsumerWidget {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
             ref.read(navigationEnableHapticFeedbackProvider.notifier).state =
                 value;
-            await PreferencesController.navigationEnableHapticFeedback
-                .write(ref.watch(navigationEnableHapticFeedbackProvider));
+            await FirestorePreferencesController.instance.savePreference(
+                PreferencesController.navigationEnableHapticFeedback.withValue(
+                    ref.watch(navigationEnableHapticFeedbackProvider)));
             log(
               '${ref.watch(navigationEnableHapticFeedbackProvider)}',
               name: 'HapticFeedbackSettingsTile',

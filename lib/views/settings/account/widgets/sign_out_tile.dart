@@ -9,7 +9,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../../controllers/page_controller.dart';
-import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/page_providers.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
@@ -63,7 +62,6 @@ class SignOutTile extends ConsumerWidget {
                 .read(
                     OnboardingController().onboardingCompletedProvider.notifier)
                 .state = false;
-            await PreferencesController().resetAll();
             vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
               Iterum.revive(context);
             });
