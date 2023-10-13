@@ -12,6 +12,13 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    List<String> labels = [
+      ...sentimentLabels.map(
+        (String label) {
+          return '${sentimentValues[sentimentLabels.indexOf(label)]}, $label';
+        },
+      )
+    ];
     return Stack(
       children: <Widget>[
         AnimatedPositioned(
@@ -59,26 +66,21 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      ...sentimentLabels
-                          .map(
-                            (String label) => Text(
-                              label,
-                              style:
-                                  context.theme.textTheme.bodyMedium!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Color.lerp(
-                                  EmotionalEchoController.badColor,
-                                  EmotionalEchoController.goodColor,
-                                  sentimentLabels.indexOf(label) /
-                                      sentimentLabels.length,
-                                )!,
-                              ),
-                            ),
-                          )
-                          .toList()
-                          .reversed,
-                    ],
+                    children: labels.reversed.map(
+                      (String label) {
+                        return Text(
+                          label,
+                          style: context.theme.textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Color.lerp(
+                              EmotionalEchoController.badColor,
+                              EmotionalEchoController.goodColor,
+                              labels.indexOf(label) / labels.length,
+                            )!,
+                          ),
+                        );
+                      },
+                    ).toList(),
                   ),
                 ),
               ],
