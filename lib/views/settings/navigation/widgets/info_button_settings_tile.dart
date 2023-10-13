@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
-import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
@@ -21,19 +20,37 @@ class InfoButtonSettingsTile extends ConsumerWidget {
       explanationString:
           'Shows an info button on the top left corner of many elements',
       enableExplanationWrapper: true,
-      trailing: Switch(
-        value: ref.watch(navigationShowInfoButtonsProvider),
-        onChanged: (value) {
-          vibrate(ref.watch(navigationShowInfoButtonsProvider), () async {
-            ref.read(navigationShowInfoButtonsProvider.notifier).state = value;
-            await FirestorePreferencesController.instance.savePreference(
-                PreferencesController.navigationShowInfoButtons
-                    .withValue(ref.watch(navigationShowInfoButtonsProvider)));
+      trailing: StreamBuilder(
+        stream: FirestorePreferencesController()
+            .getPreference(PreferencesController.navigationShowInfoButtons),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
             log(
-              '${ref.watch(navigationShowInfoButtonsProvider)}',
+              'StreamBuilder Error: ${snapshot.error}',
               name: 'InfoButtonSettingsTile',
             );
-          });
+          }
+          if (snapshot.hasData) {
+            PreferencesController.navigationShowInfoButtons.value =
+                snapshot.data!.value;
+          }
+          return Switch(
+            value: PreferencesController.navigationShowInfoButtons.value,
+            onChanged: (value) {
+              vibrate(
+                  PreferencesController.navigationEnableHapticFeedback.value, () async {
+                PreferencesController.navigationShowInfoButtons.value =
+                    value;
+                await FirestorePreferencesController.instance.savePreference(
+                    PreferencesController.navigationShowInfoButtons.withValue(
+                        PreferencesController.navigationShowInfoButtons.value));
+                log(
+                  '${PreferencesController.navigationShowInfoButtons.value}',
+                  name: 'InfoButtonSettingsTile',
+                );
+              });
+            },
+          );
         },
       ),
     );

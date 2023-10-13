@@ -5,8 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/feedback/feedback.dart';
 import '../../../controllers/feedback/github_api.dart';
+import '../../../controllers/settings/preferences_controller.dart';
 import '../../../env/env.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -32,7 +32,7 @@ class FeedbackFormActions extends ConsumerWidget {
           titleString: 'Submit',
           onTap: () {
             vibrate(
-              ref.read(navigationEnableHapticFeedbackProvider),
+              PreferencesController.navigationShowInfoButtons.value,
               () async {
                 if (formKey.currentState!.validate()) {
                   formKey.currentState!.save();
@@ -57,8 +57,8 @@ class FeedbackFormActions extends ConsumerWidget {
                       feedbackController.cleanUp();
                       CustomSnackBar(
                         SnackBarConfig(
-                          vibrate:
-                              ref.watch(navigationEnableHapticFeedbackProvider),
+                          vibrate: PreferencesController
+                              .navigationEnableHapticFeedback.value,
                           titleString1: 'Thank you for your feedback!',
                           leadingIconData1: FontAwesomeIcons.solidPaperPlane,
                         ),
@@ -70,8 +70,8 @@ class FeedbackFormActions extends ConsumerWidget {
                     (Object error) {
                       CustomSnackBar(
                         SnackBarConfig(
-                          vibrate:
-                              ref.watch(navigationEnableHapticFeedbackProvider),
+                          vibrate: PreferencesController
+                              .navigationEnableHapticFeedback.value,
                           titleString1: 'Something went wrong',
                           leadingIconData1: FontAwesomeIcons.circleExclamation,
                           titleString2: error.toString(),
@@ -86,8 +86,8 @@ class FeedbackFormActions extends ConsumerWidget {
                   // show an error text using labelsController and form key
                   await CustomSnackBar(
                     SnackBarConfig(
-                      vibrate:
-                          ref.watch(navigationEnableHapticFeedbackProvider),
+                      vibrate: PreferencesController
+                          .navigationEnableHapticFeedback.value,
                       snackBarMargin: EdgeInsets.zero,
                       titleString1: 'Please fill in all fields',
                       leadingIconData1: FontAwesomeIcons.circleExclamation,
@@ -104,11 +104,12 @@ class FeedbackFormActions extends ConsumerWidget {
           leadingIconData: FontAwesomeIcons.xmark,
           titleString: 'Cancel',
           onTap: () {
-            vibrate(ref.read(navigationEnableHapticFeedbackProvider), () {
+            vibrate(PreferencesController.navigationShowInfoButtons.value, () {
               feedbackController.cleanUp();
               CustomSnackBar(
                 SnackBarConfig(
-                  vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+                  vibrate: PreferencesController
+                      .navigationEnableHapticFeedback.value,
                   titleString1: 'We appreciate any feedback!',
                   leadingIconData1: FontAwesomeIcons.solidCompass,
                 ),

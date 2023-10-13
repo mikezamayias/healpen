@@ -1,9 +1,5 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../enums/app_theming.dart';
 import '../../models/settings/preference_model.dart';
-import '../../providers/settings_providers.dart';
-import '../onboarding/onboarding_controller.dart';
 
 class PreferencesController {
   /// Singleton instance
@@ -57,48 +53,13 @@ class PreferencesController {
     true,
   );
 
-  // Map<String, dynamic> preferences = {
-  //   shakePrivateNoteInfo.key: shakePrivateNoteInfo.value,
-  //   writingShowAnalyzeNotesButton.key: writingShowAnalyzeNotesButton.value,
-  //   writingAutomaticStopwatch.key: writingAutomaticStopwatch.value,
-  //   navigationShowAppBarTitle.key: navigationShowAppBarTitle.value,
-  //   navigationShowBackButton.key: navigationShowBackButton.value,
-  //   navigationEnableHapticFeedback.key: navigationEnableHapticFeedback.value,
-  //   themeColor.key: themeColor.value,
-  //   themeAppearance.key: themeAppearance.value,
-  //   onboardingCompleted.key: onboardingCompleted.value,
-  // };
-  List<({PreferenceModel preferenceModel, StateProvider provider})>
-      preferences = [
-    (
-      preferenceModel: shakePrivateNoteInfo,
-      provider: shakePrivateNoteInfoProvider
-    ),
-    (
-      preferenceModel: writingShowAnalyzeNotesButton,
-      provider: writingShowAnalyzeNotesButtonProvider
-    ),
-    (
-      preferenceModel: writingAutomaticStopwatch,
-      provider: writingAutomaticStopwatchProvider
-    ),
-    (
-      preferenceModel: navigationShowAppBarTitle,
-      provider: navigationShowAppBarTitleProvider
-    ),
-    (
-      preferenceModel: navigationShowBackButton,
-      provider: navigationShowBackButtonProvider
-    ),
-    (
-      preferenceModel: navigationEnableHapticFeedback,
-      provider: navigationEnableHapticFeedbackProvider
-    ),
-    (preferenceModel: themeColor, provider: themeColorProvider),
-    (preferenceModel: themeAppearance, provider: themeAppearanceProvider),
-    (
-      preferenceModel: onboardingCompleted,
-      provider: OnboardingController().onboardingCompletedProvider
-    ),
+  List<({PreferenceModel preferenceModel})> preferences = [
+    (preferenceModel: shakePrivateNoteInfo,),
+    (preferenceModel: writingShowAnalyzeNotesButton,),
+    (preferenceModel: writingAutomaticStopwatch,),
+    (preferenceModel: navigationShowAppBarTitle,),
+    (preferenceModel: navigationShowBackButton,),
+    (preferenceModel: navigationEnableHapticFeedback,),
+    (preferenceModel: onboardingCompleted,),
   ];
 }

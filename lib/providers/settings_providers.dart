@@ -51,16 +51,12 @@ final navigationShowBackButtonProvider = StateProvider<bool>(
 /// Whether to show info buttons in the app.
 /// When set to true, the app will show info buttons.
 /// When set to false, the app will hide info buttons.
-final navigationShowInfoButtonsProvider = StateProvider<bool>(
-  (ref) => PreferencesController.navigationShowInfoButtons.value,
-);
+
 
 /// Whether to reduce the amount of haptic feedback in the app.
 /// When set to true, the app will enable haptic feedback.
 /// When set to false, the app will disable haptic feedback.
-final navigationEnableHapticFeedbackProvider = StateProvider<bool>(
-  (ref) => PreferencesController.navigationEnableHapticFeedback.value,
-);
+
 
 /// Whether to hide the app bar title.
 /// When set to true, the app bar title will be hidden.

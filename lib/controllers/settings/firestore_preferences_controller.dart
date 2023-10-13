@@ -54,22 +54,19 @@ class FirestorePreferencesController {
   }
 
   /// Method to get a single preference from Firestore.
-  Future<PreferenceModel?> getPreference<T>(
+  Stream<PreferenceModel?> getPreference<T>(
     PreferenceModel<T> preferenceModel,
-  ) async {
-    // Fetch preferences from Firestore.
-    final preferences =
-        await FirestoreService.preferencesCollectionReference()!.get();
-
-    // Extract data into a Map.
-    final Map<String, dynamic>? data = preferences.data();
-
-    // If data exists, convert and map it to a list of PreferenceModel.
-    if (data != null) {
-      var valueToSave = _convertValue(data[preferenceModel.key]);
-      return PreferenceModel(preferenceModel.key, valueToSave);
-    }
-    return null;
+  ) {
+    return FirestoreService.preferencesCollectionReference()!
+        .snapshots()
+        .map((snapshot) {
+      final Map<String, dynamic>? data = snapshot.data();
+      if (data != null) {
+        var valueToSave = _convertValue(data[preferenceModel.key]);
+        return PreferenceModel(preferenceModel.key, valueToSave);
+      }
+      return null;
+    });
   }
 
   /// Utility method to convert Firestore values into the appropriate Dart

@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../controllers/settings/firestore_preferences_controller.dart';
@@ -29,7 +28,6 @@ class SaveSettingsToCloudTile extends StatelessWidget {
         );
         for (({
           PreferenceModel preferenceModel,
-          StateProvider provider
         }) preferencePattern in PreferencesController().preferences) {
           log(
             '${preferencePattern.preferenceModel.key}: '

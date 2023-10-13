@@ -8,7 +8,6 @@ import 'package:googleapis/language/v1.dart';
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
 import 'note_analyzer.dart';
-import 'settings/firestore_preferences_controller.dart';
 import 'settings/preferences_controller.dart';
 
 int timeWindow = 3;
@@ -61,10 +60,8 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   void _startTimer() async {
-    bool automaticStopwatch = (await FirestorePreferencesController()
-            .getPreference(PreferencesController.writingAutomaticStopwatch))!
-        .value;
-    // Read the automatic stopwatch preference
+    bool automaticStopwatch =
+        PreferencesController.writingAutomaticStopwatch.value;
     _stopwatch.start();
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       state = state.copyWith(duration: _stopwatch.elapsed.inSeconds);
@@ -94,9 +91,8 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   Future<void> handleSaveNote() async {
-    bool automaticStopwatch = (await FirestorePreferencesController()
-            .getPreference(PreferencesController.writingAutomaticStopwatch))!
-        .value;
+    bool automaticStopwatch =
+        PreferencesController.writingAutomaticStopwatch.value;
     // Read
     // the automatic stopwatch
     // preference

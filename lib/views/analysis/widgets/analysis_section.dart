@@ -4,9 +4,9 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
+import '../../../controllers/settings/preferences_controller.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -65,18 +65,20 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                 dotColor: context.theme.colorScheme.outline,
               ),
             ),
-            leadingIconData: ref.watch(navigationShowInfoButtonsProvider)
-                ? FontAwesomeIcons.circleInfo
-                : null,
-            leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
+            leadingIconData:
+                PreferencesController.navigationShowInfoButtons.value
+                    ? FontAwesomeIcons.circleInfo
+                    : null,
+            leadingOnTap: PreferencesController.navigationShowInfoButtons.value
                 ? () {
                     vibrate(
-                      ref.watch(navigationEnableHapticFeedbackProvider),
+                      PreferencesController
+                          .navigationEnableHapticFeedback.value,
                       () {
                         showHealpenDialog(
                           context: context,
-                          doVibrate:
-                              ref.watch(navigationEnableHapticFeedbackProvider),
+                          doVibrate: PreferencesController
+                              .navigationEnableHapticFeedback.value,
                           customDialog: CustomDialog(
                             titleString:
                                 widget.tileData[currentPage].titleString,
@@ -104,7 +106,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                 controller: pageController,
                 onPageChanged: (int index) {
                   vibrate(
-                    ref.watch(navigationEnableHapticFeedbackProvider),
+                    PreferencesController.navigationEnableHapticFeedback.value,
                     () {
                       setState(() {
                         currentPage = index;

@@ -6,7 +6,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprung/sprung.dart';
 
-import '../providers/settings_providers.dart';
+import '../controllers/settings/preferences_controller.dart';
 import '../utils/constants.dart';
 
 class CustomListTile extends ConsumerWidget {
@@ -110,8 +110,8 @@ class CustomListTile extends ConsumerWidget {
                             : null,
                         onInit: showcaseLeadingIcon!
                             ? (_) async {
-                                if (!ref.watch(
-                                    navigationEnableHapticFeedbackProvider)) {
+                                if (!PreferencesController
+                                    .navigationShowInfoButtons.value) {
                                   await Future.delayed(
                                     1.seconds,
                                     HapticFeedback.vibrate,

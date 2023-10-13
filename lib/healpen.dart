@@ -49,11 +49,15 @@ class Healpen extends ConsumerWidget {
                 for (var p in fetchedPreferences) p.key: p.value
               };
 
-              for (var preferenceTuple in PreferencesController().preferences) {
+              for (({PreferenceModel preferenceModel}) preferenceTuple
+                  in PreferencesController().preferences) {
                 var key = preferenceTuple.preferenceModel.key;
                 if (fetchedPreferenceMap.containsKey(key)) {
-                  ref.read(preferenceTuple.provider.notifier).state =
-                      fetchedPreferenceMap[key];
+                  // ref.read(preferenceTuple.provider.notifier).state =
+                  //     fetchedPreferenceMap[key];
+                  preferenceTuple.preferenceModel.withValue(
+                    fetchedPreferenceMap[key],
+                  );
                   // log(
                   //   'Updating ${preferenceTuple.preferenceModel.key} '
                   //   'with value: ${fetchedPreferenceMap[key]}',
@@ -83,7 +87,9 @@ class Healpen extends ConsumerWidget {
               controller: ref.watch(HealpenController().pageControllerProvider),
               physics: const NeverScrollableScrollPhysics(),
               onPageChanged: (value) {
-                vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+                vibrate(
+                    PreferencesController.navigationEnableHapticFeedback.value,
+                    () {
                   ref
                       .watch(
                           HealpenController().currentPageIndexProvider.notifier)

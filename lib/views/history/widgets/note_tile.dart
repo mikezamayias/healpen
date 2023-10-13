@@ -6,9 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 import '../../../controllers/history_view_controller.dart';
+import '../../../controllers/settings/preferences_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../services/firestore_service.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
@@ -42,7 +42,7 @@ class NoteTile extends ConsumerWidget {
       ),
       onTap: () {
         vibrate(
-          ref.watch(navigationEnableHapticFeedbackProvider),
+          PreferencesController.navigationEnableHapticFeedback.value,
           () async {
             NoteModel noteEntry = NoteModel.fromJson(
               (await FirestoreService.getNote(entry.timestamp)).data()!,
@@ -85,8 +85,8 @@ class NoteTile extends ConsumerWidget {
                 onPressed: (context) {
                   showHealpenDialog(
                     context: context,
-                    doVibrate:
-                        ref.watch(navigationEnableHapticFeedbackProvider),
+                    doVibrate: PreferencesController
+                        .navigationEnableHapticFeedback.value,
                     customDialog: CustomDialog(
                       titleString: 'Delete note?',
                       contentString: 'You cannot undo this action.',
@@ -103,7 +103,8 @@ class NoteTile extends ConsumerWidget {
                           textColor: context.theme.colorScheme.onError,
                           onTap: () {
                             vibrate(
-                              ref.watch(navigationEnableHapticFeedbackProvider),
+                              PreferencesController
+                                  .navigationEnableHapticFeedback.value,
                               () {
                                 Navigator.pop(navigatorKey.currentContext!);
                                 HistoryViewController()
@@ -122,7 +123,8 @@ class NoteTile extends ConsumerWidget {
                           titleString: 'Go back',
                           onTap: () {
                             vibrate(
-                              ref.watch(navigationEnableHapticFeedbackProvider),
+                              PreferencesController
+                                  .navigationEnableHapticFeedback.value,
                               () {
                                 Navigator.pop(navigatorKey.currentContext!);
                               },

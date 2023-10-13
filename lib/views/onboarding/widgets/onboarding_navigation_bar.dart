@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
-import '../../../providers/settings_providers.dart';
+import '../../../controllers/settings/preferences_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../auth/auth_view.dart';
@@ -65,7 +65,7 @@ class _OnboardingNavigationBarState
             onTap: () {
               if (currentPageIndex == 0) {
                 vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
+                  PreferencesController.navigationEnableHapticFeedback.value,
                   goToAuth,
                 );
               } else {
@@ -85,7 +85,7 @@ class _OnboardingNavigationBarState
             onTap: () {
               if (currentPageIndex == onboardingViewsLength) {
                 vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
+                  PreferencesController.navigationEnableHapticFeedback.value,
                   goToAuth,
                 );
               } else {

@@ -9,8 +9,8 @@ import 'package:restart_app/restart_app.dart';
 
 import '../../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../../controllers/page_controller.dart';
+import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/page_providers.dart';
-import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
@@ -46,7 +46,8 @@ class SignOutTile extends ConsumerWidget {
                 .read(
                     OnboardingController().onboardingCompletedProvider.notifier)
                 .state = false;
-            vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+            vibrate(PreferencesController.navigationEnableHapticFeedback.value,
+                () {
               Restart.restartApp();
             });
           },

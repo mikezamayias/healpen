@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../controllers/analysis_view_controller.dart';
 import '../../../../controllers/emotional_echo_controller.dart';
+import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../models/analysis/analysis_model.dart';
-import '../../../../providers/settings_providers.dart';
 import '../../../../utils/helper_functions.dart';
 import 'emotional_echo/active_tile.dart';
 
@@ -31,13 +31,13 @@ class EmotionalEchoTile extends ConsumerWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onLongPress: () {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+        vibrate(PreferencesController.navigationEnableHapticFeedback.value, () {
           ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
               true;
         });
       },
       onLongPressEnd: (_) {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+        vibrate(PreferencesController.navigationEnableHapticFeedback.value, () {
           ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
               false;
         });

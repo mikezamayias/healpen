@@ -9,10 +9,10 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../controllers/history_view_controller.dart';
+import '../../../controllers/settings/preferences_controller.dart';
 import '../../../extensions/int_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
@@ -214,7 +214,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   ) {
     showHealpenDialog(
       context: context,
-      doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+      doVibrate: PreferencesController.navigationEnableHapticFeedback.value,
       customDialog: CustomDialog(
         titleString: DateFormat('EEE d MMM yyyy').format(details.date!),
         enableContentContainer: false,

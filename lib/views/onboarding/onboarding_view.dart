@@ -6,7 +6,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
-import '../../providers/settings_providers.dart';
+import '../../controllers/settings/preferences_controller.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 import '../blueprint/blueprint_view.dart';
@@ -32,8 +32,9 @@ class OnboardingView extends ConsumerWidget {
                 physics: const BouncingScrollPhysics(),
                 itemCount: OnboardingController().onboardingScreenViews.length,
                 onPageChanged: (value) {
-                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
-                      () {
+                  vibrate(
+                      PreferencesController
+                          .navigationEnableHapticFeedback.value, () {
                     ref
                         .watch(OnboardingController()
                             .currentPageIndexProvider
