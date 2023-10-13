@@ -128,14 +128,14 @@ double combinedSentimentValue(double magnitude, double score) {
 
 /// Gets the sentiment label based on the given sentiment value.
 String getSentimentLabel(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
+  final index = sentimentValues.indexOf(sentiment.clamp(-5, 5).toInt());
   final label = sentimentLabels[index];
   return label;
 }
 
 /// Gets the sentiment icon based on the given sentiment value.
 IconData getSentimentIcon(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
+  final index = sentimentValues.indexOf(sentiment.clamp(-5, 5).toInt());
   final icon = sentimentIcons[index];
   return icon;
 }
