@@ -121,54 +121,49 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
               ),
             ),
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(
-                  bottom: gap,
-                  left: gap,
-                  right: gap,
-                ),
-                child: StreamBuilder(
-                    stream: NoteAnalysisService()
-                        .getAnalysisEntriesListOnDate(details.date),
-                    builder: (
-                      BuildContext context,
-                      AsyncSnapshot<List<AnalysisModel>>
-                          analysisModelListSnapshot,
-                    ) {
-                      Color? shapeColor;
-                      Color? textColor;
-                      double? dateSentiment;
-                      double? dateSentimentRatio;
-                      if (analysisModelListSnapshot.data != null &&
-                          analysisModelListSnapshot.data!.isNotEmpty) {
-                        // log(
-                        //   '${analysisModelListSnapshot.data}',
-                        //   name: 'analysisModelListSnapshot',
-                        // );
-                        List<AnalysisModel> analysisModelList =
-                            analysisModelListSnapshot.data!;
-                        if (analysisModelList.isNotEmpty) {
-                          dateSentiment = [
-                            for (AnalysisModel element in analysisModelList)
-                              element.sentiment!,
-                          ].average;
-                          dateSentimentRatio = getSentimentRatio(dateSentiment);
-                          shapeColor =
-                              getSentimentShapeColor(dateSentimentRatio);
-                          textColor = getSentimentTexColor(dateSentimentRatio);
-                        }
+              child: StreamBuilder(
+                  stream: NoteAnalysisService()
+                      .getAnalysisEntriesListOnDate(details.date),
+                  builder: (
+                    BuildContext context,
+                    AsyncSnapshot<List<AnalysisModel>>
+                        analysisModelListSnapshot,
+                  ) {
+                    Color? shapeColor;
+                    Color? textColor;
+                    double? dateSentiment;
+                    double? dateSentimentRatio;
+                    if (analysisModelListSnapshot.data != null &&
+                        analysisModelListSnapshot.data!.isNotEmpty) {
+                      // log(
+                      //   '${analysisModelListSnapshot.data}',
+                      //   name: 'analysisModelListSnapshot',
+                      // );
+                      List<AnalysisModel> analysisModelList =
+                          analysisModelListSnapshot.data!;
+                      if (analysisModelList.isNotEmpty) {
+                        dateSentiment = [
+                          for (AnalysisModel element in analysisModelList)
+                            element.sentiment!,
+                        ].average;
+                        dateSentimentRatio = getSentimentRatio(dateSentiment);
+                        shapeColor = getSentimentShapeColor(dateSentimentRatio);
+                        textColor = getSentimentTexColor(dateSentimentRatio);
                       }
-                      return AnimatedContainer(
+                    }
+                    return Visibility(
+                      visible: details.appointments.isNotEmpty,
+                      child: AnimatedContainer(
                         duration: standardDuration,
                         curve: standardCurve,
                         alignment: Alignment.center,
                         decoration: details.appointments.isNotEmpty
                             ? BoxDecoration(
-                                borderRadius: BorderRadius.circular(gap / 2),
+                                borderRadius:
+                                    BorderRadius.circular(radius - gap / 2),
                                 color: shapeColor ?? theme.colorScheme.primary,
                               )
                             : null,
-                        // : BoxDecoration(color: shapeColor),
                         child: Text(
                           '${details.appointments.length}',
                           textAlign: TextAlign.center,
@@ -178,9 +173,9 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                             textBaseline: TextBaseline.alphabetic,
                           ),
                         ),
-                      );
-                    }),
-              ),
+                      ),
+                    );
+                  }),
             )
           ],
         ),
