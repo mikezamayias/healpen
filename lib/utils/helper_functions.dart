@@ -128,7 +128,7 @@ double combinedSentimentValue(double magnitude, double score) {
 
 /// Gets the sentiment label based on the given sentiment value.
 String getSentimentLabel(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.clamp(-5, 5).toInt());
+  final index = sentimentValues.indexOf(sentiment.round().clamp(-5, 5).toInt());
   final label = sentimentLabels[index];
   return label;
 }
@@ -142,7 +142,9 @@ IconData getSentimentIcon(double sentiment) {
 
 /// Get sentiment ratio based on the given sentiment value.
 double getSentimentRatio(double sentiment) {
-  return sentiment + 3 / sentimentValues.length;
+  return double.parse(
+    (sentiment + 3 / sentimentValues.length).toStringAsFixed(2),
+  );
 }
 
 /// Get shape color based on the given sentiment ratio value.
