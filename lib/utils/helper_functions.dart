@@ -126,18 +126,40 @@ double combinedSentimentValue(double magnitude, double score) {
   return clippedResult;
 }
 
-/// Gets the sentiment label based on the given sentiment value.
-String getSentimentLabel(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.round().clamp(-5, 5).toInt());
-  final label = sentimentLabels[index];
-  return label;
+int getClosestSentimentIndex(double sentiment) {
+  // Round and clamp the sentiment value
+  int roundedClampedSentiment = sentiment.round().clamp(-5, 5).toInt();
+
+  // Try to find the index in the sentimentValues list
+  int index = sentimentValues.indexOf(roundedClampedSentiment);
+
+  if (index != -1) {
+    return index;
+  }
+
+  // If the exact index is not found, find the closest one
+  index = 0;
+  int minDiff = (sentimentValues[0] - roundedClampedSentiment).abs();
+
+  for (int i = 1; i < sentimentValues.length; i++) {
+    int diff = (sentimentValues[i] - roundedClampedSentiment).abs();
+    if (diff < minDiff) {
+      index = i;
+      minDiff = diff;
+    }
+  }
+
+  return index;
 }
 
-/// Gets the sentiment icon based on the given sentiment value.
+String getSentimentLabel(double sentiment) {
+  int index = getClosestSentimentIndex(sentiment);
+  return sentimentLabels[index];
+}
+
 IconData getSentimentIcon(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.clamp(-5, 5).toInt());
-  final icon = sentimentIcons[index];
-  return icon;
+  int index = getClosestSentimentIndex(sentiment);
+  return sentimentIcons[index];
 }
 
 /// Get sentiment ratio based on the given sentiment value.
