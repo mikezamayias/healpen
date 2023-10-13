@@ -614,14 +614,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
-  flutter_iterum:
-    dependency: "direct main"
-    description:
-      name: flutter_iterum
-      sha256: "4d558772d6ac702e86d3e38749576d07d5f3314541cdfc239ddc715bde4948f1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.3"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -1085,6 +1077,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.0"
+  restart_app:
+    dependency: "direct main"
+    description:
+      name: restart_app
+      sha256: b37daeb1c02fcab30e19d9e30b6fdd215bd53577efd927042eb77cf6f09daadb
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.1"
   rive:
     dependency: "direct main"
     description:
