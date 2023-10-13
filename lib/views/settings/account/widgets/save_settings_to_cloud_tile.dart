@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:riverpod/src/state_provider.dart';
 
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
-import '../../../../enums/app_theming.dart';
 import '../../../../models/settings/preference_model.dart';
-import '../../../../services/firestore_service.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -38,15 +37,8 @@ class SaveSettingsToCloudTile extends StatelessWidget {
             '(${preferencePattern.preferenceModel.value.runtimeType})',
             name: 'preferencePattern',
           );
-          FirestoreService.preferencesCollectionReference()
-              .update({
-                preferencePattern.preferenceModel.key: [
-                  ThemeColor,
-                  ThemeAppearance
-                ].contains(preferencePattern.preferenceModel.value.runtimeType)
-                    ? preferencePattern.preferenceModel.value.toString()
-                    : preferencePattern.preferenceModel.value,
-              })
+          FirestorePreferencesController()
+              .savePreference(preferencePattern.preferenceModel)
               .then(
                 (value) => log(
                   '${preferencePattern.preferenceModel.key} saved to cloud',
