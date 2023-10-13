@@ -39,67 +39,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   }
 
   @override
-  void didChangeDependencies() async {
-    super.didChangeDependencies();
-    // await _loadPreferences();
-  }
-
-  // Future<void> _loadPreferences() async {
-  //   try {
-  //     // Fetch preferences from Firestore
-  //     List<PreferenceModel> fetchedPreferences =
-  //         await FirestorePreferencesController().getPreferences();
-  //
-  //     // Log the fetched preferences for debugging
-  //     log(
-  //       'Fetched Preferences: $fetchedPreferences',
-  //       name: '_HealpenWrapperState:_loadPreferences - Fetched Preferences',
-  //     );
-  //
-  //     // Convert the list of fetched preferences into a map for easier lookup
-  //     Map<String, dynamic> fetchedPreferenceMap = {
-  //       for (PreferenceModel p in fetchedPreferences) p.key: p.value
-  //     };
-  //
-  //     // Iterate through each preference tuple in PreferencesController
-  //     for (({
-  //       PreferenceModel preferenceModel,
-  //       StateProvider provider
-  //     }) preferenceTuple in PreferencesController().preferences) {
-  //       // Extract the key for this preference
-  //       String key = preferenceTuple.preferenceModel.key;
-  //
-  //       // Check if the fetched preferences contain this key
-  //       if (fetchedPreferenceMap.containsKey(key)) {
-  //         // Update the state in the Riverpod provider
-  //         ref.read(preferenceTuple.provider.notifier).state =
-  //             fetchedPreferenceMap[key];
-  //
-  //         // Log the update action
-  //         log(
-  //           'Updating ${preferenceTuple.preferenceModel.key} '
-  //           'with value: ${fetchedPreferenceMap[key]}',
-  //           name: '_HealpenWrapperState:_loadPreferences - Updating State',
-  //         );
-  //       } else {
-  //         // Log that the key was not found in the fetched preferences
-  //         log(
-  //           'Key ${preferenceTuple.preferenceModel.key} '
-  //           'not found in fetched preferences',
-  //           name: '_HealpenWrapperState:_loadPreferences - Key Not Found',
-  //         );
-  //       }
-  //     }
-  //   } catch (e) {
-  //     // Log any exceptions that occur
-  //     log(
-  //       '$e',
-  //       name: '_HealpenWrapperState:_loadPreferences - Exception Caught',
-  //     );
-  //   }
-  // }
-
-  @override
   void didChangePlatformBrightness() {
     if (ref.watch(themeAppearanceProvider) == ThemeAppearance.system) {
       log(
@@ -157,7 +96,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           initialRoute: switch (user == null &&
               !ref.watch(OnboardingController().onboardingCompletedProvider)) {
             true => '/onboarding',
-            false => switch (user == null) {
+            false => switch (user != null) {
                 true => '/healpen',
                 false => '/auth',
               },
