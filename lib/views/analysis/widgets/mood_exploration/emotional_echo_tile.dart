@@ -17,11 +17,10 @@ class EmotionalEchoTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    EmotionalEchoController.sentiment = [
-      for (AnalysisModel element
-          in ref.watch(AnalysisViewController.analysisModelListProvider))
-        element.sentiment!,
-    ].average;
+    EmotionalEchoController.sentiment = ref
+        .watch(AnalysisViewController.analysisModelListProvider)
+        .map((AnalysisModel analysisModel) => analysisModel.sentiment!)
+        .average;
     EmotionalEchoController.sentimentRatio =
         getSentimentRatio(EmotionalEchoController.sentiment);
     EmotionalEchoController.shapeColor = getSentimentShapeColor(
