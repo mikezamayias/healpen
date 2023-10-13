@@ -36,12 +36,11 @@ class FirestoreService {
         .collection('notes');
   }
 
-  static CollectionReference<Map<String, dynamic>>
+  static DocumentReference<Map<String, dynamic>>
       preferencesCollectionReference() {
     return FirebaseFirestore.instance
         .collection('preferences-temp')
-        .doc(currentUser.uid)
-        .collection('preferences');
+        .doc(currentUser.uid);
   }
 
   static Future<void> saveNote(NoteModel noteModel) async {
