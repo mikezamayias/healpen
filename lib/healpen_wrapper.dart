@@ -8,9 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'controllers/onboarding/onboarding_controller.dart';
+import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'enums/app_theming.dart';
 import 'healpen.dart';
+import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
@@ -41,63 +43,63 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   void didChangeDependencies() async {
-    PreferencesController.themeAppearance.read().then(
-          (ThemeAppearance value) =>
-              ref.watch(themeAppearanceProvider.notifier).state = value,
-        );
-    PreferencesController.themeColor.read().then(
-          (ThemeColor value) =>
-              ref.watch(themeColorProvider.notifier).state = value,
-        );
-    PreferencesController.shakePrivateNoteInfo.read().then(
-          (bool value) =>
-              ref.watch(shakePrivateNoteInfoProvider.notifier).state = value,
-        );
-    PreferencesController.writingAutomaticStopwatch.read().then(
-          (bool value) => ref
-              .watch(writingAutomaticStopwatchProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.navigationShowBackButton.read().then(
-          (bool value) => ref
-              .watch(navigationShowBackButtonProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.onboardingCompleted.read().then(
-          (bool value) => ref
-              .watch(
-                  OnboardingController().onboardingCompletedProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.navigationEnableHapticFeedback.read().then(
-          (bool value) => ref
-              .watch(navigationEnableHapticFeedbackProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.navigationShowAppBarTitle.read().then(
-          (bool value) => ref
-              .watch(navigationShowAppBarTitleProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.writingShowAnalyzeNotesButton.read().then(
-          (bool value) => ref
-              .watch(writingShowAnalyzeNotesButtonProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.navigationShowInfoButtons.read().then(
-          (bool value) => ref
-              .watch(navigationShowInfoButtonsProvider.notifier)
-              .state = value,
-        );
-    log(
-      '${FirebaseAuth.instance.currentUser != null}',
-      name: '_HealpenWrapperState:didChangeDependencies:currentUserExists',
-    );
-    log(
-      '${ref.watch(OnboardingController().onboardingCompletedProvider)}',
-      name: '_HealpenWrapperState:didChangeDependencies:onboardingCompleted',
-    );
     super.didChangeDependencies();
+    await _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    try {
+      // Fetch preferences from Firestore
+      List<PreferenceModel> fetchedPreferences =
+          await FirestorePreferencesController().getPreferences();
+
+      // Log the fetched preferences for debugging
+      log(
+        'Fetched Preferences: $fetchedPreferences',
+        name: '_HealpenWrapperState:_loadPreferences - Fetched Preferences',
+      );
+
+      // Convert the list of fetched preferences into a map for easier lookup
+      Map<String, dynamic> fetchedPreferenceMap = {
+        for (PreferenceModel p in fetchedPreferences) p.key: p.value
+      };
+
+      // Iterate through each preference tuple in PreferencesController
+      for (({
+        PreferenceModel preferenceModel,
+        StateProvider provider
+      }) preferenceTuple in PreferencesController().preferences) {
+        // Extract the key for this preference
+        String key = preferenceTuple.preferenceModel.key;
+
+        // Check if the fetched preferences contain this key
+        if (fetchedPreferenceMap.containsKey(key)) {
+          // Update the state in the Riverpod provider
+          ref.read(preferenceTuple.provider.notifier).state =
+              fetchedPreferenceMap[key];
+
+          // Log the update action
+          log(
+            'Updating ${preferenceTuple.preferenceModel.key} '
+            'with value: ${fetchedPreferenceMap[key]}',
+            name: '_HealpenWrapperState:_loadPreferences - Updating State',
+          );
+        } else {
+          // Log that the key was not found in the fetched preferences
+          log(
+            'Key ${preferenceTuple.preferenceModel.key} '
+            'not found in fetched preferences',
+            name: '_HealpenWrapperState:_loadPreferences - Key Not Found',
+          );
+        }
+      }
+    } catch (e) {
+      // Log any exceptions that occur
+      log(
+        '$e',
+        name: '_HealpenWrapperState:_loadPreferences - Exception Caught',
+      );
+    }
   }
 
   @override
