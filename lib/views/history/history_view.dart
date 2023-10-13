@@ -3,12 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../controllers/emotional_echo_controller.dart';
 import '../../controllers/history_view_controller.dart';
 import '../../controllers/page_controller.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/page_providers.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
+import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
@@ -54,8 +56,73 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
             }
             if (snapshot.data!.isNotEmpty) {
               HistoryViewController.noteModels = snapshot.data!;
-              return CalendarTile(
-                noteModels: HistoryViewController.notesToAnalyze,
+              List<String> numScale = [
+                ...sentimentLabels.map(
+                  (String label) {
+                    return '${sentimentValues[sentimentLabels.indexOf(label)]}';
+                  },
+                )
+              ];
+              List<String> labelScale = [
+                for (int i = 0; i < sentimentLabels.length; i++)
+                  if (i == 0 || i == sentimentLabels.length - 1)
+                    sentimentLabels[i]
+              ];
+              return Column(
+                children: [
+                  Expanded(
+                    child: CalendarTile(
+                      noteModels: HistoryViewController.notesToAnalyze,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(gap),
+                    height: gap,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(radius),
+                      gradient: LinearGradient(
+                        colors: <Color>[
+                          EmotionalEchoController.goodColor,
+                          EmotionalEchoController.badColor,
+                        ],
+                        begin: Alignment.centerRight,
+                        end: Alignment.centerLeft,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: numScale.map(
+                      (String label) {
+                        return Text(
+                          label,
+                          style: context.theme.textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: getSentimentShapeColor(
+                              numScale.indexOf(label) / numScale.length,
+                            ),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: labelScale.map(
+                      (String label) {
+                        return Text(
+                          label,
+                          style: context.theme.textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: getSentimentShapeColor(
+                              labelScale.indexOf(label) / labelScale.length,
+                            ),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  )
+                ],
               );
             } else {
               return Column(
