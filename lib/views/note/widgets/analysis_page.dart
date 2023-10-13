@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../extensions/number_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
@@ -21,6 +22,8 @@ class AnalysisPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log('$analysisModel');
+    var minValue = sentimentValues.min();
+    var maxValue = sentimentValues.max();
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: gap),
       child: Column(
@@ -43,8 +46,10 @@ class AnalysisPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            explanationString: '''
-Sentiment is a metric that indicates the overall emotional tone of the text. It ranges from -3 to 3, where -3 is the most negative and 3 is the most positive.''',
+            explanationString: 'Sentiment is a metric that indicates the '
+                'overall emotional tone of the text. It ranges from $minValue '
+                'to $maxValue, where $minValue is the most negative and '
+                '$maxValue is the most positive.',
           ),
           Gap(gap),
           CustomListTile(
