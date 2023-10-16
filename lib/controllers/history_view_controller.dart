@@ -18,8 +18,7 @@ class HistoryViewController {
   static late List<NoteModel> noteModels;
 
   /// Methods
-  static List<NoteModel> get notesToAnalyze =>
-      noteModels.where((element) => !element.isPrivate).toList();
+  static List<NoteModel> get notesToAnalyze => noteModels;
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
       FirestoreService.writingCollectionReference()!
