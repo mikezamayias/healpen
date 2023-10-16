@@ -4,9 +4,6 @@ import '../controllers/page_controller.dart';
 import '../models/page_model.dart';
 
 final StateProvider<PageModel> currentPageProvider = StateProvider<PageModel>(
-  (ref) => PageController().pages[0],
+  (ref) => PageController().pages.first,
 );
 
-final pageControllerProvider = StateProvider<PageController>(
-  (ref) => PageController(),
-);

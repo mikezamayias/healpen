@@ -9,19 +9,25 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../controllers/onboarding/onboarding_controller.dart';
+import '../../../../controllers/page_controller.dart' as page_controller;
+import '../../../../controllers/settings/preferences_controller.dart';
+import '../../../../models/settings/preference_model.dart';
+import '../../../../providers/page_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class SignOutTile extends ConsumerWidget {
+class SignOutTile extends ConsumerStatefulWidget {
   const SignOutTile({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // return const SignOutButton(
-    //   variant: ButtonVariant.outlined,
-    // );
+  ConsumerState<SignOutTile> createState() => _SignOutTileState();
+}
+
+class _SignOutTileState extends ConsumerState<SignOutTile> {
+  @override
+  Widget build(BuildContext context) {
     return CustomListTile(
       responsiveWidth: true,
       contentPadding: EdgeInsets.symmetric(
@@ -32,27 +38,40 @@ class SignOutTile extends ConsumerWidget {
       leadingIconData: FontAwesomeIcons.rightFromBracket,
       textColor: context.theme.colorScheme.onPrimary,
       onTap: () {
-        // SignedOutAction((context) {
-        //   log('Action: SignedOutAction', name: 'SignOutTile');
-        //   ref.read(currentPageProvider.notifier).state = PageController().writing;
-        //   ref
-        //       .read(OnboardingController.onboardingCompletedProvider.notifier)
-        //       .state = false;
-        //   Iterum.revive(context);
-        // });
         log('CustomListTile: onTap', name: 'SignOutTile');
         log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
         FirebaseUIAuth.signOut().whenComplete(() {
           log('signOut().complete', name: 'SignOutTile');
           log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
-          ref
-              .read(OnboardingController().pageControllerProvider.notifier)
-              .state = PageController();
-          Iterum.revive(navigatorKey.currentContext!);
-          context.navigator.pushReplacementNamed('/onboarding');
-          // Phoenix.rebirth(navigatorKey.currentContext!);
+          Iterum.revive(context);
+          resetState();
+          context.navigator.popAndPushNamed('/onboarding');
         });
       },
     );
+  }
+
+  void resetState() {
+    ref.read(OnboardingController().pageControllerProvider).dispose();
+    ref.read(OnboardingController().pageControllerProvider.notifier).state =
+        PageController();
+    PageController();
+    ref.read(currentPageProvider.notifier).state =
+        page_controller.PageController().writing;
+    ref.read(OnboardingController.onboardingCompletedProvider.notifier).state =
+        false;
+    for (({
+      PreferenceModel preferenceModel,
+      StateProvider provider
+    }) preferenceTuple in PreferencesController().preferences) {
+      var key = preferenceTuple.preferenceModel.key;
+      var value = preferenceTuple.preferenceModel.value;
+      ref.read(preferenceTuple.provider.notifier).state = value;
+      preferenceTuple.preferenceModel.withValue(value);
+      log(
+        'Updated $key with value: $value',
+        name: 'SignOutTile:resetPreferences',
+      );
+    }
   }
 }

@@ -57,9 +57,6 @@ class Healpen extends ConsumerWidget {
               if (fetchedPreferenceMap.containsKey(key)) {
                 ref.read(preferenceTuple.provider.notifier).state =
                     fetchedPreferenceMap[key];
-                preferenceTuple.preferenceModel.withValue(
-                  fetchedPreferenceMap[key],
-                );
                 log(
                   'Updated ${preferenceTuple.preferenceModel.key} '
                   'with value: ${fetchedPreferenceMap[key]}',
