@@ -49,20 +49,22 @@ class Healpen extends ConsumerWidget {
                 for (var p in fetchedPreferences) p.key: p.value
               };
 
-              for (({PreferenceModel preferenceModel}) preferenceTuple
-                  in PreferencesController().preferences) {
+              for (({
+                PreferenceModel preferenceModel,
+                StateProvider provider
+              }) preferenceTuple in PreferencesController().preferences) {
                 var key = preferenceTuple.preferenceModel.key;
                 if (fetchedPreferenceMap.containsKey(key)) {
-                  // ref.read(preferenceTuple.provider.notifier).state =
-                  //     fetchedPreferenceMap[key];
+                  ref.read(preferenceTuple.provider.notifier).state =
+                      fetchedPreferenceMap[key];
                   preferenceTuple.preferenceModel.withValue(
                     fetchedPreferenceMap[key],
                   );
-                  // log(
-                  //   'Updating ${preferenceTuple.preferenceModel.key} '
-                  //   'with value: ${fetchedPreferenceMap[key]}',
-                  //   name: '_HealpenWrapperState:StreamBuilder - Updating State',
-                  // );
+                  log(
+                    'Updated ${preferenceTuple.preferenceModel.key} '
+                    'with value: ${fetchedPreferenceMap[key]}',
+                    name: '_HealpenWrapperState:StreamBuilder - Updating State',
+                  );
                 }
               }
 

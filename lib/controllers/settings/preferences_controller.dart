@@ -1,5 +1,9 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../enums/app_theming.dart';
 import '../../models/settings/preference_model.dart';
+import '../../providers/settings_providers.dart';
+import '../onboarding/onboarding_controller.dart';
 
 class PreferencesController {
   /// Singleton instance
@@ -53,13 +57,37 @@ class PreferencesController {
     true,
   );
 
-  List<({PreferenceModel preferenceModel})> preferences = [
-    (preferenceModel: shakePrivateNoteInfo,),
-    (preferenceModel: writingShowAnalyzeNotesButton,),
-    (preferenceModel: writingAutomaticStopwatch,),
-    (preferenceModel: navigationShowAppBarTitle,),
-    (preferenceModel: navigationShowBackButton,),
-    (preferenceModel: navigationEnableHapticFeedback,),
-    (preferenceModel: onboardingCompleted,),
+  List<({PreferenceModel preferenceModel, StateProvider provider})>
+      preferences = [
+    (
+      preferenceModel: shakePrivateNoteInfo,
+      provider: shakePrivateNoteInfoProvider
+    ),
+    (
+      preferenceModel: writingShowAnalyzeNotesButton,
+      provider: writingShowAnalyzeNotesButtonProvider
+    ),
+    (
+      preferenceModel: writingAutomaticStopwatch,
+      provider: writingAutomaticStopwatchProvider
+    ),
+    (
+      preferenceModel: navigationShowAppBarTitle,
+      provider: navigationShowAppBarTitleProvider
+    ),
+    (
+      preferenceModel: navigationShowBackButton,
+      provider: navigationShowBackButtonProvider
+    ),
+    (
+      preferenceModel: navigationEnableHapticFeedback,
+      provider: navigationEnableHapticFeedbackProvider
+    ),
+    (preferenceModel: themeColor, provider: themeColorProvider),
+    (preferenceModel: themeAppearance, provider: themeAppearanceProvider),
+    (
+      preferenceModel: onboardingCompleted,
+      provider: OnboardingController.onboardingCompletedProvider
+    ),
   ];
 }
