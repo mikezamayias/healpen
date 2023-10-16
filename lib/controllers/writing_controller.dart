@@ -110,10 +110,10 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
-    await FirestoreService.saveNote(state);
+    await FirestoreService().saveNote(state);
     // if (!state.isPrivate) {
-    await FirestoreService.saveAnalysis(
-        await NoteAnalyzer.createNoteAnalysis(state));
+    await FirestoreService()
+        .saveAnalysis(await NoteAnalyzer.createNoteAnalysis(state));
     // }
     resetNote();
     textController.clear();
@@ -159,7 +159,7 @@ class WritingController extends StateNotifier<NoteModel> {
 
   // Future<void> updateSentimentAndSaveNote() async {
   //   _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-  //   await FirestoreService.saveNote(state);
+  //   await FirestoreService().saveNote(state);
   // }
 
   // static Future<void> updateAllUserNotes() async {
@@ -168,7 +168,7 @@ class WritingController extends StateNotifier<NoteModel> {
   //     name: 'WritingController:updateAllUserNotes()',
   //   );
   //   QuerySnapshot<Map<String, dynamic>> collection =
-  //       await FirestoreService.writingCollectionReference()
+  //       await FirestoreService().writingCollectionReference()
   //           .where('isPrivate', isEqualTo: false)
   //           .get();
   //   for (QueryDocumentSnapshot<Map<String, dynamic>> element
@@ -189,7 +189,7 @@ class WritingController extends StateNotifier<NoteModel> {
   //   if (!element.data().containsKey('sentiment')) {
   //     state = NoteModel.fromDocument(element.data());
   //     // _updateOpenAIsSentimentAnalysis(await _openAIsSentimentAnalysis());
-  //     await FirestoreService.writingCollectionReference()
+  //     await FirestoreService().writingCollectionReference()
   //         .doc(state.timestamp.toString())
   //         .update(state.toDocument());
   //   }

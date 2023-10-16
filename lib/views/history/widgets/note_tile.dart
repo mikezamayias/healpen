@@ -45,10 +45,10 @@ class NoteTile extends ConsumerWidget {
           PreferencesController.navigationEnableHapticFeedback.value,
           () async {
             NoteModel noteEntry = NoteModel.fromJson(
-              (await FirestoreService.getNote(entry.timestamp)).data()!,
+              (await FirestoreService().getNote(entry.timestamp)).data()!,
             );
             AnalysisModel analysisEntry = AnalysisModel.fromJson(
-              (await FirestoreService.getAnalysis(entry.timestamp)).data()!,
+              (await FirestoreService().getAnalysis(entry.timestamp)).data()!,
             );
             if (context.mounted) {
               context.navigator.pushNamed(

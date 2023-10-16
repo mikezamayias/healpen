@@ -37,7 +37,7 @@ class NoteAnalyzer {
   /// Methods
   static Future<void> removePreviousAnalysis(WidgetRef ref) async {
     final documentsToRemoveAnalysis =
-        await FirestoreService.getWritingDocumentsToRemoveAnalysis();
+        await FirestoreService().getWritingDocumentsToRemoveAnalysis();
     ref.watch(analysisProgressProvider.notifier).state =
         AnalysisProgress.removingPreviousAnalysis;
     ref.watch(progressProvider.notifier).state = 0;
@@ -53,13 +53,13 @@ class NoteAnalyzer {
         note.get('content'),
         name: 'AnalysisViewController:removePreviousAnalysis() - note content',
       );
-      await FirestoreService.removeAnalysisFromWritingDocument(note);
+      await FirestoreService().removeAnalysisFromWritingDocument(note);
       ref.watch(progressProvider.notifier).state++;
     }
   }
 
   static Future<void> analyzeNotes(WidgetRef ref) async {
-    var notesToAnalyze = await FirestoreService.getDocumentsToAnalyze();
+    var notesToAnalyze = await FirestoreService().getDocumentsToAnalyze();
 
     ref.watch(analysisProgressProvider.notifier).state =
         AnalysisProgress.analyzingNotes;
@@ -77,7 +77,7 @@ class NoteAnalyzer {
         name: 'AnalysisViewController:analyzeNotes() - note content',
       );
       // await WritingController().analyzeSentiment(noteModel);
-      await FirestoreService.analyzeSentiment(note);
+      await FirestoreService().analyzeSentiment(note);
       ref.watch(progressProvider.notifier).state++;
     }
   }

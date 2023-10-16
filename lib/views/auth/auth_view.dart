@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,6 +47,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
         log(
           '${state.runtimeType}',
           name: 'AuthView:state',
+        );
+        log(
+          '${FirebaseAuth.instance.currentUser}',
+          name: 'AuthView',
         );
         return WillPopScope(
           onWillPop: () {

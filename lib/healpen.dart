@@ -28,92 +28,90 @@ class Healpen extends ConsumerWidget {
             .fade(duration: emphasizedDuration, curve: emphasizedCurve),
     ];
     return StreamBuilder(
-        stream: FirestorePreferencesController().getPreferences(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            log(
-              'StreamBuilder Error: ${snapshot.error}',
-              name: '_HealpenWrapperState:StreamBuilder - Error',
-            );
-          }
-
-          if (snapshot.hasData) {
-            List<PreferenceModel> fetchedPreferences = snapshot.data!;
-            log(
-              'Fetched Preferences: $fetchedPreferences',
-              name: '_HealpenWrapperState:StreamBuilder - Fetched Preferences',
-            );
-
-            Future.microtask(() {
-              Map<String, dynamic> fetchedPreferenceMap = {
-                for (var p in fetchedPreferences) p.key: p.value
-              };
-
-              for (({
-                PreferenceModel preferenceModel,
-                StateProvider provider
-              }) preferenceTuple in PreferencesController().preferences) {
-                var key = preferenceTuple.preferenceModel.key;
-                if (fetchedPreferenceMap.containsKey(key)) {
-                  ref.read(preferenceTuple.provider.notifier).state =
-                      fetchedPreferenceMap[key];
-                  preferenceTuple.preferenceModel.withValue(
-                    fetchedPreferenceMap[key],
-                  );
-                  log(
-                    'Updated ${preferenceTuple.preferenceModel.key} '
-                    'with value: ${fetchedPreferenceMap[key]}',
-                    name: '_HealpenWrapperState:StreamBuilder - Updating State',
-                  );
-                }
-              }
-
-              getSystemUIOverlayStyle(
-                context.theme,
-                ref.watch(themeAppearanceProvider),
-              );
-
-              EmotionalEchoController.goodColor =
-                  context.theme.colorScheme.primary;
-              EmotionalEchoController.badColor =
-                  context.theme.colorScheme.error;
-              EmotionalEchoController.onGoodColor =
-                  context.theme.colorScheme.onPrimary;
-              EmotionalEchoController.onBadColor =
-                  context.theme.colorScheme.onError;
-            });
-          }
-
-          return Scaffold(
-            body: PageView.builder(
-              controller: ref.watch(HealpenController().pageControllerProvider),
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (value) {
-                vibrate(
-                    PreferencesController.navigationEnableHapticFeedback.value,
-                    () {
-                  ref
-                      .watch(
-                          HealpenController().currentPageIndexProvider.notifier)
-                      .state = value;
-                });
-              },
-              itemCount: pages.length,
-              itemBuilder: (context, index) {
-                return AnimatedOpacity(
-                  duration: slightlyLongEmphasizedDuration,
-                  curve: emphasizedCurve,
-                  opacity:
-                      ref.watch(HealpenController().currentPageIndexProvider) ==
-                              index
-                          ? 1
-                          : 0,
-                  child: pages.elementAt(index),
-                );
-              },
-            ),
-            bottomNavigationBar: const CustomBottomNavigationBar(),
+      stream: FirestorePreferencesController().getPreferences(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          log(
+            'StreamBuilder Error: ${snapshot.error}',
+            name: '_HealpenWrapperState:StreamBuilder - Error',
           );
-        });
+        }
+
+        if (snapshot.hasData) {
+          List<PreferenceModel> fetchedPreferences = snapshot.data!;
+          log(
+            'Fetched Preferences: $fetchedPreferences',
+            name: '_HealpenWrapperState:StreamBuilder - Fetched Preferences',
+          );
+
+          Future.microtask(() {
+            Map<String, dynamic> fetchedPreferenceMap = {
+              for (var p in fetchedPreferences) p.key: p.value
+            };
+
+            for (({
+              PreferenceModel preferenceModel,
+              StateProvider provider
+            }) preferenceTuple in PreferencesController().preferences) {
+              var key = preferenceTuple.preferenceModel.key;
+              if (fetchedPreferenceMap.containsKey(key)) {
+                ref.read(preferenceTuple.provider.notifier).state =
+                    fetchedPreferenceMap[key];
+                preferenceTuple.preferenceModel.withValue(
+                  fetchedPreferenceMap[key],
+                );
+                log(
+                  'Updated ${preferenceTuple.preferenceModel.key} '
+                  'with value: ${fetchedPreferenceMap[key]}',
+                  name: '_HealpenWrapperState:StreamBuilder - Updating State',
+                );
+              }
+            }
+          });
+        }
+
+        getSystemUIOverlayStyle(
+          context.theme,
+          ref.watch(themeAppearanceProvider),
+        );
+
+        EmotionalEchoController.goodColor = context.theme.colorScheme.primary;
+        EmotionalEchoController.badColor = context.theme.colorScheme.error;
+        EmotionalEchoController.onGoodColor =
+            context.theme.colorScheme.onPrimary;
+        EmotionalEchoController.onBadColor = context.theme.colorScheme.onError;
+
+        return Scaffold(
+          body: PageView.builder(
+            controller: ref.watch(HealpenController().pageControllerProvider),
+            physics: const NeverScrollableScrollPhysics(),
+            onPageChanged: (value) {
+              vibrate(
+                  PreferencesController.navigationEnableHapticFeedback.value,
+                  () {
+                ref
+                    .watch(
+                        HealpenController().currentPageIndexProvider.notifier)
+                    .state = value;
+              });
+            },
+            itemCount: pages.length,
+            itemBuilder: (context, index) {
+              return AnimatedOpacity(
+                duration: slightlyLongEmphasizedDuration,
+                curve: emphasizedCurve,
+                opacity:
+                    ref.watch(HealpenController().currentPageIndexProvider) ==
+                            index
+                        ? 1
+                        : 0,
+                child: pages.elementAt(index),
+              );
+            },
+          ),
+          bottomNavigationBar: const CustomBottomNavigationBar(),
+        );
+      },
+    );
   }
 }

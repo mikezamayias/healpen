@@ -17,7 +17,7 @@ class FirestorePreferencesController {
   /// Method to save a single preference to Firestore.
   Future<void> savePreference(PreferenceModel preferenceModel) async {
     // Update the Firestore document with the new preference.
-    await FirestoreService.preferencesCollectionReference()!.update({
+    await FirestoreService().preferencesCollectionReference().update({
       preferenceModel.key: [ThemeColor, ThemeAppearance]
               .contains(preferenceModel.value.runtimeType)
           ? preferenceModel.value.toString()
@@ -32,17 +32,16 @@ class FirestorePreferencesController {
     );
   }
 
-  /// Method to get all preferences from Firestore.
-  Stream<List<PreferenceModel>>? getPreferences() {
-    if (FirestoreService.preferencesCollectionReference() == null) return null;
-    return FirestoreService.preferencesCollectionReference()!
+  /// Method to get all user preferences from Firestore.
+  Stream<List<PreferenceModel>> getPreferences() {
+    return FirestoreService()
+        .preferencesCollectionReference()
         .snapshots()
         .map((snapshot) {
       final Map<String, dynamic>? data = snapshot.data();
       if (data == null) {
         return [];
       }
-
       return data
           .map((key, value) {
             var valueToSave = _convertValue(value);
@@ -57,7 +56,8 @@ class FirestorePreferencesController {
   Stream<PreferenceModel?> getPreference<T>(
     PreferenceModel<T> preferenceModel,
   ) {
-    return FirestoreService.preferencesCollectionReference()!
+    return FirestoreService()
+        .preferencesCollectionReference()
         .snapshots()
         .map((snapshot) {
       final Map<String, dynamic>? data = snapshot.data();

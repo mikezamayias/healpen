@@ -17,51 +17,45 @@ class FirestoreService {
   factory FirestoreService() => instance;
 
   // Attributes
-  static final User? currentUser = FirebaseAuth.instance.currentUser;
+  final User _currentUser = FirebaseAuth.instance.currentUser!;
 
   // Methods
-  static CollectionReference<Map<String, dynamic>>?
-      writingCollectionReference() {
-    if (currentUser == null) return null;
+  CollectionReference<Map<String, dynamic>> writingCollectionReference() {
     return FirebaseFirestore.instance
         .collection('writing-temp')
-        .doc(currentUser!.uid)
+        .doc(_currentUser.uid)
         .collection('notes');
   }
 
-  static CollectionReference<Map<String, dynamic>>?
-      analysisCollectionReference() {
-    if (currentUser == null) return null;
+  CollectionReference<Map<String, dynamic>> analysisCollectionReference() {
     return FirebaseFirestore.instance
         .collection('analysis-temp')
-        .doc(currentUser!.uid)
+        .doc(_currentUser.uid)
         .collection('notes');
   }
 
-  static DocumentReference<Map<String, dynamic>>?
-      preferencesCollectionReference() {
-    if (currentUser == null) return null;
+  DocumentReference<Map<String, dynamic>> preferencesCollectionReference() {
     return FirebaseFirestore.instance
         .collection('preferences-temp')
-        .doc(currentUser!.uid);
+        .doc(_currentUser.uid);
   }
 
-  static Future<void> saveNote(NoteModel noteModel) async {
+  Future<void> saveNote(NoteModel noteModel) async {
     log(
       '${noteModel.toJson()}',
       name: 'FirestoreService:saveNote() - note to save',
     );
-    await writingCollectionReference()!
+    await writingCollectionReference()
         .doc('${noteModel.timestamp}')
         .set(noteModel.toJson());
   }
 
-  static Future<void> saveAnalysis(AnalysisModel analysisModel) async {
+  Future<void> saveAnalysis(AnalysisModel analysisModel) async {
     log(
       '${analysisModel.toJson()}',
       name: 'FirestoreService:saveAnalysis() - analysis to save',
     );
-    await analysisCollectionReference()!
+    await analysisCollectionReference()
         .doc('${analysisModel.timestamp}')
         .set(analysisModel.toJson());
   }
@@ -76,17 +70,17 @@ class FirestoreService {
   //   await preferencesCollectionReference().add(preference.toJson());
   // }
 
-  static Future<List<DocumentSnapshot<Map<String, dynamic>>>>
+  Future<List<DocumentSnapshot<Map<String, dynamic>>>>
       getDocumentsToAnalyze() async {
     // Get all documents from the writing collection
     QuerySnapshot<Map<String, dynamic>> writingSnapshot =
-        await writingCollectionReference()!.get();
+        await writingCollectionReference().get();
     List<DocumentSnapshot<Map<String, dynamic>>> writingDocuments =
         writingSnapshot.docs;
 
     // Get all documents from the analysis collection
     QuerySnapshot<Map<String, dynamic>> analysisSnapshot =
-        await analysisCollectionReference()!
+        await analysisCollectionReference()
             .where('wordCount', isNull: true)
             .get();
     List<DocumentSnapshot<Map<String, dynamic>>> analysisDocuments =
@@ -102,19 +96,19 @@ class FirestoreService {
     return documentsToAnalyze;
   }
 
-  static Future<DocumentSnapshot<Map<String, dynamic>>> getNote(
+  Future<DocumentSnapshot<Map<String, dynamic>>> getNote(
     int timestamp,
   ) {
-    return writingCollectionReference()!.doc('$timestamp').get();
+    return writingCollectionReference().doc('$timestamp').get();
   }
 
-  static Future<DocumentSnapshot<Map<String, dynamic>>> getAnalysis(
+  Future<DocumentSnapshot<Map<String, dynamic>>> getAnalysis(
     int timestamp,
   ) {
-    return analysisCollectionReference()!.doc('$timestamp').get();
+    return analysisCollectionReference().doc('$timestamp').get();
   }
 
-  static Future<void> removeAnalysisFromWritingDocument(
+  Future<void> removeAnalysisFromWritingDocument(
     DocumentSnapshot<Map<String, dynamic>> element,
   ) async {
     List<String> keys = [
@@ -126,7 +120,7 @@ class FirestoreService {
     ];
     for (String key in keys) {
       if (element.data()!.containsKey(key)) {
-        FirestoreService.writingCollectionReference()!
+        writingCollectionReference()
             .doc(element.id)
             .update({key: FieldValue.delete()}).then((_) {
           log(
@@ -143,7 +137,7 @@ class FirestoreService {
     }
   }
 
-  static Future<List<DocumentSnapshot<Map<String, dynamic>>>>
+  Future<List<DocumentSnapshot<Map<String, dynamic>>>>
       getWritingDocumentsToRemoveAnalysis() async {
     List<String> filterKeys = [
       'sentimentScore',
@@ -154,7 +148,7 @@ class FirestoreService {
     ];
     // Get all documents from the writing collection
     QuerySnapshot<Map<String, dynamic>> writingSnapshot =
-        await writingCollectionReference()!.get();
+        await writingCollectionReference().get();
     List<DocumentSnapshot<Map<String, dynamic>>> writingDocuments =
         writingSnapshot.docs;
 
@@ -182,10 +176,10 @@ class FirestoreService {
   /// Natural Language API, and saves the sentiment analysis results to the
   /// analysisCollectionReference. The method returns the
   /// AnalyzeSentimentResponse object.
-  static Future<void> analyzeSentiment(
+  Future<void> analyzeSentiment(
     DocumentSnapshot<Map<String, dynamic>> note,
   ) async {
-    writingCollectionReference()!
+    writingCollectionReference()
         .doc(note.id)
         .get()
         .then((DocumentSnapshot<Map<String, dynamic>> value) async {
@@ -199,9 +193,9 @@ class FirestoreService {
         '${analysisModel.toJson()}',
         name: 'FirestorService:analyzeSentiment:analysisModel',
       );
-      analysisCollectionReference()!.doc(note.id).set(analysisModel.toJson());
+      analysisCollectionReference().doc(note.id).set(analysisModel.toJson());
       for (SentenceModel sentence in analysisModel.sentences) {
-        analysisCollectionReference()!
+        analysisCollectionReference()
             .doc(note.id)
             .collection('sentences')
             .doc(analysisModel.sentences.indexOf(sentence).toString())

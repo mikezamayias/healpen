@@ -61,9 +61,8 @@ class OnboardingController {
   /// Providers
   static final onboardingCompletedProvider =
       StateProvider<bool>((ref) => false);
-  final pageControllerProvider = StateProvider<PageController>(
-    (ref) => PageController(),
-  );
+  final pageControllerProvider =
+      StateProvider<PageController>((ref) => PageController());
   final currentPageIndexProvider = StateProvider<int>((ref) => 0);
 
   /// Methods
