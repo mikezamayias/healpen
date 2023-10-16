@@ -21,9 +21,8 @@ class _OnboardingNavigationBarState
     extends ConsumerState<OnboardingNavigationBar> {
   void goToAuth() async {
     ref.watch(OnboardingController().pageControllerProvider).dispose();
-    ref
-        .watch(OnboardingController().onboardingCompletedProvider.notifier)
-        .state = true;
+    ref.watch(OnboardingController.onboardingCompletedProvider.notifier).state =
+        true;
     navigator.pushReplacement(
       PageRouteBuilder(
         transitionDuration: emphasizedDuration,

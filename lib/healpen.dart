@@ -39,10 +39,10 @@ class Healpen extends ConsumerWidget {
 
           if (snapshot.hasData) {
             List<PreferenceModel> fetchedPreferences = snapshot.data!;
-            // log(
-            //   'Fetched Preferences: $fetchedPreferences',
-            //   name: '_HealpenWrapperState:StreamBuilder - Fetched Preferences',
-            // );
+            log(
+              'Fetched Preferences: $fetchedPreferences',
+              name: '_HealpenWrapperState:StreamBuilder - Fetched Preferences',
+            );
 
             Future.microtask(() {
               Map<String, dynamic> fetchedPreferenceMap = {

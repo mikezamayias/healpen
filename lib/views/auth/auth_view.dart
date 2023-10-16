@@ -26,49 +26,14 @@ class AuthView extends ConsumerStatefulWidget {
 }
 
 class _AuthViewState extends ConsumerState<AuthView> {
-  void goBack() {
-    ref.watch(OnboardingController().pageControllerProvider.notifier).state =
-        PageController();
-    ref.watch(OnboardingController().currentPageIndexProvider.notifier).state =
-        0;
-    navigator.pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: emphasizedDuration,
-        reverseTransitionDuration: emphasizedDuration,
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const OnboardingView(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            FadeTransition(
-          opacity: Tween<double>(
-            begin: -1,
-            end: 1,
-          ).animate(animation),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(1, 0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final emailLinkProvider = ref.watch(
-      CustomAuthProvider().emailLinkAuthProvider,
-    );
     return AuthFlowBuilder<EmailLinkAuthController>(
-      provider: emailLinkProvider,
+      provider: ref.read(CustomAuthProvider().emailLinkAuthProvider),
       listener: (oldState, newState, ctrl) {
         // TODO: check if the following implementation is correct
         // documentation mentions only the SignedIn check
-        if (newState is SignedIn ||
-            newState is UserCreated ||
-            newState is CredentialLinked ||
-            newState is CredentialReceived) {
+        if (newState is SignedIn) {
           context.navigator.pushReplacementNamed('/healpen');
         }
       },
@@ -98,7 +63,12 @@ class _AuthViewState extends ConsumerState<AuthView> {
                 Uninitialized => const UninitializedState(),
                 SendingLink => const SendingLinkState(),
                 AwaitingDynamicLink => const AwaitingDynamicLinkState(),
-                SigningIn => const SigningInState(),
+                SignedIn ||
+                SigningIn ||
+                UserCreated ||
+                CredentialLinked ||
+                CredentialReceived =>
+                  const SigningInState(),
                 AuthFailed => AuthFailedState(state: state),
                 _ => UnknownState(state: state)
               },
@@ -106,6 +76,35 @@ class _AuthViewState extends ConsumerState<AuthView> {
           ),
         );
       },
+    );
+  }
+
+  void goBack() {
+    ref.read(OnboardingController().pageControllerProvider.notifier).state =
+        PageController();
+    ref.read(OnboardingController().currentPageIndexProvider.notifier).state =
+        0;
+    navigator.pushReplacement(
+      PageRouteBuilder(
+        transitionDuration: emphasizedDuration,
+        reverseTransitionDuration: emphasizedDuration,
+        pageBuilder: (context, animation, secondaryAnimation) =>
+            const OnboardingView(),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+          opacity: Tween<double>(
+            begin: -1,
+            end: 1,
+          ).animate(animation),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1, 0),
+              end: Offset.zero,
+            ).animate(animation),
+            child: child,
+          ),
+        ),
+      ),
     );
   }
 }

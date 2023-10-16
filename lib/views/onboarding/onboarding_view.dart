@@ -28,7 +28,7 @@ class OnboardingView extends ConsumerWidget {
               child: PageView.builder(
                 clipBehavior: Clip.none,
                 controller:
-                    ref.watch(OnboardingController().pageControllerProvider),
+                    ref.read(OnboardingController().pageControllerProvider),
                 physics: const BouncingScrollPhysics(),
                 itemCount: OnboardingController().onboardingScreenViews.length,
                 onPageChanged: (value) {
@@ -36,7 +36,7 @@ class OnboardingView extends ConsumerWidget {
                       PreferencesController
                           .navigationEnableHapticFeedback.value, () {
                     ref
-                        .watch(OnboardingController()
+                        .read(OnboardingController()
                             .currentPageIndexProvider
                             .notifier)
                         .state = value;
@@ -45,13 +45,12 @@ class OnboardingView extends ConsumerWidget {
                 // depending on the current index, animate slide from left or right and opacity
                 itemBuilder: (context, index) {
                   final bool active = index ==
-                      ref.watch(
-                          OnboardingController().currentPageIndexProvider);
+                      ref.watch(OnboardingController().currentPageIndexProvider);
                   final double opacity = active ? 1 : 0;
                   final double slide = active
                       ? 0
                       : index <
-                              ref.watch(OnboardingController()
+                              ref.read(OnboardingController()
                                   .currentPageIndexProvider)
                           ? -1
                           : 1;
@@ -88,7 +87,7 @@ class OnboardingView extends ConsumerWidget {
               padding: EdgeInsets.all(gap),
               child: SmoothPageIndicator(
                 controller:
-                    ref.watch(OnboardingController().pageControllerProvider),
+                    ref.read(OnboardingController().pageControllerProvider),
                 count: OnboardingController().onboardingScreenViews.length,
                 effect: ExpandingDotsEffect(
                   activeDotColor: context.theme.colorScheme.primary,

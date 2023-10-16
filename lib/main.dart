@@ -1,6 +1,7 @@
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_iterum/flutter_iterum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -18,14 +19,16 @@ void main() async {
 
   runApp(
     ProviderScope(
-      child: ResponsiveSizer(
-        builder: (
-          BuildContext context,
-          Orientation orientation,
-          ScreenType screenType,
-        ) {
-          return const HealpenWrapper();
-        },
+      child: Iterum(
+        child: ResponsiveSizer(
+          builder: (
+            BuildContext context,
+            Orientation orientation,
+            ScreenType screenType,
+          ) {
+            return const HealpenWrapper();
+          },
+        ),
       ),
     ),
   );

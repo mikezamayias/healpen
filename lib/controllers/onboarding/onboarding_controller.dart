@@ -14,6 +14,7 @@ class OnboardingController {
   OnboardingController._internal();
 
   /// Members
+  static bool onboardingCompleted = false;
   final List<OnboardingModel> onboardingScreenModels = [
     // 1
     OnboardingModel(
@@ -58,7 +59,8 @@ class OnboardingController {
   ];
 
   /// Providers
-  final onboardingCompletedProvider = StateProvider<bool>((ref) => false);
+  static final onboardingCompletedProvider =
+      StateProvider<bool>((ref) => false);
   final pageControllerProvider = StateProvider<PageController>(
     (ref) => PageController(),
   );

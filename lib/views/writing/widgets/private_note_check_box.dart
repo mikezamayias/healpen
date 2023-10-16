@@ -24,10 +24,10 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       backgroundColor: context.theme.colorScheme.surface,
       responsiveWidth: true,
       showcaseLeadingIcon: ref.watch(shakePrivateNoteInfoProvider),
-      leadingIconData: PreferencesController.navigationShowInfoButtons.value
+      leadingIconData: ref.watch(shakePrivateNoteInfoProvider)
           ? FontAwesomeIcons.circleInfo
           : FontAwesomeIcons.lock,
-      leadingOnTap: PreferencesController.navigationShowInfoButtons.value
+      leadingOnTap: ref.watch(shakePrivateNoteInfoProvider)
           ? () {
               vibrate(
                   PreferencesController.navigationEnableHapticFeedback.value,
