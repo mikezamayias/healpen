@@ -95,8 +95,8 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         BuildContext context,
         AsyncSnapshot<List<AnalysisModel>> analysisModelListSnapshot,
       ) {
-        Color? shapeColor;
-        Color? textColor;
+        Color shapeColor = context.theme.colorScheme.surface;
+        Color textColor = context.theme.colorScheme.onSurface;
         double? dateSentiment;
         double? dateSentimentRatio;
         if (analysisModelListSnapshot.data != null &&
@@ -127,15 +127,10 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
               gradient: RadialGradient(
                 radius: radius - gap,
                 center: Alignment.topCenter,
-                colors: shapeColor == null
-                    ? [
-                        context.theme.colorScheme.surface,
-                        context.theme.colorScheme.surface
-                      ]
-                    : [
-                        shapeColor,
-                        context.theme.colorScheme.surface,
-                      ],
+                colors: [
+                  shapeColor,
+                  context.theme.colorScheme.surface,
+                ],
               ),
             ),
             child: Column(
@@ -153,8 +148,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                       color: currentMonthCheck &&
                               !dateAfterTodayCheck &&
                               !dateBeforeFirstRecordCheck
-                          ? textColor ??
-                              context.theme.colorScheme.onSecondaryContainer
+                          ? textColor
                           : context.theme.colorScheme.outlineVariant,
                       fontWeight: currentMonthCheck &&
                               !dateAfterTodayCheck &&
@@ -179,15 +173,10 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                               gradient: RadialGradient(
                                 radius: radius - gap,
                                 center: Alignment.topCenter,
-                                colors: shapeColor == null
-                                    ? [
-                                        context.theme.colorScheme.surface,
-                                        context.theme.colorScheme.surface
-                                      ]
-                                    : [
-                                        shapeColor,
-                                        context.theme.colorScheme.surface,
-                                      ],
+                                colors: [
+                                  shapeColor,
+                                  context.theme.colorScheme.surface,
+                                ],
                               ),
                             )
                           : null,
@@ -195,7 +184,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                         '${details.appointments.length}',
                         textAlign: TextAlign.center,
                         style: context.theme.textTheme.titleMedium!.copyWith(
-                          color: textColor ?? theme.colorScheme.onPrimary,
+                          color: textColor,
                           fontWeight: FontWeight.bold,
                           textBaseline: TextBaseline.alphabetic,
                         ),
