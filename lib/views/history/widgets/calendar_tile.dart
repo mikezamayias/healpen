@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -104,10 +102,6 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
           List<AnalysisModel> analysisModelList =
               analysisModelListSnapshot.data!;
           if (analysisModelList.isNotEmpty) {
-            log(
-              '$analysisModelList',
-              name: DateFormat('yyyy-MM-dd').format(details.date),
-            );
             dateSentiment = [
               for (AnalysisModel element in analysisModelList)
                 element.sentiment!,
