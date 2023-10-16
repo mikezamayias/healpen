@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../providers/custom_auth_provider.dart';
+import '../../route_controller.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
@@ -26,10 +28,70 @@ class AuthView extends ConsumerStatefulWidget {
 }
 
 class _AuthViewState extends ConsumerState<AuthView> {
+  @override
+  Widget build(BuildContext context) {
+    return AuthFlowBuilder<EmailLinkAuthController>(
+      provider: ref.read(CustomAuthProvider().emailLinkAuthProvider),
+      listener: (oldState, newState, ctrl) {
+        // TODO: check if the following implementation is correct
+        // documentation mentions only the SignedIn check
+        if (newState is SignedIn) {
+          context.navigator.pushNamedAndRemoveUntil(
+            RouterController.authWrapperRoute.route,
+            (route) => false,
+          );
+        }
+      },
+      builder: (
+        BuildContext context,
+        AuthState state,
+        EmailLinkAuthController authController,
+        Widget? _,
+      ) {
+        log(
+          '${state.runtimeType}',
+          name: 'AuthView:state',
+        );
+        log(
+          '${FirebaseAuth.instance.currentUser}',
+          name: 'AuthView',
+        );
+        return WillPopScope(
+          onWillPop: () {
+            goBack();
+            return Future.value(true);
+          },
+          child: BlueprintView(
+            appBar: AppBar(
+              pathNames: const ['Sign in with magic link'],
+              automaticallyImplyLeading: true,
+              onBackButtonPressed: goBack,
+            ),
+            body: Center(
+              child: switch (state.runtimeType) {
+                Uninitialized => const UninitializedState(),
+                SendingLink => const SendingLinkState(),
+                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
+                SignedIn ||
+                SigningIn ||
+                UserCreated ||
+                CredentialLinked ||
+                CredentialReceived =>
+                  const SigningInState(),
+                AuthFailed => AuthFailedState(state: state),
+                _ => UnknownState(state: state)
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   void goBack() {
-    ref.watch(OnboardingController().pageControllerProvider.notifier).state =
+    ref.read(OnboardingController().pageControllerProvider.notifier).state =
         PageController();
-    ref.watch(OnboardingController().currentPageIndexProvider.notifier).state =
+    ref.read(OnboardingController().currentPageIndexProvider.notifier).state =
         0;
     navigator.pushReplacement(
       PageRouteBuilder(
@@ -52,60 +114,6 @@ class _AuthViewState extends ConsumerState<AuthView> {
           ),
         ),
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final emailLinkProvider = ref.watch(
-      CustomAuthProvider().emailLinkAuthProvider,
-    );
-    return AuthFlowBuilder<EmailLinkAuthController>(
-      provider: emailLinkProvider,
-      listener: (oldState, newState, ctrl) {
-        // TODO: check if the following implementation is correct
-        // documentation mentions only the SignedIn check
-        if (newState is SignedIn ||
-            newState is UserCreated ||
-            newState is CredentialLinked ||
-            newState is CredentialReceived) {
-          context.navigator.pushReplacementNamed('/healpen');
-        }
-      },
-      builder: (
-        BuildContext context,
-        AuthState state,
-        EmailLinkAuthController authController,
-        Widget? _,
-      ) {
-        log(
-          '${state.runtimeType}',
-          name: 'AuthView:state',
-        );
-        return WillPopScope(
-          onWillPop: () {
-            goBack();
-            return Future.value(true);
-          },
-          child: BlueprintView(
-            appBar: AppBar(
-              pathNames: const ['Sign in with magic link'],
-              automaticallyImplyLeading: true,
-              onBackButtonPressed: goBack,
-            ),
-            body: Center(
-              child: switch (state.runtimeType) {
-                Uninitialized => const UninitializedState(),
-                SendingLink => const SendingLinkState(),
-                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
-                SigningIn => const SigningInState(),
-                AuthFailed => AuthFailedState(state: state),
-                _ => UnknownState(state: state)
-              },
-            ),
-          ),
-        );
-      },
     );
   }
 }

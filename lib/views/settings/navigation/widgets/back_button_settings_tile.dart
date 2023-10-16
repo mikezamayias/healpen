@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
@@ -24,10 +25,12 @@ class BackButtonSettingsTile extends ConsumerWidget {
       trailing: Switch(
         value: ref.watch(navigationShowBackButtonProvider),
         onChanged: (value) {
-          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
+          vibrate(PreferencesController.navigationEnableHapticFeedback.value,
+              () async {
             ref.read(navigationShowBackButtonProvider.notifier).state = value;
-            await PreferencesController.navigationShowBackButton
-                .write(ref.watch(navigationShowBackButtonProvider));
+            await FirestorePreferencesController.instance.savePreference(
+                PreferencesController.navigationShowBackButton
+                    .withValue(ref.watch(navigationShowBackButtonProvider)));
             log(
               '${ref.watch(navigationShowBackButtonProvider)}',
               name: 'SettingsView:ShowBackButtonSettingsTile',

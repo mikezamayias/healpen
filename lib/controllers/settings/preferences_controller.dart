@@ -57,17 +57,6 @@ class PreferencesController {
     true,
   );
 
-  // Map<String, dynamic> preferences = {
-  //   shakePrivateNoteInfo.key: shakePrivateNoteInfo.value,
-  //   writingShowAnalyzeNotesButton.key: writingShowAnalyzeNotesButton.value,
-  //   writingAutomaticStopwatch.key: writingAutomaticStopwatch.value,
-  //   navigationShowAppBarTitle.key: navigationShowAppBarTitle.value,
-  //   navigationShowBackButton.key: navigationShowBackButton.value,
-  //   navigationEnableHapticFeedback.key: navigationEnableHapticFeedback.value,
-  //   themeColor.key: themeColor.value,
-  //   themeAppearance.key: themeAppearance.value,
-  //   onboardingCompleted.key: onboardingCompleted.value,
-  // };
   List<({PreferenceModel preferenceModel, StateProvider provider})>
       preferences = [
     (
@@ -98,17 +87,7 @@ class PreferencesController {
     (preferenceModel: themeAppearance, provider: themeAppearanceProvider),
     (
       preferenceModel: onboardingCompleted,
-      provider: OnboardingController().onboardingCompletedProvider
+      provider: OnboardingController.onboardingCompletedProvider
     ),
   ];
-
-  /// Reset all preferences
-  Future<void> resetAll() async {
-    for (({PreferenceModel preferenceModel, StateProvider provider}) element
-        in preferences) {
-      await element.preferenceModel.reset();
-      ProviderContainer().read(element.provider).state =
-          element.preferenceModel.value;
-    }
-  }
 }

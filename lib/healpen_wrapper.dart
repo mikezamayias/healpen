@@ -1,22 +1,15 @@
 import 'dart:developer';
 
 import 'package:feedback/feedback.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iterum/flutter_iterum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import 'controllers/onboarding/onboarding_controller.dart';
-import 'controllers/settings/preferences_controller.dart';
 import 'enums/app_theming.dart';
-import 'healpen.dart';
 import 'providers/settings_providers.dart';
+import 'route_controller.dart';
 import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
-import 'views/auth/auth_view.dart';
-import 'views/note/note_view.dart';
-import 'views/onboarding/onboarding_view.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
   const HealpenWrapper({Key? key}) : super(key: key);
@@ -40,67 +33,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   }
 
   @override
-  void didChangeDependencies() async {
-    PreferencesController.themeAppearance.read().then(
-          (ThemeAppearance value) =>
-              ref.watch(themeAppearanceProvider.notifier).state = value,
-        );
-    PreferencesController.themeColor.read().then(
-          (ThemeColor value) =>
-              ref.watch(themeColorProvider.notifier).state = value,
-        );
-    PreferencesController.shakePrivateNoteInfo.read().then(
-          (bool value) =>
-              ref.watch(shakePrivateNoteInfoProvider.notifier).state = value,
-        );
-    PreferencesController.writingAutomaticStopwatch.read().then(
-          (bool value) => ref
-              .watch(writingAutomaticStopwatchProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.navigationShowBackButton.read().then(
-          (bool value) => ref
-              .watch(navigationShowBackButtonProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.onboardingCompleted.read().then(
-          (bool value) => ref
-              .watch(
-                  OnboardingController().onboardingCompletedProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.navigationEnableHapticFeedback.read().then(
-          (bool value) => ref
-              .watch(navigationEnableHapticFeedbackProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.navigationShowAppBarTitle.read().then(
-          (bool value) => ref
-              .watch(navigationShowAppBarTitleProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.writingShowAnalyzeNotesButton.read().then(
-          (bool value) => ref
-              .watch(writingShowAnalyzeNotesButtonProvider.notifier)
-              .state = value,
-        );
-    PreferencesController.navigationShowInfoButtons.read().then(
-          (bool value) => ref
-              .watch(navigationShowInfoButtonsProvider.notifier)
-              .state = value,
-        );
-    log(
-      '${FirebaseAuth.instance.currentUser != null}',
-      name: '_HealpenWrapperState:didChangeDependencies:currentUserExists',
-    );
-    log(
-      '${ref.watch(OnboardingController().onboardingCompletedProvider)}',
-      name: '_HealpenWrapperState:didChangeDependencies:onboardingCompleted',
-    );
-    super.didChangeDependencies();
-  }
-
-  @override
   void didChangePlatformBrightness() {
     if (ref.watch(themeAppearanceProvider) == ThemeAppearance.system) {
       log(
@@ -109,10 +41,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       );
       // TODO: figure a way to change the colors of smooth dot indicator on
       //  system appearance change without restarting the app
-      if (FirebaseAuth.instance.currentUser == null ||
-          ref.watch(OnboardingController().onboardingCompletedProvider)) {
-        Iterum.revive(context);
-      }
       ref.watch(themeProvider.notifier).state = createTheme(
         ref.watch(themeColorProvider).color,
         brightness(ref.watch(themeAppearanceProvider)),
@@ -149,26 +77,15 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         child: MaterialApp(
           title: 'Healpen',
           scaffoldMessengerKey: scaffoldMessengerKey,
+          navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false,
           navigatorObservers: [
             ClearFocusNavigatorObserver(),
           ],
           themeMode: themeMode(ref.watch(themeAppearanceProvider)),
           theme: ref.watch(themeProvider),
-          initialRoute: switch (FirebaseAuth.instance.currentUser == null &&
-              !ref.watch(OnboardingController().onboardingCompletedProvider)) {
-            true => '/onboarding',
-            false => switch (FirebaseAuth.instance.currentUser != null) {
-                true => '/healpen',
-                false => '/auth',
-              },
-          },
-          routes: {
-            '/onboarding': (context) => const OnboardingView(),
-            '/auth': (context) => const AuthView(),
-            '/healpen': (context) => const Healpen(),
-            '/note': (context) => const NoteView(),
-          },
+          initialRoute: RouterController.authWrapperRoute.route,
+          routes: RouterController().routes,
         ),
       ),
     );

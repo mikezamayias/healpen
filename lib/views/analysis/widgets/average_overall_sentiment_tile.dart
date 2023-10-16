@@ -6,8 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../../controllers/analysis_view_controller.dart';
+import '../../../controllers/settings/preferences_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
@@ -61,7 +61,7 @@ class AverageOverallSentimentTile extends ConsumerWidget {
               labelPlacement: LabelPlacement.onTicks,
               onChanged: (dynamic value) {
                 vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
+                  PreferencesController.navigationEnableHapticFeedback.value,
                   () {},
                 );
               },
@@ -91,7 +91,7 @@ class AverageOverallSentimentTile extends ConsumerWidget {
         /// explain to the user what they are seeing
         showHealpenDialog(
           context: context,
-          doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+          doVibrate: PreferencesController.navigationEnableHapticFeedback.value,
           customDialog: const CustomDialog(
             titleString: 'What is this?',
             contentString: 'This is the average sentiment value of all '

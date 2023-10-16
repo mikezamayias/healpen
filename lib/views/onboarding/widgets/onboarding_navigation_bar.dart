@@ -4,7 +4,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../auth/auth_view.dart';
@@ -20,13 +19,9 @@ class OnboardingNavigationBar extends ConsumerStatefulWidget {
 
 class _OnboardingNavigationBarState
     extends ConsumerState<OnboardingNavigationBar> {
-  void goToAuth() {
-    ref.watch(OnboardingController().pageControllerProvider).dispose();
-    ref
-        .watch(OnboardingController().onboardingCompletedProvider.notifier)
-        .state = true;
-    PreferencesController.onboardingCompleted
-        .write(ref.watch(OnboardingController().onboardingCompletedProvider));
+  void goToAuth() async {
+    ref.read(OnboardingController.onboardingCompletedProvider.notifier).state =
+        true;
     navigator.pushReplacement(
       PageRouteBuilder(
         transitionDuration: emphasizedDuration,
@@ -68,7 +63,7 @@ class _OnboardingNavigationBarState
             onTap: () {
               if (currentPageIndex == 0) {
                 vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
+                  PreferencesController.navigationEnableHapticFeedback.value,
                   goToAuth,
                 );
               } else {
@@ -88,7 +83,7 @@ class _OnboardingNavigationBarState
             onTap: () {
               if (currentPageIndex == onboardingViewsLength) {
                 vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
+                  PreferencesController.navigationEnableHapticFeedback.value,
                   goToAuth,
                 );
               } else {

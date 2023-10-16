@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../providers/settings_providers.dart';
@@ -32,14 +33,17 @@ class ThemeColorTile extends ConsumerWidget {
         ],
         selected: {ref.watch(themeColorProvider)},
         onSelectionChanged: (Set<ThemeColor> newSelection) {
-          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
+          vibrate(PreferencesController.navigationEnableHapticFeedback.value,
+              () async {
             ref.watch(themeColorProvider.notifier).state = newSelection.first;
             log(
               '${newSelection.first}',
               name: 'Settings:ThemeColorTile',
             );
-            await PreferencesController.themeColor
-                .write(ref.watch(themeColorProvider));
+            await FirestorePreferencesController.instance.savePreference(
+              PreferencesController.themeColor
+                  .withValue(ref.watch(themeColorProvider)),
+            );
           });
         },
       ),

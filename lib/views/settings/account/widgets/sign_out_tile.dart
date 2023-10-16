@@ -1,29 +1,33 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart' hide PageController;
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_iterum/flutter_iterum.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../controllers/healpen/healpen_controller.dart';
 import '../../../../controllers/onboarding/onboarding_controller.dart';
-import '../../../../controllers/page_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
-import '../../../../providers/page_providers.dart';
-import '../../../../providers/settings_providers.dart';
+import '../../../../models/settings/preference_model.dart';
+import '../../../../route_controller.dart';
 import '../../../../utils/constants.dart';
-import '../../../../utils/helper_functions.dart';
-import '../../../../widgets/custom_dialog.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class SignOutTile extends ConsumerWidget {
+class SignOutTile extends ConsumerStatefulWidget {
   const SignOutTile({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SignOutTile> createState() => _SignOutTileState();
+}
+
+class _SignOutTileState extends ConsumerState<SignOutTile> {
+  @override
+  Widget build(BuildContext context) {
     return CustomListTile(
       responsiveWidth: true,
       contentPadding: EdgeInsets.symmetric(
@@ -34,42 +38,38 @@ class SignOutTile extends ConsumerWidget {
       leadingIconData: FontAwesomeIcons.rightFromBracket,
       textColor: context.theme.colorScheme.onPrimary,
       onTap: () {
-        User user = FirebaseAuth.instance.currentUser!;
-        log('$user', name: 'Signing out user');
-        FirebaseAuth.instance.signOut().onError(
-          (error, stackTrace) {
-            log('$error', name: 'Error signing out user');
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return CustomDialog(
-                  titleString: 'Error signing out',
-                  contentString: 'Please try again later.',
-                  actions: [
-                    CustomListTile(
-                      onTap: () => context.navigator.pop(),
-                      titleString: 'OK',
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ).then(
-          (_) async {
-            ref.read(currentPageProvider.notifier).state =
-                PageController().writing;
-            ref
-                .read(
-                    OnboardingController().onboardingCompletedProvider.notifier)
-                .state = false;
-            await PreferencesController().resetAll();
-            vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-              Iterum.revive(context);
-            });
-          },
-        );
+        log('CustomListTile: onTap', name: 'SignOutTile');
+        log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
+        FirebaseUIAuth.signOut().whenComplete(() {
+          log('signOut().complete', name: 'SignOutTile');
+          log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
+          resetState();
+          Iterum.revive(context);
+          context.navigator.pushNamedAndRemoveUntil(
+            RouterController.authWrapperRoute.route,
+            (route) => false,
+          );
+        });
       },
     );
+  }
+
+  void resetState() {
+    ref.read(HealpenController().currentPageIndexProvider.notifier).state = 0;
+    ref.read(OnboardingController.onboardingCompletedProvider.notifier).state =
+        false;
+    for (({
+      PreferenceModel preferenceModel,
+      StateProvider provider
+    }) preferenceTuple in PreferencesController().preferences) {
+      var key = preferenceTuple.preferenceModel.key;
+      var value = preferenceTuple.preferenceModel.value;
+      ref.read(preferenceTuple.provider.notifier).state = value;
+      preferenceTuple.preferenceModel.withValue(value);
+      log(
+        'Updated $key with value: $value',
+        name: 'SignOutTile:resetPreferences',
+      );
+    }
   }
 }

@@ -12,7 +12,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 // https://m3.material.io/styles/motion/easing-and-duration/tokens-specs#433b1153-2ea3-4fe2-9748-803a47bc97ee
 /// The curve used for most small UI animations.
-const Curve standardCurve = Cubic(0.2, 0.0, 0, 1.0);
+const Curve standardCurve = Cubic(0.2, 0, 0, 1.0);
 
 /// The shortest duration used with Standard curve, 50 milliseconds.
 final Duration shortStandardDuration = 50.milliseconds;
@@ -59,18 +59,4 @@ final sentimentIcons = [
 ];
 
 /// A list of sentiment values used in the application.
-final sentimentValues = [-3, -2, -1, 0, 1, 2, 3];
-
-/// Gets the sentiment label based on the given sentiment value.
-String getSentimentLabel(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
-  final label = sentimentLabels[index];
-  return label;
-}
-
-/// Gets the sentiment icon based on the given sentiment value.
-IconData getSentimentIcon(double sentiment) {
-  final index = sentimentValues.indexOf(sentiment.clamp(-3, 3).toInt());
-  final icon = sentimentIcons[index];
-  return icon;
-}
+final sentimentValues = [-5, -3, -1, 0, 1, 3, 5];

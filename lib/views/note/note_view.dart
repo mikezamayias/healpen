@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../controllers/settings/preferences_controller.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../models/note/note_model.dart';
-import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
@@ -39,10 +39,12 @@ class _NoteViewState extends ConsumerState<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final NoteModel noteModel = args['noteModel'] as NoteModel;
-    final AnalysisModel analysisModel = args['analysisModel'];
+    final args = ModalRoute.of(context)!.settings.arguments as ({
+      NoteModel noteModel,
+      AnalysisModel analysisModel
+    });
+    final NoteModel noteModel = args.noteModel;
+    final AnalysisModel analysisModel = args.analysisModel;
     final showAnalysis = !noteModel.isPrivate;
     return BlueprintView(
       appBar: Padding(
@@ -102,8 +104,9 @@ class _NoteViewState extends ConsumerState<NoteView> {
                 ],
                 selected: {segments[selectedPage]},
                 onSelectionChanged: (Set<String> value) {
-                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
-                      () {
+                  vibrate(
+                      PreferencesController
+                          .navigationEnableHapticFeedback.value, () {
                     setState(() {
                       selectedPage = segments.indexOf(value.first);
                       controller.animateToPage(

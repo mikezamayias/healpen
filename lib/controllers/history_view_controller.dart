@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
@@ -14,12 +17,29 @@ class HistoryViewController {
 
   /// Attributes
   final _writingEntries = <NoteModel>[];
+  static late List<NoteModel> noteModels;
 
   /// Methods
-  Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
-      FirestoreService.writingCollectionReference()
+  static List<NoteModel> get notesToAnalyze => noteModels;
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
+      FirestoreService()
+          .writingCollectionReference()
           .orderBy('timestamp', descending: true)
-          .snapshots();
+          // .limit(10)
+          .snapshots(includeMetadataChanges: true);
+
+  /// Get documents from Firestore of the given date
+  Query<Map<String, dynamic>> getNoteEntriesListOnDate(
+    DateTime date,
+  ) {
+    return FirestoreService()
+        .analysisCollectionReference()
+        .orderBy('timestamp', descending: true)
+        .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
+        .where('timestamp',
+            isLessThan: date.add(1.days).millisecondsSinceEpoch);
+  }
 
   /// Make historyStream from Stream<QuerySnapshot<Map<String, dynamic>>> to
   /// Stream<WritingModelEntry>
@@ -27,31 +47,55 @@ class HistoryViewController {
         _writingEntries.clear();
         for (QueryDocumentSnapshot<Map<String, dynamic>> element
             in event.docs) {
-          // log(
-          //   '${element.data()}',
-          //   name: 'HistoryViewController:notesStream',
-          // );
           _writingEntries.add(NoteModel.fromJson(element.data()));
         }
         return _writingEntries;
       });
 
   /// Deletes note from writing and analysis collections
-  Future<void> deleteNote({
+  deleteNote({
     required NoteModel noteModel,
-  }) async {
-    await FirestoreService.writingCollectionReference()
+  }) {
+    FirestoreService()
+        .writingCollectionReference()
         .doc(noteModel.timestamp.toString())
-        .delete();
-    await FirestoreService.analysisCollectionReference()
+        .delete()
+        .then(
+          (value) => log(
+            'Note deleted',
+            name:
+                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+          ),
+          onError: (error) => log(
+            'Failed to delete note: $error',
+            name:
+                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+          ),
+        );
+    ;
+    FirestoreService()
+        .analysisCollectionReference()
         .doc(noteModel.timestamp.toString())
-        .delete();
+        .delete()
+        .then(
+          (value) => log(
+            'Analysis deleted',
+            name:
+                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+          ),
+          onError: (error) => log(
+            'Failed to delete analysis: $error',
+            name:
+                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+          ),
+        );
   }
 
   Future<void> noteToggleFavorite({
     required NoteModel noteModel,
   }) async {
-    await FirestoreService.writingCollectionReference()
+    await FirestoreService()
+        .writingCollectionReference()
         .doc(noteModel.timestamp.toString())
         .update({
       'isFavorite': !noteModel.isFavorite,
@@ -61,7 +105,8 @@ class HistoryViewController {
   Future<void> noteTogglePrivate({
     required NoteModel noteModel,
   }) async {
-    await FirestoreService.writingCollectionReference()
+    await FirestoreService()
+        .writingCollectionReference()
         .doc(noteModel.timestamp.toString())
         .update({
       'isPrivate': !noteModel.isPrivate,

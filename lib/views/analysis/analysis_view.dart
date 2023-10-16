@@ -6,6 +6,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import '../../controllers/analysis_view_controller.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../providers/settings_providers.dart';
+import '../../services/firestore_service.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
@@ -25,7 +26,7 @@ class AnalysisView extends ConsumerWidget {
         pathNames: ['Your writing insights'],
       ),
       body: StreamBuilder(
-        stream: AnalysisViewController.analysisStream(),
+        stream: FirestoreService().analysisCollectionReference().snapshots(),
         builder: (
           BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> analysisSnapshot,

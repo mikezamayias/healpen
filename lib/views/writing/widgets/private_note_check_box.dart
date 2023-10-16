@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
 import '../../../controllers/writing_controller.dart';
 import '../../../providers/settings_providers.dart';
@@ -23,48 +24,63 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       backgroundColor: context.theme.colorScheme.surface,
       responsiveWidth: true,
       showcaseLeadingIcon: ref.watch(shakePrivateNoteInfoProvider),
-      leadingIconData: ref.watch(navigationShowInfoButtonsProvider)
+      leadingIconData: ref.watch(shakePrivateNoteInfoProvider)
           ? FontAwesomeIcons.circleInfo
           : FontAwesomeIcons.lock,
-      leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
+      leadingOnTap: ref.watch(shakePrivateNoteInfoProvider)
           ? () {
-              vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+              vibrate(
+                  PreferencesController.navigationEnableHapticFeedback.value,
+                  () async {
                 ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
-                PreferencesController.shakePrivateNoteInfo
-                    .write(ref.watch(shakePrivateNoteInfoProvider));
-                showHealpenDialog(
-                  context: context,
-                  doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
-                  customDialog: CustomDialog(
-                    titleString: 'Private note',
-                    contentString:
-                        'A private note won\'t be used in analysis and will only be visible in History.',
-                    actions: [
-                      CustomListTile(
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: gap * 2,
-                          vertical: gap,
-                        ),
-                        cornerRadius: radius - gap,
-                        responsiveWidth: true,
-                        titleString: 'Okay',
-                        onTap: () {
-                          vibrate(
-                            ref.watch(navigationEnableHapticFeedbackProvider),
-                            () {
-                              ref
-                                  .watch(shakePrivateNoteInfoProvider.notifier)
-                                  .state = false;
-                              PreferencesController.shakePrivateNoteInfo.write(
-                                  ref.watch(shakePrivateNoteInfoProvider));
-                              context.navigator.pop();
-                            },
-                          );
-                        },
-                      )
-                    ],
-                  ),
+                await FirestorePreferencesController().savePreference(
+                  PreferencesController.shakePrivateNoteInfo
+                      .withValue(ref.watch(shakePrivateNoteInfoProvider)),
                 );
+                if (context.mounted) {
+                  showHealpenDialog(
+                    context: context,
+                    doVibrate: PreferencesController
+                        .navigationEnableHapticFeedback.value,
+                    customDialog: CustomDialog(
+                      titleString: 'Private note',
+                      contentString:
+                          'A private note won\'t be used in analysis and will only be visible in History.',
+                      actions: [
+                        CustomListTile(
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap * 2,
+                            vertical: gap,
+                          ),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          titleString: 'Okay',
+                          onTap: () {
+                            vibrate(
+                              PreferencesController
+                                  .navigationEnableHapticFeedback.value,
+                              () async {
+                                ref
+                                    .watch(
+                                        shakePrivateNoteInfoProvider.notifier)
+                                    .state = false;
+                                await FirestorePreferencesController()
+                                    .savePreference(
+                                  PreferencesController.shakePrivateNoteInfo
+                                      .withValue(ref
+                                          .watch(shakePrivateNoteInfoProvider)),
+                                );
+                                if (context.mounted) {
+                                  context.navigator.pop();
+                                }
+                              },
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }
               });
             }
           : null,
@@ -73,7 +89,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           ? FontAwesomeIcons.solidSquareCheck
           : FontAwesomeIcons.square,
       trailingOnTap: () {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+        vibrate(PreferencesController.navigationEnableHapticFeedback.value, () {
           ref
               .watch(writingControllerProvider.notifier)
               .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);

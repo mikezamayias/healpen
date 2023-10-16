@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../controllers/settings/preferences_controller.dart';
 import '../../../controllers/writing_controller.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/custom_snack_bar.dart';
@@ -25,7 +25,8 @@ class SaveNoteButton extends ConsumerWidget {
           ? () {
               CustomSnackBar(
                 SnackBarConfig(
-                  vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+                  vibrate: PreferencesController
+                      .navigationEnableHapticFeedback.value,
                   titleString1: 'Saving note...',
                   leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
                   trailingWidgets1: [

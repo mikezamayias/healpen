@@ -27,7 +27,7 @@ class WritingPatternsTile extends ConsumerWidget {
         /// habit.
         (
           titleString: 'Journaling Rhythm',
-          explanationString: 'See how often you write',
+          explanationString: 'See how often you write.',
           content: JournalingRhythmTile(),
         ),
 

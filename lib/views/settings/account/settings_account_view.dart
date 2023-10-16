@@ -6,21 +6,17 @@ import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'widgets/edit_name_tile.dart';
+import 'widgets/save_settings_to_cloud_tile.dart';
 import 'widgets/sign_out_tile.dart';
 
-class SettingsAccountView extends ConsumerStatefulWidget {
+class SettingsAccountView extends ConsumerWidget {
   const SettingsAccountView({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<SettingsAccountView> createState() =>
-      _SettingsAccountViewState();
-}
-
-class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
       const EditNameTile(),
+      const SaveSettingsToCloudTile(),
 
       /// TODO: study and implement the re-authentication process required
       ///  to change email
@@ -42,3 +38,5 @@ class _SettingsAccountViewState extends ConsumerState<SettingsAccountView> {
     );
   }
 }
+
+

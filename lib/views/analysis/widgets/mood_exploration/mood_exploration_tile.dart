@@ -25,7 +25,7 @@ class MoodExploration extends ConsumerWidget {
         (
           titleString: 'Emotional Echo',
           explanationString: 'The color of this ring changes according to your '
-              'mood',
+              'mood.',
           content: EmotionalEchoTile(),
         ),
 

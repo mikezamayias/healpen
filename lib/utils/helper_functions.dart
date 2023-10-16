@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../controllers/emotional_echo_controller.dart';
 import '../enums/app_theming.dart';
 import '../themes/blueprint_theme.dart';
 import 'constants.dart';
@@ -123,4 +124,65 @@ double combinedSentimentValue(double magnitude, double score) {
   double clippedResult = (result * 100).truncate() / 100;
   // log('$clippedResult', name: 'SentenceModel:clippedResult');
   return clippedResult;
+}
+
+int getClosestSentimentIndex(double sentiment) {
+  // Round and clamp the sentiment value
+  int roundedClampedSentiment = sentiment.round().clamp(-5, 5).toInt();
+
+  // Try to find the index in the sentimentValues list
+  int index = sentimentValues.indexOf(roundedClampedSentiment);
+
+  if (index != -1) {
+    return index;
+  }
+
+  // If the exact index is not found, find the closest one
+  index = 0;
+  int minDiff = (sentimentValues[0] - roundedClampedSentiment).abs();
+
+  for (int i = 1; i < sentimentValues.length; i++) {
+    int diff = (sentimentValues[i] - roundedClampedSentiment).abs();
+    if (diff < minDiff) {
+      index = i;
+      minDiff = diff;
+    }
+  }
+
+  return index;
+}
+
+String getSentimentLabel(double sentiment) {
+  int index = getClosestSentimentIndex(sentiment);
+  return sentimentLabels[index];
+}
+
+IconData getSentimentIcon(double sentiment) {
+  int index = getClosestSentimentIndex(sentiment);
+  return sentimentIcons[index];
+}
+
+/// Get sentiment ratio based on the given sentiment value.
+double getSentimentRatio(double sentiment) {
+  return double.parse(
+    (sentiment + 3 / sentimentValues.length).toStringAsFixed(2),
+  );
+}
+
+/// Get shape color based on the given sentiment ratio value.
+Color getSentimentShapeColor(double sentimentRatio) {
+  return Color.lerp(
+    EmotionalEchoController.badColor,
+    EmotionalEchoController.goodColor,
+    sentimentRatio,
+  )!;
+}
+
+/// Get shape color based on the given sentiment ratio value.
+Color getSentimentTexColor(double sentimentRatio) {
+  return Color.lerp(
+    EmotionalEchoController.onBadColor,
+    EmotionalEchoController.onGoodColor,
+    sentimentRatio,
+  )!;
 }
