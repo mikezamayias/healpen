@@ -4,10 +4,9 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/emotional_echo_controller.dart';
+import '../../controllers/healpen/healpen_controller.dart';
 import '../../controllers/history_view_controller.dart';
-import '../../controllers/page_controller.dart';
 import '../../models/note/note_model.dart';
-import '../../providers/page_providers.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
@@ -155,8 +154,11 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                     contentPadding: EdgeInsets.all(gap),
                     subtitle:
                         const Text('Start writing to see your notes here'),
-                    onTap: () => ref.read(currentPageProvider.notifier).state =
-                        PageController().writing,
+                    onTap: () => ref
+                        .read(HealpenController()
+                            .currentPageIndexProvider
+                            .notifier)
+                        .state = 0,
                     leadingIconData: FontAwesomeIcons.pencil,
                     showcaseLeadingIcon: true,
                   ),

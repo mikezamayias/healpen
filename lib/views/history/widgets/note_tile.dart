@@ -9,6 +9,7 @@ import '../../../controllers/history_view_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
+import '../../../route_controller.dart';
 import '../../../services/firestore_service.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
@@ -52,7 +53,7 @@ class NoteTile extends ConsumerWidget {
             );
             if (context.mounted) {
               context.navigator.pushNamed(
-                '/note',
+                RouterController.noteViewRoute.route,
                 arguments: (
                   noteModel: noteEntry,
                   analysisModel: analysisEntry,

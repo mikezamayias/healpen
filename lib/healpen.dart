@@ -16,17 +16,21 @@ import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
 
-class Healpen extends ConsumerWidget {
+class Healpen extends ConsumerStatefulWidget {
   const Healpen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final List<Animate> pages = [
-      for (final page in page_controller.PageController().pages)
-        page.widget
-            .animate()
-            .fade(duration: emphasizedDuration, curve: emphasizedCurve),
-    ];
+  ConsumerState<Healpen> createState() => _HealpenState();
+}
+
+class _HealpenState extends ConsumerState<Healpen> {
+  List<PreferenceModel> _lastFetchedPreferences = [];
+
+  @override
+  Widget build(BuildContext context) {
+    // Moved pages creation to a separate function
+    final pages = _buildPages();
+
     return StreamBuilder(
       stream: FirestorePreferencesController().getPreferences(),
       builder: (context, snapshot) {
@@ -38,77 +42,104 @@ class Healpen extends ConsumerWidget {
         }
 
         if (snapshot.hasData) {
-          List<PreferenceModel> fetchedPreferences = snapshot.data!;
-          log(
-            'Fetched Preferences: $fetchedPreferences',
-            name: '_HealpenWrapperState:StreamBuilder - Fetched Preferences',
-          );
+          List<PreferenceModel> currentPreferences =
+              snapshot.data as List<PreferenceModel>;
 
-          Future.microtask(() {
-            Map<String, dynamic> fetchedPreferenceMap = {
-              for (var p in fetchedPreferences) p.key: p.value
-            };
-
-            for (({
-              PreferenceModel preferenceModel,
-              StateProvider provider
-            }) preferenceTuple in PreferencesController().preferences) {
-              var key = preferenceTuple.preferenceModel.key;
-              if (fetchedPreferenceMap.containsKey(key)) {
-                ref.read(preferenceTuple.provider.notifier).state =
-                    fetchedPreferenceMap[key];
-                log(
-                  'Updated ${preferenceTuple.preferenceModel.key} '
-                  'with value: ${fetchedPreferenceMap[key]}',
-                  name: '_HealpenWrapperState:StreamBuilder - Updating State',
-                );
-              }
-            }
-          });
+          if (_havePreferencesChanged(currentPreferences)) {
+            _updatePreferences(currentPreferences);
+            _lastFetchedPreferences = currentPreferences;
+          }
         }
 
-        getSystemUIOverlayStyle(
-          context.theme,
-          ref.watch(themeAppearanceProvider),
-        );
-
-        EmotionalEchoController.goodColor = context.theme.colorScheme.primary;
-        EmotionalEchoController.badColor = context.theme.colorScheme.error;
-        EmotionalEchoController.onGoodColor =
-            context.theme.colorScheme.onPrimary;
-        EmotionalEchoController.onBadColor = context.theme.colorScheme.onError;
+        _setupGlobalStyles(context);
 
         return Scaffold(
           body: PageView.builder(
             controller: ref.watch(HealpenController().pageControllerProvider),
             physics: const NeverScrollableScrollPhysics(),
-            onPageChanged: (value) {
-              vibrate(
-                  PreferencesController.navigationEnableHapticFeedback.value,
-                  () {
-                ref
-                    .watch(
-                        HealpenController().currentPageIndexProvider.notifier)
-                    .state = value;
-              });
-            },
+            onPageChanged: (value) => _handlePageChange(value),
             itemCount: pages.length,
-            itemBuilder: (context, index) {
-              return AnimatedOpacity(
-                duration: slightlyLongEmphasizedDuration,
-                curve: emphasizedCurve,
-                opacity:
-                    ref.watch(HealpenController().currentPageIndexProvider) ==
-                            index
-                        ? 1
-                        : 0,
-                child: pages.elementAt(index),
-              );
-            },
+            itemBuilder: (context, index) => _buildPage(context, index, pages),
           ),
           bottomNavigationBar: const CustomBottomNavigationBar(),
         );
       },
     );
+  }
+
+  List<Animate> _buildPages() {
+    return [
+      for (final page in page_controller.PageController().pages)
+        page.widget
+            .animate()
+            .fade(duration: emphasizedDuration, curve: emphasizedCurve),
+    ];
+  }
+
+  void _updatePreferences(List<PreferenceModel> fetchedPreferences) {
+    Future.microtask(() {
+      // Moved this logic to a separate function
+      var fetchedPreferenceMap = {
+        for (var p in fetchedPreferences) p.key: p.value
+      };
+
+      for (var preferenceTuple in PreferencesController().preferences) {
+        var key = preferenceTuple.preferenceModel.key;
+        if (fetchedPreferenceMap.containsKey(key)) {
+          ref.read(preferenceTuple.provider.notifier).state =
+              fetchedPreferenceMap[key];
+          log(
+            'Updated ${preferenceTuple.preferenceModel.key} '
+            'with value: ${fetchedPreferenceMap[key]}',
+            name: '_HealpenWrapperState:StreamBuilder - Updating State',
+          );
+        }
+      }
+    });
+  }
+
+  void _setupGlobalStyles(BuildContext context) {
+    // Moved this logic to a separate function
+    getSystemUIOverlayStyle(context.theme, ref.watch(themeAppearanceProvider));
+
+    EmotionalEchoController.goodColor = context.theme.colorScheme.primary;
+    EmotionalEchoController.badColor = context.theme.colorScheme.error;
+    EmotionalEchoController.onGoodColor = context.theme.colorScheme.onPrimary;
+    EmotionalEchoController.onBadColor = context.theme.colorScheme.onError;
+  }
+
+  void _handlePageChange(int value) {
+    // Moved this logic to a separate function
+    vibrate(PreferencesController.navigationEnableHapticFeedback.value, () {
+      ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
+          value;
+    });
+  }
+
+  Widget _buildPage(BuildContext context, int index, List<Animate> pages) {
+    // Moved this logic to a separate function
+    return AnimatedOpacity(
+      duration: slightlyLongEmphasizedDuration,
+      curve: emphasizedCurve,
+      opacity: ref.watch(HealpenController().currentPageIndexProvider) == index
+          ? 1
+          : 0,
+      child: pages.elementAt(index),
+    );
+  }
+
+  bool _havePreferencesChanged(List<PreferenceModel> newPreferences) {
+    if (newPreferences.length != _lastFetchedPreferences.length) {
+      return true;
+    }
+
+    for (int i = 0; i < newPreferences.length; i++) {
+      if (newPreferences[i].key != _lastFetchedPreferences[i].key ||
+          newPreferences[i].value != _lastFetchedPreferences[i].value) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

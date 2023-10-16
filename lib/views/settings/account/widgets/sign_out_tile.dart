@@ -8,11 +8,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../controllers/healpen/healpen_controller.dart';
 import '../../../../controllers/onboarding/onboarding_controller.dart';
-import '../../../../controllers/page_controller.dart' as page_controller;
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../models/settings/preference_model.dart';
-import '../../../../providers/page_providers.dart';
+import '../../../../route_controller.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -43,21 +43,19 @@ class _SignOutTileState extends ConsumerState<SignOutTile> {
         FirebaseUIAuth.signOut().whenComplete(() {
           log('signOut().complete', name: 'SignOutTile');
           log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
-          Iterum.revive(context);
           resetState();
-          context.navigator.popAndPushNamed('/onboarding');
+          Iterum.revive(context);
+          context.navigator.pushNamedAndRemoveUntil(
+            RouterController.authWrapperRoute.route,
+            (route) => false,
+          );
         });
       },
     );
   }
 
   void resetState() {
-    ref.read(OnboardingController().pageControllerProvider).dispose();
-    ref.read(OnboardingController().pageControllerProvider.notifier).state =
-        PageController();
-    PageController();
-    ref.read(currentPageProvider.notifier).state =
-        page_controller.PageController().writing;
+    ref.read(HealpenController().currentPageIndexProvider.notifier).state = 0;
     ref.read(OnboardingController.onboardingCompletedProvider.notifier).state =
         false;
     for (({

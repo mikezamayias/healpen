@@ -8,6 +8,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../providers/custom_auth_provider.dart';
+import '../../route_controller.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
@@ -35,7 +36,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
         // TODO: check if the following implementation is correct
         // documentation mentions only the SignedIn check
         if (newState is SignedIn) {
-          context.navigator.pushReplacementNamed('/healpen');
+          context.navigator.pushNamedAndRemoveUntil(
+            RouterController.authWrapperRoute.route,
+            (route) => false,
+          );
         }
       },
       builder: (

@@ -6,14 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'enums/app_theming.dart';
-import 'healpen.dart';
 import 'providers/settings_providers.dart';
+import 'route_controller.dart';
 import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
-import 'views/auth/auth_view.dart';
-import 'views/note/note_view.dart';
-import 'views/onboarding/onboarding_view.dart';
-import 'widgets/auth_wrapper.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
   const HealpenWrapper({Key? key}) : super(key: key);
@@ -88,14 +84,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           ],
           themeMode: themeMode(ref.watch(themeAppearanceProvider)),
           theme: ref.watch(themeProvider),
-          initialRoute: '/auth-gate',
-          routes: {
-            '/onboarding': (context) => const OnboardingView(),
-            '/auth': (context) => const AuthView(),
-            '/healpen': (context) => const Healpen(),
-            '/note': (context) => const NoteView(),
-            '/auth-gate': (context) => const AuthWrapper(),
-          },
+          initialRoute: RouterController.authWrapperRoute.route,
+          routes: RouterController().routes,
         ),
       ),
     );

@@ -30,34 +30,37 @@ class BlueprintView extends ConsumerWidget {
         context.theme,
         ref.watch(themeAppearanceProvider),
       ),
-      child: GestureDetector(
-        onTap: () => context.focusScope.unfocus(),
-        child: Container(
-          color: context.theme.colorScheme.background,
-          padding: EdgeInsets.symmetric(
-            vertical: gap,
-            horizontal: padBodyHorizontally! ? gap : 0,
-          ),
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: showAppBarTitle!
-                  ? appBar != null
-                      ? PreferredSize(
-                          preferredSize: Size.fromHeight(100.h),
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: gap),
-                            child: appBar!.animateAppBar(),
-                          ),
-                        )
-                      : null
-                  : null,
-              body: ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  scrollbars: false,
-                  overscroll: false,
+      child: Container(
+        color: context.theme.colorScheme.background,
+        child: SafeArea(
+          child: GestureDetector(
+            onTap: () => context.focusScope.unfocus(),
+            child: Container(
+              color: context.theme.colorScheme.background,
+              padding: EdgeInsets.symmetric(
+                vertical: gap,
+                horizontal: padBodyHorizontally! ? gap : 0,
+              ),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: showAppBarTitle!
+                    ? appBar != null
+                        ? PreferredSize(
+                            preferredSize: Size.fromHeight(100.h),
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: gap),
+                              child: appBar!.animateAppBar(),
+                            ),
+                          )
+                        : null
+                    : null,
+                body: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(
+                    scrollbars: false,
+                    overscroll: false,
+                  ),
+                  child: body,
                 ),
-                child: body,
               ),
             ),
           ),
