@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -87,99 +89,125 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
           .timestampToDateTime()
           .subtract(1.days),
     );
-    return Padding(
-      padding: EdgeInsets.all(gap / 2),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius - gap / 2),
-          color: context.theme.colorScheme.surface,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            AnimatedContainer(
-              duration: standardDuration,
-              curve: standardCurve,
-              alignment: Alignment.center,
-              height: gap * 4,
-              width: gap * 4,
-              child: Text(
-                details.date.day.toString(),
-                style: context.theme.textTheme.titleLarge!.copyWith(
-                  color: currentMonthCheck &&
-                          !dateAfterTodayCheck &&
-                          !dateBeforeFirstRecordCheck
-                      ? context.theme.colorScheme.onSecondaryContainer
-                      : context.theme.colorScheme.outlineVariant,
-                  fontWeight: currentMonthCheck &&
-                          !dateAfterTodayCheck &&
-                          !dateBeforeFirstRecordCheck &&
-                          todayCheck
-                      ? FontWeight.bold
-                      : FontWeight.normal,
-                ),
+    return StreamBuilder(
+      stream: NoteAnalysisService().getAnalysisEntriesListOnDate(details.date),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<AnalysisModel>> analysisModelListSnapshot,
+      ) {
+        Color? shapeColor;
+        Color? textColor;
+        double? dateSentiment;
+        double? dateSentimentRatio;
+        if (analysisModelListSnapshot.data != null &&
+            analysisModelListSnapshot.data!.isNotEmpty) {
+          List<AnalysisModel> analysisModelList =
+              analysisModelListSnapshot.data!;
+          if (analysisModelList.isNotEmpty) {
+            log(
+              '$analysisModelList',
+              name: DateFormat('yyyy-MM-dd').format(details.date),
+            );
+            dateSentiment = [
+              for (AnalysisModel element in analysisModelList)
+                element.sentiment!,
+            ].average;
+            dateSentimentRatio = getSentimentRatio(dateSentiment);
+            shapeColor = getSentimentShapeColor(dateSentimentRatio);
+            textColor = getSentimentTexColor(dateSentimentRatio);
+          }
+        }
+        return Padding(
+          padding: EdgeInsets.all(gap / 2),
+          child: AnimatedContainer(
+            duration: standardDuration,
+            curve: standardCurve,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius - gap / 2),
+              gradient: RadialGradient(
+                radius: radius - gap,
+                center: Alignment.topCenter,
+                colors: shapeColor == null
+                    ? [
+                        context.theme.colorScheme.surface,
+                        context.theme.colorScheme.surface
+                      ]
+                    : [
+                        shapeColor,
+                        context.theme.colorScheme.surface,
+                      ],
               ),
             ),
-            Expanded(
-              child: StreamBuilder(
-                  stream: NoteAnalysisService()
-                      .getAnalysisEntriesListOnDate(details.date),
-                  builder: (
-                    BuildContext context,
-                    AsyncSnapshot<List<AnalysisModel>>
-                        analysisModelListSnapshot,
-                  ) {
-                    Color? shapeColor;
-                    Color? textColor;
-                    double? dateSentiment;
-                    double? dateSentimentRatio;
-                    if (analysisModelListSnapshot.data != null &&
-                        analysisModelListSnapshot.data!.isNotEmpty) {
-                      // log(
-                      //   '${analysisModelListSnapshot.data}',
-                      //   name: 'analysisModelListSnapshot',
-                      // );
-                      List<AnalysisModel> analysisModelList =
-                          analysisModelListSnapshot.data!;
-                      if (analysisModelList.isNotEmpty) {
-                        dateSentiment = [
-                          for (AnalysisModel element in analysisModelList)
-                            element.sentiment!,
-                        ].average;
-                        dateSentimentRatio = getSentimentRatio(dateSentiment);
-                        shapeColor = getSentimentShapeColor(dateSentimentRatio);
-                        textColor = getSentimentTexColor(dateSentimentRatio);
-                      }
-                    }
-                    return Visibility(
-                      visible: details.appointments.isNotEmpty,
-                      child: AnimatedContainer(
-                        duration: standardDuration,
-                        curve: standardCurve,
-                        alignment: Alignment.center,
-                        decoration: details.appointments.isNotEmpty
-                            ? BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(radius - gap / 2),
-                                color: shapeColor ?? theme.colorScheme.primary,
-                              )
-                            : null,
-                        child: Text(
-                          '${details.appointments.length}',
-                          textAlign: TextAlign.center,
-                          style: context.theme.textTheme.titleMedium!.copyWith(
-                            color: textColor ?? theme.colorScheme.onPrimary,
-                            fontWeight: FontWeight.bold,
-                            textBaseline: TextBaseline.alphabetic,
-                          ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                AnimatedContainer(
+                  duration: standardDuration,
+                  curve: standardCurve,
+                  alignment: Alignment.center,
+                  height: gap * 4,
+                  width: gap * 4,
+                  child: Text(
+                    details.date.day.toString(),
+                    style: context.theme.textTheme.titleLarge!.copyWith(
+                      color: currentMonthCheck &&
+                              !dateAfterTodayCheck &&
+                              !dateBeforeFirstRecordCheck
+                          ? textColor ??
+                              context.theme.colorScheme.onSecondaryContainer
+                          : context.theme.colorScheme.outlineVariant,
+                      fontWeight: currentMonthCheck &&
+                              !dateAfterTodayCheck &&
+                              !dateBeforeFirstRecordCheck &&
+                              todayCheck
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Visibility(
+                    visible: details.appointments.isNotEmpty,
+                    child: AnimatedContainer(
+                      duration: standardDuration,
+                      curve: standardCurve,
+                      alignment: Alignment.center,
+                      decoration: details.appointments.isNotEmpty
+                          ? BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(radius - gap / 2),
+                              gradient: RadialGradient(
+                                radius: radius - gap,
+                                center: Alignment.topCenter,
+                                colors: shapeColor == null
+                                    ? [
+                                        context.theme.colorScheme.surface,
+                                        context.theme.colorScheme.surface
+                                      ]
+                                    : [
+                                        shapeColor,
+                                        context.theme.colorScheme.surface,
+                                      ],
+                              ),
+                            )
+                          : null,
+                      child: Text(
+                        '${details.appointments.length}',
+                        textAlign: TextAlign.center,
+                        style: context.theme.textTheme.titleMedium!.copyWith(
+                          color: textColor ?? theme.colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                          textBaseline: TextBaseline.alphabetic,
                         ),
                       ),
-                    );
-                  }),
-            )
-          ],
-        ),
-      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
