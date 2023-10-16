@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -51,17 +53,42 @@ class HistoryViewController {
       });
 
   /// Deletes note from writing and analysis collections
-  Future<void> deleteNote({
+  deleteNote({
     required NoteModel noteModel,
-  }) async {
-    await FirestoreService()
+  }) {
+    FirestoreService()
         .writingCollectionReference()
         .doc(noteModel.timestamp.toString())
-        .delete();
-    await FirestoreService()
+        .delete()
+        .then(
+          (value) => log(
+            'Note deleted',
+            name:
+                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+          ),
+          onError: (error) => log(
+            'Failed to delete note: $error',
+            name:
+                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+          ),
+        );
+    ;
+    FirestoreService()
         .analysisCollectionReference()
         .doc(noteModel.timestamp.toString())
-        .delete();
+        .delete()
+        .then(
+          (value) => log(
+            'Analysis deleted',
+            name:
+                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+          ),
+          onError: (error) => log(
+            'Failed to delete analysis: $error',
+            name:
+                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+          ),
+        );
   }
 
   Future<void> noteToggleFavorite({
