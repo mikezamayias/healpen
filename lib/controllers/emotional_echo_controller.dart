@@ -10,7 +10,6 @@ class EmotionalEchoController {
 
   /// Attributes
   static late double sentiment;
-  static late double sentimentRatio;
   static late Color goodColor;
   static late Color onGoodColor;
   static late Color badColor;

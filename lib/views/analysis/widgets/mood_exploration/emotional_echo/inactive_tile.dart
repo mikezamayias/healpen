@@ -50,7 +50,7 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
                 child: Opacity(
                   opacity: value,
                   child: Text(
-                    getSentimentLabel(EmotionalEchoController.sentimentRatio)
+                    getSentimentLabel(EmotionalEchoController.sentiment)
                         .split(' ')
                         .join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(

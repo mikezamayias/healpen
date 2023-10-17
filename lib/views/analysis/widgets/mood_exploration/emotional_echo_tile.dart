@@ -20,14 +20,10 @@ class EmotionalEchoTile extends ConsumerWidget {
         .watch(AnalysisViewController.analysisModelListProvider)
         .map((AnalysisModel analysisModel) => analysisModel.sentiment!)
         .average;
-    EmotionalEchoController.sentimentRatio =
-        getSentimentRatio(EmotionalEchoController.sentiment);
-    EmotionalEchoController.shapeColor = getSentimentShapeColor(
-      EmotionalEchoController.sentimentRatio,
-    );
-    EmotionalEchoController.textColor = getSentimentTexColor(
-      EmotionalEchoController.sentimentRatio,
-    );
+    EmotionalEchoController.shapeColor =
+        getSentimentShapeColor(EmotionalEchoController.sentiment);
+    EmotionalEchoController.textColor =
+        getSentimentTexColor(EmotionalEchoController.sentiment);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onLongPress: () {
