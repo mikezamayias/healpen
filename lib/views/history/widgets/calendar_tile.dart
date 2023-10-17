@@ -218,7 +218,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
               List<Widget> widgets = [
                 ...querySnapshot.data!.docs.map(
                   (e) => NoteTile(
-                    entry: NoteModel.fromJson(e.data()),
+                    noteModel: NoteModel.fromJson(e.data()),
                   ),
                 )
               ];
