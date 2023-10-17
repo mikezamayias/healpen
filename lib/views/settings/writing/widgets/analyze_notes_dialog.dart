@@ -59,8 +59,7 @@ class AnalyzeNotesDialog extends ConsumerWidget {
           cornerRadius: radius - gap,
           responsiveWidth: true,
           titleString: 'Close',
-          onTap: switch (
-              ref.watch(NoteAnalyzer.analysisProgressProvider)) {
+          onTap: switch (ref.watch(NoteAnalyzer.analysisProgressProvider)) {
             AnalysisProgress.completed => () {
                 context.navigator.pop();
               },

@@ -25,7 +25,9 @@ class EnableAutomaticStopwatchTile extends ConsumerWidget {
       trailing: Switch(
         value: ref.watch(writingAutomaticStopwatchProvider),
         onChanged: (value) {
-          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
+          vibrate(
+            ref.watch(navigationEnableHapticFeedbackProvider),
+            () async {
               ref.read(writingAutomaticStopwatchProvider.notifier).state =
                   value;
               await FirestorePreferencesController.instance.savePreference(

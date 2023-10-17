@@ -46,7 +46,7 @@ class BlueprintView extends ConsumerWidget {
                 appBar: showAppBarTitle!
                     ? appBar != null
                         ? PreferredSize(
-                            preferredSize: Size.fromHeight(100.h),
+                            preferredSize: Size.fromHeight(21.h),
                             child: Padding(
                               padding: EdgeInsets.only(bottom: gap),
                               child: appBar!.animateAppBar(),
