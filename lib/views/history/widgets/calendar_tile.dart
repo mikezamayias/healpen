@@ -55,7 +55,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       todayHighlightColor: context.theme.colorScheme.secondary,
       cellBorderColor: context.theme.colorScheme.surface,
       selectionDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(radius - gap / 3),
         border: Border.all(
           color: context.theme.colorScheme.primary,
           width: gap / 3,
@@ -115,7 +115,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
             duration: standardDuration,
             curve: standardCurve,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(radius - gap / 2),
+              borderRadius: BorderRadius.circular(radius - gap),
               color: shapeColor,
             ),
             child: Column(
