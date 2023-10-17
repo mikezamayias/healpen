@@ -11,7 +11,6 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
-import 'feedback/settings_feedback_tile.dart';
 import 'navigation/settings_navigation_view.dart';
 import 'theme/settings_theme_view.dart';
 import 'writing/settings_writing_view.dart';
@@ -84,7 +83,6 @@ class SettingsView extends ConsumerWidget {
                   });
                 },
               ),
-          const SettingsFeedbackTile(),
         ],
       ),
     );
