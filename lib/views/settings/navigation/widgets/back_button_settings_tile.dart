@@ -26,15 +26,18 @@ class BackButtonSettingsTile extends ConsumerWidget {
         value: ref.watch(navigationShowBackButtonProvider),
         onChanged: (value) {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
-            ref.read(navigationShowBackButtonProvider.notifier).state = value;
-            await FirestorePreferencesController.instance.savePreference(
-                PreferencesController.navigationShowBackButton
-                    .withValue(ref.watch(navigationShowBackButtonProvider)));
-            log(
-              '${ref.watch(navigationShowBackButtonProvider)}',
-              name: 'SettingsView:ShowBackButtonSettingsTile',
-            );
-          });
+              ref.read(navigationShowBackButtonProvider.notifier).state = value;
+              await FirestorePreferencesController.instance.savePreference(
+                PreferencesController.navigationShowBackButton.withValue(
+                  ref.watch(navigationShowBackButtonProvider),
+                ),
+              );
+              log(
+                '${ref.watch(navigationShowBackButtonProvider)}',
+                name: 'SettingsView:ShowAppBarTitle',
+              );
+            },
+          );
         },
       ),
     );

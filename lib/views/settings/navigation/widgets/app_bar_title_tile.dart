@@ -29,13 +29,16 @@ class AppBarTitleTitle extends ConsumerWidget {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
             ref.read(navigationShowAppBarTitleProvider.notifier).state = value;
             await FirestorePreferencesController.instance.savePreference(
-                PreferencesController.navigationShowAppBarTitle
-                    .withValue(ref.watch(navigationShowAppBarTitleProvider)));
-            log(
-              '${ref.watch(navigationShowAppBarTitleProvider)}',
-              name: 'SettingsView:ShowAppBarTitle',
-            );
-          });
+                PreferencesController.navigationShowAppBarTitle.withValue(
+                  ref.watch(navigationShowAppBarTitleProvider),
+                ),
+              );
+              log(
+                '${ref.watch(navigationShowAppBarTitleProvider)}',
+                name: 'SettingsView:ShowAppBarTitle',
+              );
+            },
+          );
         },
       ),
     );

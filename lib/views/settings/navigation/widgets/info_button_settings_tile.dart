@@ -21,38 +21,22 @@ class InfoButtonSettingsTile extends ConsumerWidget {
       explanationString:
           'Shows an info button on the top left corner of many elements',
       enableExplanationWrapper: true,
-      trailing: StreamBuilder(
-        stream: FirestorePreferencesController()
-            .getPreference(PreferencesController.navigationShowInfoButtons),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            log(
-              '${snapshot.error}',
-              name: 'InfoButtonSettingsTile:StreamBuilder - Error',
-            );
-          }
-          if (snapshot.hasData) {
-            PreferencesController.navigationShowInfoButtons.value =
-                snapshot.data!.value;
-          }
-          return Switch(
-            value: ref.watch(navigationShowInfoButtonsProvider),
-            onChanged: (value) {
-              vibrate(
-                ref.watch(navigationEnableHapticFeedbackProvider),
-                () async {
-                  PreferencesController.navigationShowInfoButtons.value = value;
-                  ref
-                      .read(navigationShowInfoButtonsProvider.notifier)
-                      .state = value;
-                  await FirestorePreferencesController.instance.savePreference(
-                    PreferencesController.navigationShowInfoButtons,
-                  );
-                  log(
-                    '${PreferencesController.navigationShowInfoButtons.value}',
-                    name: 'InfoButtonSettingsTile:StreamBuilder - onChanged',
-                  );
-                },
+      trailing: Switch(
+        value: ref.watch(navigationShowInfoButtonsProvider),
+        onChanged: (value) {
+          vibrate(
+            ref.watch(navigationEnableHapticFeedbackProvider),
+            () async {
+              ref.read(navigationShowInfoButtonsProvider.notifier).state =
+                  value;
+              await FirestorePreferencesController.instance.savePreference(
+                PreferencesController.navigationShowInfoButtons.withValue(
+                  ref.watch(navigationShowInfoButtonsProvider),
+                ),
+              );
+              log(
+                '${ref.watch(navigationShowInfoButtonsProvider)}',
+                name: 'SettingsView:ShowAppBarTitle',
               );
             },
           );
