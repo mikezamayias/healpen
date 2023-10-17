@@ -14,8 +14,6 @@ class EmotionalEchoController {
   static late Color onGoodColor;
   static late Color badColor;
   static late Color onBadColor;
-  static late Color shapeColor;
-  static late Color textColor;
   static final isPressedProvider = StateProvider<bool>((ref) => false);
 
   /// Methods

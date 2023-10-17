@@ -26,9 +26,9 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
               (child) {
                 if (child is Shape) {
                   final Shape shape = child;
-                  shape.fills.first.paint.color = EmotionalEchoController
-                      .shapeColor
-                      .withOpacity(shape.fills.first.paint.color.opacity);
+                  shape.fills.first.paint.color =
+                      getSentimentShapeColor(EmotionalEchoController.sentiment)
+                          .withOpacity(shape.fills.first.paint.color.opacity);
                 }
               },
             );
@@ -50,11 +50,14 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
                 child: Opacity(
                   opacity: value,
                   child: Text(
-                    getSentimentLabel(EmotionalEchoController.sentiment)
+                    '${getSentimentLabel(EmotionalEchoController.sentiment)} '
+                            '${'${EmotionalEchoController.sentiment}'}'
                         .split(' ')
                         .join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(
-                      color: EmotionalEchoController.textColor,
+                      color: getSentimentTexColor(
+                        EmotionalEchoController.sentiment,
+                      ),
                     ),
                     textAlign: TextAlign.center,
                   ),
