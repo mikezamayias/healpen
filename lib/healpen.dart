@@ -15,6 +15,7 @@ import 'providers/settings_providers.dart';
 import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'widgets/custom_bottom_navigation_bar.dart';
+import 'wrappers/keep_alive_wrapper.dart';
 
 class Healpen extends ConsumerStatefulWidget {
   const Healpen({super.key});
@@ -70,7 +71,7 @@ class _HealpenState extends ConsumerState<Healpen> {
   List<Animate> _buildPages() {
     return [
       for (final page in page_controller.PageController().pages)
-        page.widget
+        KeepAliveWrapper(child: page.widget)
             .animate()
             .fade(duration: emphasizedDuration, curve: emphasizedCurve),
     ];
