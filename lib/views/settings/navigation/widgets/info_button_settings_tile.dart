@@ -27,8 +27,8 @@ class InfoButtonSettingsTile extends ConsumerWidget {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             log(
-              'StreamBuilder Error: ${snapshot.error}',
-              name: 'InfoButtonSettingsTile',
+              '${snapshot.error}',
+              name: 'InfoButtonSettingsTile:StreamBuilder - Error',
             );
           }
           if (snapshot.hasData) {
@@ -36,19 +36,21 @@ class InfoButtonSettingsTile extends ConsumerWidget {
                 snapshot.data!.value;
           }
           return Switch(
-            value: PreferencesController.navigationShowInfoButtons.value,
+            value: ref.watch(navigationShowInfoButtonsProvider),
             onChanged: (value) {
               vibrate(
                 ref.watch(navigationEnableHapticFeedbackProvider),
                 () async {
                   PreferencesController.navigationShowInfoButtons.value = value;
+                  ref
+                      .read(navigationShowInfoButtonsProvider.notifier)
+                      .state = value;
                   await FirestorePreferencesController.instance.savePreference(
-                      PreferencesController.navigationShowInfoButtons.withValue(
-                          PreferencesController
-                              .navigationShowInfoButtons.value));
+                    PreferencesController.navigationShowInfoButtons,
+                  );
                   log(
                     '${PreferencesController.navigationShowInfoButtons.value}',
-                    name: 'InfoButtonSettingsTile',
+                    name: 'InfoButtonSettingsTile:StreamBuilder - onChanged',
                   );
                 },
               );

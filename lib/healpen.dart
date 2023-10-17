@@ -29,6 +29,10 @@ class _HealpenState extends ConsumerState<Healpen> {
 
   @override
   Widget build(BuildContext context) {
+    log(
+      '${ref.watch(navigationShowInfoButtonsProvider)}',
+      name: '_HealpenWrapperState:StreamBuilder - Info Buttons',
+    );
     // Moved pages creation to a separate function
     final pages = _buildPages();
 

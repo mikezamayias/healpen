@@ -28,7 +28,7 @@ class HapticFeedbackSettingsTile extends ConsumerWidget {
           if (snapshot.hasError) {
             log(
               'StreamBuilder Error: ${snapshot.error}',
-              name: 'InfoButtonSettingsTile',
+              name: 'HapticFeedbackSettingsTile',
             );
           }
           if (snapshot.hasData) {
@@ -42,6 +42,9 @@ class HapticFeedbackSettingsTile extends ConsumerWidget {
                 ref.watch(navigationEnableHapticFeedbackProvider),
                 () async {
                   PreferencesController.navigationShowInfoButtons.value = value;
+                  ref
+                      .read(navigationEnableHapticFeedbackProvider.notifier)
+                      .state = value;
                   await FirestorePreferencesController.instance.savePreference(
                       PreferencesController.navigationEnableHapticFeedback
                           .withValue(PreferencesController
