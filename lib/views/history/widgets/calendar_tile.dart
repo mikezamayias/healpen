@@ -96,7 +96,6 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         Color shapeColor = context.theme.colorScheme.surface;
         Color textColor = context.theme.colorScheme.onSurface;
         double? dateSentiment;
-        double? dateSentimentRatio;
         if (analysisModelListSnapshot.data != null &&
             analysisModelListSnapshot.data!.isNotEmpty) {
           List<AnalysisModel> analysisModelList =
@@ -106,9 +105,8 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
               for (AnalysisModel element in analysisModelList)
                 element.sentiment!,
             ].average;
-            dateSentimentRatio = getSentimentRatio(dateSentiment);
-            shapeColor = getSentimentShapeColor(dateSentimentRatio);
-            textColor = getSentimentTexColor(dateSentimentRatio);
+            shapeColor = getSentimentShapeColor(dateSentiment);
+            textColor = getSentimentTexColor(dateSentiment);
           }
         }
         return Padding(
@@ -118,14 +116,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
             curve: standardCurve,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(radius - gap / 2),
-              gradient: RadialGradient(
-                radius: radius - gap,
-                center: Alignment.topCenter,
-                colors: [
-                  shapeColor,
-                  context.theme.colorScheme.surface,
-                ],
-              ),
+              color: shapeColor,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -160,20 +151,6 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                       duration: standardDuration,
                       curve: standardCurve,
                       alignment: Alignment.center,
-                      decoration: details.appointments.isNotEmpty
-                          ? BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(radius - gap / 2),
-                              gradient: RadialGradient(
-                                radius: radius - gap,
-                                center: Alignment.topCenter,
-                                colors: [
-                                  shapeColor,
-                                  context.theme.colorScheme.surface,
-                                ],
-                              ),
-                            )
-                          : null,
                       child: Text(
                         '${details.appointments.length}',
                         textAlign: TextAlign.center,
