@@ -110,8 +110,7 @@ class _HealpenState extends ConsumerState<Healpen> {
 
   void _handlePageChange(int value) {
     // Moved this logic to a separate function
-    vibrate(                  ref.watch(navigationEnableHapticFeedbackProvider),
-        () {
+    vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
       ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
           value;
     });

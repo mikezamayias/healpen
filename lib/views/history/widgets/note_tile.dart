@@ -11,7 +11,6 @@ import '../../../controllers/history_view_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../route_controller.dart';
 import '../../../services/firestore_service.dart';
 import '../../../utils/constants.dart';
@@ -66,17 +65,12 @@ class NoteTile extends ConsumerWidget {
               maxLines: 1,
             ),
             onTap: () {
-              vibrate(
-                ref.watch(navigationEnableHapticFeedbackProvider),
-                () {
-                  context.navigator.pushNamed(
-                    RouterController.noteViewRoute.route,
-                    arguments: (
-                      noteModel: snapshot.data!.note,
-                      analysisModel: snapshot.data!.analysis,
-                    ),
-                  );
-                },
+              context.navigator.pushNamed(
+                RouterController.noteViewRoute.route,
+                arguments: (
+                  noteModel: snapshot.data!.note,
+                  analysisModel: snapshot.data!.analysis,
+                ),
               );
             },
           );
@@ -120,15 +114,9 @@ class NoteTile extends ConsumerWidget {
                           backgroundColor: context.theme.colorScheme.error,
                           textColor: context.theme.colorScheme.onError,
                           onTap: () {
-                            vibrate(
-                              PreferencesController
-                                  .navigationEnableHapticFeedback.value,
-                              () {
-                                HistoryViewController()
-                                    .deleteNote(noteModel: noteModel);
-                                Navigator.pop(navigatorKey.currentContext!);
-                              },
-                            );
+                            HistoryViewController()
+                                .deleteNote(noteModel: noteModel);
+                            Navigator.pop(navigatorKey.currentContext!);
                           },
                         ),
                         CustomListTile(
@@ -140,13 +128,7 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'Go back',
                           onTap: () {
-                            vibrate(
-                              PreferencesController
-                                  .navigationEnableHapticFeedback.value,
-                              () {
-                                Navigator.pop(navigatorKey.currentContext!);
-                              },
-                            );
+                            Navigator.pop(navigatorKey.currentContext!);
                           },
                         ),
                       ],

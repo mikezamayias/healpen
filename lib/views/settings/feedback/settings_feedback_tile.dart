@@ -7,9 +7,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/feedback/feedback.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../feedback/feedback_view.dart';
 
@@ -28,30 +26,25 @@ class SettingsFeedbackTile extends ConsumerWidget {
       textColor: context.theme.colorScheme.onPrimary,
       titleString: 'Feedback',
       onTap: () {
-        vibrate(
-          ref.watch(navigationEnableHapticFeedbackProvider),
-          () {
-            final feedbackController =
-                ref.watch(feedbackControllerProvider.notifier);
-            BetterFeedback.of(context).show((UserFeedback userFeedback) {
-              FeedbackController.writeImageToStorage(userFeedback.screenshot)
-                  .then((String screenshotPath) {
-                feedbackController.bodyTextController.text = userFeedback.text;
-                feedbackController.setScreenshotPath(screenshotPath);
-                FeedbackController.uploadScreenshotToFirebase(
-                  File(feedbackController.screenshotPath),
-                ).then((String screenshotUrl) {
-                  feedbackController.setScreenshotUrl(screenshotUrl);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const FeedbackView(),
-                    ),
-                  );
-                });
-              });
+        final feedbackController =
+            ref.watch(feedbackControllerProvider.notifier);
+        BetterFeedback.of(context).show((UserFeedback userFeedback) {
+          FeedbackController.writeImageToStorage(userFeedback.screenshot)
+              .then((String screenshotPath) {
+            feedbackController.bodyTextController.text = userFeedback.text;
+            feedbackController.setScreenshotPath(screenshotPath);
+            FeedbackController.uploadScreenshotToFirebase(
+              File(feedbackController.screenshotPath),
+            ).then((String screenshotUrl) {
+              feedbackController.setScreenshotUrl(screenshotUrl);
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const FeedbackView(),
+                ),
+              );
             });
-          },
-        );
+          });
+        });
       },
     );
   }

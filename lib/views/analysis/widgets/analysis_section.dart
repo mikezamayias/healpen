@@ -107,7 +107,6 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                 onPageChanged: (int index) {
                   vibrate(
                     ref.watch(navigationEnableHapticFeedbackProvider),
-
                     () {
                       setState(() {
                         currentPage = index;

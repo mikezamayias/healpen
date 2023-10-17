@@ -29,9 +29,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           : FontAwesomeIcons.lock,
       leadingOnTap: ref.watch(shakePrivateNoteInfoProvider)
           ? () {
-              vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
-
+              vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
                   () async {
                 ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
                 await FirestorePreferencesController().savePreference(
@@ -56,26 +54,19 @@ class PrivateNoteCheckBox extends ConsumerWidget {
                           cornerRadius: radius - gap,
                           responsiveWidth: true,
                           titleString: 'Okay',
-                          onTap: () {
-                            vibrate(
-                              PreferencesController
-                                  .navigationEnableHapticFeedback.value,
-                              () async {
-                                ref
-                                    .watch(
-                                        shakePrivateNoteInfoProvider.notifier)
-                                    .state = false;
-                                await FirestorePreferencesController()
-                                    .savePreference(
-                                  PreferencesController.shakePrivateNoteInfo
-                                      .withValue(ref
-                                          .watch(shakePrivateNoteInfoProvider)),
-                                );
-                                if (context.mounted) {
-                                  context.navigator.pop();
-                                }
-                              },
+                          onTap: () async {
+                            ref
+                                .watch(shakePrivateNoteInfoProvider.notifier)
+                                .state = false;
+                            await FirestorePreferencesController()
+                                .savePreference(
+                              PreferencesController.shakePrivateNoteInfo
+                                  .withValue(
+                                      ref.watch(shakePrivateNoteInfoProvider)),
                             );
+                            if (context.mounted) {
+                              context.navigator.pop();
+                            }
                           },
                         )
                       ],
@@ -90,8 +81,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           ? FontAwesomeIcons.solidSquareCheck
           : FontAwesomeIcons.square,
       trailingOnTap: () {
-        vibrate(                  ref.watch(navigationEnableHapticFeedbackProvider),
-            () {
+        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
           ref
               .watch(writingControllerProvider.notifier)
               .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);

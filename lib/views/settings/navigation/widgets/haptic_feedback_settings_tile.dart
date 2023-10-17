@@ -22,23 +22,23 @@ class HapticFeedbackSettingsTile extends ConsumerWidget {
           'elements.',
       enableExplanationWrapper: true,
       trailing: StreamBuilder(
-          stream: FirestorePreferencesController().getPreference(
-              PreferencesController.navigationEnableHapticFeedback),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              log(
-                'StreamBuilder Error: ${snapshot.error}',
-                name: 'InfoButtonSettingsTile',
-              );
-            }
-            if (snapshot.hasData) {
-              PreferencesController.navigationEnableHapticFeedback.value =
-                  snapshot.data!.value;
-            }
-            return Switch(
+        stream: FirestorePreferencesController().getPreference(
+            PreferencesController.navigationEnableHapticFeedback),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            log(
+              'StreamBuilder Error: ${snapshot.error}',
+              name: 'InfoButtonSettingsTile',
+            );
+          }
+          if (snapshot.hasData) {
+            PreferencesController.navigationEnableHapticFeedback.value =
+                snapshot.data!.value;
+          }
+          return Switch(
             value: ref.watch(navigationEnableHapticFeedbackProvider),
             onChanged: (value) {
-                vibrate(
+              vibrate(
                 ref.watch(navigationEnableHapticFeedbackProvider),
                 () async {
                   PreferencesController.navigationShowInfoButtons.value = value;
@@ -53,7 +53,7 @@ class HapticFeedbackSettingsTile extends ConsumerWidget {
                 },
               );
             },
-            );
+          );
         },
       ),
     );

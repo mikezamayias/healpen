@@ -45,7 +45,8 @@ class OnboardingView extends ConsumerWidget {
                 // depending on the current index, animate slide from left or right and opacity
                 itemBuilder: (context, index) {
                   final bool active = index ==
-                      ref.watch(OnboardingController().currentPageIndexProvider);
+                      ref.watch(
+                          OnboardingController().currentPageIndexProvider);
                   final double opacity = active ? 1 : 0;
                   final double slide = active
                       ? 0

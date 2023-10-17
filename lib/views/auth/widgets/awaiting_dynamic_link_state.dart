@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class AwaitingDynamicLinkState extends ConsumerWidget {
@@ -40,9 +38,7 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
           explanationString: 'Start again.',
           enableExplanationWrapper: true,
           onTap: () {
-            vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-              context.navigator.pushReplacementNamed('/auth');
-            });
+            context.navigator.pushReplacementNamed('/auth');
           },
         ),
       ],

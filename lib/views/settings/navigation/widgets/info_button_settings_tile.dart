@@ -42,13 +42,14 @@ class InfoButtonSettingsTile extends ConsumerWidget {
                 ref.watch(navigationEnableHapticFeedbackProvider),
                 () async {
                   PreferencesController.navigationShowInfoButtons.value = value;
-                await FirestorePreferencesController.instance.savePreference(
-                    PreferencesController.navigationShowInfoButtons.withValue(
-                        PreferencesController.navigationShowInfoButtons.value));
-                log(
-                  '${PreferencesController.navigationShowInfoButtons.value}',
-                  name: 'InfoButtonSettingsTile',
-                );
+                  await FirestorePreferencesController.instance.savePreference(
+                      PreferencesController.navigationShowInfoButtons.withValue(
+                          PreferencesController
+                              .navigationShowInfoButtons.value));
+                  log(
+                    '${PreferencesController.navigationShowInfoButtons.value}',
+                    name: 'InfoButtonSettingsTile',
+                  );
                 },
               );
             },
