@@ -80,6 +80,10 @@ class PreferencesController {
       provider: navigationShowBackButtonProvider
     ),
     (
+      preferenceModel: navigationShowInfoButtons,
+      provider: navigationShowInfoButtonsProvider
+    ),
+    (
       preferenceModel: navigationEnableHapticFeedback,
       provider: navigationEnableHapticFeedbackProvider
     ),
