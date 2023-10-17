@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../../../controllers/emotional_echo_controller.dart';
-import '../../../../../utils/constants.dart';
+import '../../../../../../controllers/emotional_echo_controller.dart';
+import '../../../../../../utils/constants.dart';
 import 'inactive_tile.dart';
 
 class EmotionalEchoActiveTile extends ConsumerWidget {

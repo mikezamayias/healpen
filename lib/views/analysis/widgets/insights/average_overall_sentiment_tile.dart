@@ -5,14 +5,14 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-import '../../../controllers/analysis_view_controller.dart';
-import '../../../models/analysis/analysis_model.dart';
-import '../../../providers/settings_providers.dart';
-import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
-import '../../../utils/show_healpen_dialog.dart';
-import '../../../widgets/custom_dialog.dart';
-import '../../../widgets/custom_list_tile.dart';
+import '../../../../controllers/analysis_view_controller.dart';
+import '../../../../models/analysis/analysis_model.dart';
+import '../../../../providers/settings_providers.dart';
+import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
+import '../../../../utils/show_healpen_dialog.dart';
+import '../../../../widgets/custom_dialog.dart';
+import '../../../../widgets/custom_list_tile.dart';
 
 class AverageOverallSentimentTile extends ConsumerWidget {
   const AverageOverallSentimentTile({

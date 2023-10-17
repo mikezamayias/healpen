@@ -4,11 +4,11 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../../controllers/analysis_view_controller.dart';
-import '../../../extensions/int_extensions.dart';
-import '../../../utils/constants.dart';
-import '../../../widgets/custom_list_tile.dart';
-import '../../../widgets/text_divider.dart';
+import '../../../../controllers/analysis_view_controller.dart';
+import '../../../../extensions/int_extensions.dart';
+import '../../../../utils/constants.dart';
+import '../../../../widgets/custom_list_tile.dart';
+import '../../../../widgets/text_divider.dart';
 
 class SplineSentimentTile extends ConsumerStatefulWidget {
   const SplineSentimentTile({
