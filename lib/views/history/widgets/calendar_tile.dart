@@ -40,8 +40,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       showNavigationArrow: false,
       showDatePickerButton: false,
       view: CalendarView.month,
-      maxDate: HistoryViewController.noteModels.first.timestamp
-          .timestampToDateTime(),
+      maxDate: DateTime.now(),
       minDate:
           HistoryViewController.noteModels.last.timestamp.timestampToDateTime(),
       viewNavigationMode: ViewNavigationMode.snap,
@@ -129,7 +128,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                   width: gap * 4,
                   child: Text(
                     details.date.day.toString(),
-                    style: context.theme.textTheme.titleLarge!.copyWith(
+                    style: context.theme.textTheme.titleMedium!.copyWith(
                       color: currentMonthCheck &&
                               !dateAfterTodayCheck &&
                               !dateBeforeFirstRecordCheck
@@ -154,7 +153,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                       child: Text(
                         '${details.appointments.length}',
                         textAlign: TextAlign.center,
-                        style: context.theme.textTheme.titleMedium!.copyWith(
+                        style: context.theme.textTheme.titleSmall!.copyWith(
                           color: textColor,
                           fontWeight: FontWeight.bold,
                           textBaseline: TextBaseline.alphabetic,
