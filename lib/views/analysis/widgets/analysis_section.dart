@@ -7,6 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../controllers/settings/preferences_controller.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -65,11 +66,10 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                 dotColor: context.theme.colorScheme.outline,
               ),
             ),
-            leadingIconData:
-                PreferencesController.navigationShowInfoButtons.value
-                    ? FontAwesomeIcons.circleInfo
-                    : null,
-            leadingOnTap: PreferencesController.navigationShowInfoButtons.value
+            leadingIconData: ref.watch(navigationShowInfoButtonsProvider)
+                ? FontAwesomeIcons.circleInfo
+                : null,
+            leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
                 ? () {
                     vibrate(
                       PreferencesController
@@ -106,7 +106,8 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                 controller: pageController,
                 onPageChanged: (int index) {
                   vibrate(
-                    PreferencesController.navigationEnableHapticFeedback.value,
+                    ref.watch(navigationEnableHapticFeedbackProvider),
+
                     () {
                       setState(() {
                         currentPage = index;

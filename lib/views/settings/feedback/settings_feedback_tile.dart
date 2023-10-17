@@ -7,7 +7,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/feedback/feedback.dart';
-import '../../../controllers/settings/preferences_controller.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -29,7 +29,7 @@ class SettingsFeedbackTile extends ConsumerWidget {
       titleString: 'Feedback',
       onTap: () {
         vibrate(
-          PreferencesController.navigationEnableHapticFeedback.value,
+          ref.watch(navigationEnableHapticFeedbackProvider),
           () {
             final feedbackController =
                 ref.watch(feedbackControllerProvider.notifier);

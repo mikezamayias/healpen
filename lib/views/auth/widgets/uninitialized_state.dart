@@ -4,8 +4,8 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:validated/validated.dart' as validate;
 
-import '../../../controllers/settings/preferences_controller.dart';
 import '../../../providers/custom_auth_provider.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -65,9 +65,7 @@ class UninitializedState extends ConsumerWidget {
             leadingIconData: FontAwesomeIcons.solidPaperPlane,
             onTap: () {
               if (formKey.currentState!.validate()) {
-                vibrate(
-                    PreferencesController.navigationEnableHapticFeedback.value,
-                    () {
+                vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
                   ref
                       .watch(CustomAuthProvider().emailLinkAuthProvider)
                       .sendLink(emailAddress);

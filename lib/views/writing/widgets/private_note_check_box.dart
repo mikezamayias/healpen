@@ -30,7 +30,8 @@ class PrivateNoteCheckBox extends ConsumerWidget {
       leadingOnTap: ref.watch(shakePrivateNoteInfoProvider)
           ? () {
               vibrate(
-                  PreferencesController.navigationEnableHapticFeedback.value,
+                  ref.watch(navigationEnableHapticFeedbackProvider),
+
                   () async {
                 ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
                 await FirestorePreferencesController().savePreference(
@@ -89,7 +90,8 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           ? FontAwesomeIcons.solidSquareCheck
           : FontAwesomeIcons.square,
       trailingOnTap: () {
-        vibrate(PreferencesController.navigationEnableHapticFeedback.value, () {
+        vibrate(                  ref.watch(navigationEnableHapticFeedbackProvider),
+            () {
           ref
               .watch(writingControllerProvider.notifier)
               .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);

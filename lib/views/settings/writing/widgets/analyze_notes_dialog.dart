@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../../controllers/note_analyzer.dart';
-import '../../../../controllers/settings/preferences_controller.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_dialog.dart';
@@ -64,7 +64,7 @@ class AnalyzeNotesDialog extends ConsumerWidget {
           onTap: switch (ref.watch(NoteAnalyzer.analysisProgressProvider)) {
             AnalysisProgress.completed => () {
                 vibrate(
-                  PreferencesController.navigationEnableHapticFeedback.value,
+                  ref.watch(navigationEnableHapticFeedbackProvider),
                   () {
                     context.navigator.pop();
                   },

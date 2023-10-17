@@ -35,7 +35,8 @@ class ThemeAppearanceTile extends ConsumerWidget {
         ],
         selected: {ref.watch(themeAppearanceProvider)},
         onSelectionChanged: (Set<ThemeAppearance> newSelection) {
-          vibrate(PreferencesController.navigationEnableHapticFeedback.value,
+          vibrate(                  ref.watch(navigationEnableHapticFeedbackProvider),
+
               () {
             ref.watch(themeAppearanceProvider.notifier).state =
                 newSelection.first;

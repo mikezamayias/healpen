@@ -25,7 +25,8 @@ class BackButtonSettingsTile extends ConsumerWidget {
       trailing: Switch(
         value: ref.watch(navigationShowBackButtonProvider),
         onChanged: (value) {
-          vibrate(PreferencesController.navigationEnableHapticFeedback.value,
+          vibrate(                  ref.watch(navigationEnableHapticFeedbackProvider),
+
               () async {
             ref.read(navigationShowBackButtonProvider.notifier).state = value;
             await FirestorePreferencesController.instance.savePreference(

@@ -11,6 +11,7 @@ import '../../../controllers/history_view_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../route_controller.dart';
 import '../../../services/firestore_service.dart';
 import '../../../utils/constants.dart';
@@ -66,7 +67,7 @@ class NoteTile extends ConsumerWidget {
             ),
             onTap: () {
               vibrate(
-                PreferencesController.navigationEnableHapticFeedback.value,
+                ref.watch(navigationEnableHapticFeedbackProvider),
                 () {
                   context.navigator.pushNamed(
                     RouterController.noteViewRoute.route,

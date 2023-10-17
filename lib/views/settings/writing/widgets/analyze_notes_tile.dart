@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../controllers/note_analyzer.dart';
-import '../../../../controllers/settings/preferences_controller.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../utils/show_healpen_dialog.dart';
@@ -22,13 +22,12 @@ class AnalyzeNotesTile extends ConsumerWidget {
       explanationString: 'Update the analysis of all your notes.',
       onTap: () {
         vibrate(
-          PreferencesController.navigationEnableHapticFeedback.value,
+          ref.watch(navigationEnableHapticFeedbackProvider),
           () async {
             NoteAnalyzer.completed(ref);
             showHealpenDialog(
               context: context,
-              doVibrate:
-                  PreferencesController.navigationEnableHapticFeedback.value,
+              doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
               customDialog: const AnalyzeNotesDialog(),
             );
           },

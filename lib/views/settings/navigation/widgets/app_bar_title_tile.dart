@@ -26,7 +26,8 @@ class AppBarTitleTitle extends ConsumerWidget {
       trailing: Switch(
         value: ref.watch(navigationShowAppBarTitleProvider),
         onChanged: (value) {
-          vibrate(PreferencesController.navigationEnableHapticFeedback.value,
+          vibrate(                  ref.watch(navigationEnableHapticFeedbackProvider),
+
               () async {
             ref.read(navigationShowAppBarTitleProvider.notifier).state = value;
             await FirestorePreferencesController.instance.savePreference(

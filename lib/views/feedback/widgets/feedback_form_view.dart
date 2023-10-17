@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../controllers/feedback/feedback.dart';
 import '../../../controllers/feedback/feedback_label.dart';
 import '../../../controllers/settings/preferences_controller.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -139,7 +140,7 @@ class FeedbackFormView extends ConsumerWidget {
                         : FontAwesomeIcons.square,
                 onTap: () {
                   vibrate(
-                    PreferencesController.navigationEnableHapticFeedback.value,
+                    ref.watch(navigationEnableHapticFeedbackProvider),
                     () {
                       feedbackController.setIncludeScreenshot(!ref
                           .watch(feedbackControllerProvider)

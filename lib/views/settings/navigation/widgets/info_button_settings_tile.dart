@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
@@ -38,9 +39,9 @@ class InfoButtonSettingsTile extends ConsumerWidget {
             value: PreferencesController.navigationShowInfoButtons.value,
             onChanged: (value) {
               vibrate(
-                  PreferencesController.navigationEnableHapticFeedback.value, () async {
-                PreferencesController.navigationShowInfoButtons.value =
-                    value;
+                ref.watch(navigationEnableHapticFeedbackProvider),
+                () async {
+                  PreferencesController.navigationShowInfoButtons.value = value;
                 await FirestorePreferencesController.instance.savePreference(
                     PreferencesController.navigationShowInfoButtons.withValue(
                         PreferencesController.navigationShowInfoButtons.value));
@@ -48,7 +49,8 @@ class InfoButtonSettingsTile extends ConsumerWidget {
                   '${PreferencesController.navigationShowInfoButtons.value}',
                   name: 'InfoButtonSettingsTile',
                 );
-              });
+                },
+              );
             },
           );
         },

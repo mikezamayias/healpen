@@ -21,4 +21,5 @@ class AnalysisViewController {
   static final analysisModelListProvider = StateProvider(
     (ref) => <AnalysisModel>[],
   );
+
 }
