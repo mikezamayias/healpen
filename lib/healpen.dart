@@ -7,7 +7,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import 'controllers/emotional_echo_controller.dart';
 import 'controllers/healpen/healpen_controller.dart';
-import 'controllers/page_controller.dart' as page_controller;
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'models/settings/preference_model.dart';
@@ -73,8 +72,8 @@ class _HealpenState extends ConsumerState<Healpen> {
 
   List<Animate> _buildPages() {
     return [
-      for (final page in page_controller.PageController().pages)
-        page.widget
+      for (final page in HealpenController().pages)
+        page
             .animate()
             .fade(duration: emphasizedDuration, curve: emphasizedCurve),
     ];
