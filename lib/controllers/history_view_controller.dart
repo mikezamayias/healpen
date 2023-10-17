@@ -72,7 +72,6 @@ class HistoryViewController {
                 'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
           ),
         );
-    ;
     FirestoreService()
         .analysisCollectionReference()
         .doc(noteModel.timestamp.toString())
