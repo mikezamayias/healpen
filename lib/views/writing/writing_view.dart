@@ -10,8 +10,8 @@ import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
 import '../settings/writing/widgets/analyze_notes_tile.dart';
-import 'widgets/private_note_check_box.dart';
 import 'widgets/save_note_button.dart';
+import 'widgets/stopwatch_tile.dart';
 import 'widgets/writing_text_field.dart';
 
 class WritingView extends ConsumerStatefulWidget {
@@ -80,7 +80,7 @@ class _WritingViewState extends ConsumerState<WritingView>
                     padding: EdgeInsets.only(top: gap),
                     child: Row(
                       children: [
-                        const Expanded(child: PrivateNoteCheckBox()),
+                        const Expanded(child: StopwatchTile()),
                         SizedBox(width: gap),
                         const SaveNoteButton(),
                       ],
