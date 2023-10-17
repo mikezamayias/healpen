@@ -18,8 +18,8 @@ class PageController {
     pages = [
       // home,
       writing,
-      // analysis,
-      // history,
+      analysis,
+      history,
       settings,
     ];
   }
