@@ -26,16 +26,19 @@ class EnableAutomaticStopwatchTile extends ConsumerWidget {
         value: ref.watch(writingAutomaticStopwatchProvider),
         onChanged: (value) {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
-            ref.read(writingAutomaticStopwatchProvider.notifier).state = value;
-            await FirestorePreferencesController.instance.savePreference(
-              PreferencesController.writingAutomaticStopwatch
-                  .withValue(ref.watch(writingAutomaticStopwatchProvider)),
-            );
-            log(
-              '${ref.watch(writingAutomaticStopwatchProvider)}',
-              name: 'SettingsWritingView:writingResetStopwatchOnEmpty',
-            );
-          });
+              ref.read(writingAutomaticStopwatchProvider.notifier).state =
+                  value;
+              await FirestorePreferencesController.instance.savePreference(
+                PreferencesController.writingAutomaticStopwatch.withValue(
+                  ref.watch(writingAutomaticStopwatchProvider),
+                ),
+              );
+              log(
+                '${ref.watch(writingAutomaticStopwatchProvider)}',
+                name: 'SettingsView:ShowAppBarTitle',
+              );
+            },
+          );
         },
       ),
     );
