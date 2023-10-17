@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -16,59 +18,73 @@ import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
+import '../../../widgets/loading_tile.dart';
 
 class NoteTile extends ConsumerWidget {
   const NoteTile({
     super.key,
-    required this.entry,
+    required this.noteModel,
+    this.analysisModel,
   });
 
-  final NoteModel entry;
+  final NoteModel noteModel;
+  final AnalysisModel? analysisModel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    CustomListTile tile = CustomListTile(
-      cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.all(gap),
-      explanationString: DateFormat('HH:mm')
-          .format(DateTime.fromMillisecondsSinceEpoch(entry.timestamp))
-          .toString(),
-      title: Text(
-        entry.content,
-        style: context.theme.textTheme.bodyLarge!.copyWith(
-          color: context.theme.colorScheme.onPrimary,
-          overflow: TextOverflow.ellipsis,
-        ),
-        maxLines: 1,
-      ),
-      onTap: () {
-        vibrate(
-          PreferencesController.navigationEnableHapticFeedback.value,
-          () async {
-            NoteModel noteEntry = NoteModel.fromJson(
-              (await FirestoreService().getNote(entry.timestamp)).data()!,
-            );
-            AnalysisModel analysisEntry = AnalysisModel.fromJson(
-              (await FirestoreService().getAnalysis(entry.timestamp)).data()!,
-            );
-            if (context.mounted) {
-              context.navigator.pushNamed(
-                RouterController.noteViewRoute.route,
-                arguments: (
-                  noteModel: noteEntry,
-                  analysisModel: analysisEntry,
-                ),
+    Widget tile = StreamBuilder<({NoteModel note, AnalysisModel analysis})>(
+        stream: getNoteAndAnalysis(),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<({NoteModel note, AnalysisModel analysis})> snapshot,
+        ) {
+          if (!snapshot.hasData) {
+            return const LoadingTile(durationTitle: 'Loading note...');
+          }
+          log(
+            '${snapshot.data}',
+            name: 'NoteTile:build:StreamBuilder:snapshot.data',
+          );
+          return CustomListTile(
+            backgroundColor:
+                getSentimentShapeColor(snapshot.data!.analysis.sentiment!),
+            textColor: getSentimentTexColor(snapshot.data!.analysis.sentiment!),
+            cornerRadius: radius - gap,
+            contentPadding: EdgeInsets.all(gap),
+            explanationString: DateFormat('HH:mm')
+                .format(
+                  DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+                )
+                .toString(),
+            title: Text(
+              noteModel.content,
+              style: context.theme.textTheme.bodyLarge!.copyWith(
+                color: context.theme.colorScheme.onPrimary,
+                overflow: TextOverflow.ellipsis,
+              ),
+              maxLines: 1,
+            ),
+            onTap: () {
+              vibrate(
+                PreferencesController.navigationEnableHapticFeedback.value,
+                () {
+                  context.navigator.pushNamed(
+                    RouterController.noteViewRoute.route,
+                    arguments: (
+                      noteModel: snapshot.data!.note,
+                      analysisModel: snapshot.data!.analysis,
+                    ),
+                  );
+                },
               );
-            }
-          },
-        );
-      },
-    );
+            },
+          );
+        });
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius - gap),
       child: IntrinsicWidth(
         child: Slidable(
-          key: ValueKey(entry.timestamp.toString()),
+          key: ValueKey(noteModel.timestamp.toString()),
           endActionPane: ActionPane(
             motion: const ScrollMotion(),
             dragDismissible: true,
@@ -108,7 +124,7 @@ class NoteTile extends ConsumerWidget {
                                   .navigationEnableHapticFeedback.value,
                               () {
                                 HistoryViewController()
-                                    .deleteNote(noteModel: entry);
+                                    .deleteNote(noteModel: noteModel);
                                 Navigator.pop(navigatorKey.currentContext!);
                               },
                             );
@@ -143,5 +159,16 @@ class NoteTile extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Stream<({NoteModel note, AnalysisModel analysis})>
+      getNoteAndAnalysis() async* {
+    NoteModel noteEntry = NoteModel.fromJson(
+      (await FirestoreService().getNote(noteModel.timestamp)).data()!,
+    );
+    AnalysisModel analysisEntry = AnalysisModel.fromJson(
+      (await FirestoreService().getAnalysis(noteModel.timestamp)).data()!,
+    );
+    yield (note: noteEntry, analysis: analysisEntry);
   }
 }
