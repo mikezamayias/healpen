@@ -73,7 +73,6 @@ class _WritingViewState extends ConsumerState<WritingView>
           mainAxisSize: MainAxisSize.max,
           children: [
             const Expanded(child: WritingTextField()),
-            if (!ref.watch(WritingController().isKeyboardOpenProvider))
               Column(
                 children: [
                   Padding(
