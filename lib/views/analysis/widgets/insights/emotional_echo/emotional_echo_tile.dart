@@ -1,10 +1,7 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../controllers/emotional_echo_controller.dart';
-import '../../../../../models/analysis/analysis_model.dart';
 import '../../../../../providers/settings_providers.dart';
 import '../../../../../utils/helper_functions.dart';
 import 'widgets/active_tile.dart';
@@ -16,10 +13,6 @@ class EmotionalEchoTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    EmotionalEchoController.sentiment = ref
-        .watch(AnalysisViewController.analysisModelListProvider)
-        .map((AnalysisModel analysisModel) => analysisModel.sentiment!)
-        .average;
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onLongPress: () {

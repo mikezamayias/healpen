@@ -43,6 +43,10 @@ class ThemeColorTile extends ConsumerWidget {
               PreferencesController.themeColor
                   .withValue(ref.watch(themeColorProvider)),
             );
+            ref.read(themeProvider.notifier).state = createTheme(
+              ref.watch(themeColorProvider).color,
+              brightness(ref.watch(themeAppearanceProvider)),
+            );
           });
         },
       ),

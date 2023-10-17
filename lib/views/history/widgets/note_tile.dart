@@ -7,6 +7,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../../controllers/analysis_view_controller.dart';
 import '../../../controllers/history_view_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
@@ -46,9 +47,16 @@ class NoteTile extends ConsumerWidget {
             name: 'NoteTile:build:StreamBuilder:snapshot.data',
           );
           return CustomListTile(
-            backgroundColor:
-                getSentimentShapeColor(snapshot.data!.analysis.sentiment!),
-            textColor: getSentimentTexColor(snapshot.data!.analysis.sentiment!),
+            textColor: Color.lerp(
+              ref.watch(AnalysisViewController.onBadColorProvider),
+              ref.watch(AnalysisViewController.onGoodColorProvider),
+              getSentimentRatio(snapshot.data!.analysis.sentiment!),
+            )!,
+            backgroundColor: Color.lerp(
+              ref.watch(AnalysisViewController.badColorProvider),
+              ref.watch(AnalysisViewController.goodColorProvider),
+              getSentimentRatio(snapshot.data!.analysis.sentiment!),
+            )!,
             cornerRadius: radius - gap,
             contentPadding: EdgeInsets.all(gap),
             explanationString: DateFormat('HH:mm')

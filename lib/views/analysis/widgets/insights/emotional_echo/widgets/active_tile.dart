@@ -4,6 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../../controllers/emotional_echo_controller.dart';
+import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
 import 'inactive_tile.dart';
 
@@ -21,6 +22,16 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
     ];
     return Stack(
       children: <Widget>[
+        AnimatedPositioned(
+          duration: emphasizedDuration,
+          curve: emphasizedCurve,
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right:
+              ref.watch(EmotionalEchoController.isPressedProvider) ? -81.w : 0,
+          child: const EmotionalEchoInactiveTile(),
+        ),
         AnimatedPositioned(
           duration: emphasizedDuration,
           curve: emphasizedCurve,
@@ -52,8 +63,8 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(radius),
                     gradient: LinearGradient(
                       colors: <Color>[
-                        EmotionalEchoController.goodColor,
-                        EmotionalEchoController.badColor,
+                        ref.watch(themeProvider).colorScheme.primary,
+                        ref.watch(themeProvider).colorScheme.error,
                       ],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -73,8 +84,8 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                           style: context.theme.textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Color.lerp(
-                              EmotionalEchoController.badColor,
-                              EmotionalEchoController.goodColor,
+                              ref.watch(themeProvider).colorScheme.error,
+                              ref.watch(themeProvider).colorScheme.primary,
                               labels.indexOf(label) / labels.length,
                             )!,
                           ),
@@ -86,16 +97,6 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
               ],
             ),
           ),
-        ),
-        AnimatedPositioned(
-          duration: emphasizedDuration,
-          curve: emphasizedCurve,
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right:
-              ref.watch(EmotionalEchoController.isPressedProvider) ? -81.w : 0,
-          child: const EmotionalEchoInactiveTile(),
         ),
       ],
     );

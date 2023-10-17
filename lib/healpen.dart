@@ -5,7 +5,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import 'controllers/emotional_echo_controller.dart';
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
@@ -104,11 +103,6 @@ class _HealpenState extends ConsumerState<Healpen> {
   void _setupGlobalStyles(BuildContext context) {
     // Moved this logic to a separate function
     getSystemUIOverlayStyle(context.theme, ref.watch(themeAppearanceProvider));
-
-    EmotionalEchoController.goodColor = context.theme.colorScheme.primary;
-    EmotionalEchoController.badColor = context.theme.colorScheme.error;
-    EmotionalEchoController.onGoodColor = context.theme.colorScheme.onPrimary;
-    EmotionalEchoController.onBadColor = context.theme.colorScheme.onError;
   }
 
   void _handlePageChange(int value) {

@@ -73,35 +73,35 @@ class _WritingViewState extends ConsumerState<WritingView>
           mainAxisSize: MainAxisSize.max,
           children: [
             const Expanded(child: WritingTextField()),
-              Column(
-                children: [
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(top: gap),
+                  child: Row(
+                    children: [
+                      const Expanded(child: StopwatchTile()),
+                      SizedBox(width: gap),
+                      const SaveNoteButton(),
+                    ],
+                  ),
+                ),
+                if (ref.watch(writingShowAnalyzeNotesButtonProvider))
                   Padding(
                     padding: EdgeInsets.only(top: gap),
-                    child: Row(
-                      children: [
-                        const Expanded(child: StopwatchTile()),
-                        SizedBox(width: gap),
-                        const SaveNoteButton(),
-                      ],
-                    ),
+                    child: const AnalyzeNotesTile(),
                   ),
-                  if (ref.watch(writingShowAnalyzeNotesButtonProvider))
-                    Padding(
-                      padding: EdgeInsets.only(top: gap),
-                      child: const AnalyzeNotesTile(),
-                    ),
-                ],
-              )
-                  .animate()
-                  .fadeIn(
-                    curve: standardCurve,
-                    duration: standardDuration,
-                  )
-                  .slideY(
-                    begin: gap,
-                    curve: standardCurve,
-                    duration: standardDuration,
-                  ),
+              ],
+            )
+                .animate()
+                .fadeIn(
+                  curve: standardCurve,
+                  duration: standardDuration,
+                )
+                .slideY(
+                  begin: gap,
+                  curve: standardCurve,
+                  duration: standardDuration,
+                ),
           ],
         ),
       ),

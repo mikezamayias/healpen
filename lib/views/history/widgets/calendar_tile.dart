@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
+import '../../../controllers/analysis_view_controller.dart';
 import '../../../controllers/history_view_controller.dart';
 import '../../../extensions/int_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
@@ -104,8 +105,16 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
               for (AnalysisModel element in analysisModelList)
                 element.sentiment!,
             ].average;
-            shapeColor = getSentimentShapeColor(dateSentiment);
-            textColor = getSentimentTexColor(dateSentiment);
+            shapeColor = Color.lerp(
+              ref.watch(AnalysisViewController.badColorProvider),
+              ref.watch(AnalysisViewController.goodColorProvider),
+              getSentimentRatio(dateSentiment),
+            )!;
+            textColor = Color.lerp(
+              ref.watch(AnalysisViewController.onBadColorProvider),
+              ref.watch(AnalysisViewController.onGoodColorProvider),
+              getSentimentRatio(dateSentiment),
+            )!;
           }
         }
         return Padding(

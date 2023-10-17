@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -49,6 +50,11 @@ class AnalysisView extends ConsumerWidget {
                       AnalysisModel.fromJson(element.data()),
                     );
               }
+              AnalysisViewController.overallSentiment = ref
+                  .read(AnalysisViewController.analysisModelListProvider)
+                  .map(
+                      (AnalysisModel analysisModel) => analysisModel.sentiment!)
+                  .average;
               return const AnalysisSection();
             }
           }

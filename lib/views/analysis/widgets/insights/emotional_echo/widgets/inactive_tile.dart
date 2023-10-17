@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:rive/rive.dart';
 
+import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
@@ -12,6 +13,17 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final sentiment = AnalysisViewController.overallSentiment;
+    final shapeColor = Color.lerp(
+      ref.watch(AnalysisViewController.badColorProvider),
+      ref.watch(AnalysisViewController.goodColorProvider),
+      getSentimentRatio(AnalysisViewController.overallSentiment),
+    )!;
+    final textColor = Color.lerp(
+      ref.watch(AnalysisViewController.onBadColorProvider),
+      ref.watch(AnalysisViewController.onGoodColorProvider),
+      getSentimentRatio(AnalysisViewController.overallSentiment),
+    )!;
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -26,9 +38,8 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
               (child) {
                 if (child is Shape) {
                   final Shape shape = child;
-                  shape.fills.first.paint.color =
-                      getSentimentShapeColor(EmotionalEchoController.sentiment)
-                          .withOpacity(shape.fills.first.paint.color.opacity);
+                  shape.fills.first.paint.color = shapeColor
+                      .withOpacity(shape.fills.first.paint.color.opacity);
                 }
               },
             );
@@ -50,16 +61,13 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
                 child: Opacity(
                   opacity: value,
                   child: Text(
-                    '${getSentimentLabel(EmotionalEchoController.sentiment)} '
-                            '${'${EmotionalEchoController.sentiment}'}'
+                    textAlign: TextAlign.center,
+                    '${getSentimentLabel(sentiment)} $sentiment'
                         .split(' ')
                         .join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(
-                      color: getSentimentTexColor(
-                        EmotionalEchoController.sentiment,
-                      ),
+                      color: textColor,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                 ),
               );
