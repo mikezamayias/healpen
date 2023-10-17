@@ -115,7 +115,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                       .copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: getSentimentShapeColor(
-                                      numScale.indexOf(label) / numScale.length,
+                                      numScale.indexOf(label),
                                     ),
                                   ),
                                 );
@@ -132,8 +132,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                                       .copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: getSentimentShapeColor(
-                                      labelScale.indexOf(label) /
-                                          labelScale.length,
+                                      labelScale.indexOf(label),
                                     ),
                                   ),
                                 );

@@ -163,26 +163,26 @@ IconData getSentimentIcon(double sentiment) {
 }
 
 /// Get sentiment ratio based on the given sentiment value.
-double getSentimentRatio(double sentiment) {
+double getSentimentRatio(num sentiment) {
   return double.parse(
     (sentiment + 3 / sentimentValues.length).toStringAsFixed(2),
   );
 }
 
-/// Get shape color based on the given sentiment ratio value.
-Color getSentimentShapeColor(double sentimentRatio) {
+/// Get shape color based on the given sentiment value.
+Color getSentimentShapeColor(num sentiment) {
   return Color.lerp(
     EmotionalEchoController.badColor,
     EmotionalEchoController.goodColor,
-    sentimentRatio,
+    getSentimentRatio(sentiment),
   )!;
 }
 
-/// Get shape color based on the given sentiment ratio value.
-Color getSentimentTexColor(double sentimentRatio) {
+/// Get shape color based on the given sentiment value.
+Color getSentimentTexColor(num sentiment) {
   return Color.lerp(
     EmotionalEchoController.onBadColor,
     EmotionalEchoController.onGoodColor,
-    sentimentRatio,
+    getSentimentRatio(sentiment),
   )!;
 }
