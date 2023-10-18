@@ -44,7 +44,7 @@ class PageController {
   );
   final history = PageModel(
     label: 'history',
-    icon: FontAwesomeIcons.book,
+    icon: FontAwesomeIcons.calendarDays,
     widget: const HistoryView(),
   );
   final settings = PageModel(
