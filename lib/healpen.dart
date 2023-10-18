@@ -26,23 +26,12 @@ class _HealpenState extends ConsumerState<Healpen> {
 
   @override
   Widget build(BuildContext context) {
-    log(
-      '${ref.watch(navigationShowInfoButtonsProvider)}',
-      name: '_HealpenWrapperState:StreamBuilder - Info Buttons',
-    );
     // Moved pages creation to a separate function
     final pages = _buildPages();
 
     return StreamBuilder(
       stream: FirestorePreferencesController().getPreferences(),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          log(
-            'StreamBuilder Error: ${snapshot.error}',
-            name: '_HealpenWrapperState:StreamBuilder - Error',
-          );
-        }
-
         if (snapshot.hasData) {
           List<PreferenceModel> currentPreferences =
               snapshot.data as List<PreferenceModel>;

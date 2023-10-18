@@ -1,26 +1,26 @@
-// create a singleton constructor for the app bar controller
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/app_bar_model.dart';
+
 final appBarControllerProvider =
-    StateProvider<AppBarController>((ref) => AppBarController());
+    StateNotifierProvider<AppBarController, AppBarModel>(
+  (ref) => AppBarController(),
+);
 
-class AppBarController {
-  // Singleton constructor
-  static final AppBarController _instance = AppBarController._internal();
-  factory AppBarController() => _instance;
-  AppBarController._internal();
+class AppBarController extends StateNotifier<AppBarModel> {
+  AppBarController._() : super(AppBarModel());
+  static final AppBarController _singleton = AppBarController._();
+  factory AppBarController() => _singleton;
 
-  // Attributes
-  List<String> pathNames = [];
-  bool automaticallyImplyLeading = false;
+  void updatePathNames(List<String> newPathNames) {
+    state = state.copyWith(pathNames: newPathNames);
+  }
 
-  // Methods
-  String getPathText(int i) {
-    return i < pathNames.length - 1
-        ? '${pathNames[i]} / '
-        : pathNames.length != 1 && pathNames.length > 2
-            ? '\n${pathNames[i]}'
-            : pathNames[i];
+  void toggleAutomaticallyImplyLeading(bool value) {
+    state = state.copyWith(automaticallyImplyLeading: value);
+  }
+
+  void setOnBackButtonPressed(void Function()? callback) {
+    state = state.copyWith(onBackButtonPressed: callback);
   }
 }
