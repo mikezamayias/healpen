@@ -13,7 +13,7 @@ final themeColorProvider = StateProvider<ThemeColor>(
   (ref) => PreferencesController.themeColor.value,
 );
 
-final themeProvider = StateProvider<ThemeData>(
+final themeProvider = Provider<ThemeData>(
   (ref) => createTheme(
     ref.watch(themeColorProvider).color,
     brightness(ref.watch(themeAppearanceProvider)),

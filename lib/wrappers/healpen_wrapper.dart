@@ -41,10 +41,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       );
       // TODO: figure a way to change the colors of smooth dot indicator on
       //  system appearance change without restarting the app
-      ref.watch(themeProvider.notifier).state = createTheme(
-        ref.watch(themeColorProvider).color,
-        brightness(ref.watch(themeAppearanceProvider)),
-      );
       setState(() {
         getSystemUIOverlayStyle(
           context.theme,

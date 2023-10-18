@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -13,17 +14,10 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final sentiment = AnalysisViewController.overallSentiment;
-    final shapeColor = Color.lerp(
-      ref.watch(AnalysisViewController.badColorProvider),
-      ref.watch(AnalysisViewController.goodColorProvider),
-      getSentimentRatio(AnalysisViewController.overallSentiment),
-    )!;
-    final textColor = Color.lerp(
-      ref.watch(AnalysisViewController.onBadColorProvider),
-      ref.watch(AnalysisViewController.onGoodColorProvider),
-      getSentimentRatio(AnalysisViewController.overallSentiment),
-    )!;
+    double sentiment = ref
+        .watch(AnalysisViewController.analysisModelListProvider)
+        .map((e) => e.sentiment!)
+        .average;
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -38,7 +32,11 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
               (child) {
                 if (child is Shape) {
                   final Shape shape = child;
-                  shape.fills.first.paint.color = shapeColor
+                  shape.fills.first.paint.color = Color.lerp(
+                    context.theme.colorScheme.error,
+                    context.theme.colorScheme.primary,
+                    getSentimentRatio(sentiment),
+                  )!
                       .withOpacity(shape.fills.first.paint.color.opacity);
                 }
               },
@@ -62,11 +60,13 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
                   opacity: value,
                   child: Text(
                     textAlign: TextAlign.center,
-                    '${getSentimentLabel(sentiment)} $sentiment'
-                        .split(' ')
-                        .join('\n'),
+                    getSentimentLabel(sentiment).split(' ').join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(
-                      color: textColor,
+                      color: Color.lerp(
+                        context.theme.colorScheme.onError,
+                        context.theme.colorScheme.onPrimary,
+                        getSentimentRatio(sentiment),
+                      )!,
                     ),
                   ),
                 ),
