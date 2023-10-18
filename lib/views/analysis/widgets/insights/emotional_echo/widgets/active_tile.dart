@@ -29,7 +29,7 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
           bottom: 0,
           left: 0,
           right:
-              ref.watch(EmotionalEchoController.isPressedProvider) ? -81.w : 0,
+              ref.watch(EmotionalEchoController.isPressedProvider) ? -102.w : 0,
           child: const EmotionalEchoInactiveTile(),
         ),
         AnimatedPositioned(
@@ -38,24 +38,12 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
           top: 0,
           bottom: 0,
           left:
-              ref.watch(EmotionalEchoController.isPressedProvider) ? 0 : -48.w,
+              ref.watch(EmotionalEchoController.isPressedProvider) ? 0 : -51.w,
           right: 0,
-          child: Container(
-            width: 48.w,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: <Color>[
-                  context.theme.colorScheme.surface,
-                  context.theme.colorScheme.surface.withOpacity(0.3),
-                  context.theme.colorScheme.surface.withOpacity(0),
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                stops: const [0.0, 0.3, 0.5],
-              ),
-            ),
+          child: SizedBox(
+            width: 51.w,
             child: Row(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
                   width: gap,
