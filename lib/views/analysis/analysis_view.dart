@@ -7,7 +7,7 @@ import '../../controllers/analysis_view_controller.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../services/firestore_service.dart';
-import '../../widgets/app_bar/app_bar.dart';
+import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';

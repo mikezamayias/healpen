@@ -8,7 +8,7 @@ import '../../controllers/history_view_controller.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
-import '../../widgets/app_bar/app_bar.dart';
+import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';

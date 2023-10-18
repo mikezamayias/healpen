@@ -8,7 +8,7 @@ import '../../models/analysis/analysis_model.dart';
 import '../../models/note/note_model.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
-import '../../widgets/app_bar/app_bar.dart';
+import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/analysis_page.dart';
 import 'widgets/details_page.dart';

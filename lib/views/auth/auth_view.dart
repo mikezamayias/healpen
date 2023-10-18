@@ -10,7 +10,7 @@ import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../providers/custom_auth_provider.dart';
 import '../../route_controller.dart';
 import '../../utils/constants.dart';
-import '../../widgets/app_bar/app_bar.dart';
+import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
 import '../onboarding/onboarding_view.dart';
 import 'widgets/auth_failed_state.dart';

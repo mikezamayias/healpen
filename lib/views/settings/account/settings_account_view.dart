@@ -5,7 +5,7 @@ import '../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../extensions/widget_extensions.dart';
 import '../../../models/settings/preference_model.dart';
 import '../../../utils/constants.dart';
-import '../../../widgets/app_bar/app_bar.dart';
+import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'widgets/edit_name_tile.dart';
 import 'widgets/save_settings_to_cloud_tile.dart';
