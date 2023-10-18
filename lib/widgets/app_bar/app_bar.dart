@@ -4,11 +4,13 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../controllers/healpen/healpen_controller.dart';
-import '../controllers/settings/preferences_controller.dart';
-import '../providers/settings_providers.dart';
-import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
+import '../../controllers/app_bar_controller.dart';
+import '../../controllers/settings/preferences_controller.dart';
+import '../../providers/settings_providers.dart';
+import '../../utils/constants.dart';
+import '../../utils/helper_functions.dart';
+import 'widgets/page_icon.dart';
+import 'widgets/path_title.dart';
 
 class AppBar extends ConsumerStatefulWidget {
   final List<String> pathNames;
@@ -28,16 +30,25 @@ class AppBar extends ConsumerStatefulWidget {
 
 class _AppBarState extends ConsumerState<AppBar> {
   @override
+  void initState() {
+    final appBarController = ref.read(appBarControllerProvider);
+    appBarController.pathNames = widget.pathNames;
+    appBarController.automaticallyImplyLeading =
+        widget.automaticallyImplyLeading!;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
       height: _getContainerHeight(),
-      duration: emphasizedDuration,
+      duration: longEmphasizedDuration,
       curve: emphasizedCurve,
       decoration: _getContainerDecoration(),
       child: Stack(
         alignment: Alignment.bottomLeft,
         children: [
-          _buildIcon(),
+          const PageIcon(),
           _buildPathWithLeading(),
         ],
       ),
@@ -59,54 +70,20 @@ class _AppBarState extends ConsumerState<AppBar> {
         : context.theme.textTheme.titleLarge!.fontSize! * 2;
   }
 
-  Widget _buildIcon() {
-    return Positioned(
-      top: 0,
-      right: 0,
-      child: AnimatedOpacity(
-        duration: emphasizedDuration,
-        curve: emphasizedCurve,
-        opacity: ref.watch(navigationShowAppBarTitleProvider) ? 1 : 0,
-        child: Padding(
-          padding: EdgeInsets.all(gap),
-          child: ClipOval(
-            child: Container(
-              decoration: BoxDecoration(
-                color: context.theme.colorScheme.secondary,
-                borderRadius: BorderRadius.circular(radius),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(gap * 1.5),
-                child: FaIcon(
-                  HealpenController()
-                      .currentPageModel(ref
-                          .watch(HealpenController().currentPageIndexProvider))
-                      .icon,
-                  color: context.theme.colorScheme.onSecondary,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildPathWithLeading() {
-    final path = _buildPath(context);
     return AnimatedPadding(
-      duration: emphasizedDuration,
+      duration: longEmphasizedDuration,
       curve: emphasizedCurve,
       padding: _getPathPadding(ref),
       child: Stack(
         children: <Widget>[
           _buildBackButton(context, ref),
           AnimatedContainer(
-            duration: emphasizedDuration,
+            duration: longEmphasizedDuration,
             curve: emphasizedCurve,
             margin: _getPathMargin(ref),
             alignment: Alignment.bottomLeft,
-            child: path,
+            child: const PathTitle(),
           ),
         ],
       ),
@@ -126,49 +103,9 @@ class _AppBarState extends ConsumerState<AppBar> {
         : EdgeInsets.zero;
   }
 
-  Widget _buildPath(BuildContext context) {
-    return AnimatedPadding(
-      duration: emphasizedDuration,
-      curve: emphasizedCurve,
-      padding: (ref.watch(navigationShowBackButtonProvider) &&
-              widget.automaticallyImplyLeading!)
-          ? EdgeInsets.only(bottom: gap / 2)
-          : EdgeInsets.zero,
-      child: RichText(
-        text: TextSpan(
-          children: [
-            for (int i = 0; i < widget.pathNames.length; i++)
-              TextSpan(
-                text: _getPathText(i),
-                style: _getPathTextStyle(context, i),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  TextStyle _getPathTextStyle(BuildContext context, int i) {
-    return (i < widget.pathNames.length - 1)
-        ? context.theme.textTheme.titleLarge!.copyWith(
-            color: context.theme.colorScheme.outline,
-          )
-        : context.theme.textTheme.headlineSmall!.copyWith(
-            color: context.theme.colorScheme.secondary,
-          );
-  }
-
-  String _getPathText(int i) {
-    return i < widget.pathNames.length - 1
-        ? '${widget.pathNames[i]} / '
-        : widget.pathNames.length != 1 && widget.pathNames.length > 2
-            ? '\n${widget.pathNames[i]}'
-            : widget.pathNames[i];
-  }
-
   Widget _buildBackButton(BuildContext context, WidgetRef ref) {
     return AnimatedPositioned(
-      duration: emphasizedDuration,
+      duration: longEmphasizedDuration,
       curve: emphasizedCurve,
       left: ref.watch(navigationShowBackButtonProvider) &&
               widget.automaticallyImplyLeading!

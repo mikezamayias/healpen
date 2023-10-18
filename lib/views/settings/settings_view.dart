@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
-import '../../widgets/app_bar.dart';
+import '../../widgets/app_bar/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../utils/constants.dart';
-import '../../widgets/app_bar.dart';
+import '../../widgets/app_bar/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
 import 'widgets/feedback_form_actions.dart';
 import 'widgets/feedback_form_view.dart';

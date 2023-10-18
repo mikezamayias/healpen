@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../extensions/widget_extensions.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
-import '../../../widgets/app_bar.dart';
+import '../../../widgets/app_bar/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'widgets/analyze_notes_tile.dart';
 import 'widgets/enable_automatic_stopwatch_tile.dart';

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../extensions/widget_extensions.dart';
 import '../../../../utils/constants.dart';
-import '../../../widgets/app_bar.dart';
+import '../../../widgets/app_bar/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'widgets/app_bar_title_tile.dart';
 import 'widgets/back_button_settings_tile.dart';
