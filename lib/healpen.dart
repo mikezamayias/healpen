@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
@@ -45,7 +46,8 @@ class _HealpenState extends ConsumerState<Healpen> {
         _setupGlobalStyles(context);
 
         return Scaffold(
-          body: PageView.builder(
+          body: PreloadPageView.builder(
+            preloadPagesCount: pages.length,
             controller: ref.watch(HealpenController().pageControllerProvider),
             physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (value) => _handlePageChange(value),
