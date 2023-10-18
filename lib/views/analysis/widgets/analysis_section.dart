@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
-import '../../../controllers/settings/preferences_controller.dart';
 import '../../../providers/settings_providers.dart';
-import '../../../utils/show_healpen_dialog.dart';
-import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
+import '../../../wrappers/keep_alive_wrapper.dart';
 import 'insights/emotional_echo/emotional_echo_tile.dart';
 import 'insights/journal_length_tile.dart';
 import 'insights/journaling_rhythm_tile.dart';
@@ -52,7 +49,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
     /// to see the entries where it was used.
     (
       titleString: 'Word Cloud',
-      explanationString: 'See the most frequent words in your notes',
+      explanationString: 'See the most frequent words in your notes.',
       content: const WordCloudTile(),
     ),
 
@@ -62,7 +59,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
     /// indicate the strength of sentiment (positive or negative).
     (
       titleString: 'Mood Journey',
-      explanationString: 'See how your mood has changed over time',
+      explanationString: 'See how your mood has changed over time.',
       content: const MoodJourneyTile(),
     ),
 
@@ -87,7 +84,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
     /// visually appealing way.
     (
       titleString: 'Journal Length',
-      explanationString: 'See how long your entries are',
+      explanationString: 'See how long your entries are.',
       content: const JournalLengthTile(),
     ),
 
@@ -98,7 +95,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
     /// during that period.
     (
       titleString: 'Writing Flow Time',
-      explanationString: 'See when you write',
+      explanationString: 'See when you write.',
       content: const WritingFlowTimeTile(),
     ),
   ];
@@ -125,27 +122,6 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
           dotColor: context.theme.colorScheme.outline,
         ),
       ),
-      leadingIconData: ref.watch(navigationShowInfoButtonsProvider)
-          ? FontAwesomeIcons.circleInfo
-          : null,
-      leadingOnTap: ref.watch(navigationShowInfoButtonsProvider)
-          ? () {
-              vibrate(
-                PreferencesController.navigationEnableHapticFeedback.value,
-                () {
-                  showHealpenDialog(
-                    context: context,
-                    doVibrate: PreferencesController
-                        .navigationEnableHapticFeedback.value,
-                    customDialog: CustomDialog(
-                      titleString: tileData[currentPage].titleString,
-                      contentString: tileData[currentPage].explanationString,
-                    ),
-                  );
-                },
-              );
-            }
-          : null,
       enableSubtitleWrapper: false,
       subtitle: Container(
         padding: EdgeInsets.symmetric(vertical: gap),
@@ -153,23 +129,45 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
           color: context.theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(radius - gap),
         ),
-        child: PageView.builder(
-          itemCount: tileData.length,
-          itemBuilder: (BuildContext context, int index) => Padding(
-            padding: EdgeInsets.symmetric(horizontal: gap),
-            child: tileData[index].content,
+        child: KeepAliveWrapper(
+          child: PageView.builder(
+            itemCount: tileData.length,
+            itemBuilder: (BuildContext context, int index) => KeepAliveWrapper(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: gap),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: tileData[index].content!,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: gap),
+                      child: Text(
+                        tileData[index].explanationString,
+                        textAlign: TextAlign.start,
+                        style: context.theme.textTheme.bodyMedium!.copyWith(
+                          color: context.theme.colorScheme.outline,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            controller: pageController,
+            onPageChanged: (int index) {
+              vibrate(
+                ref.watch(navigationEnableHapticFeedbackProvider),
+                () {
+                  setState(() {
+                    currentPage = index;
+                  });
+                },
+              );
+            },
           ),
-          controller: pageController,
-          onPageChanged: (int index) {
-            vibrate(
-              ref.watch(navigationEnableHapticFeedbackProvider),
-              () {
-                setState(() {
-                  currentPage = index;
-                });
-              },
-            );
-          },
         ),
       ),
     );
