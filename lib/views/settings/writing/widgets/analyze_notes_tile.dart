@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../controllers/healpen/healpen_controller.dart';
 import '../../../../controllers/note_analyzer.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
@@ -15,8 +16,13 @@ class AnalyzeNotesTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      cornerRadius: radius,
-      enableExplanationWrapper: true,
+      cornerRadius: ref.watch(HealpenController().currentPageIndexProvider) == 0
+          ? radius - gap
+          : radius,
+      enableExplanationWrapper:
+          ref.watch(HealpenController().currentPageIndexProvider) == 0
+              ? false
+              : true,
       titleString: 'Update note analysis',
       explanationString: 'Update the analysis of all your notes.',
       onTap: () async {
