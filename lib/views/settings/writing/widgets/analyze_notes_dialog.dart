@@ -22,8 +22,8 @@ class AnalyzeNotesDialog extends ConsumerWidget {
       contentWidget: Padding(
         padding: EdgeInsets.all(gap),
         child: CustomListTile(
-          backgroundColor: context.theme.colorScheme.surface,
-          textColor: context.theme.colorScheme.onSurface,
+          // backgroundColor: context.theme.colorScheme.surface,
+          // textColor: context.theme.colorScheme.onSurface,
           cornerRadius: radius - gap,
           contentPadding: EdgeInsets.all(gap),
           titleString: switch (

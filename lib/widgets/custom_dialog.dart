@@ -66,16 +66,16 @@ class _CustomDialogState extends ConsumerState<CustomDialog> {
               : 0,
         ),
         elevation: 0,
-        backgroundColor: widget.backgroundColor ??
-            context.theme.colorScheme.primaryContainer,
+        backgroundColor:
+            widget.backgroundColor ?? context.theme.colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),
         title: Text(
           widget.titleString,
           style: context.theme.textTheme.headlineSmall!.copyWith(
-            color: widget.textColor ??
-                context.theme.colorScheme.onPrimaryContainer,
+            color: widget.textColor ?? context.theme.colorScheme.onSurface,
+            fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.start,
         ),
