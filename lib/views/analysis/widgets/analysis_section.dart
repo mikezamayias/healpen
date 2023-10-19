@@ -7,7 +7,6 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../widgets/custom_list_tile.dart';
-import '../../../wrappers/keep_alive_wrapper.dart';
 import 'insights/emotional_echo/emotional_echo_tile.dart';
 import 'insights/journal_length_tile.dart';
 import 'insights/journaling_rhythm_tile.dart';
@@ -129,45 +128,41 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
           color: context.theme.colorScheme.surface,
           borderRadius: BorderRadius.circular(radius - gap),
         ),
-        child: KeepAliveWrapper(
-          child: PageView.builder(
-            itemCount: tileData.length,
-            itemBuilder: (BuildContext context, int index) => KeepAliveWrapper(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: gap),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: tileData[index].content!,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: gap),
-                      child: Text(
-                        tileData[index].explanationString,
-                        textAlign: TextAlign.start,
-                        style: context.theme.textTheme.bodyMedium!.copyWith(
-                          color: context.theme.colorScheme.outline,
-                        ),
-                      ),
-                    ),
-                  ],
+        child: PageView.builder(
+          itemCount: tileData.length,
+          itemBuilder: (BuildContext context, int index) => Padding(
+            padding: EdgeInsets.symmetric(horizontal: gap),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: tileData[index].content!,
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.only(top: gap),
+                  child: Text(
+                    tileData[index].explanationString,
+                    textAlign: TextAlign.start,
+                    style: context.theme.textTheme.bodyMedium!.copyWith(
+                      color: context.theme.colorScheme.outline,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            controller: pageController,
-            onPageChanged: (int index) {
-              vibrate(
-                ref.watch(navigationEnableHapticFeedbackProvider),
-                () {
-                  setState(() {
-                    currentPage = index;
-                  });
-                },
-              );
-            },
           ),
+          controller: pageController,
+          onPageChanged: (int index) {
+            vibrate(
+              ref.watch(navigationEnableHapticFeedbackProvider),
+              () {
+                setState(() {
+                  currentPage = index;
+                });
+              },
+            );
+          },
         ),
       ),
     );
