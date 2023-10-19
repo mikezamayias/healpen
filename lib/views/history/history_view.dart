@@ -25,7 +25,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
   @override
   Widget build(BuildContext context) {
     return BlueprintView(
-      showAppBarTitle: ref.watch(navigationShowAppBarTitleProvider),
+      showAppBarTitle: ref.watch(navigationShowAppBarProvider),
       appBar: const AppBar(
         pathNames: [
           'Your past notes',

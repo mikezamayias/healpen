@@ -18,7 +18,7 @@ class AnalysisView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BlueprintView(
-      showAppBarTitle: ref.watch(navigationShowAppBarTitleProvider),
+      showAppBarTitle: ref.watch(navigationShowAppBarProvider),
       appBar: const AppBar(
         pathNames: ['Your writing insights'],
       ),

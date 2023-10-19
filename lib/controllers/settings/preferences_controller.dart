@@ -48,8 +48,8 @@ class PreferencesController {
     'onboardingCompleted',
     false,
   );
-  static final navigationShowAppBarTitle = PreferenceModel<bool>(
-    'navigationShowAppBarTitle',
+  static final navigationShowAppBar = PreferenceModel<bool>(
+    'navigationShowAppBar',
     true,
   );
   static final writingShowAnalyzeNotesButton = PreferenceModel<bool>(
@@ -72,8 +72,8 @@ class PreferencesController {
       provider: writingAutomaticStopwatchProvider
     ),
     (
-      preferenceModel: navigationShowAppBarTitle,
-      provider: navigationShowAppBarTitleProvider
+      preferenceModel: navigationShowAppBar,
+      provider: navigationShowAppBarProvider
     ),
     (
       preferenceModel: navigationShowBackButton,

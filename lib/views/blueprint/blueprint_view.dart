@@ -43,16 +43,14 @@ class BlueprintView extends ConsumerWidget {
               ),
               child: Scaffold(
                 backgroundColor: Colors.transparent,
-                appBar: showAppBarTitle!
-                    ? appBar != null
-                        ? PreferredSize(
-                            preferredSize: Size.fromHeight(21.h),
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: gap),
-                              child: appBar!.animateAppBar(),
-                            ),
-                          )
-                        : null
+                appBar: showAppBarTitle! && appBar != null
+                    ? PreferredSize(
+                        preferredSize: Size.fromHeight(21.h),
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: gap),
+                          child: appBar!.animateAppBar(),
+                        ),
+                      )
                     : null,
                 body: ScrollConfiguration(
                   behavior: ScrollConfiguration.of(context).copyWith(

@@ -17,7 +17,7 @@ class SettingsNavigationView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = const [
       HapticFeedbackSettingsTile(),
-      AppBarTitleTitle(),
+      AppBarTile(),
       BackButtonSettingsTile(),
       InfoButtonSettingsTile(),
     ].animateWidgetList();
