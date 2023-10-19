@@ -17,12 +17,23 @@ class FirestorePreferencesController {
   /// Method to save a single preference to Firestore.
   Future<void> savePreference(PreferenceModel preferenceModel) async {
     // Update the Firestore document with the new preference.
-    await FirestoreService().preferencesCollectionReference().update({
-      preferenceModel.key: [ThemeColor, ThemeAppearance]
-              .contains(preferenceModel.value.runtimeType)
-          ? preferenceModel.value.toString()
-          : preferenceModel.value,
-    });
+    try {
+      await FirestoreService().preferencesCollectionReference().update({
+        preferenceModel.key: [ThemeColor, ThemeAppearance]
+                .contains(preferenceModel.value.runtimeType)
+            ? preferenceModel.value.toString()
+            : preferenceModel.value,
+      });
+    } on Exception catch (e) {
+      if (e.toString().contains('cloud_firestore/not-found')) {
+        await FirestoreService().preferencesCollectionReference().set({
+          preferenceModel.key: [ThemeColor, ThemeAppearance]
+                  .contains(preferenceModel.value.runtimeType)
+              ? preferenceModel.value.toString()
+              : preferenceModel.value,
+        });
+      }
+    }
 
     // Log the preference being saved for debugging.
     log(
