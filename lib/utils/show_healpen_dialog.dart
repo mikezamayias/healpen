@@ -8,9 +8,6 @@ Future showHealpenDialog({
   required bool doVibrate,
   required Widget customDialog,
 }) async {
-  if (doVibrate) {
-    vibrate(doVibrate, () {});
-  }
   return showDialog(
     context: context,
     useRootNavigator: false,
