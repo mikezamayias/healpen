@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import 'enums/app_theming.dart';
-import 'providers/settings_providers.dart';
-import 'route_controller.dart';
-import 'utils/constants.dart';
-import 'utils/helper_functions.dart';
+import '../enums/app_theming.dart';
+import '../providers/settings_providers.dart';
+import '../route_controller.dart';
+import '../utils/constants.dart';
+import '../utils/helper_functions.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
   const HealpenWrapper({Key? key}) : super(key: key);
@@ -41,10 +41,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       );
       // TODO: figure a way to change the colors of smooth dot indicator on
       //  system appearance change without restarting the app
-      ref.watch(themeProvider.notifier).state = createTheme(
-        ref.watch(themeColorProvider).color,
-        brightness(ref.watch(themeAppearanceProvider)),
-      );
       setState(() {
         getSystemUIOverlayStyle(
           context.theme,

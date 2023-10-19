@@ -81,7 +81,7 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
   String get body => state.body;
 
   String get screenshotPath => state.screenshotPath;
-  
+
   String get screenshotUrl => state.screenshotUrl;
 
   List<String>? get labels => state.labels;

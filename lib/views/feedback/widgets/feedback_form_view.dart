@@ -5,9 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/feedback/feedback.dart';
 import '../../../controllers/feedback/feedback_label.dart';
-import '../../../controllers/settings/preferences_controller.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class FeedbackFormView extends ConsumerWidget {
@@ -106,24 +104,18 @@ class FeedbackFormView extends ConsumerWidget {
                           ? FontAwesomeIcons.solidSquareCheck
                           : FontAwesomeIcons.square,
                       onTap: () {
-                        vibrate(
-                          PreferencesController
-                              .navigationEnableHapticFeedback.value,
-                          () {
-                            if (ref
-                                .watch(feedbackControllerProvider)
-                                .labels!
-                                .contains(label.name)) {
-                              ref
-                                  .watch(feedbackControllerProvider.notifier)
-                                  .removeLabel(label.name);
-                            } else {
-                              ref
-                                  .watch(feedbackControllerProvider.notifier)
-                                  .addLabel(label.name);
-                            }
-                          },
-                        );
+                        if (ref
+                            .watch(feedbackControllerProvider)
+                            .labels!
+                            .contains(label.name)) {
+                          ref
+                              .watch(feedbackControllerProvider.notifier)
+                              .removeLabel(label.name);
+                        } else {
+                          ref
+                              .watch(feedbackControllerProvider.notifier)
+                              .addLabel(label.name);
+                        }
                       },
                     );
                   }).toList(),
@@ -138,14 +130,8 @@ class FeedbackFormView extends ConsumerWidget {
                         ? FontAwesomeIcons.solidSquareCheck
                         : FontAwesomeIcons.square,
                 onTap: () {
-                  vibrate(
-                    PreferencesController.navigationEnableHapticFeedback.value,
-                    () {
-                      feedbackController.setIncludeScreenshot(!ref
-                          .watch(feedbackControllerProvider)
-                          .includeScreenshot);
-                    },
-                  );
+                  feedbackController.setIncludeScreenshot(
+                      !ref.watch(feedbackControllerProvider).includeScreenshot);
                 },
               ),
             ],

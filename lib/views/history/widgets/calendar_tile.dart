@@ -1,4 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,10 +10,11 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../controllers/history_view_controller.dart';
-import '../../../controllers/settings/preferences_controller.dart';
 import '../../../extensions/int_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../models/note/note_model.dart';
+import '../../../providers/settings_providers.dart';
+import '../../../services/note_analysis_service.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
@@ -40,8 +42,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       showNavigationArrow: false,
       showDatePickerButton: false,
       view: CalendarView.month,
-      maxDate: HistoryViewController.noteModels.first.timestamp
-          .timestampToDateTime(),
+      maxDate: DateTime.now(),
       minDate:
           HistoryViewController.noteModels.last.timestamp.timestampToDateTime(),
       viewNavigationMode: ViewNavigationMode.snap,
@@ -55,7 +56,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       todayHighlightColor: context.theme.colorScheme.secondary,
       cellBorderColor: context.theme.colorScheme.surface,
       selectionDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(radius - gap / 3),
         border: Border.all(
           color: context.theme.colorScheme.primary,
           width: gap / 3,
@@ -96,19 +97,26 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         Color shapeColor = context.theme.colorScheme.surface;
         Color textColor = context.theme.colorScheme.onSurface;
         double? dateSentiment;
-        double? dateSentimentRatio;
         if (analysisModelListSnapshot.data != null &&
             analysisModelListSnapshot.data!.isNotEmpty) {
           List<AnalysisModel> analysisModelList =
               analysisModelListSnapshot.data!;
+          log('$analysisModelList', name: 'CalendarTile:analysisModelList');
           if (analysisModelList.isNotEmpty) {
             dateSentiment = [
               for (AnalysisModel element in analysisModelList)
                 element.sentiment!,
             ].average;
-            dateSentimentRatio = getSentimentRatio(dateSentiment);
-            shapeColor = getSentimentShapeColor(dateSentimentRatio);
-            textColor = getSentimentTexColor(dateSentimentRatio);
+            shapeColor = Color.lerp(
+              context.theme.colorScheme.error,
+              context.theme.colorScheme.primary,
+              getSentimentRatio(dateSentiment),
+            )!;
+            textColor = Color.lerp(
+              context.theme.colorScheme.onError,
+              context.theme.colorScheme.onPrimary,
+              getSentimentRatio(dateSentiment),
+            )!;
           }
         }
         return Padding(
@@ -117,15 +125,8 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
             duration: standardDuration,
             curve: standardCurve,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(radius - gap / 2),
-              gradient: RadialGradient(
-                radius: radius - gap,
-                center: Alignment.topCenter,
-                colors: [
-                  shapeColor,
-                  context.theme.colorScheme.surface,
-                ],
-              ),
+              borderRadius: BorderRadius.circular(radius - gap),
+              color: shapeColor,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -138,7 +139,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                   width: gap * 4,
                   child: Text(
                     details.date.day.toString(),
-                    style: context.theme.textTheme.titleLarge!.copyWith(
+                    style: context.theme.textTheme.titleMedium!.copyWith(
                       color: currentMonthCheck &&
                               !dateAfterTodayCheck &&
                               !dateBeforeFirstRecordCheck
@@ -156,33 +157,28 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                 Expanded(
                   child: Visibility(
                     visible: details.appointments.isNotEmpty,
-                    child: AnimatedContainer(
-                      duration: standardDuration,
-                      curve: standardCurve,
-                      alignment: Alignment.center,
-                      decoration: details.appointments.isNotEmpty
-                          ? BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.circular(radius - gap / 2),
-                              gradient: RadialGradient(
-                                radius: radius - gap,
-                                center: Alignment.topCenter,
-                                colors: [
-                                  shapeColor,
-                                  context.theme.colorScheme.surface,
-                                ],
-                              ),
-                            )
-                          : null,
-                      child: Text(
-                        '${details.appointments.length}',
-                        textAlign: TextAlign.center,
-                        style: context.theme.textTheme.titleMedium!.copyWith(
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
-                          textBaseline: TextBaseline.alphabetic,
-                        ),
-                      ),
+                    child: StreamBuilder(
+                      stream: NoteAnalysisService()
+                          .getNoteEntriesListOnDate(details.date),
+                      builder:
+                          (context, AsyncSnapshot<List<NoteModel>> snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            '${snapshot.data!.length}',
+                            textAlign: TextAlign.center,
+                            style: context.theme.textTheme.titleSmall!.copyWith(
+                              color: textColor,
+                              fontWeight: FontWeight.bold,
+                              textBaseline: TextBaseline.alphabetic,
+                            ),
+                          ).animate().fade(
+                                duration: standardDuration,
+                                curve: standardCurve,
+                              );
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
                     ),
                   ),
                 )
@@ -225,73 +221,91 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   ) {
     showHealpenDialog(
       context: context,
-      doVibrate: PreferencesController.navigationEnableHapticFeedback.value,
+      doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
       customDialog: CustomDialog(
         titleString: DateFormat('EEE d MMM yyyy').format(details.date!),
         enableContentContainer: false,
-        contentWidget: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-          stream: HistoryViewController()
-              .getNoteEntriesListOnDate(details.date!)
-              .snapshots(includeMetadataChanges: true),
-          builder: (
-            BuildContext context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> querySnapshot,
-          ) {
-            if (querySnapshot.connectionState == ConnectionState.active) {
-              List<Widget> widgets = [
-                ...querySnapshot.data!.docs.map(
-                  (e) => NoteTile(
-                    entry: NoteModel.fromJson(e.data()),
-                  ),
-                )
-              ];
-              return Padding(
-                padding: EdgeInsets.all(gap),
-                child: AnimatedCrossFade(
-                  duration: emphasizedDuration,
-                  reverseDuration: emphasizedDuration,
-                  sizeCurve: emphasizedCurve,
-                  firstCurve: emphasizedCurve,
-                  secondCurve: emphasizedCurve,
-                  firstChild: SizedBox(
-                    height: 42.h,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(radius - gap),
-                      child: widgets.isNotEmpty
-                          ? ListView.separated(
-                              shrinkWrap: true,
-                              itemBuilder: (BuildContext context, int index) =>
-                                  widgets[index].animate().fade(
-                                        duration: standardDuration,
-                                        curve: standardCurve,
-                                      ),
-                              separatorBuilder: (_, __) =>
-                                  SizedBox(height: gap),
-                              itemCount: widgets.length,
-                            )
-                          : CustomListTile(
-                              titleString: 'No notes',
-                              cornerRadius: radius - gap,
+        contentWidget: StreamBuilder(
+          stream: NoteAnalysisService().getNoteEntriesListOnDate(details.date!),
+          builder:
+              (context, AsyncSnapshot<List<NoteModel>> noteListStreamSnapshot) {
+            if (noteListStreamSnapshot.connectionState ==
+                ConnectionState.active) {
+              return StreamBuilder(
+                  stream: NoteAnalysisService()
+                      .getAnalysisEntriesListOnDate(details.date!),
+                  builder: (context, analysisListStreamSnapshot) {
+                    log(
+                      '$analysisListStreamSnapshot',
+                      name: 'CalendarTile:analysisListStreamSnapshot',
+                    );
+                    List<Widget> widgets = [
+                      for (int i = 0;
+                          i < noteListStreamSnapshot.data!.length;
+                          i++)
+                        if (analysisListStreamSnapshot.hasData &&
+                            analysisListStreamSnapshot.data!.isNotEmpty)
+                          NoteTile(
+                            noteModel:
+                                noteListStreamSnapshot.data!.elementAt(i),
+                            analysisModel:
+                                analysisListStreamSnapshot.data!.elementAt(i),
+                          )
+                        else
+                          NoteTile(
+                            noteModel:
+                                noteListStreamSnapshot.data!.elementAt(i),
+                          )
+                    ];
+                    return Padding(
+                      padding: EdgeInsets.all(gap),
+                      child: AnimatedCrossFade(
+                        duration: emphasizedDuration,
+                        reverseDuration: emphasizedDuration,
+                        sizeCurve: emphasizedCurve,
+                        firstCurve: emphasizedCurve,
+                        secondCurve: emphasizedCurve,
+                        firstChild: SizedBox(
+                          height: 42.h,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(radius - gap),
+                            child: widgets.isNotEmpty
+                                ? ListView.separated(
+                                    shrinkWrap: true,
+                                    itemBuilder:
+                                        (BuildContext context, int index) =>
+                                            widgets[index].animate().fade(
+                                                  duration: standardDuration,
+                                                  curve: standardCurve,
+                                                ),
+                                    separatorBuilder: (_, __) =>
+                                        SizedBox(height: gap),
+                                    itemCount: widgets.length,
+                                  )
+                                : CustomListTile(
+                                    titleString: 'No notes',
+                                    cornerRadius: radius - gap,
+                                  ),
+                          ),
+                        ).animate().fade(
+                              duration: emphasizedDuration,
+                              curve: emphasizedCurve,
                             ),
-                    ),
-                  ).animate().fade(
-                        duration: emphasizedDuration,
-                        curve: emphasizedCurve,
+                        secondChild: CustomListTile(
+                          titleString: 'No notes',
+                          cornerRadius: radius - gap,
+                          backgroundColor: context.theme.colorScheme.surface,
+                          textColor: context.theme.colorScheme.onSurface,
+                        ).animate().fade(
+                              duration: emphasizedDuration,
+                              curve: emphasizedCurve,
+                            ),
+                        crossFadeState: widgets.isNotEmpty
+                            ? CrossFadeState.showFirst
+                            : CrossFadeState.showSecond,
                       ),
-                  secondChild: CustomListTile(
-                    titleString: 'No notes',
-                    cornerRadius: radius - gap,
-                    backgroundColor: context.theme.colorScheme.surface,
-                    textColor: context.theme.colorScheme.onSurface,
-                  ).animate().fade(
-                        duration: emphasizedDuration,
-                        curve: emphasizedCurve,
-                      ),
-                  crossFadeState: widgets.isNotEmpty
-                      ? CrossFadeState.showFirst
-                      : CrossFadeState.showSecond,
-                ),
-              );
+                    );
+                  });
             } else {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -310,37 +324,6 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
           )
         ],
       ),
-    );
-  }
-}
-
-class NoteAnalysisService {
-  Stream<List<NoteModel>> getNoteEntriesListOnDate(DateTime date) {
-    return HistoryViewController()
-        .getNoteEntriesListOnDate(date)
-        .snapshots(includeMetadataChanges: true)
-        .map(
-          (QuerySnapshot<Map<String, dynamic>> query) => [
-            ...query.docs.map(
-              (e) => NoteModel.fromJson(e.data()),
-            )
-          ],
-        );
-  }
-
-  Stream<List<AnalysisModel>> getAnalysisEntriesListOnDate(DateTime date) {
-    return HistoryViewController()
-        .getNoteEntriesListOnDate(date)
-        .snapshots(includeMetadataChanges: true)
-        .map(
-      (QuerySnapshot<Map<String, dynamic>> query) {
-        return [
-          ...query.docs.map(
-            (QueryDocumentSnapshot<Map<String, dynamic>> e) =>
-                AnalysisModel.fromJson(e.data()),
-          )
-        ];
-      },
     );
   }
 }

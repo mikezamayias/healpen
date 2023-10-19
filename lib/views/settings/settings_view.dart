@@ -3,15 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../controllers/settings/preferences_controller.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
-import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
-import 'feedback/settings_feedback_tile.dart';
 import 'navigation/settings_navigation_view.dart';
 import 'theme/settings_theme_view.dart';
 import 'writing/settings_writing_view.dart';
@@ -53,7 +50,7 @@ class SettingsView extends ConsumerWidget {
     };
 
     return BlueprintView(
-      showAppBarTitle: ref.watch(navigationShowAppBarTitleProvider),
+      showAppBarTitle: ref.watch(navigationShowAppBarProvider),
       appBar: const AppBar(
         pathNames: ['Personalize your experience'],
       ),
@@ -73,18 +70,13 @@ class SettingsView extends ConsumerWidget {
                 textColor: context.theme.colorScheme.onPrimary,
                 titleString: title,
                 onTap: () {
-                  vibrate(
-                      PreferencesController
-                          .navigationEnableHapticFeedback.value, () {
-                    context.navigator.push(
-                      MaterialPageRoute(
-                        builder: (_) => pageWidgets[title]!.$1,
-                      ),
-                    );
-                  });
+                  context.navigator.push(
+                    MaterialPageRoute(
+                      builder: (_) => pageWidgets[title]!.$1,
+                    ),
+                  );
                 },
               ),
-          const SettingsFeedbackTile(),
         ],
       ),
     );

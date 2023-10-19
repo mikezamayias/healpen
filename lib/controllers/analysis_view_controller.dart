@@ -18,7 +18,7 @@ class AnalysisViewController {
   AnalysisViewController._internal();
 
   /// Attributes
-  static final analysisModelListProvider = StateProvider(
+  static final analysisModelListProvider = StateProvider<List<AnalysisModel>>(
     (ref) => <AnalysisModel>[],
   );
 }

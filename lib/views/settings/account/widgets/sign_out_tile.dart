@@ -40,16 +40,18 @@ class _SignOutTileState extends ConsumerState<SignOutTile> {
       onTap: () {
         log('CustomListTile: onTap', name: 'SignOutTile');
         log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
-        FirebaseUIAuth.signOut().whenComplete(() {
-          log('signOut().complete', name: 'SignOutTile');
-          log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
-          resetState();
-          Iterum.revive(context);
-          context.navigator.pushNamedAndRemoveUntil(
-            RouterController.authWrapperRoute.route,
-            (route) => false,
-          );
-        });
+        FirebaseUIAuth.signOut().whenComplete(
+          () {
+            log('signOut().complete', name: 'SignOutTile');
+            log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
+            resetState();
+            Iterum.revive(context);
+            context.navigator.pushNamedAndRemoveUntil(
+              RouterController.authWrapperRoute.route,
+              (route) => false,
+            );
+          },
+        );
       },
     );
   }

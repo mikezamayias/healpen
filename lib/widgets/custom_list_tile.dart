@@ -7,7 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sprung/sprung.dart';
 
 import '../controllers/settings/preferences_controller.dart';
+import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
+import '../utils/helper_functions.dart';
 
 class CustomListTile extends ConsumerWidget {
   final String? titleString;
@@ -253,7 +255,14 @@ class CustomListTile extends ConsumerWidget {
     );
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: onTap,
+      onTap: onTap != null
+          ? () {
+              vibrate(
+                ref.watch(navigationEnableHapticFeedbackProvider),
+                onTap!,
+              );
+            }
+          : null,
       child: PhysicalModel(
         color: backgroundColor ??
             (onTap == null

@@ -13,7 +13,7 @@ final themeColorProvider = StateProvider<ThemeColor>(
   (ref) => PreferencesController.themeColor.value,
 );
 
-final themeProvider = StateProvider<ThemeData>(
+final themeProvider = Provider<ThemeData>(
   (ref) => createTheme(
     ref.watch(themeColorProvider).color,
     brightness(ref.watch(themeAppearanceProvider)),
@@ -63,8 +63,8 @@ final navigationEnableHapticFeedbackProvider = StateProvider<bool>(
 );
 
 /// Whether to hide the app bar title.
-/// When set to true, the app bar title will be hidden.
-/// When set to false, the app bar title will be shown.
-final navigationShowAppBarTitleProvider = StateProvider<bool>(
-  (ref) => PreferencesController.navigationShowAppBarTitle.value,
+/// When set to true, the app bar will be hidden.
+/// When set to false, the app bar will be shown.
+final navigationShowAppBarProvider = StateProvider<bool>(
+  (ref) => PreferencesController.navigationShowAppBar.value,
 );

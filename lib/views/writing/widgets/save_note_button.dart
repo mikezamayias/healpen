@@ -57,7 +57,6 @@ class SaveNoteButton extends ConsumerWidget {
           state.content.isEmpty ? context.theme.colorScheme.background : null,
       responsiveWidth: true,
       titleString: 'Save',
-      leadingIconData: FontAwesomeIcons.solidFloppyDisk,
     );
   }
 }

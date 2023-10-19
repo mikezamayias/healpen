@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../extensions/int_extensions.dart';
 import '../../../models/note/note_model.dart';
@@ -49,48 +47,6 @@ class DetailsPage extends StatelessWidget {
                       titleString: 'Duration',
                       subtitleString:
                           noteModel.duration.writingDurationFormat(),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: gap),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomListTile(
-                      responsiveWidth: true,
-                      contentPadding: EdgeInsets.all(gap),
-                      titleString: 'Private',
-                      subtitle: Center(
-                        child: FaIcon(
-                          noteModel.isPrivate
-                              ? FontAwesomeIcons.lock
-                              : FontAwesomeIcons.lockOpen,
-                          size: context
-                                  .theme.textTheme.headlineSmall!.fontSize! +
-                              context.theme.textTheme.headlineSmall!.height!,
-                          color: context.theme.colorScheme.onBackground,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: gap),
-                  Expanded(
-                    child: CustomListTile(
-                      responsiveWidth: true,
-                      contentPadding: EdgeInsets.all(gap),
-                      titleString: 'Favorite',
-                      subtitle: Center(
-                        child: FaIcon(
-                          noteModel.isFavorite
-                              ? FontAwesomeIcons.solidStar
-                              : FontAwesomeIcons.star,
-                          size: context
-                                  .theme.textTheme.headlineSmall!.fontSize! +
-                              context.theme.textTheme.headlineSmall!.height!,
-                          color: context.theme.colorScheme.onBackground,
-                        ),
-                      ),
                     ),
                   ),
                 ],

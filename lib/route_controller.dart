@@ -4,7 +4,7 @@ import 'healpen.dart';
 import 'views/auth/auth_view.dart';
 import 'views/note/note_view.dart';
 import 'views/onboarding/onboarding_view.dart';
-import 'widgets/auth_wrapper.dart';
+import 'wrappers/auth_wrapper.dart';
 
 class RouterController {
 //   make it singleton

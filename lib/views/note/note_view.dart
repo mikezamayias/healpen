@@ -41,11 +41,11 @@ class _NoteViewState extends ConsumerState<NoteView> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ({
       NoteModel noteModel,
-      AnalysisModel analysisModel
+      AnalysisModel? analysisModel
     });
     final NoteModel noteModel = args.noteModel;
-    final AnalysisModel analysisModel = args.analysisModel;
-    final showAnalysis = !noteModel.isPrivate;
+    final AnalysisModel? analysisModel = args.analysisModel;
+    final showAnalysis = !noteModel.isPrivate && analysisModel != null;
     return BlueprintView(
       appBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: gap),

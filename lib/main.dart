@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'env/env.dart';
-import 'healpen_wrapper.dart';
+import 'wrappers/healpen_wrapper.dart';
 import 'services/firebase_service.dart';
 
 void main() async {

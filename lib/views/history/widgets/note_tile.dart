@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -16,50 +18,75 @@ import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
+import '../../../widgets/loading_tile.dart';
 
 class NoteTile extends ConsumerWidget {
   const NoteTile({
     super.key,
-    required this.entry,
+    required this.noteModel,
+    this.analysisModel,
   });
 
-  final NoteModel entry;
+  final NoteModel noteModel;
+  final AnalysisModel? analysisModel;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    CustomListTile tile = CustomListTile(
-      cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.all(gap),
-      explanationString: DateFormat('HH:mm')
-          .format(DateTime.fromMillisecondsSinceEpoch(entry.timestamp))
-          .toString(),
-      title: Text(
-        entry.content,
-        style: context.theme.textTheme.bodyLarge!.copyWith(
-          color: context.theme.colorScheme.onPrimary,
-          overflow: TextOverflow.ellipsis,
-        ),
-        maxLines: 1,
-      ),
-      onTap: () {
-        vibrate(
-          PreferencesController.navigationEnableHapticFeedback.value,
-          () async {
-            NoteModel noteEntry = NoteModel.fromJson(
-              (await FirestoreService().getNote(entry.timestamp)).data()!,
+    Widget tile = StreamBuilder<({NoteModel note, AnalysisModel? analysis})>(
+      stream: getNoteAndAnalysis(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<({NoteModel note, AnalysisModel? analysis})> snapshot,
+      ) {
+        log(
+          '${snapshot.data?.note}',
+          name: 'NoteTile:build:StreamBuilder:snapshot.data',
+        );
+        if (!snapshot.hasData) {
+          return const LoadingTile(durationTitle: 'Loading note...');
+        }
+        return CustomListTile(
+          textColor: snapshot.data!.analysis != null
+              ? Color.lerp(
+                  context.theme.colorScheme.onError,
+                  context.theme.colorScheme.onPrimary,
+                  getSentimentRatio(
+                    snapshot.data!.analysis!.sentiment!,
+                  ),
+                )!
+              : null,
+          backgroundColor: snapshot.data!.analysis != null
+              ? Color.lerp(
+                  context.theme.colorScheme.error,
+                  context.theme.colorScheme.primary,
+                  getSentimentRatio(
+                    snapshot.data!.analysis!.sentiment!,
+                  ),
+                )!
+              : null,
+          cornerRadius: radius - gap,
+          contentPadding: EdgeInsets.all(gap),
+          explanationString: DateFormat('HH:mm')
+              .format(
+                DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+              )
+              .toString(),
+          title: Text(
+            noteModel.content,
+            style: context.theme.textTheme.bodyLarge!.copyWith(
+              color: context.theme.colorScheme.onPrimary,
+              overflow: TextOverflow.ellipsis,
+            ),
+            maxLines: 1,
+          ),
+          onTap: () {
+            context.navigator.pushNamed(
+              RouterController.noteViewRoute.route,
+              arguments: (
+                noteModel: snapshot.data!.note,
+                analysisModel: snapshot.data!.analysis,
+              ),
             );
-            AnalysisModel analysisEntry = AnalysisModel.fromJson(
-              (await FirestoreService().getAnalysis(entry.timestamp)).data()!,
-            );
-            if (context.mounted) {
-              context.navigator.pushNamed(
-                RouterController.noteViewRoute.route,
-                arguments: (
-                  noteModel: noteEntry,
-                  analysisModel: analysisEntry,
-                ),
-              );
-            }
           },
         );
       },
@@ -68,7 +95,7 @@ class NoteTile extends ConsumerWidget {
       borderRadius: BorderRadius.circular(radius - gap),
       child: IntrinsicWidth(
         child: Slidable(
-          key: ValueKey(entry.timestamp.toString()),
+          key: ValueKey(noteModel.timestamp.toString()),
           endActionPane: ActionPane(
             motion: const ScrollMotion(),
             dragDismissible: true,
@@ -103,15 +130,9 @@ class NoteTile extends ConsumerWidget {
                           backgroundColor: context.theme.colorScheme.error,
                           textColor: context.theme.colorScheme.onError,
                           onTap: () {
-                            vibrate(
-                              PreferencesController
-                                  .navigationEnableHapticFeedback.value,
-                              () {
-                                HistoryViewController()
-                                    .deleteNote(noteModel: entry);
-                                Navigator.pop(navigatorKey.currentContext!);
-                              },
-                            );
+                            HistoryViewController()
+                                .deleteNote(noteModel: noteModel);
+                            Navigator.pop(navigatorKey.currentContext!);
                           },
                         ),
                         CustomListTile(
@@ -123,13 +144,7 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'Go back',
                           onTap: () {
-                            vibrate(
-                              PreferencesController
-                                  .navigationEnableHapticFeedback.value,
-                              () {
-                                Navigator.pop(navigatorKey.currentContext!);
-                              },
-                            );
+                            Navigator.pop(navigatorKey.currentContext!);
                           },
                         ),
                       ],
@@ -143,5 +158,19 @@ class NoteTile extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Stream<({NoteModel note, AnalysisModel? analysis})>
+      getNoteAndAnalysis() async* {
+    NoteModel noteEntry = NoteModel.fromJson(
+      (await FirestoreService().getNote(noteModel.timestamp)).data()!,
+    );
+    Map<String, dynamic>? analysisData =
+        (await FirestoreService().getAnalysis(noteModel.timestamp)).data();
+    AnalysisModel? analysisEntry;
+    if (analysisData != null) {
+      analysisEntry = AnalysisModel.fromJson(analysisData);
+    }
+    yield (note: noteEntry, analysis: analysisEntry);
   }
 }

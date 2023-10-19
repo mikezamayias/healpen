@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../../controllers/note_analyzer.dart';
-import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../utils/constants.dart';
-import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_dialog.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -24,8 +22,8 @@ class AnalyzeNotesDialog extends ConsumerWidget {
       contentWidget: Padding(
         padding: EdgeInsets.all(gap),
         child: CustomListTile(
-          backgroundColor: context.theme.colorScheme.surface,
-          textColor: context.theme.colorScheme.onSurface,
+          // backgroundColor: context.theme.colorScheme.surface,
+          // textColor: context.theme.colorScheme.onSurface,
           cornerRadius: radius - gap,
           contentPadding: EdgeInsets.all(gap),
           titleString: switch (
@@ -63,12 +61,7 @@ class AnalyzeNotesDialog extends ConsumerWidget {
           titleString: 'Close',
           onTap: switch (ref.watch(NoteAnalyzer.analysisProgressProvider)) {
             AnalysisProgress.completed => () {
-                vibrate(
-                  PreferencesController.navigationEnableHapticFeedback.value,
-                  () {
-                    context.navigator.pop();
-                  },
-                );
+                context.navigator.pop();
               },
             _ => null
           },

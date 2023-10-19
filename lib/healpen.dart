@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
-import 'controllers/emotional_echo_controller.dart';
 import 'controllers/healpen/healpen_controller.dart';
-import 'controllers/page_controller.dart' as page_controller;
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'models/settings/preference_model.dart';
@@ -34,13 +33,6 @@ class _HealpenState extends ConsumerState<Healpen> {
     return StreamBuilder(
       stream: FirestorePreferencesController().getPreferences(),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          log(
-            'StreamBuilder Error: ${snapshot.error}',
-            name: '_HealpenWrapperState:StreamBuilder - Error',
-          );
-        }
-
         if (snapshot.hasData) {
           List<PreferenceModel> currentPreferences =
               snapshot.data as List<PreferenceModel>;
@@ -54,7 +46,8 @@ class _HealpenState extends ConsumerState<Healpen> {
         _setupGlobalStyles(context);
 
         return Scaffold(
-          body: PageView.builder(
+          body: PreloadPageView.builder(
+            preloadPagesCount: pages.length,
             controller: ref.watch(HealpenController().pageControllerProvider),
             physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (value) => _handlePageChange(value),
@@ -69,8 +62,8 @@ class _HealpenState extends ConsumerState<Healpen> {
 
   List<Animate> _buildPages() {
     return [
-      for (final page in page_controller.PageController().pages)
-        page.widget
+      for (final page in HealpenController().pages)
+        page
             .animate()
             .fade(duration: emphasizedDuration, curve: emphasizedCurve),
     ];
@@ -101,16 +94,11 @@ class _HealpenState extends ConsumerState<Healpen> {
   void _setupGlobalStyles(BuildContext context) {
     // Moved this logic to a separate function
     getSystemUIOverlayStyle(context.theme, ref.watch(themeAppearanceProvider));
-
-    EmotionalEchoController.goodColor = context.theme.colorScheme.primary;
-    EmotionalEchoController.badColor = context.theme.colorScheme.error;
-    EmotionalEchoController.onGoodColor = context.theme.colorScheme.onPrimary;
-    EmotionalEchoController.onBadColor = context.theme.colorScheme.onError;
   }
 
   void _handlePageChange(int value) {
     // Moved this logic to a separate function
-    vibrate(PreferencesController.navigationEnableHapticFeedback.value, () {
+    vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
       ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
           value;
     });
