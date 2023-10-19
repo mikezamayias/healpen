@@ -35,10 +35,10 @@ class AppBar extends ConsumerWidget {
                       : pathNames[i],
               style: (i < pathNames.length - 1)
                   ? context.theme.textTheme.titleLarge!.copyWith(
-                      color: context.theme.colorScheme.outline,
+                      color: ref.watch(themeProvider).colorScheme.outline,
                     )
                   : context.theme.textTheme.headlineSmall!.copyWith(
-                      color: context.theme.colorScheme.secondary,
+                      color: ref.watch(themeProvider).colorScheme.secondary,
                     ),
             ),
         ],
@@ -65,7 +65,7 @@ class AppBar extends ConsumerWidget {
                     }
                   });
                 },
-                color: context.theme.colorScheme.onPrimary,
+                color: ref.watch(themeProvider).colorScheme.onPrimary,
                 icon: const FaIcon(FontAwesomeIcons.chevronLeft),
               ),
               SizedBox(width: gap),
@@ -77,29 +77,26 @@ class AppBar extends ConsumerWidget {
       padding: EdgeInsets.all(gap),
       height: 42.h,
       decoration: BoxDecoration(
-        color: context.theme.colorScheme.surfaceVariant,
+        color: ref.watch(themeProvider).colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(radius),
       ),
       child: Stack(
         children: [
           Align(
             alignment: Alignment.topRight,
-            child: IconButton.filled(
-              padding: EdgeInsets.zero,
-              enableFeedback: true,
-              iconSize: context.theme.textTheme.titleLarge!.fontSize,
-              color: context.theme.colorScheme.onPrimary,
-              icon: Container(
+            child: ClipOval(
+              child: Container(
                 padding: EdgeInsets.all(gap * 2),
+                color: ref.watch(themeProvider).colorScheme.secondary,
                 child: FaIcon(
                   HealpenController()
                       .currentPageModel(ref
                           .watch(HealpenController().currentPageIndexProvider))
                       .icon,
+                      color: ref.watch(themeProvider).colorScheme.onSecondary,
                   size: radius * 1.5,
                 ),
               ),
-              onPressed: () {},
             ),
           ),
           Align(
