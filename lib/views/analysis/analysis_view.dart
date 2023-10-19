@@ -33,11 +33,11 @@ class AnalysisView extends ConsumerWidget {
           } else {
             if (analysisSnapshot.data!.docs.isEmpty) {
               return const CustomListTile(
-                titleString: 'No analysis found',
-                subtitle: Text(
-                  'You have no analysis yet. '
-                  'Try writing a few notes to get started.',
-                ),
+                titleString: 'No data found',
+                subtitleString:
+                    'You don\'t have any insights yet. Try writing a few notes '
+                    'to get started or tap the \'Update note analysis\' '
+                    'button.',
               );
             } else {
               ref
