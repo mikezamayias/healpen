@@ -49,7 +49,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
       (
         titleString: 'Emotional Echo',
         explanationString: 'The color of the echo changes according to your '
-            'overall mood. Hint: press and hold to see the color scale.',
+            'overall mood.\nHint: press and hold to see the color scale.',
         content: const EmotionalEchoTile(),
       ),
 

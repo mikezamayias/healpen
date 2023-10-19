@@ -1,11 +1,14 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
+import '../../../../../../utils/helper_functions.dart';
 import 'inactive_tile.dart';
 
 class EmotionalEchoActiveTile extends ConsumerWidget {
@@ -13,13 +16,11 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<String> labels = [
-      ...sentimentLabels.map(
-        (String label) {
-          return '${sentimentValues[sentimentLabels.indexOf(label)]}, $label';
-        },
-      )
-    ];
+    double sentiment = ref
+        .watch(AnalysisViewController.analysisModelListProvider)
+        .map((e) => e.sentiment!)
+        .average;
+    num closestIndexSentiment = getClosestSentimentIndex(sentiment);
     return Stack(
       children: <Widget>[
         AnimatedPositioned(
@@ -42,47 +43,31 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
           right: 0,
           child: SizedBox(
             width: 51.w,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Container(
-                  width: gap,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(radius),
-                    gradient: LinearGradient(
-                      colors: <Color>[
-                        ref.watch(themeProvider).colorScheme.primary,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: sentimentLabels.reversed.map(
+                (String label) {
+                  double labelColorIndex = sentimentLabels.indexOf(label) /
+                      (sentimentLabels.length - 1);
+                  int labelIndex = sentimentLabels.indexOf(label);
+                  return Text(
+                    label,
+                    style: (labelIndex == closestIndexSentiment
+                            ? context.theme.textTheme.titleLarge
+                            : context.theme.textTheme.titleMedium)!
+                        .copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Color.lerp(
                         ref.watch(themeProvider).colorScheme.error,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
+                        ref.watch(themeProvider).colorScheme.primary,
+                        labelColorIndex,
+                      ),
                     ),
-                  ),
-                ),
-                Gap(gap),
-                Flexible(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: labels.reversed.map(
-                      (String label) {
-                        return Text(
-                          label,
-                          style: context.theme.textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Color.lerp(
-                              ref.watch(themeProvider).colorScheme.error,
-                              ref.watch(themeProvider).colorScheme.primary,
-                              labels.indexOf(label) / labels.length,
-                            )!,
-                          ),
-                        );
-                      },
-                    ).toList(),
-                  ),
-                ),
-              ],
+                  );
+                },
+              ).toList(),
             ),
           ),
         ),
