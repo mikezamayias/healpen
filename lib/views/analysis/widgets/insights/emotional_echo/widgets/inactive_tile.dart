@@ -83,10 +83,9 @@ class _EmotionalEchoInactiveTileState
                   opacity: value,
                   child: Text(
                     textAlign: TextAlign.center,
-                    '${getSentimentLabel(sentiment)} '
-                            '${sentiment.toStringAsFixed(2)}'
-                        .split(' ')
-                        .join('\n'),
+                    // '${getSentimentLabel(sentiment)} '
+                    //         '${sentiment.toStringAsFixed(2)}'
+                    getSentimentLabel(sentiment).split(' ').join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(
                       color: Color.lerp(
                         context.theme.colorScheme.onError,
