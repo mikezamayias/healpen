@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import 'helper_functions.dart';
-
 Future showHealpenDialog({
   required BuildContext context,
   required bool doVibrate,
