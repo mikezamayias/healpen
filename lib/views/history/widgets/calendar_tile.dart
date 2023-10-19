@@ -298,37 +298,6 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   }
 }
 
-class NoteAnalysisService {
-  Stream<List<NoteModel>> getNoteEntriesListOnDate(DateTime date) {
-    return HistoryViewController()
-        .getNoteEntriesListOnDate(date)
-        .snapshots(includeMetadataChanges: true)
-        .map(
-          (QuerySnapshot<Map<String, dynamic>> query) => [
-            ...query.docs.map(
-              (e) => NoteModel.fromJson(e.data()),
-            )
-          ],
-        );
-  }
-
-  Stream<List<AnalysisModel>> getAnalysisEntriesListOnDate(DateTime date) {
-    return HistoryViewController()
-        .getNoteEntriesListOnDate(date)
-        .snapshots(includeMetadataChanges: true)
-        .map(
-      (QuerySnapshot<Map<String, dynamic>> query) {
-        return [
-          ...query.docs.map(
-            (QueryDocumentSnapshot<Map<String, dynamic>> e) =>
-                AnalysisModel.fromJson(e.data()),
-          )
-        ];
-      },
-    );
-  }
-}
-
 class DataSource extends CalendarDataSource {
   DataSource(List<Appointment> source) {
     appointments = source;
