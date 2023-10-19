@@ -49,7 +49,7 @@ class _EmotionalEchoInactiveTileState
     Color shapeColor = Color.lerp(
       ref.watch(themeProvider).colorScheme.error,
       ref.watch(themeProvider).colorScheme.primary,
-      sentiment,
+      getSentimentRatio(sentiment),
     )!;
     return Stack(
       fit: StackFit.expand,
@@ -90,7 +90,7 @@ class _EmotionalEchoInactiveTileState
                       color: Color.lerp(
                         context.theme.colorScheme.onError,
                         context.theme.colorScheme.onPrimary,
-                        sentiment,
+                        getSentimentRatio(sentiment),
                       )!,
                     ),
                   ),
