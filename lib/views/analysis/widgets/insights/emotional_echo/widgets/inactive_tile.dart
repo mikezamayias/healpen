@@ -6,6 +6,7 @@ import 'package:rive/rive.dart';
 
 import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../controllers/emotional_echo_controller.dart';
+import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 
@@ -30,13 +31,14 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
           onInit: (Artboard artboard) {
             artboard.forEachComponent(
               (child) {
+                final shapeColor = Color.lerp(
+                  ref.watch(themeProvider).colorScheme.error,
+                  ref.watch(themeProvider).colorScheme.primary,
+                  getSentimentRatio(sentiment),
+                )!;
                 if (child is Shape) {
                   final Shape shape = child;
-                  shape.fills.first.paint.color = Color.lerp(
-                    context.theme.colorScheme.error,
-                    context.theme.colorScheme.primary,
-                    getSentimentRatio(sentiment),
-                  )!
+                  shape.fills.first.paint.color = shapeColor
                       .withOpacity(shape.fills.first.paint.color.opacity);
                 }
               },
