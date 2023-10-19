@@ -32,11 +32,11 @@ class NoteTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Widget tile = StreamBuilder<({NoteModel note, AnalysisModel analysis})>(
+    Widget tile = StreamBuilder<({NoteModel note, AnalysisModel? analysis})>(
       stream: getNoteAndAnalysis(),
       builder: (
         BuildContext context,
-        AsyncSnapshot<({NoteModel note, AnalysisModel analysis})> snapshot,
+        AsyncSnapshot<({NoteModel note, AnalysisModel? analysis})> snapshot,
       ) {
         log(
           '${snapshot.data?.note}',
@@ -46,16 +46,24 @@ class NoteTile extends ConsumerWidget {
           return const LoadingTile(durationTitle: 'Loading note...');
         }
         return CustomListTile(
-          textColor: Color.lerp(
-            context.theme.colorScheme.onError,
-            context.theme.colorScheme.onPrimary,
-            getSentimentRatio(snapshot.data!.analysis.sentiment!),
-          )!,
-          backgroundColor: Color.lerp(
-            context.theme.colorScheme.error,
-            context.theme.colorScheme.primary,
-            getSentimentRatio(snapshot.data!.analysis.sentiment!),
-          )!,
+          textColor: snapshot.data!.analysis != null
+              ? Color.lerp(
+                  context.theme.colorScheme.onError,
+                  context.theme.colorScheme.onPrimary,
+                  getSentimentRatio(
+                    snapshot.data!.analysis!.sentiment!,
+                  ),
+                )!
+              : null,
+          backgroundColor: snapshot.data!.analysis != null
+              ? Color.lerp(
+                  context.theme.colorScheme.error,
+                  context.theme.colorScheme.primary,
+                  getSentimentRatio(
+                    snapshot.data!.analysis!.sentiment!,
+                  ),
+                )!
+              : null,
           cornerRadius: radius - gap,
           contentPadding: EdgeInsets.all(gap),
           explanationString: DateFormat('HH:mm')
@@ -152,14 +160,17 @@ class NoteTile extends ConsumerWidget {
     );
   }
 
-  Stream<({NoteModel note, AnalysisModel analysis})>
+  Stream<({NoteModel note, AnalysisModel? analysis})>
       getNoteAndAnalysis() async* {
     NoteModel noteEntry = NoteModel.fromJson(
       (await FirestoreService().getNote(noteModel.timestamp)).data()!,
     );
-    AnalysisModel analysisEntry = AnalysisModel.fromJson(
-      (await FirestoreService().getAnalysis(noteModel.timestamp)).data()!,
-    );
+    Map<String, dynamic>? analysisData =
+        (await FirestoreService().getAnalysis(noteModel.timestamp)).data();
+    AnalysisModel? analysisEntry;
+    if (analysisData != null) {
+      analysisEntry = AnalysisModel.fromJson(analysisData);
+    }
     yield (note: noteEntry, analysis: analysisEntry);
   }
 }

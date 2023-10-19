@@ -235,16 +235,27 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                   stream: NoteAnalysisService()
                       .getAnalysisEntriesListOnDate(details.date!),
                   builder: (context, analysisListStreamSnapshot) {
+                    log(
+                      '$analysisListStreamSnapshot',
+                      name: 'CalendarTile:analysisListStreamSnapshot',
+                    );
                     List<Widget> widgets = [
                       for (int i = 0;
                           i < noteListStreamSnapshot.data!.length;
                           i++)
-                        NoteTile(
-                          noteModel: noteListStreamSnapshot.data!.elementAt(i),
-                          analysisModel: analysisListStreamSnapshot.data != null
-                              ? analysisListStreamSnapshot.data!.elementAt(i)
-                              : null,
-                        )
+                        if (analysisListStreamSnapshot.hasData &&
+                            analysisListStreamSnapshot.data!.isNotEmpty)
+                          NoteTile(
+                            noteModel:
+                                noteListStreamSnapshot.data!.elementAt(i),
+                            analysisModel:
+                                analysisListStreamSnapshot.data!.elementAt(i),
+                          )
+                        else
+                          NoteTile(
+                            noteModel:
+                                noteListStreamSnapshot.data!.elementAt(i),
+                          )
                     ];
                     return Padding(
                       padding: EdgeInsets.all(gap),
