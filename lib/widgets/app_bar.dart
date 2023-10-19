@@ -2,7 +2,9 @@ import 'package:flutter/material.dart' hide AppBar, Page;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../controllers/healpen/healpen_controller.dart';
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
@@ -42,8 +44,8 @@ class AppBar extends ConsumerWidget {
         ],
       ),
     );
-    return ref.watch(navigationShowBackButtonProvider) &&
-            automaticallyImplyLeading!
+    final showBackButton = ref.watch(navigationShowBackButtonProvider);
+    final appBar = showBackButton && automaticallyImplyLeading!
         ? Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -71,5 +73,41 @@ class AppBar extends ConsumerWidget {
             ],
           )
         : appBarContent;
+    return Container(
+      padding: EdgeInsets.all(gap),
+      height: 42.h,
+      decoration: BoxDecoration(
+        color: context.theme.colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: IconButton.filled(
+              padding: EdgeInsets.zero,
+              enableFeedback: true,
+              iconSize: context.theme.textTheme.titleLarge!.fontSize,
+              color: context.theme.colorScheme.onPrimary,
+              icon: Container(
+                padding: EdgeInsets.all(gap * 2),
+                child: FaIcon(
+                  HealpenController()
+                      .currentPageModel(ref
+                          .watch(HealpenController().currentPageIndexProvider))
+                      .icon,
+                  size: radius * 1.5,
+                ),
+              ),
+              onPressed: () {},
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomLeft,
+            child: appBar,
+          ),
+        ],
+      ),
+    );
   }
 }
