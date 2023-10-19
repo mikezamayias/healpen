@@ -22,8 +22,6 @@ class EmotionalEchoInactiveTile extends ConsumerStatefulWidget {
 
 class _EmotionalEchoInactiveTileState
     extends ConsumerState<EmotionalEchoInactiveTile> {
-  /// We track if the animation is playing by whether or not the controller is
-  /// running.
   bool get isPlaying => _controller?.isActive ?? false;
 
   Artboard? _riveArtboard;
@@ -56,25 +54,6 @@ class _EmotionalEchoInactiveTileState
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        // RiveAnimation.asset(
-        //   'assets/rive/emotional_echo.riv',
-        //   stateMachines: const [
-        //     'AllCircles',
-        //   ],
-        //   fit: BoxFit.contain,
-        //   onInit: (Artboard artboard) {
-        //     artboard.forEachComponent(
-        //       (child) {
-        //         if (child is Shape) {
-        //           final Shape shape = child;
-        //           shape.fills.first.paint.color = shapeColor
-        //               .withOpacity(shape.fills.first.paint.color.opacity);
-        //         }
-        //       },
-        //     );
-        //   },
-        // ),
-
         if (_riveArtboard != null)
           RiveColorModifier(
             artboard: _riveArtboard!,
@@ -87,7 +66,6 @@ class _EmotionalEchoInactiveTileState
                     ))
                 .toList(),
           ),
-
         Align(
           alignment: Alignment.center,
           child: TweenAnimationBuilder<double>(
