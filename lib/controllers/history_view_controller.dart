@@ -34,6 +34,18 @@ class HistoryViewController {
     DateTime date,
   ) {
     return FirestoreService()
+        .writingCollectionReference()
+        .orderBy('timestamp', descending: true)
+        .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
+        .where('timestamp',
+            isLessThan: date.add(1.days).millisecondsSinceEpoch);
+  }
+
+  /// Get documents from Firestore of the given date
+  Query<Map<String, dynamic>> getAnalysisEntriesListOnDate(
+    DateTime date,
+  ) {
+    return FirestoreService()
         .analysisCollectionReference()
         .orderBy('timestamp', descending: true)
         .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
