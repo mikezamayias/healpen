@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -14,11 +12,9 @@ import '../../../models/note/note_model.dart';
 import '../../../route_controller.dart';
 import '../../../services/firestore_service.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
-import '../../../widgets/loading_tile.dart';
 
 class NoteTile extends ConsumerWidget {
   const NoteTile({
@@ -32,56 +28,95 @@ class NoteTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Widget tile = StreamBuilder<({NoteModel note, AnalysisModel analysis})>(
-        stream: getNoteAndAnalysis(),
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<({NoteModel note, AnalysisModel analysis})> snapshot,
-        ) {
-          if (!snapshot.hasData) {
-            return const LoadingTile(durationTitle: 'Loading note...');
-          }
-          log(
-            '${snapshot.data}',
-            name: 'NoteTile:build:StreamBuilder:snapshot.data',
-          );
-          return CustomListTile(
-            textColor: Color.lerp(
-              context.theme.colorScheme.onError,
-              context.theme.colorScheme.onPrimary,
-              getSentimentRatio(snapshot.data!.analysis.sentiment!),
-            )!,
-            backgroundColor: Color.lerp(
-              context.theme.colorScheme.error,
-              context.theme.colorScheme.primary,
-              getSentimentRatio(snapshot.data!.analysis.sentiment!),
-            )!,
-            cornerRadius: radius - gap,
-            contentPadding: EdgeInsets.all(gap),
-            explanationString: DateFormat('HH:mm')
-                .format(
-                  DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
-                )
-                .toString(),
-            title: Text(
-              noteModel.content,
-              style: context.theme.textTheme.bodyLarge!.copyWith(
-                color: context.theme.colorScheme.onPrimary,
-                overflow: TextOverflow.ellipsis,
-              ),
-              maxLines: 1,
-            ),
-            onTap: () {
-              context.navigator.pushNamed(
-                RouterController.noteViewRoute.route,
-                arguments: (
-                  noteModel: snapshot.data!.note,
-                  analysisModel: snapshot.data!.analysis,
-                ),
-              );
-            },
-          );
-        });
+    // Widget tile = StreamBuilder<({NoteModel note, AnalysisModel analysis})>(
+    //     stream: getNoteAndAnalysis(),
+    //     builder: (
+    //       BuildContext context,
+    //       AsyncSnapshot<({NoteModel note, AnalysisModel analysis})> snapshot,
+    //     ) {
+    //       log(
+    //       '${snapshot.data.note}',
+    //       name: 'NoteTile:build:StreamBuilder:snapshot.data',
+    //       );
+    //     if (!snapshot.hasData) {
+    //       return const LoadingTile(durationTitle: 'Loading note...');
+    //     }
+    //     return CustomListTile(
+    //         textColor: Color.lerp(
+    //           context.theme.colorScheme.onError,
+    //           context.theme.colorScheme.onPrimary,
+    //           getSentimentRatio(snapshot.data!.analysis.sentiment!),
+    //         )!,
+    //         backgroundColor: Color.lerp(
+    //           context.theme.colorScheme.error,
+    //           context.theme.colorScheme.primary,
+    //           getSentimentRatio(snapshot.data!.analysis.sentiment!),
+    //         )!,
+    //         cornerRadius: radius - gap,
+    //         contentPadding: EdgeInsets.all(gap),
+    //         explanationString: DateFormat('HH:mm')
+    //             .format(
+    //               DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+    //             )
+    //             .toString(),
+    //         title: Text(
+    //           noteModel.content,
+    //           style: context.theme.textTheme.bodyLarge!.copyWith(
+    //             color: context.theme.colorScheme.onPrimary,
+    //             overflow: TextOverflow.ellipsis,
+    //           ),
+    //           maxLines: 1,
+    //         ),
+    //         onTap: () {
+    //           context.navigator.pushNamed(
+    //             RouterController.noteViewRoute.route,
+    //             arguments: (
+    //               noteModel: snapshot.data!.note,
+    //               analysisModel: snapshot.data!.analysis,
+    //             ),
+    //           );
+    //         },
+    //       );
+    //   },
+    // );
+    Widget tile = CustomListTile(
+      // textColor: Color.lerp(
+      //   context.theme.colorScheme.onError,
+      //   context.theme.colorScheme.onPrimary,
+      //   getSentimentRatio(snapshot.data!.analysis.sentiment!),
+      // )!,
+      // backgroundColor: Color.lerp(
+      //   context.theme.colorScheme.error,
+      //   context.theme.colorScheme.primary,
+      //   getSentimentRatio(snapshot.data!.analysis.sentiment!),
+      // )!,
+      cornerRadius: radius - gap,
+      contentPadding: EdgeInsets.all(gap),
+      explanationString: DateFormat('HH:mm')
+          .format(
+            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+          )
+          .toString(),
+      title: Text(
+        noteModel.content,
+        style: context.theme.textTheme.bodyLarge!.copyWith(
+          color: context.theme.colorScheme.onPrimary,
+          overflow: TextOverflow.ellipsis,
+        ),
+        maxLines: 1,
+      ),
+      onTap: () {
+        context.navigator.pushNamed(
+          RouterController.noteViewRoute.route,
+          arguments: (
+            // noteModel: snapshot.data!.note,
+            // analysisModel: snapshot.data!.analysis,
+            noteModel: noteModel,
+            analysisModel: analysisModel,
+          ),
+        );
+      },
+    );
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius - gap),
       child: IntrinsicWidth(
