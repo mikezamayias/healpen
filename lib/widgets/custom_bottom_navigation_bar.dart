@@ -10,6 +10,7 @@ import '../../../extensions/string_extensions.dart';
 import '../../../utils/constants.dart';
 import '../controllers/healpen/healpen_controller.dart';
 import '../extensions/widget_extensions.dart';
+import '../providers/settings_providers.dart';
 import '../utils/helper_functions.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
@@ -17,24 +18,44 @@ class CustomBottomNavigationBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          left: gap,
-          right: gap,
-          bottom: gap,
-        ),
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        padding: smallNavigationElements
+            ? EdgeInsets.zero
+            : EdgeInsets.only(
+                left: gap,
+                right: gap,
+                bottom: gap,
+              ),
         child: PhysicalModel(
-          color: context.theme.colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.all(Radius.circular(radius)),
-          child: Padding(
-            padding: EdgeInsets.all(gap),
+          color: Colors.transparent,
+          child: AnimatedContainer(
+            duration: standardDuration,
+            curve: standardCurve,
+            padding: smallNavigationElements
+                ? EdgeInsets.only(
+                    left: gap,
+                    right: gap,
+                  )
+                : EdgeInsets.all(gap),
+            decoration: smallNavigationElements
+                ? const BoxDecoration()
+                : BoxDecoration(
+                    color: context.theme.colorScheme.surfaceVariant,
+                    borderRadius: BorderRadius.all(Radius.circular(radius)),
+                  ),
             child: SalomonBottomBar(
               duration: standardDuration,
               curve: standardCurve,
               margin: EdgeInsets.zero,
               itemShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(radius / 2)),
+                borderRadius: BorderRadius.all(Radius.circular(
+                  smallNavigationElements ? radius : radius - gap,
+                )),
               ),
               currentIndex:
                   ref.watch(HealpenController().currentPageIndexProvider),
@@ -80,9 +101,9 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                       ),
                     ),
               ],
-            ),
+            ).animateBottomNavigationBar(context),
           ),
-        ).animateBottomNavigationBar(context),
+        ),
       ),
     );
   }
