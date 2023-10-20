@@ -32,16 +32,13 @@ class PageController {
   List<PageModel> pages = <PageModel>[];
 
   final home = PageModel(
-    titleGenerator: (userName) =>
-        userName == null ? 'Welcome Home' : 'Welcome Home, $userName',
+    titleGenerator: (userName) => 'Welcome Home',
     label: 'home',
     icon: FontAwesomeIcons.house,
     widget: const Center(child: Text('Home')),
   );
 
   final writing = PageModel(
-    // titleGenerator: (userName) =>
-    //     userName == null ? 'Your Thoughts?' : '$userName, Your Thoughts?',
     titleGenerator: (userName) => userName == null
         ? 'What\'s on your mind today?'
         : 'Hello $userName,\nWhat\'s on your mind today?',
@@ -51,20 +48,14 @@ class PageController {
   );
 
   final analysis = PageModel(
-    //   titleGenerator: (userName) => userName == null ? 'Explore Insights' : '$userName, Explore Insights',
-    titleGenerator: (userName) => userName == null
-        ? 'Explore your writing insights'
-        : 'Hello $userName,\nExplore your writing insights',
+    titleGenerator: (userName) => 'Explore your writing insights',
     label: 'analysis',
     icon: FontAwesomeIcons.chartLine,
     widget: const AnalysisView(),
   );
 
   final history = PageModel(
-    //   titleGenerator: (userName) => userName == null ? 'Past Entries?' : '$userName, Past Entries?',
-    titleGenerator: (userName) => userName == null
-        ? 'Your past entries'
-        : '$userName,\nYour past entries',
+    titleGenerator: (userName) => 'See your past entries',
     label: 'history',
     icon: FontAwesomeIcons.calendarDays,
     widget: const HistoryView(),
@@ -72,9 +63,7 @@ class PageController {
 
   final settings = PageModel(
     //   titleGenerator: (userName) => userName == null ? 'Your Settings' : '$userName, Your Settings',
-    titleGenerator: (userName) => userName == null
-        ? 'Personalize your experience'
-        : '$userName,\nPersonalize your experience',
+    titleGenerator: (userName) => 'Personalize your experience',
     label: 'settings',
     icon: FontAwesomeIcons.sliders,
     widget: const SettingsView(),
