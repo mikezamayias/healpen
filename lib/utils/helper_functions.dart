@@ -171,6 +171,6 @@ IconData getSentimentIcon(double sentiment) {
 /// Get sentiment ratio based on the given sentiment value.
 double getSentimentRatio(num sentiment) {
   return double.parse(
-    (sentiment + 3 / sentimentValues.length).toStringAsFixed(2),
+    (sentiment + 3 / (sentimentValues.length - 1)).toStringAsFixed(2),
   );
 }
