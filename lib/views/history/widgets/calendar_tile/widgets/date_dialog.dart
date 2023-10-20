@@ -87,6 +87,9 @@ class DateDialog extends ConsumerWidget {
                       secondChild: CustomListTile(
                         titleString: 'No notes',
                         cornerRadius: radius - gap,
+                        backgroundColor:
+                            context.theme.colorScheme.surfaceVariant,
+                        textColor: context.theme.colorScheme.onSurfaceVariant,
                       ),
                       crossFadeState: switch (noteListStreamSnapshot.hasData) {
                         true => CrossFadeState.showFirst,
@@ -106,8 +109,8 @@ class DateDialog extends ConsumerWidget {
                 secondChild: CustomListTile(
                   titleString: 'No notes',
                   cornerRadius: radius - gap,
-                  backgroundColor: context.theme.colorScheme.surface,
-                  textColor: context.theme.colorScheme.onSurface,
+                  backgroundColor: context.theme.colorScheme.surfaceVariant,
+                  textColor: context.theme.colorScheme.onSurfaceVariant,
                 ).animate().fade(
                       duration: emphasizedDuration,
                       curve: emphasizedCurve,
