@@ -129,14 +129,12 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
               color: shapeColor,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 AnimatedContainer(
                   duration: standardDuration,
                   curve: standardCurve,
                   alignment: Alignment.center,
-                  height: gap * 4,
-                  width: gap * 4,
                   child: Text(
                     details.date.day.toString(),
                     style: context.theme.textTheme.titleMedium!.copyWith(
@@ -157,31 +155,34 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                 Expanded(
                   child: Visibility(
                     visible: details.appointments.isNotEmpty,
-                    child: StreamBuilder(
-                      stream: NoteAnalysisService()
-                          .getNoteEntriesListOnDate(details.date),
-                      builder:
-                          (context, AsyncSnapshot<List<NoteModel>> snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            '${snapshot.data!.length}',
-                            textAlign: TextAlign.center,
-                            style: context.theme.textTheme.titleSmall!.copyWith(
-                              color: textColor,
-                              fontWeight: FontWeight.bold,
-                              textBaseline: TextBaseline.alphabetic,
-                            ),
-                          ).animate().fade(
-                                duration: standardDuration,
-                                curve: standardCurve,
-                              );
-                        } else {
-                          return const SizedBox();
-                        }
-                      },
+                    child: Center(
+                      child: StreamBuilder(
+                        stream: NoteAnalysisService()
+                            .getNoteEntriesListOnDate(details.date),
+                        builder:
+                            (context, AsyncSnapshot<List<NoteModel>> snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              '${snapshot.data!.length}',
+                              textAlign: TextAlign.center,
+                              style:
+                                  context.theme.textTheme.titleSmall!.copyWith(
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
+                                textBaseline: TextBaseline.alphabetic,
+                              ),
+                            ).animate().fade(
+                                  duration: standardDuration,
+                                  curve: standardCurve,
+                                );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
