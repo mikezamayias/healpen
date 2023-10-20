@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 import '../enums/app_theming.dart';
 import '../themes/blueprint_theme.dart';
@@ -90,15 +91,21 @@ void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
   }
 }
 
-void animateToPage(PageController pageController, int index) {
+void animateToPage(dynamic pageController, int index) {
+  assert(
+    pageController is PageController || pageController is PreloadPageController,
+  );
   pageController.animateToPage(
     index,
-    duration: emphasizedDuration,
-    curve: emphasizedCurve,
+    duration: standardDuration,
+    curve: standardCurve,
   );
 }
 
-void goToPage(PageController pageController, int index) {
+void goToPage(dynamic pageController, int index) {
+  assert(
+    pageController is PageController || pageController is PreloadPageController,
+  );
   pageController.jumpToPage(
     index,
   );

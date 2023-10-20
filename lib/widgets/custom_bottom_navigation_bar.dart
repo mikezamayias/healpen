@@ -10,6 +10,7 @@ import '../../../extensions/string_extensions.dart';
 import '../../../utils/constants.dart';
 import '../controllers/healpen/healpen_controller.dart';
 import '../extensions/widget_extensions.dart';
+import '../utils/helper_functions.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
@@ -29,8 +30,8 @@ class CustomBottomNavigationBar extends ConsumerWidget {
           child: Padding(
             padding: EdgeInsets.all(gap),
             child: SalomonBottomBar(
-              duration: emphasizedDuration,
-              curve: emphasizedCurve,
+              duration: standardDuration,
+              curve: standardCurve,
               margin: EdgeInsets.zero,
               itemShape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(radius / 2)),
@@ -38,15 +39,11 @@ class CustomBottomNavigationBar extends ConsumerWidget {
               currentIndex:
                   ref.watch(HealpenController().currentPageIndexProvider),
               onTap: (int index) {
-                ref
-                    .watch(HealpenController().pageControllerProvider)
-                    .animateToPage(
-                      index,
-                      duration: standardDuration,
-                      curve: standardCurve,
-                    );
+                goToPage(
+                  ref.watch(HealpenController().pageControllerProvider),
+                  index,
+                );
               },
-              // selectedColorOpacity: 0,
               selectedItemColor: context.theme.colorScheme.primary,
               unselectedItemColor: context.theme.colorScheme.primary,
               selectedColorOpacity: 1,
