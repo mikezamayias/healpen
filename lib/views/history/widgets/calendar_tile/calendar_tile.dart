@@ -35,7 +35,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   Widget build(BuildContext context) {
     return SfCalendar(
       showCurrentTimeIndicator: false,
-      showTodayButton: true,
+      showTodayButton: false,
       showWeekNumber: false,
       allowViewNavigation: false,
       showNavigationArrow: false,
