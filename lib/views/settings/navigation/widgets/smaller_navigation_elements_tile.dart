@@ -17,10 +17,10 @@ class SmallerNavigationElementsTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap),
-      titleString: 'Enable back button in app bar',
+      titleString: 'Enable smaller navigation elements',
       explanationString:
-          'Shows a back button at the top of the screen, making it simpler to '
-          'return to previous pages.',
+          'When enabled, the app will show smaller navigation elements. '
+          'This is useful for devices with smaller screens.',
       enableExplanationWrapper: true,
       trailing: Switch(
         value: ref.watch(navigationSmallerNavigationElementsProvider),
