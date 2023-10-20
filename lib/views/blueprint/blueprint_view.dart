@@ -38,7 +38,6 @@ class BlueprintView extends ConsumerWidget {
             child: Container(
               color: context.theme.colorScheme.background,
               padding: EdgeInsets.symmetric(
-                vertical: gap,
                 horizontal: padBodyHorizontally! ? gap : 0,
               ),
               child: Scaffold(

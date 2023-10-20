@@ -21,87 +21,89 @@ class CustomBottomNavigationBar extends ConsumerWidget {
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
     return SafeArea(
-      child: AnimatedContainer(
-        duration: standardDuration,
-        curve: standardCurve,
-        padding: smallNavigationElements
-            ? EdgeInsets.zero
-            : EdgeInsets.only(
-                left: gap,
-                right: gap,
-                bottom: gap,
-              ),
-        child: PhysicalModel(
-          color: Colors.transparent,
-          child: AnimatedContainer(
-            duration: standardDuration,
-            curve: standardCurve,
-            padding: smallNavigationElements
-                ? EdgeInsets.only(
-                    left: gap,
-                    right: gap,
-                  )
-                : EdgeInsets.all(gap),
-            decoration: smallNavigationElements
-                ? const BoxDecoration()
-                : BoxDecoration(
-                    color: context.theme.colorScheme.surfaceVariant,
-                    borderRadius: BorderRadius.all(Radius.circular(radius)),
-                  ),
-            child: SalomonBottomBar(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: gap),
+        child: AnimatedContainer(
+          duration: standardDuration,
+          curve: standardCurve,
+          padding: smallNavigationElements
+              ? EdgeInsets.zero
+              : EdgeInsets.only(
+                  left: gap,
+                  right: gap,
+                ),
+          child: PhysicalModel(
+            color: Colors.transparent,
+            child: AnimatedContainer(
               duration: standardDuration,
               curve: standardCurve,
-              margin: EdgeInsets.zero,
-              itemShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(
-                  smallNavigationElements ? radius : radius - gap,
-                )),
-              ),
-              currentIndex:
-                  ref.watch(HealpenController().currentPageIndexProvider),
-              onTap: (int index) {
-                goToPage(
-                  ref.watch(HealpenController().pageControllerProvider),
-                  index,
-                );
-              },
-              selectedItemColor: context.theme.colorScheme.primary,
-              unselectedItemColor: context.theme.colorScheme.primary,
-              selectedColorOpacity: 1,
-              items: [
-                ...PageController().pages.map(
-                      (PageModel pageModel) => SalomonBottomBarItem(
-                        icon: FaIcon(
-                          pageModel.icon,
-                          color: ref.watch(HealpenController()
-                                      .currentPageIndexProvider) ==
-                                  PageController().pages.indexOf(pageModel)
-                              ? context.theme.colorScheme.onPrimary
-                              : context.theme.colorScheme.primary,
-                        ),
-                        title: AnimatedOpacity(
-                          duration: shortStandardDuration,
-                          curve: standardCurve,
-                          opacity: ref.watch(HealpenController()
-                                      .currentPageIndexProvider) ==
-                                  PageController().pages.indexOf(pageModel)
-                              ? 1
-                              : 0,
-                          child: Text(
-                            pageModel.label.toTitleCase(),
-                            style: TextStyle(
-                              fontFamily:
-                                  context.theme.textTheme.bodySmall!.fontFamily,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.6,
-                              color: context.theme.colorScheme.onPrimary,
+              padding: smallNavigationElements
+                  ? EdgeInsets.only(
+                      left: gap,
+                      right: gap,
+                    )
+                  : EdgeInsets.all(gap),
+              decoration: smallNavigationElements
+                  ? const BoxDecoration()
+                  : BoxDecoration(
+                      color: context.theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.all(Radius.circular(radius)),
+                    ),
+              child: SalomonBottomBar(
+                duration: standardDuration,
+                curve: standardCurve,
+                margin: EdgeInsets.zero,
+                itemShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(
+                    smallNavigationElements ? radius : radius - gap,
+                  )),
+                ),
+                currentIndex:
+                    ref.watch(HealpenController().currentPageIndexProvider),
+                onTap: (int index) {
+                  goToPage(
+                    ref.watch(HealpenController().pageControllerProvider),
+                    index,
+                  );
+                },
+                selectedItemColor: context.theme.colorScheme.primary,
+                unselectedItemColor: context.theme.colorScheme.primary,
+                selectedColorOpacity: 1,
+                items: [
+                  ...PageController().pages.map(
+                        (PageModel pageModel) => SalomonBottomBarItem(
+                          icon: FaIcon(
+                            pageModel.icon,
+                            color: ref.watch(HealpenController()
+                                        .currentPageIndexProvider) ==
+                                    PageController().pages.indexOf(pageModel)
+                                ? context.theme.colorScheme.onPrimary
+                                : context.theme.colorScheme.primary,
+                          ),
+                          title: AnimatedOpacity(
+                            duration: shortStandardDuration,
+                            curve: standardCurve,
+                            opacity: ref.watch(HealpenController()
+                                        .currentPageIndexProvider) ==
+                                    PageController().pages.indexOf(pageModel)
+                                ? 1
+                                : 0,
+                            child: Text(
+                              pageModel.label.toTitleCase(),
+                              style: TextStyle(
+                                fontFamily: context
+                                    .theme.textTheme.bodySmall!.fontFamily,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.6,
+                                color: context.theme.colorScheme.onPrimary,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-              ],
-            ).animateBottomNavigationBar(context),
+                ],
+              ).animateBottomNavigationBar(context),
+            ),
           ),
         ),
       ),

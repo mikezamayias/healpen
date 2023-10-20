@@ -51,14 +51,22 @@ class _WritingViewState extends ConsumerState<WritingView>
     WritingController.writingAutomaticStopwatch =
         ref.watch(writingAutomaticStopwatchProvider);
     // WritingController().updateAllUserNotes();
+    final smallerNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
+    final pathNames = page_controller.PageController()
+        .writing
+        .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
+        .split('\n');
     return BlueprintView(
       showAppBarTitle: ref.watch(navigationShowAppBarProvider),
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)
           ? null
           : AppBar(
               pathNames: [
-                page_controller.PageController().writing.titleGenerator(
-                    FirebaseAuth.instance.currentUser?.displayName),
+                if (smallerNavigationElements)
+                  pathNames.last
+                else
+                  pathNames.join('\n')
               ],
             ),
       body: Container(
