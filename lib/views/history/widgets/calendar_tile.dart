@@ -88,6 +88,8 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
           .timestampToDateTime()
           .subtract(1.days),
     );
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     return StreamBuilder(
       stream: NoteAnalysisService().getAnalysisEntriesListOnDate(details.date),
       builder: (
@@ -131,6 +133,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                if (smallNavigationElements) Gap(gap),
                 AnimatedContainer(
                   duration: standardDuration,
                   curve: standardCurve,
@@ -152,6 +155,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                     ),
                   ),
                 ),
+                if (smallNavigationElements) Gap(gap),
                 Expanded(
                   child: Visibility(
                     visible: details.appointments.isNotEmpty,
@@ -183,6 +187,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                     ),
                   ),
                 ),
+                if (smallNavigationElements) Gap(gap),
               ],
             ),
           ),
