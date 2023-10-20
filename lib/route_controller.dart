@@ -1,10 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide PageController;
 
-import 'healpen.dart';
-import 'views/auth/auth_view.dart';
-import 'views/note/note_view.dart';
-import 'views/onboarding/onboarding_view.dart';
-import 'wrappers/auth_wrapper.dart';
+import 'controllers/page_controller.dart';
+import 'models/page_model.dart';
 
 class RouterController {
 //   make it singleton
@@ -14,28 +11,28 @@ class RouterController {
 
   RouterController._internal();
 
-  static const ({String route, Widget widget}) onboardingRoute = (
+  static ({String route, PageModel pageModel}) onboardingRoute = (
     route: '/onboarding',
-    widget: OnboardingView(),
+    pageModel: PageController().onboarding,
   );
-  static const ({String route, Widget widget}) authWrapperRoute = (
+  static ({String route, PageModel pageModel}) authWrapperRoute = (
     route: '/auth-wrapper',
-    widget: AuthWrapper(),
+    pageModel: PageController().authWrapper,
   );
-  static const ({String route, Widget widget}) authViewRoute = (
+  static ({String route, PageModel pageModel}) authViewRoute = (
     route: '/auth-view',
-    widget: AuthView(),
+    pageModel: PageController().authView,
   );
-  static const ({String route, Widget widget}) noteViewRoute = (
+  static ({String route, PageModel pageModel}) noteViewRoute = (
     route: '/note-view',
-    widget: NoteView(),
+    pageModel: PageController().noteView,
   );
-  static const ({String route, Widget widget}) healpen = (
+  static ({String route, PageModel pageModel}) healpen = (
     route: '/healpen',
-    widget: Healpen(),
+    pageModel: PageController().healpen,
   );
 
-  List<({String route, Widget widget})> routeList = [
+  List<({String route, PageModel pageModel})> routeList = [
     onboardingRoute,
     authWrapperRoute,
     authViewRoute,
@@ -46,6 +43,7 @@ class RouterController {
 //   create a method that will return a map of string and widget based on the
 //   above routes
   Map<String, Widget Function(BuildContext)> get routes => {
-        for (var route in routeList) route.route: (context) => route.widget,
+        for (var route in routeList)
+          route.route: (context) => route.pageModel.widget,
       };
 }

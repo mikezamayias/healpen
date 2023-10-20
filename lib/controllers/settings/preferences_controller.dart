@@ -52,6 +52,10 @@ class PreferencesController {
     'navigationShowAppBar',
     true,
   );
+  static final navigationSmallerNavigationElements = PreferenceModel<bool>(
+    'navigationSmallerNavigationElements',
+    false,
+  );
   static final writingShowAnalyzeNotesButton = PreferenceModel<bool>(
     'writingShowAnalyzeNotesButton',
     true,
@@ -87,8 +91,18 @@ class PreferencesController {
       preferenceModel: navigationEnableHapticFeedback,
       provider: navigationEnableHapticFeedbackProvider
     ),
-    (preferenceModel: themeColor, provider: themeColorProvider),
-    (preferenceModel: themeAppearance, provider: themeAppearanceProvider),
+    (
+      preferenceModel: navigationSmallerNavigationElements,
+      provider: navigationSmallerNavigationElementsProvider
+    ),
+    (
+      preferenceModel: themeColor,
+      provider: themeColorProvider,
+    ),
+    (
+      preferenceModel: themeAppearance,
+      provider: themeAppearanceProvider,
+    ),
     (
       preferenceModel: onboardingCompleted,
       provider: OnboardingController.onboardingCompletedProvider

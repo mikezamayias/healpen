@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
+import '../../../controllers/page_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
-import '../../auth/auth_view.dart';
 import 'onboarding_button.dart';
 
 class OnboardingNavigationBar extends ConsumerStatefulWidget {
@@ -27,7 +27,7 @@ class _OnboardingNavigationBarState
         transitionDuration: emphasizedDuration,
         reverseTransitionDuration: emphasizedDuration,
         pageBuilder: (context, animation, secondaryAnimation) =>
-            const AuthView(),
+            PageController().authView.widget,
         transitionsBuilder: (context, animation, secondaryAnimation, child) =>
             FadeTransition(
           opacity: Tween<double>(

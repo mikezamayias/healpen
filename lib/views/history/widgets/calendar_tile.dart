@@ -56,7 +56,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       todayHighlightColor: context.theme.colorScheme.secondary,
       cellBorderColor: context.theme.colorScheme.surface,
       selectionDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius - gap / 3),
+        borderRadius: BorderRadius.circular(radius - gap / 2),
         border: Border.all(
           color: context.theme.colorScheme.primary,
           width: gap / 3,
@@ -88,6 +88,8 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
           .timestampToDateTime()
           .subtract(1.days),
     );
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     return StreamBuilder(
       stream: NoteAnalysisService().getAnalysisEntriesListOnDate(details.date),
       builder: (
@@ -129,14 +131,13 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
               color: shapeColor,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
+                if (smallNavigationElements) Gap(gap),
                 AnimatedContainer(
                   duration: standardDuration,
                   curve: standardCurve,
                   alignment: Alignment.center,
-                  height: gap * 4,
-                  width: gap * 4,
                   child: Text(
                     details.date.day.toString(),
                     style: context.theme.textTheme.titleMedium!.copyWith(
@@ -154,34 +155,39 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
                     ),
                   ),
                 ),
+                if (smallNavigationElements) Gap(gap),
                 Expanded(
                   child: Visibility(
                     visible: details.appointments.isNotEmpty,
-                    child: StreamBuilder(
-                      stream: NoteAnalysisService()
-                          .getNoteEntriesListOnDate(details.date),
-                      builder:
-                          (context, AsyncSnapshot<List<NoteModel>> snapshot) {
-                        if (snapshot.hasData) {
-                          return Text(
-                            '${snapshot.data!.length}',
-                            textAlign: TextAlign.center,
-                            style: context.theme.textTheme.titleSmall!.copyWith(
-                              color: textColor,
-                              fontWeight: FontWeight.bold,
-                              textBaseline: TextBaseline.alphabetic,
-                            ),
-                          ).animate().fade(
-                                duration: standardDuration,
-                                curve: standardCurve,
-                              );
-                        } else {
-                          return const SizedBox();
-                        }
-                      },
+                    child: Center(
+                      child: StreamBuilder(
+                        stream: NoteAnalysisService()
+                            .getNoteEntriesListOnDate(details.date),
+                        builder:
+                            (context, AsyncSnapshot<List<NoteModel>> snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(
+                              '${snapshot.data!.length}',
+                              textAlign: TextAlign.center,
+                              style:
+                                  context.theme.textTheme.titleSmall!.copyWith(
+                                color: textColor,
+                                fontWeight: FontWeight.bold,
+                                textBaseline: TextBaseline.alphabetic,
+                              ),
+                            ).animate().fade(
+                                  duration: standardDuration,
+                                  curve: standardCurve,
+                                );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      ),
                     ),
                   ),
-                )
+                ),
+                if (smallNavigationElements) Gap(gap),
               ],
             ),
           ),

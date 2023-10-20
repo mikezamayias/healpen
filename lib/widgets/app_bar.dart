@@ -4,7 +4,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../controllers/healpen/healpen_controller.dart';
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
@@ -73,41 +72,29 @@ class AppBar extends ConsumerWidget {
             ],
           )
         : appBarContent;
-    return Container(
-      padding: EdgeInsets.all(gap),
-      height: 42.h,
-      decoration: BoxDecoration(
-        color: context.theme.colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(radius),
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
+    return AnimatedCrossFade(
+      crossFadeState: switch (smallNavigationElements) {
+        true => CrossFadeState.showFirst,
+        false => CrossFadeState.showSecond
+      },
+      firstChild: appBar,
+      secondChild: Container(
+        padding: EdgeInsets.all(gap),
+        height: 42.h,
+        decoration: BoxDecoration(
+          color: context.theme.colorScheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(radius),
+        ),
+        alignment: Alignment.bottomLeft,
+        child: appBar,
       ),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: IconButton.filled(
-              padding: EdgeInsets.zero,
-              enableFeedback: true,
-              iconSize: context.theme.textTheme.titleLarge!.fontSize,
-              color: context.theme.colorScheme.onPrimary,
-              icon: Container(
-                padding: EdgeInsets.all(gap * 2),
-                child: FaIcon(
-                  HealpenController()
-                      .currentPageModel(ref
-                          .watch(HealpenController().currentPageIndexProvider))
-                      .icon,
-                  size: radius * 1.5,
-                ),
-              ),
-              onPressed: () {},
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: appBar,
-          ),
-        ],
-      ),
+      duration: standardDuration,
+      reverseDuration: standardDuration,
+      sizeCurve: standardEasing,
+      secondCurve: standardCurve,
+      firstCurve: standardCurve,
     );
   }
 }

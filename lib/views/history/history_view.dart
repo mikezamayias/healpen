@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -5,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/healpen/healpen_controller.dart';
 import '../../controllers/history_view_controller.dart';
+import '../../controllers/page_controller.dart';
 import '../../models/note/note_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
@@ -26,9 +28,11 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
   Widget build(BuildContext context) {
     return BlueprintView(
       showAppBarTitle: ref.watch(navigationShowAppBarProvider),
-      appBar: const AppBar(
+      appBar: AppBar(
         pathNames: [
-          'Your past notes',
+          PageController()
+              .history
+              .titleGenerator(FirebaseAuth.instance.currentUser?.displayName),
         ],
       ),
       body: StreamBuilder(

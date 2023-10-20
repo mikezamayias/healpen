@@ -68,3 +68,10 @@ final navigationEnableHapticFeedbackProvider = StateProvider<bool>(
 final navigationShowAppBarProvider = StateProvider<bool>(
   (ref) => PreferencesController.navigationShowAppBar.value,
 );
+
+/// Whether to show smaller navigation elements in the app.
+/// When set to true, the app will show smaller navigation elements.
+/// When set to false, the app will show larger navigation elements.
+final navigationSmallerNavigationElementsProvider = StateProvider<bool>(
+  (ref) => PreferencesController.navigationSmallerNavigationElements.value,
+);

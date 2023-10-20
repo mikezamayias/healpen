@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../controllers/page_controller.dart' as page_controller;
 import '../../controllers/settings/preferences_controller.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../models/note/note_model.dart';
@@ -49,9 +51,13 @@ class _NoteViewState extends ConsumerState<NoteView> {
     return BlueprintView(
       appBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: gap),
-        child: const AppBar(
+        child: AppBar(
+          pathNames: [
+            page_controller.PageController()
+                .noteView
+                .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
+          ],
           automaticallyImplyLeading: true,
-          pathNames: ['Note'],
         ),
       ),
       padBodyHorizontally: false,

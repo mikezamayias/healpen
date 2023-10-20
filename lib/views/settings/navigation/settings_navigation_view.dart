@@ -5,10 +5,11 @@ import '../../../../extensions/widget_extensions.dart';
 import '../../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
-import 'widgets/app_bar_title_tile.dart';
+import 'widgets/show_app_bar_tile.dart';
 import 'widgets/back_button_settings_tile.dart';
 import 'widgets/haptic_feedback_settings_tile.dart';
 import 'widgets/info_button_settings_tile.dart';
+import 'widgets/smaller_navigation_elements_tile.dart';
 
 class SettingsNavigationView extends ConsumerWidget {
   const SettingsNavigationView({Key? key}) : super(key: key);
@@ -16,9 +17,10 @@ class SettingsNavigationView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = const [
-      HapticFeedbackSettingsTile(),
-      AppBarTile(),
+      ShowAppBarTile(),
       BackButtonSettingsTile(),
+      SmallerNavigationElementsTile(),
+      HapticFeedbackSettingsTile(),
       InfoButtonSettingsTile(),
     ].animateWidgetList();
 
