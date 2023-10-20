@@ -9,7 +9,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
 import '../../providers/custom_auth_provider.dart';
-import '../../route_controller.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
@@ -37,9 +36,28 @@ class _AuthViewState extends ConsumerState<AuthView> {
         // TODO: check if the following implementation is correct
         // documentation mentions only the SignedIn check
         if (newState is SignedIn) {
-          context.navigator.pushNamedAndRemoveUntil(
-            RouterController.authWrapperRoute.route,
-            (route) => false,
+          navigator.pushReplacement(
+            PageRouteBuilder(
+              transitionDuration: emphasizedDuration,
+              reverseTransitionDuration: emphasizedDuration,
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  page_controller.PageController().authWrapper.widget,
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) =>
+                      FadeTransition(
+                opacity: Tween<double>(
+                  begin: -1,
+                  end: 1,
+                ).animate(animation),
+                child: SlideTransition(
+                  position: Tween<Offset>(
+                    begin: const Offset(1, 0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                ),
+              ),
+            ),
           );
         }
       },
