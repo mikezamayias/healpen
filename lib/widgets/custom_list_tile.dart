@@ -28,6 +28,7 @@ class CustomListTile extends ConsumerWidget {
   final bool? responsiveWidth;
   final bool? showcaseLeadingIcon;
   final bool? enableSubtitleWrapper;
+  final bool? expandSubtitle;
   final bool? enableExplanationWrapper;
   final Color? backgroundColor;
   final Color? textColor;
@@ -55,6 +56,7 @@ class CustomListTile extends ConsumerWidget {
     this.showcaseLeadingIcon = false,
     this.enableSubtitleWrapper = true,
     this.enableExplanationWrapper = false,
+    this.expandSubtitle = false,
     this.cornerRadius,
     this.contentPadding,
   }) : super(key: key);
@@ -64,7 +66,7 @@ class CustomListTile extends ConsumerWidget {
     final padding = contentPadding ?? EdgeInsets.all(gap);
     final listTile = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: expandSubtitle! ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         if (leading != null ||
@@ -188,65 +190,35 @@ class CustomListTile extends ConsumerWidget {
             height: padding.vertical / 2,
           ),
         if (subtitle != null || subtitleString != null)
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.only(
-                bottom: gap,
-                left: gap,
-                right: gap,
-              ),
-              child: Container(
-                padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
-                decoration: enableSubtitleWrapper!
-                    ? BoxDecoration(
-                        color: context.theme.colorScheme.surface,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(radius - gap),
-                        ),
-                      )
-                    : null,
-                child: subtitle != null && subtitleString == null
-                    ? subtitle!
-                    : SelectableText(
-                        subtitleString!,
-                        onTap: onTap,
-                        enableInteractiveSelection: selectableText!,
-                        style: context.theme.textTheme.titleMedium!.copyWith(
-                          color: enableSubtitleWrapper! || onTap == null
-                              ? context.theme.colorScheme.onSurfaceVariant
-                              : context.theme.colorScheme.onPrimary,
-                        ),
-                      ),
-              ),
-            ),
-          ),
+          // if (expandSubtitle!)
+            // Expanded(child: _buildSubtitle(context))
+          // else
+            Flexible(child: _buildSubtitle(context)),
         if (explanationString != null)
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.only(
-                bottom: gap,
-                left: gap,
-                right: gap,
-              ),
-              child: Container(
-                padding: enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
-                decoration: enableExplanationWrapper!
-                    ? BoxDecoration(
-                        color: context.theme.colorScheme.surface,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(radius - gap),
-                        ),
-                      )
-                    : null,
-                child: SelectableText(
-                  explanationString!,
-                  onTap: onTap,
-                  enableInteractiveSelection: selectableText!,
-                  style: TextStyle(
-                    color: enableExplanationWrapper! || onTap == null
-                        ? context.theme.colorScheme.onSurfaceVariant
-                        : context.theme.colorScheme.onPrimary,
-                  ),
+          Padding(
+            padding: EdgeInsets.only(
+              bottom: gap,
+              left: gap,
+              right: gap,
+            ),
+            child: Container(
+              padding: enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
+              decoration: enableExplanationWrapper!
+                  ? BoxDecoration(
+                      color: context.theme.colorScheme.surface,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(radius - gap),
+                      ),
+                    )
+                  : null,
+              child: SelectableText(
+                explanationString!,
+                onTap: onTap,
+                enableInteractiveSelection: selectableText!,
+                style: TextStyle(
+                  color: enableExplanationWrapper! || onTap == null
+                      ? context.theme.colorScheme.onSurfaceVariant
+                      : context.theme.colorScheme.onPrimary,
                 ),
               ),
             ),
@@ -263,20 +235,53 @@ class CustomListTile extends ConsumerWidget {
               );
             }
           : null,
-      child: PhysicalModel(
-        color: backgroundColor ??
-            (onTap == null
-                ? context.theme.colorScheme.surfaceVariant
-                : context.theme.colorScheme.primary),
-        // shadowColor: context.theme.colorScheme.shadow,
-        // elevation: onTap == null ? constants.gap : constants.gap / 2,
-        borderRadius: BorderRadius.all(
-          Radius.circular(cornerRadius ?? radius),
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor ??
+              (onTap == null
+                  ? context.theme.colorScheme.surfaceVariant
+                  : context.theme.colorScheme.primary),
+          borderRadius: BorderRadius.all(
+            Radius.circular(cornerRadius ?? radius),
+          ),
         ),
         child: switch (responsiveWidth) {
           true => IntrinsicWidth(child: listTile),
           _ => listTile,
         },
+      ),
+    );
+  }
+
+  Padding _buildSubtitle(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: gap,
+        left: gap,
+        right: gap,
+      ),
+      child: Container(
+        padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
+        decoration: enableSubtitleWrapper!
+            ? BoxDecoration(
+                color: context.theme.colorScheme.surface,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(radius - gap),
+                ),
+              )
+            : null,
+        child: subtitle != null && subtitleString == null
+            ? subtitle!
+            : SelectableText(
+                subtitleString!,
+                onTap: onTap,
+                enableInteractiveSelection: selectableText!,
+                style: context.theme.textTheme.titleMedium!.copyWith(
+                  color: enableSubtitleWrapper! || onTap == null
+                      ? context.theme.colorScheme.onSurfaceVariant
+                      : context.theme.colorScheme.onPrimary,
+                ),
+              ),
       ),
     );
   }

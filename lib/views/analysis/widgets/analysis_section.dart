@@ -11,7 +11,6 @@ import 'insights/emotional_echo/emotional_echo_tile.dart';
 import 'insights/journal_length_tile.dart';
 import 'insights/journaling_rhythm_tile.dart';
 import 'insights/mood_journey_tile.dart';
-import 'insights/word_cloud_tile.dart';
 import 'insights/writing_flow_time_tile.dart';
 
 class AnalysisSection extends ConsumerStatefulWidget {
@@ -122,6 +121,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
         ),
       ),
       enableSubtitleWrapper: false,
+      expandSubtitle: true,
       subtitle: Container(
         padding: EdgeInsets.symmetric(vertical: gap),
         decoration: BoxDecoration(
@@ -132,25 +132,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
           itemCount: tileData.length,
           itemBuilder: (BuildContext context, int index) => Padding(
             padding: EdgeInsets.symmetric(horizontal: gap),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: tileData[index].content!,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: gap),
-                  child: Text(
-                    tileData[index].explanationString,
-                    textAlign: TextAlign.start,
-                    style: context.theme.textTheme.bodyMedium!.copyWith(
-                      color: context.theme.colorScheme.outline,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: tileData[index].content!,
           ),
           controller: pageController,
           onPageChanged: (int index) {
@@ -165,6 +147,7 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
           },
         ),
       ),
+      explanationString: tileData.elementAt(currentPage).explanationString,
     );
   }
 }
