@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,14 +52,6 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                   double labelColorIndex = sentimentLabels.indexOf(label) /
                       (sentimentLabels.length - 1);
                   int labelIndex = sentimentLabels.indexOf(label);
-                  log(
-                    '$labelIndex',
-                    name: 'EmotionalEchoActiveTile:labelIndex',
-                  );
-                  log(
-                    '$labelColorIndex',
-                    name: 'EmotionalEchoActiveTile:labelColorIndex',
-                  );
                   return Text(
                     label,
                     style: (labelIndex == closestIndexSentiment

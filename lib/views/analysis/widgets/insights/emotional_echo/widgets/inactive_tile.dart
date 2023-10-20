@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,20 +46,7 @@ class _EmotionalEchoInactiveTileState
         .watch(AnalysisViewController.analysisModelListProvider)
         .map((e) => e.sentiment!)
         .average;
-    log(
-      '$sentiment',
-      name: 'EmotionalEchoInactiveTile:sentiment',
-    );
     double sentimentRatio = (sentiment + 3) / (sentimentLabels.length - 1);
-    log(
-      '$sentimentRatio',
-      name: 'EmotionalEchoInactiveTile:sentimentRatio',
-    );
-    int closestSentimentIndex = getClosestSentimentIndex(sentimentRatio);
-    log(
-      '$closestSentimentIndex',
-      name: 'EmotionalEchoInactiveTile:closestSentimentIndex',
-    );
     Color shapeColor = Color.lerp(
       ref.watch(themeProvider).colorScheme.error,
       ref.watch(themeProvider).colorScheme.primary,
