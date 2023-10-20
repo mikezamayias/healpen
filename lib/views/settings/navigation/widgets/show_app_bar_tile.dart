@@ -10,8 +10,8 @@ import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class AppBarTile extends ConsumerWidget {
-  const AppBarTile({Key? key}) : super(key: key);
+class ShowAppBarTile extends ConsumerWidget {
+  const ShowAppBarTile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
