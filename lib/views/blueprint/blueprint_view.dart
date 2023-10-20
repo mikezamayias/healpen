@@ -14,17 +14,19 @@ class BlueprintView extends ConsumerWidget {
     Key? key,
     this.appBar,
     this.padBodyHorizontally = true,
-    this.showAppBarTitle = true,
+    this.showAppBar,
     required this.body,
   }) : super(key: key);
 
   final Widget? appBar;
   final Widget body;
   final bool? padBodyHorizontally;
-  final bool? showAppBarTitle;
+  final bool? showAppBar;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showAppBarSetting =
+        showAppBar ?? ref.watch(navigationShowAppBarProvider);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: getSystemUIOverlayStyle(
         context.theme,
@@ -42,14 +44,18 @@ class BlueprintView extends ConsumerWidget {
               ),
               child: Scaffold(
                 backgroundColor: Colors.transparent,
-                appBar: showAppBarTitle! && appBar != null
+                appBar: showAppBarSetting! && appBar != null
                     ? PreferredSize(
                         preferredSize: Size.fromHeight(21.h),
                         child: appBar!.animateAppBar(),
                       )
                     : null,
-                body: Padding(
-                  padding: EdgeInsets.symmetric(vertical: gap),
+                body: AnimatedContainer(
+                  duration: standardDuration,
+                  curve: standardCurve,
+                  padding: showAppBarSetting
+                      ? EdgeInsets.symmetric(vertical: gap)
+                      : EdgeInsets.only(bottom: gap),
                   child: ScrollConfiguration(
                     behavior: ScrollConfiguration.of(context).copyWith(
                       scrollbars: false,

@@ -20,7 +20,7 @@ class AnalysisView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BlueprintView(
-      showAppBarTitle: ref.watch(navigationShowAppBarProvider),
+      showAppBar: ref.watch(navigationShowAppBarProvider),
       appBar: AppBar(
         pathNames: [
           PageController()

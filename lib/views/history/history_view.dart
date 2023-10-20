@@ -27,7 +27,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
   @override
   Widget build(BuildContext context) {
     return BlueprintView(
-      showAppBarTitle: ref.watch(navigationShowAppBarProvider),
+      showAppBar: ref.watch(navigationShowAppBarProvider),
       appBar: AppBar(
         pathNames: [
           PageController()

@@ -53,7 +53,7 @@ class SettingsView extends ConsumerWidget {
     };
 
     return BlueprintView(
-      showAppBarTitle: ref.watch(navigationShowAppBarProvider),
+      showAppBar: ref.watch(navigationShowAppBarProvider),
       appBar: AppBar(
         pathNames: [
           PageController()
