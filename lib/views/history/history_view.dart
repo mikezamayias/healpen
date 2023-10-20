@@ -14,7 +14,7 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';
-import 'widgets/calendar_tile.dart';
+import 'widgets/calendar_tile/calendar_tile.dart';
 
 class HistoryView extends ConsumerStatefulWidget {
   const HistoryView({super.key});
