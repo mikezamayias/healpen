@@ -56,6 +56,7 @@ class DetailsPage extends StatelessWidget {
                 titleString: 'Content',
                 contentPadding: EdgeInsets.all(gap),
                 subtitleString: noteModel.content,
+                selectableText: true,
               ),
             ],
           ),
