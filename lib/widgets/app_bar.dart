@@ -4,7 +4,6 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../controllers/healpen/healpen_controller.dart';
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
@@ -35,10 +34,10 @@ class AppBar extends ConsumerWidget {
                       : pathNames[i],
               style: (i < pathNames.length - 1)
                   ? context.theme.textTheme.titleLarge!.copyWith(
-                      color: ref.watch(themeProvider).colorScheme.outline,
+                      color: context.theme.colorScheme.outline,
                     )
                   : context.theme.textTheme.headlineSmall!.copyWith(
-                      color: ref.watch(themeProvider).colorScheme.secondary,
+                      color: context.theme.colorScheme.secondary,
                     ),
             ),
         ],
@@ -65,7 +64,7 @@ class AppBar extends ConsumerWidget {
                     }
                   });
                 },
-                color: ref.watch(themeProvider).colorScheme.onPrimary,
+                color: context.theme.colorScheme.onPrimary,
                 icon: const FaIcon(FontAwesomeIcons.chevronLeft),
               ),
               SizedBox(width: gap),
@@ -77,34 +76,11 @@ class AppBar extends ConsumerWidget {
       padding: EdgeInsets.all(gap),
       height: 42.h,
       decoration: BoxDecoration(
-        color: ref.watch(themeProvider).colorScheme.surfaceVariant,
+        color: context.theme.colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(radius),
       ),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: ClipOval(
-              child: Container(
-                padding: EdgeInsets.all(gap * 2),
-                color: ref.watch(themeProvider).colorScheme.secondary,
-                child: FaIcon(
-                  HealpenController()
-                      .currentPageModel(ref
-                          .watch(HealpenController().currentPageIndexProvider))
-                      .icon,
-                      color: ref.watch(themeProvider).colorScheme.onSecondary,
-                  size: radius * 1.5,
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: appBar,
-          ),
-        ],
-      ),
+      alignment: Alignment.bottomLeft,
+      child: appBar,
     );
   }
 }
