@@ -1,8 +1,11 @@
-import 'package:flutter/material.dart' hide AppBar, ListTile, Feedback;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart'
+    hide AppBar, ListTile, Feedback, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../controllers/page_controller.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
@@ -51,8 +54,12 @@ class SettingsView extends ConsumerWidget {
 
     return BlueprintView(
       showAppBarTitle: ref.watch(navigationShowAppBarProvider),
-      appBar: const AppBar(
-        pathNames: ['Personalize your experience'],
+      appBar: AppBar(
+        pathNames: [
+          PageController()
+              .settings
+              .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
+        ],
       ),
       body: Wrap(
         spacing: gap,

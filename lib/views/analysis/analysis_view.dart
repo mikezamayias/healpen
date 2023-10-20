@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart' hide AppBar;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart' hide AppBar, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../controllers/analysis_view_controller.dart';
+import '../../controllers/page_controller.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../services/firestore_service.dart';
@@ -19,8 +21,12 @@ class AnalysisView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return BlueprintView(
       showAppBarTitle: ref.watch(navigationShowAppBarProvider),
-      appBar: const AppBar(
-        pathNames: ['Your writing insights'],
+      appBar: AppBar(
+        pathNames: [
+          PageController()
+              .analysis
+              .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
+        ],
       ),
       body: StreamBuilder(
         stream: FirestoreService().analysisCollectionReference().snapshots(),

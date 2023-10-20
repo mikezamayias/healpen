@@ -4,6 +4,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../controllers/page_controller.dart' as page_controller;
 import '../../controllers/writing_controller.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
@@ -47,8 +48,6 @@ class _WritingViewState extends ConsumerState<WritingView>
 
   @override
   Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser;
-    final userName = user?.displayName;
     WritingController.writingAutomaticStopwatch =
         ref.watch(writingAutomaticStopwatchProvider);
     // WritingController().updateAllUserNotes();
@@ -58,9 +57,8 @@ class _WritingViewState extends ConsumerState<WritingView>
           ? null
           : AppBar(
               pathNames: [
-                userName == null
-                    ? 'Hello,\nWhat\'s on your mind today?'
-                    : 'Hello $userName,\nWhat\'s on your mind today?',
+                page_controller.PageController().writing.titleGenerator(
+                    FirebaseAuth.instance.currentUser?.displayName),
               ],
             ),
       body: Container(

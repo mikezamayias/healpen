@@ -17,27 +17,27 @@ class FirestoreService {
   factory FirestoreService() => instance;
 
   // Attributes
-  final User _currentUser = FirebaseAuth.instance.currentUser!;
+  final User currentUser = FirebaseAuth.instance.currentUser!;
 
   // Methods
   CollectionReference<Map<String, dynamic>> writingCollectionReference() {
     return FirebaseFirestore.instance
         .collection('writing-temp')
-        .doc(_currentUser.uid)
+        .doc(currentUser.uid)
         .collection('notes');
   }
 
   CollectionReference<Map<String, dynamic>> analysisCollectionReference() {
     return FirebaseFirestore.instance
         .collection('analysis-temp')
-        .doc(_currentUser.uid)
+        .doc(currentUser.uid)
         .collection('notes');
   }
 
   DocumentReference<Map<String, dynamic>> preferencesCollectionReference() {
     return FirebaseFirestore.instance
         .collection('preferences-temp')
-        .doc(_currentUser.uid);
+        .doc(currentUser.uid);
   }
 
   Future<void> saveNote(NoteModel noteModel) async {

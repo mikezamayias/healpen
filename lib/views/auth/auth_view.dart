@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
+import '../../controllers/page_controller.dart' as page_controller;
 import '../../providers/custom_auth_provider.dart';
 import '../../route_controller.dart';
 import '../../utils/constants.dart';
@@ -63,7 +64,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
           },
           child: BlueprintView(
             appBar: AppBar(
-              pathNames: const ['Sign in with magic link'],
+              pathNames: [
+                page_controller.PageController().authView.titleGenerator(
+                    FirebaseAuth.instance.currentUser?.displayName)
+              ],
               automaticallyImplyLeading: true,
               onBackButtonPressed: goBack,
             ),
