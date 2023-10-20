@@ -83,13 +83,12 @@ class NoteAnalyzer {
   }
 
   static Future<void> completed(WidgetRef ref) async {
-    // await AnalysisViewController.removePreviousAnalysis(ref);
     await NoteAnalyzer.analyzeNotes(ref);
     ref.watch(analysisProgressProvider.notifier).state =
         AnalysisProgress.completed;
     ref.read(writingShowAnalyzeNotesButtonProvider.notifier).state = false;
     await FirestorePreferencesController().savePreference(
-      PreferencesController.writingAutomaticStopwatch
+      PreferencesController.writingShowAnalyzeNotesButton
           .withValue(ref.watch(writingShowAnalyzeNotesButtonProvider)),
     );
   }
