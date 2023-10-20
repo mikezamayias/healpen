@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../providers/settings_providers.dart';
 import '../../../../../utils/helper_functions.dart';
+import '../../../../../wrappers/keep_alive_wrapper.dart';
 import 'widgets/active_tile.dart';
 
 class EmotionalEchoTile extends ConsumerWidget {
@@ -13,21 +14,23 @@ class EmotionalEchoTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onLongPress: () {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-          ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
-              true;
-        });
-      },
-      onLongPressEnd: (_) {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-          ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
-              false;
-        });
-      },
-      child: const EmotionalEchoActiveTile(),
+    return KeepAliveWrapper(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onLongPress: () {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+            ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
+                true;
+          });
+        },
+        onLongPressEnd: (_) {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+            ref.watch(EmotionalEchoController.isPressedProvider.notifier).state =
+                false;
+          });
+        },
+        child: const EmotionalEchoActiveTile(),
+      ),
     );
   }
 }
