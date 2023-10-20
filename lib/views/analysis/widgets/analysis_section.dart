@@ -56,11 +56,11 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
       /// This widget could be represented by a word cloud.
       /// You could add interactivity, for example, users could tap on a word
       /// to see the entries where it was used.
-      (
-        titleString: 'Word Cloud',
-        explanationString: 'See the most frequent words in your notes.',
-        content: const WordCloudTile(),
-      ),
+      // (
+      //   titleString: 'Word Cloud',
+      //   explanationString: 'See the most frequent words in your notes.',
+      //   content: const WordCloudTile(),
+      // ),
 
       /// Instead of a line graph, consider a river or stream graph.
       /// It provides a more visual, less analytical depiction of the ebb and
