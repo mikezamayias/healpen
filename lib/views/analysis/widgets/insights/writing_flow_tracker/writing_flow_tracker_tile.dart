@@ -7,7 +7,6 @@ import '../../../../../providers/settings_providers.dart';
 import '../../../../../services/data_analysis_service.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../widgets/custom_list_tile.dart';
-import '../../../../../widgets/loading_tile.dart';
 import 'painters/clock_painter.dart';
 
 class WritingFlowTrackerTile extends ConsumerWidget {
@@ -27,12 +26,6 @@ class WritingFlowTrackerTile extends ConsumerWidget {
     AsyncSnapshot<List<HourlyData>> snapshot,
     WidgetRef ref,
   ) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return const LoadingTile(
-        durationTitle: 'Loading',
-      );
-    }
-
     if (!snapshot.hasData || snapshot.data!.isEmpty) {
       return const CustomListTile(
         titleString: 'No data available',
@@ -52,8 +45,11 @@ class WritingFlowTrackerTile extends ConsumerWidget {
         ),
         Center(
           child: CustomPaint(
-            painter: ClockPainter(snapshot.data!),
             size: Size.fromRadius(42.w),
+            painter: ClockPainter(
+              hourlyData: snapshot.data!,
+              theme: ref.watch(themeProvider),
+            ),
           ),
         ),
       ],

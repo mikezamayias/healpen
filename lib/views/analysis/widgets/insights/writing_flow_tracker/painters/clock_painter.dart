@@ -2,19 +2,18 @@ import 'dart:developer';
 import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../services/data_analysis_service.dart';
 import '../../../../../../utils/constants.dart';
 
 class ClockPainter extends CustomPainter {
-  static final ref = ProviderContainer();
-  final theme = ref.read(themeProvider);
-
   final List<HourlyData> hourlyData;
+  final ThemeData theme;
 
-  ClockPainter(this.hourlyData);
+  ClockPainter({
+    required this.hourlyData,
+    required this.theme,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
