@@ -23,14 +23,11 @@ class NoteAnalysisService {
         .getAnalysisEntriesListOnDate(date)
         .snapshots(includeMetadataChanges: true)
         .map(
-      (QuerySnapshot<Map<String, dynamic>> query) {
-        return [
-          ...query.docs.map(
-            (QueryDocumentSnapshot<Map<String, dynamic>> e) =>
-                AnalysisModel.fromJson(e.data()),
-          )
-        ];
-      },
-    );
+          (QuerySnapshot<AnalysisModel> event) => <AnalysisModel>[
+            ...event.docs.map(
+              (QueryDocumentSnapshot<AnalysisModel> e) => e.data(),
+            )
+          ],
+        );
   }
 }

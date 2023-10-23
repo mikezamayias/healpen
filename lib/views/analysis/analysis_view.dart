@@ -32,7 +32,7 @@ class AnalysisView extends ConsumerWidget {
         stream: FirestoreService().analysisCollectionReference().snapshots(),
         builder: (
           BuildContext context,
-          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> analysisSnapshot,
+          AsyncSnapshot<QuerySnapshot<AnalysisModel>> analysisSnapshot,
         ) {
           if (analysisSnapshot.data == null) {
             return const LoadingTile(durationTitle: 'Loading metrics');
@@ -49,11 +49,11 @@ class AnalysisView extends ConsumerWidget {
               ref
                   .watch(AnalysisViewController.analysisModelListProvider)
                   .clear();
-              for (QueryDocumentSnapshot<Map<String, dynamic>> element
+              for (QueryDocumentSnapshot<AnalysisModel> element
                   in analysisSnapshot.data!.docs) {
-                ref.watch(AnalysisViewController.analysisModelListProvider).add(
-                      AnalysisModel.fromJson(element.data()),
-                    );
+                ref
+                    .watch(AnalysisViewController.analysisModelListProvider)
+                    .add(element.data());
               }
               return const AnalysisSection();
             }

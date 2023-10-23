@@ -27,11 +27,16 @@ class FirestoreService {
         .collection('notes');
   }
 
-  CollectionReference<Map<String, dynamic>> analysisCollectionReference() {
+  CollectionReference<AnalysisModel> analysisCollectionReference() {
     return FirebaseFirestore.instance
         .collection('analysis-temp')
         .doc(currentUser.uid)
-        .collection('notes');
+        .collection('notes')
+        .withConverter<AnalysisModel>(
+          fromFirestore: (snapshot, _) =>
+              AnalysisModel.fromJson(snapshot.data()!),
+          toFirestore: (analysisModel, _) => analysisModel.toJson(),
+        );
   }
 
   DocumentReference<Map<String, dynamic>> preferencesCollectionReference() {
@@ -57,18 +62,16 @@ class FirestoreService {
     );
     await analysisCollectionReference()
         .doc('${analysisModel.timestamp}')
-        .set(analysisModel.toJson());
+        .set(analysisModel);
   }
 
-  // static Future<void> savePreferences(
-  //   PreferenceModel preference,
-  // ) async {
-  //   log(
-  //     '${preference.toJson()}',
-  //     name: 'FirestoreService:savePreferences() - preference to save',
-  //   );
-  //   await preferencesCollectionReference().add(preference.toJson());
-  // }
+  Stream<QuerySnapshot<AnalysisModel>> getAnalysisBetweenDates(
+      DateTime start, DateTime end) {
+    return analysisCollectionReference()
+        .where('timestamp', isGreaterThanOrEqualTo: start)
+        .where('timestamp', isLessThanOrEqualTo: end)
+        .snapshots();
+  }
 
   Future<List<DocumentSnapshot<Map<String, dynamic>>>>
       getDocumentsToAnalyze() async {
@@ -79,11 +82,11 @@ class FirestoreService {
         writingSnapshot.docs;
 
     // Get all documents from the analysis collection
-    QuerySnapshot<Map<String, dynamic>> analysisSnapshot =
+    QuerySnapshot<AnalysisModel> analysisSnapshot =
         await analysisCollectionReference()
             .where('wordCount', isNull: true)
             .get();
-    List<DocumentSnapshot<Map<String, dynamic>>> analysisDocuments =
+    List<QueryDocumentSnapshot<AnalysisModel>> analysisDocuments =
         analysisSnapshot.docs;
 
     // Get the IDs of the documents in the analysis collection
@@ -102,7 +105,7 @@ class FirestoreService {
     return writingCollectionReference().doc('$timestamp').get();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getAnalysis(
+  Future<DocumentSnapshot<AnalysisModel>> getAnalysis(
     int timestamp,
   ) {
     return analysisCollectionReference().doc('$timestamp').get();
@@ -193,7 +196,7 @@ class FirestoreService {
         '${analysisModel.toJson()}',
         name: 'FirestorService:analyzeSentiment:analysisModel',
       );
-      analysisCollectionReference().doc(note.id).set(analysisModel.toJson());
+      analysisCollectionReference().doc(note.id).set(analysisModel);
       for (SentenceModel sentence in analysisModel.sentences) {
         analysisCollectionReference()
             .doc(note.id)

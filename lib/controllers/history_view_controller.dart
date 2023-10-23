@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
 
@@ -42,15 +43,20 @@ class HistoryViewController {
   }
 
   /// Get documents from Firestore of the given date
-  Query<Map<String, dynamic>> getAnalysisEntriesListOnDate(
+  Query<AnalysisModel> getAnalysisEntriesListOnDate(
     DateTime date,
   ) {
     return FirestoreService()
         .analysisCollectionReference()
         .orderBy('timestamp', descending: true)
-        .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
-        .where('timestamp',
-            isLessThan: date.add(1.days).millisecondsSinceEpoch);
+        .where(
+          'timestamp',
+          isGreaterThanOrEqualTo: date.millisecondsSinceEpoch,
+        )
+        .where(
+          'timestamp',
+          isLessThan: date.add(1.days).millisecondsSinceEpoch,
+        );
   }
 
   /// Make historyStream from Stream<QuerySnapshot<Map<String, dynamic>>> to

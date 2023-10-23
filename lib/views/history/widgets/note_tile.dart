@@ -165,11 +165,11 @@ class NoteTile extends ConsumerWidget {
     NoteModel noteEntry = NoteModel.fromJson(
       (await FirestoreService().getNote(noteModel.timestamp)).data()!,
     );
-    Map<String, dynamic>? analysisData =
+    AnalysisModel? analysisData =
         (await FirestoreService().getAnalysis(noteModel.timestamp)).data();
     AnalysisModel? analysisEntry;
     if (analysisData != null) {
-      analysisEntry = AnalysisModel.fromJson(analysisData);
+      analysisEntry = analysisData;
     }
     yield (note: noteEntry, analysis: analysisEntry);
   }
