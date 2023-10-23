@@ -144,14 +144,14 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
                     ? -1
                     : 1;
             return AnimatedContainer(
-              duration: longEmphasizedDuration,
-              curve: emphasizedCurve,
+              duration: standardDuration,
+              curve: standardEasing,
               transform: Matrix4.identity()
                 ..translate(slide * 100.w)
                 ..scale(active ? 1.0 : 0.3),
               child: AnimatedOpacity(
-                duration: longEmphasizedDuration,
-                curve: emphasizedCurve,
+                duration: standardDuration,
+                curve: standardEasing,
                 opacity: opacity,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: gap),
