@@ -10,9 +10,9 @@ class NoteAnalysisService {
         .getNoteEntriesListOnDate(date)
         .snapshots(includeMetadataChanges: true)
         .map(
-          (QuerySnapshot<Map<String, dynamic>> query) => [
-            ...query.docs.map(
-              (e) => NoteModel.fromJson(e.data()),
+          (QuerySnapshot<NoteModel> event) => <NoteModel>[
+            ...event.docs.map(
+              (QueryDocumentSnapshot<NoteModel> e) => e.data(),
             )
           ],
         );

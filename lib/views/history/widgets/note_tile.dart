@@ -162,9 +162,8 @@ class NoteTile extends ConsumerWidget {
 
   Stream<({NoteModel note, AnalysisModel? analysis})>
       getNoteAndAnalysis() async* {
-    NoteModel noteEntry = NoteModel.fromJson(
-      (await FirestoreService().getNote(noteModel.timestamp)).data()!,
-    );
+    NoteModel noteEntry =
+        (await FirestoreService().getNote(noteModel.timestamp)).data()!;
     AnalysisModel? analysisData =
         (await FirestoreService().getAnalysis(noteModel.timestamp)).data();
     AnalysisModel? analysisEntry;

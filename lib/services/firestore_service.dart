@@ -20,11 +20,15 @@ class FirestoreService {
   final User currentUser = FirebaseAuth.instance.currentUser!;
 
   // Methods
-  CollectionReference<Map<String, dynamic>> writingCollectionReference() {
+  CollectionReference<NoteModel> writingCollectionReference() {
     return FirebaseFirestore.instance
         .collection('writing-temp')
         .doc(currentUser.uid)
-        .collection('notes');
+        .collection('notes')
+        .withConverter<NoteModel>(
+          fromFirestore: (snapshot, _) => NoteModel.fromJson(snapshot.data()!),
+          toFirestore: (noteModel, _) => noteModel.toJson(),
+        );
   }
 
   CollectionReference<AnalysisModel> analysisCollectionReference() {
@@ -52,7 +56,7 @@ class FirestoreService {
     );
     await writingCollectionReference()
         .doc('${noteModel.timestamp}')
-        .set(noteModel.toJson());
+        .set(noteModel);
   }
 
   Future<void> saveAnalysis(AnalysisModel analysisModel) async {
@@ -79,13 +83,11 @@ class FirestoreService {
         .snapshots();
   }
 
-  Future<List<DocumentSnapshot<Map<String, dynamic>>>>
-      getDocumentsToAnalyze() async {
+  Future<List<DocumentSnapshot<NoteModel>>> getDocumentsToAnalyze() async {
     // Get all documents from the writing collection
-    QuerySnapshot<Map<String, dynamic>> writingSnapshot =
+    QuerySnapshot<NoteModel> writingSnapshot =
         await writingCollectionReference().get();
-    List<DocumentSnapshot<Map<String, dynamic>>> writingDocuments =
-        writingSnapshot.docs;
+    List<DocumentSnapshot<NoteModel>> writingDocuments = writingSnapshot.docs;
 
     // Get all documents from the analysis collection
     QuerySnapshot<AnalysisModel> analysisSnapshot =
@@ -99,13 +101,13 @@ class FirestoreService {
     Set<String> analysisIds = analysisDocuments.map((doc) => doc.id).toSet();
 
     // Filter the writing documents to only include those whose ID is not in the analysis collection
-    List<DocumentSnapshot<Map<String, dynamic>>> documentsToAnalyze =
+    List<DocumentSnapshot<NoteModel>> documentsToAnalyze =
         writingDocuments.where((doc) => !analysisIds.contains(doc.id)).toList();
 
     return documentsToAnalyze;
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getNote(
+  Future<DocumentSnapshot<NoteModel>> getNote(
     int timestamp,
   ) {
     return writingCollectionReference().doc('$timestamp').get();
@@ -118,7 +120,7 @@ class FirestoreService {
   }
 
   Future<void> removeAnalysisFromWritingDocument(
-    DocumentSnapshot<Map<String, dynamic>> element,
+    DocumentSnapshot<NoteModel> element,
   ) async {
     List<String> keys = [
       'sentimentScore',
@@ -128,7 +130,7 @@ class FirestoreService {
       'wordCount'
     ];
     for (String key in keys) {
-      if (element.data()!.containsKey(key)) {
+      if (element.data()!.toJson().toString().contains(key)) {
         writingCollectionReference()
             .doc(element.id)
             .update({key: FieldValue.delete()}).then((_) {
@@ -146,7 +148,7 @@ class FirestoreService {
     }
   }
 
-  Future<List<DocumentSnapshot<Map<String, dynamic>>>>
+  Future<List<DocumentSnapshot<NoteModel>>>
       getWritingDocumentsToRemoveAnalysis() async {
     List<String> filterKeys = [
       'sentimentScore',
@@ -156,16 +158,15 @@ class FirestoreService {
       'wordCount'
     ];
     // Get all documents from the writing collection
-    QuerySnapshot<Map<String, dynamic>> writingSnapshot =
+    QuerySnapshot<NoteModel> writingSnapshot =
         await writingCollectionReference().get();
-    List<DocumentSnapshot<Map<String, dynamic>>> writingDocuments =
-        writingSnapshot.docs;
+    List<DocumentSnapshot<NoteModel>> writingDocuments = writingSnapshot.docs;
 
     // Filter the writing documents to only those that have the keys to be removed
-    List<DocumentSnapshot<Map<String, dynamic>>> documentsToRemoveAnalysis =
+    List<DocumentSnapshot<NoteModel>> documentsToRemoveAnalysis =
         writingDocuments.where((doc) {
       for (String key in filterKeys) {
-        if (doc.data()!.containsKey(key)) {
+        if (doc.data()!.toJson().toString().contains(key)) {
           return true;
         }
       }
@@ -186,17 +187,17 @@ class FirestoreService {
   /// analysisCollectionReference. The method returns the
   /// AnalyzeSentimentResponse object.
   Future<void> analyzeSentiment(
-    DocumentSnapshot<Map<String, dynamic>> note,
+    DocumentSnapshot<NoteModel> note,
   ) async {
     writingCollectionReference()
         .doc(note.id)
         .get()
-        .then((DocumentSnapshot<Map<String, dynamic>> value) async {
+        .then((DocumentSnapshot<NoteModel> value) async {
       // AnalysisModel analysisModel = AnalysisModel.fromJson(
       //   NoteModel.fromJson(value.data()!).toJson(),
       // );
       final analysisModel = await NoteAnalyzer.createNoteAnalysis(
-        NoteModel.fromJson(value.data()!),
+        value.data()!,
       );
       log(
         '${analysisModel.toJson()}',

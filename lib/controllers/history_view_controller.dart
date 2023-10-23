@@ -23,7 +23,7 @@ class HistoryViewController {
   /// Methods
   static List<NoteModel> get notesToAnalyze => noteModels;
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
+  static Stream<QuerySnapshot<NoteModel>> get historyStream =>
       FirestoreService()
           .writingCollectionReference()
           .orderBy('timestamp', descending: true)
@@ -31,7 +31,7 @@ class HistoryViewController {
           .snapshots(includeMetadataChanges: true);
 
   /// Get documents from Firestore of the given date
-  Query<Map<String, dynamic>> getNoteEntriesListOnDate(
+  Query<NoteModel> getNoteEntriesListOnDate(
     DateTime date,
   ) {
     return FirestoreService()
@@ -63,9 +63,8 @@ class HistoryViewController {
   /// Stream<WritingModelEntry>
   Stream<List<NoteModel>> get notesStream => historyStream.map((event) {
         _writingEntries.clear();
-        for (QueryDocumentSnapshot<Map<String, dynamic>> element
-            in event.docs) {
-          _writingEntries.add(NoteModel.fromJson(element.data()));
+        for (QueryDocumentSnapshot<NoteModel> element in event.docs) {
+          _writingEntries.add(element.data());
         }
         return _writingEntries;
       });
