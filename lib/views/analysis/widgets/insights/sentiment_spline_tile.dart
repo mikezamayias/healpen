@@ -6,6 +6,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../controllers/analysis_view_controller.dart';
 import '../../../../extensions/int_extensions.dart';
+import '../../../../models/analysis/analysis_model.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 import '../../../../widgets/text_divider.dart';
@@ -25,7 +26,7 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
   final animationDuration = 0;
   @override
   Widget build(BuildContext context) {
-    final sentimentData =
+    final List<AnalysisModel> sentimentData =
         ref.watch(AnalysisViewController.analysisModelListProvider);
     final sentimentDataLength = sentimentData.length;
     Map<int, String> periodRanges = {
