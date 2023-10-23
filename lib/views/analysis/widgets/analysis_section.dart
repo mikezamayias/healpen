@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../utils/constants.dart';
@@ -130,10 +131,35 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
         ),
         child: PageView.builder(
           itemCount: tileData.length,
-          itemBuilder: (BuildContext context, int index) => Padding(
-            padding: EdgeInsets.symmetric(horizontal: gap),
-            child: tileData[index].content!,
-          ),
+          // itemBuilder: (BuildContext context, int index) => Padding(
+          //   padding: EdgeInsets.symmetric(horizontal: gap),
+          //   child: tileData[index].content!,
+          // ),
+          itemBuilder: (context, index) {
+            final bool active = index == currentPage;
+            final double opacity = active ? 1 : 0;
+            final double slide = active
+                ? 0
+                : index < currentPage
+                    ? -1
+                    : 1;
+            return AnimatedContainer(
+              duration: longEmphasizedDuration,
+              curve: emphasizedCurve,
+              transform: Matrix4.identity()
+                ..translate(slide * 100.w)
+                ..scale(active ? 1.0 : 0.3),
+              child: AnimatedOpacity(
+                duration: longEmphasizedDuration,
+                curve: emphasizedCurve,
+                opacity: opacity,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: gap),
+                  child: tileData[index].content!,
+                ),
+              ),
+            );
+          },
           controller: pageController,
           onPageChanged: (int index) {
             vibrate(
