@@ -49,6 +49,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
     final AnalysisModel? analysisModel = args.analysisModel;
     final showAnalysis = !noteModel.isPrivate && analysisModel != null;
     return BlueprintView(
+      showAppBar: true,
       appBar: Padding(
         padding: EdgeInsets.symmetric(horizontal: gap),
         child: AppBar(
