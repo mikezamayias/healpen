@@ -219,4 +219,17 @@ class FirestoreService {
       throw error;
     });
   }
+
+  Stream<({NoteModel note, AnalysisModel? analysis})> getNoteAndAnalysis(
+    int timestamp,
+  ) async* {
+    NoteModel noteEntry = (await FirestoreService().getNote(timestamp)).data()!;
+    AnalysisModel? analysisData =
+        (await FirestoreService().getAnalysis(timestamp)).data();
+    AnalysisModel? analysisEntry;
+    if (analysisData != null) {
+      analysisEntry = analysisData;
+    }
+    yield (note: noteEntry, analysis: analysisEntry);
+  }
 }
