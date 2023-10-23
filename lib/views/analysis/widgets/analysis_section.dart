@@ -77,7 +77,8 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
     /// indicate the strength of sentiment (positive or negative).
     (
       titleString: 'Mood Journey',
-      explanationString: 'See how your mood has changed over time.',
+      explanationString: 'See how your mood has changed over time.\nHint: '
+          'double tap a point to see more details about that entry.',
       content: const MoodJourneyTile(),
     ),
 
