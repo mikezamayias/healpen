@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:intl/intl.dart';
@@ -9,6 +10,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../../extensions/date_time_extensions.dart';
 import '../../../../../../extensions/int_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
+import '../../../../../../route_controller.dart';
 import '../../../../../../services/firestore_service.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../widgets/custom_list_tile.dart';
@@ -37,29 +39,25 @@ class MonthLineChart extends StatelessWidget {
             titleString: 'Loading...',
           );
         }
-        log(
-          '${month.startOfMonth()}',
-          name: 'start Month',
-        );
-        log(
-          '${month.endOfMonth()}',
-          name: 'end Month',
-        );
-        log('${snapshot.data!.docs}', name: 'snapshot data');
-        final List<ChartData> chartData = snapshot.data!.docs
+        final analysisModelList = snapshot.data!.docs
             .map((QueryDocumentSnapshot<AnalysisModel> analysisModel) =>
-                ChartData(
-                  analysisModel.data().timestamp.timestampToDateTime(),
-                  analysisModel.data().sentiment!,
+                analysisModel.data())
+            .toList();
+        final List<ChartData> chartData = analysisModelList
+            .map((AnalysisModel analysisModel) => ChartData(
+                  analysisModel.timestamp.timestampToDateTime(),
+                  analysisModel.sentiment!,
                 ))
             .toList();
         return SfCartesianChart(
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
-            interval: 0.2,
-            isVisible: false,
+            interval: 5,
+            isVisible: true,
             opposedPosition: false,
             name: 'Sentiment',
+            minimum: sentimentValues.min.toDouble(),
+            maximum: sentimentValues.max.toDouble(),
           ),
           primaryXAxis: DateTimeCategoryAxis(
             dateFormat: DateFormat('MMM dd'),
@@ -88,12 +86,37 @@ class MonthLineChart extends StatelessWidget {
                 Trendline(
                   animationDuration: standardDuration.inSeconds.toDouble(),
                   type: TrendlineType.polynomial,
-                  width: 3,
+                  width: gap,
                   color: context.theme.colorScheme.primary,
                   opacity: 0.2,
-                  dashArray: <double>[0, 0],
                 ),
               ],
+              dataLabelSettings: const DataLabelSettings(
+                isVisible: false,
+              ),
+              onPointDoubleTap: (pointInteractionDetails) async {
+                log(pointInteractionDetails.viewportPointIndex.toString());
+                log(
+                  analysisModelList
+                      .elementAt(
+                          pointInteractionDetails.viewportPointIndex!.toInt())
+                      .toString(),
+                );
+                final analysisModel = analysisModelList.elementAt(
+                    pointInteractionDetails.viewportPointIndex!.toInt());
+                final noteModel =
+                    (await FirestoreService().getNote(analysisModel.timestamp))
+                        .data()!;
+                if (context.mounted) {
+                  context.navigator.pushNamed(
+                    RouterController.noteViewRoute.route,
+                    arguments: (
+                      noteModel: noteModel,
+                      analysisModel: analysisModel,
+                    ),
+                  );
+                }
+              },
             )
           ],
         );
