@@ -45,7 +45,7 @@ class WritingFlowTrackerTile extends ConsumerWidget {
             child: AspectRatio(
               aspectRatio: 1,
               child: Container(
-                color: ref.read(themeProvider).colorScheme.outlineVariant,
+                color: ref.read(themeProvider).colorScheme.surfaceVariant,
               ),
             ),
           ),

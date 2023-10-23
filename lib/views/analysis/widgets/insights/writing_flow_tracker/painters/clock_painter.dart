@@ -20,18 +20,31 @@ class ClockPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-    final textStyle = theme.textTheme.labelLarge;
-    for (final data in hourlyData) {
+    final textStyle = theme.textTheme.titleMedium!.copyWith(
+      color: theme.colorScheme.onSurfaceVariant,
+    );
+    for (int i = 0; i < hourlyData.length; i++) {
+      final HourlyData currentData = hourlyData.elementAt(i);
+      HourlyData? previousData;
+      if (i > 0) {
+        previousData = hourlyData.elementAt(i - 1);
+      }
       final stroke = radius *
-          data.totalWritingTime /
+          currentData.totalWritingTime /
           (60 * 60); // Adjust this formula to your needs
       log(
-        data.averageSentiment.toString(),
+        currentData.averageSentiment.toString(),
         name: 'log:data.averageSentiment',
       );
-      final angle = 2 * pi * (data.hour - 6) / 24;
+      final angle = 2 * pi * (currentData.hour - 6) / 24;
       final paint = Paint()
-        ..color = getColor(data.averageSentiment)
+        ..color = switch (previousData != null) {
+          true => Color.alphaBlend(
+              getColor(currentData.averageSentiment),
+              getColor(previousData!.averageSentiment),
+            ),
+          false => getColor(currentData.averageSentiment),
+        }
         ..style = PaintingStyle.stroke
         ..strokeWidth = gap / 2
         ..strokeCap = StrokeCap.round; // Add this line
@@ -45,7 +58,7 @@ class ClockPainter extends CustomPainter {
       );
       canvas.drawLine(startOffset, endOffset, paint);
       final textSpan = TextSpan(
-        text: '${data.hour}',
+        text: '${currentData.hour}',
         style: textStyle,
       );
       final textPainter = TextPainter(
@@ -62,15 +75,15 @@ class ClockPainter extends CustomPainter {
   }
 
   Color getColor(double? sentiment) {
-    // return Color.lerp(
-    //   ref.read(themeProvider).colorScheme.error,
-    //   ref.read(themeProvider).colorScheme.primary,
-    //   (sentiment + 3) / (sentimentLabels.length - 1),
-    // )!;
-    return switch (sentiment == null) {
-      true => theme.colorScheme.outlineVariant,
-      false => theme.colorScheme.outline
-    };
+    return theme.colorScheme.onSurfaceVariant;
+    // return switch (sentiment == null) {
+    //   true => theme.colorScheme.outline,
+    //   false => Color.lerp(
+    //       ref.read(themeProvider).colorScheme.error,
+    //       ref.read(themeProvider).colorScheme.primary,
+    //       (sentiment! + 3) / (sentimentLabels.length - 1),
+    //     )!,
+    // };
   }
 
   @override
