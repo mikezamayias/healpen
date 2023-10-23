@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../models/analysis/analysis_model.dart';
+import '../../../../../widgets/text_divider.dart';
 import 'widgets/month_line_chart.dart';
 
 class MoodJourneyTile extends ConsumerWidget {
@@ -17,11 +20,24 @@ class MoodJourneyTile extends ConsumerWidget {
       reverse: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          ...monthSet
-              .toList()
-              .map((DateTime month) => MonthLineChart(month: month)),
-        ],
+        children: monthSet
+            .map<Widget>(
+              (DateTime month) => SizedBox(
+                height: 30.h,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextDivider(
+                      DateFormat('y, MMMM').format(month),
+                    ),
+                    Expanded(
+                      child: MonthLineChart(month: month),
+                    )
+                  ],
+                ),
+              ),
+            )
+            .toList(),
       ),
     );
   }
