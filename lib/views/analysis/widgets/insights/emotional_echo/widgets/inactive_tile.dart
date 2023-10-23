@@ -46,10 +46,16 @@ class _EmotionalEchoInactiveTileState
         .watch(AnalysisViewController.analysisModelListProvider)
         .map((e) => e.sentiment!)
         .average;
+    double sentimentRatio = (sentiment + 3) / (sentimentLabels.length - 1);
     Color shapeColor = Color.lerp(
       ref.watch(themeProvider).colorScheme.error,
       ref.watch(themeProvider).colorScheme.primary,
-      getSentimentRatio(sentiment),
+      sentimentRatio,
+    )!;
+    Color textColor = Color.lerp(
+      ref.watch(themeProvider).colorScheme.onError,
+      ref.watch(themeProvider).colorScheme.onPrimary,
+      sentimentRatio,
     )!;
     return Stack(
       fit: StackFit.expand,
@@ -59,11 +65,13 @@ class _EmotionalEchoInactiveTileState
             artboard: _riveArtboard!,
             fit: BoxFit.contain,
             components: ['core', 'inner', 'middle', 'outer']
-                .map((String element) => RiveColorComponent(
-                      shapeName: element,
-                      fillName: '$element-fill',
-                      color: shapeColor,
-                    ))
+                .map(
+                  (String element) => RiveColorComponent(
+                    shapeName: element,
+                    fillName: '$element-fill',
+                    color: shapeColor,
+                  ),
+                )
                 .toList(),
           ),
         Align(
@@ -83,15 +91,9 @@ class _EmotionalEchoInactiveTileState
                   opacity: value,
                   child: Text(
                     textAlign: TextAlign.center,
-                    // '${getSentimentLabel(sentiment)} '
-                    //         '${sentiment.toStringAsFixed(2)}'
                     getSentimentLabel(sentiment).split(' ').join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(
-                      color: Color.lerp(
-                        context.theme.colorScheme.onError,
-                        context.theme.colorScheme.onPrimary,
-                        getSentimentRatio(sentiment),
-                      )!,
+                      color: textColor,
                     ),
                   ),
                 ),

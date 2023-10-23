@@ -33,7 +33,7 @@ class NoteTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Widget tile = StreamBuilder<({NoteModel note, AnalysisModel? analysis})>(
-      stream: getNoteAndAnalysis(),
+      stream: FirestoreService().getNoteAndAnalysis(noteModel.timestamp),
       builder: (
         BuildContext context,
         AsyncSnapshot<({NoteModel note, AnalysisModel? analysis})> snapshot,
@@ -158,19 +158,5 @@ class NoteTile extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  Stream<({NoteModel note, AnalysisModel? analysis})>
-      getNoteAndAnalysis() async* {
-    NoteModel noteEntry = NoteModel.fromJson(
-      (await FirestoreService().getNote(noteModel.timestamp)).data()!,
-    );
-    Map<String, dynamic>? analysisData =
-        (await FirestoreService().getAnalysis(noteModel.timestamp)).data();
-    AnalysisModel? analysisEntry;
-    if (analysisData != null) {
-      analysisEntry = AnalysisModel.fromJson(analysisData);
-    }
-    yield (note: noteEntry, analysis: analysisEntry);
   }
 }

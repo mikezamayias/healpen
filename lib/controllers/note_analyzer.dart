@@ -43,8 +43,7 @@ class NoteAnalyzer {
     ref.watch(progressProvider.notifier).state = 0;
     ref.watch(listToAnalyzeLengthProvider.notifier).state =
         documentsToRemoveAnalysis.length;
-    for (DocumentSnapshot<Map<String, dynamic>> note
-        in documentsToRemoveAnalysis) {
+    for (DocumentSnapshot<NoteModel> note in documentsToRemoveAnalysis) {
       log(
         note.id,
         name: 'AnalysisViewController:removePreviousAnalysis() - note ID',
@@ -67,17 +66,17 @@ class NoteAnalyzer {
     ref.watch(listToAnalyzeLengthProvider.notifier).state =
         notesToAnalyze.length;
 
-    for (DocumentSnapshot<Map<String, dynamic>> note in notesToAnalyze) {
+    for (DocumentSnapshot<NoteModel> noteModel in notesToAnalyze) {
       log(
-        note.id,
+        noteModel.id,
         name: 'AnalysisViewController:analyzeNotes() - note ID',
       );
       log(
-        note.get('content'),
+        noteModel.get('content'),
         name: 'AnalysisViewController:analyzeNotes() - note content',
       );
       // await WritingController().analyzeSentiment(noteModel);
-      await FirestoreService().analyzeSentiment(note);
+      await FirestoreService().analyzeSentiment(noteModel);
       ref.watch(progressProvider.notifier).state++;
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../extensions/int_extensions.dart';
 import '../../../models/note/note_model.dart';
@@ -36,7 +37,9 @@ class DetailsPage extends StatelessWidget {
                       titleString: 'Date and Time',
                       responsiveWidth: true,
                       contentPadding: EdgeInsets.all(gap),
-                      subtitleString: noteModel.timestamp.timestampFormat(),
+                      subtitleString: DateFormat('MMM dd, yyyy - HH:mm')
+                      // subtitleString: DateFormat('MMM dd, yyyy - hh:mm a')
+                          .format(noteModel.timestamp.timestampToDateTime()),
                     ),
                   ),
                   SizedBox(width: gap),
@@ -56,6 +59,7 @@ class DetailsPage extends StatelessWidget {
                 titleString: 'Content',
                 contentPadding: EdgeInsets.all(gap),
                 subtitleString: noteModel.content,
+                selectableText: true,
               ),
             ],
           ),

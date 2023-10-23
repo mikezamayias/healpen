@@ -14,7 +14,7 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
 import '../blueprint/blueprint_view.dart';
-import 'widgets/calendar_tile.dart';
+import 'widgets/calendar_tile/calendar_tile.dart';
 
 class HistoryView extends ConsumerStatefulWidget {
   const HistoryView({super.key});
@@ -27,7 +27,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
   @override
   Widget build(BuildContext context) {
     return BlueprintView(
-      showAppBarTitle: ref.watch(navigationShowAppBarProvider),
+      showAppBar: ref.watch(navigationShowAppBarProvider),
       appBar: AppBar(
         pathNames: [
           PageController()

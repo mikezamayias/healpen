@@ -21,6 +21,7 @@ class SettingsWritingView extends ConsumerWidget {
     ].animateWidgetList();
 
     return BlueprintView(
+      showAppBar: true,
       appBar: const AppBar(
         automaticallyImplyLeading: true,
         pathNames: [

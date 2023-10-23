@@ -19,6 +19,7 @@ class SettingsThemeView extends ConsumerWidget {
     ].animateWidgetList();
 
     return BlueprintView(
+      showAppBar: true,
       appBar: const AppBar(
         automaticallyImplyLeading: true,
         pathNames: [

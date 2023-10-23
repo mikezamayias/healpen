@@ -62,7 +62,7 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                       color: Color.lerp(
                         ref.watch(themeProvider).colorScheme.error,
                         ref.watch(themeProvider).colorScheme.primary,
-                        getSentimentRatio(labelColorIndex),
+                        labelColorIndex,
                       ),
                     ),
                   );

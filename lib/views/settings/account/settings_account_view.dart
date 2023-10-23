@@ -17,6 +17,7 @@ class SettingsAccountView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return BlueprintView(
+      showAppBar: true,
       appBar: const AppBar(
         automaticallyImplyLeading: true,
         pathNames: ['Settings', 'Account'],

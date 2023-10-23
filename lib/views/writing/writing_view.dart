@@ -58,7 +58,7 @@ class _WritingViewState extends ConsumerState<WritingView>
         .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         .split('\n');
     return BlueprintView(
-      showAppBarTitle: ref.watch(navigationShowAppBarProvider),
+      showAppBar: ref.watch(navigationShowAppBarProvider),
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)
           ? null
           : AppBar(

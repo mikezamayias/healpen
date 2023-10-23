@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
 
@@ -22,7 +23,7 @@ class HistoryViewController {
   /// Methods
   static List<NoteModel> get notesToAnalyze => noteModels;
 
-  static Stream<QuerySnapshot<Map<String, dynamic>>> get historyStream =>
+  static Stream<QuerySnapshot<NoteModel>> get historyStream =>
       FirestoreService()
           .writingCollectionReference()
           .orderBy('timestamp', descending: true)
@@ -30,7 +31,7 @@ class HistoryViewController {
           .snapshots(includeMetadataChanges: true);
 
   /// Get documents from Firestore of the given date
-  Query<Map<String, dynamic>> getNoteEntriesListOnDate(
+  Query<NoteModel> getNoteEntriesListOnDate(
     DateTime date,
   ) {
     return FirestoreService()
@@ -42,24 +43,28 @@ class HistoryViewController {
   }
 
   /// Get documents from Firestore of the given date
-  Query<Map<String, dynamic>> getAnalysisEntriesListOnDate(
+  Query<AnalysisModel> getAnalysisEntriesListOnDate(
     DateTime date,
   ) {
     return FirestoreService()
         .analysisCollectionReference()
         .orderBy('timestamp', descending: true)
-        .where('timestamp', isGreaterThanOrEqualTo: date.millisecondsSinceEpoch)
-        .where('timestamp',
-            isLessThan: date.add(1.days).millisecondsSinceEpoch);
+        .where(
+          'timestamp',
+          isGreaterThanOrEqualTo: date.millisecondsSinceEpoch,
+        )
+        .where(
+          'timestamp',
+          isLessThan: date.add(1.days).millisecondsSinceEpoch,
+        );
   }
 
   /// Make historyStream from Stream<QuerySnapshot<Map<String, dynamic>>> to
   /// Stream<WritingModelEntry>
   Stream<List<NoteModel>> get notesStream => historyStream.map((event) {
         _writingEntries.clear();
-        for (QueryDocumentSnapshot<Map<String, dynamic>> element
-            in event.docs) {
-          _writingEntries.add(NoteModel.fromJson(element.data()));
+        for (QueryDocumentSnapshot<NoteModel> element in event.docs) {
+          _writingEntries.add(element.data());
         }
         return _writingEntries;
       });

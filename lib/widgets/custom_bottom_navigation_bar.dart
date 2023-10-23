@@ -22,7 +22,7 @@ class CustomBottomNavigationBar extends ConsumerWidget {
         ref.watch(navigationSmallerNavigationElementsProvider);
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: gap),
+        padding: EdgeInsets.only(bottom: gap),
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
