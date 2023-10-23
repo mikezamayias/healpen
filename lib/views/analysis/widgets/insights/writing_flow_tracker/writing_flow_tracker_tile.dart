@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../providers/settings_providers.dart';
 import '../../../../../services/data_analysis_service.dart';
@@ -37,9 +38,25 @@ class WritingFlowTrackerTile extends ConsumerWidget {
         titleString: 'No data available',
       );
     }
-
-    return CustomPaint(
-      painter: ClockPainter(snapshot.data!),
+    return Stack(
+      children: [
+        Center(
+          child: ClipOval(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: Container(
+                color: ref.read(themeProvider).colorScheme.outlineVariant,
+              ),
+            ),
+          ),
+        ),
+        Center(
+          child: CustomPaint(
+            painter: ClockPainter(snapshot.data!),
+            size: Size.fromRadius(42.w),
+          ),
+        ),
+      ],
     );
   }
 }
