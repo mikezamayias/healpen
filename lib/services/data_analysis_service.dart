@@ -37,16 +37,17 @@ class DataAnalysisService {
         .map(_analyzeHourlyData);
   }
 
-  List<HourlyData> _analyzeHourlyData(QuerySnapshot querySnapshot) {
+  List<HourlyData> _analyzeHourlyData(
+    QuerySnapshot<AnalysisModel> querySnapshot,
+  ) {
     final Map<int, HourlyDataBuilder> dataBuilders = {};
-    for (final doc in querySnapshot.docs) {
-      final analysis =
-          AnalysisModel.fromJson(doc.data() as Map<String, dynamic>);
+    for (QueryDocumentSnapshot<AnalysisModel> doc in querySnapshot.docs) {
+      final analysis = doc.data();
       final hour = DateTime.fromMillisecondsSinceEpoch(analysis.timestamp).hour;
       final builder = dataBuilders.putIfAbsent(hour, () => HourlyDataBuilder());
       builder.addAnalysis(analysis);
     }
-    var res = List.generate(
+    List<HourlyData> res = List.generate(
       24,
       (hour) => dataBuilders[hour]?.build(hour) ?? HourlyData.empty(hour),
     );
