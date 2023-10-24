@@ -46,7 +46,7 @@ class BlueprintView extends ConsumerWidget {
                 backgroundColor: Colors.transparent,
                 appBar: showAppBarSetting! && appBar != null
                     ? PreferredSize(
-                        preferredSize: Size.fromHeight(24.h),
+                        preferredSize: Size.fromHeight(18.h),
                         child: appBar!.animateAppBar(),
                       )
                     : null,
