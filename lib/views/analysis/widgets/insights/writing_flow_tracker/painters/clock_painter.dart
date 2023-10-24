@@ -22,19 +22,16 @@ class ClockPainter extends CustomPainter {
     final textStyle = theme.textTheme.titleMedium!.copyWith(
       color: theme.colorScheme.onSurfaceVariant,
     );
+    final upperStokeLimit =
+        hourlyData.map((e) => calculateStroke(radius, e)).reduce(max);
+    final lowerStrokeLimit =
+        hourlyData.map((e) => calculateStroke(radius, e)).reduce(min);
     for (int i = 0; i < hourlyData.length; i++) {
       final HourlyData currentData = hourlyData.elementAt(i);
       HourlyData? previousData;
       if (i > 0) {
         previousData = hourlyData.elementAt(i - 1);
       }
-      final stroke = radius *
-          currentData.totalWritingTime /
-          (60 * 60); // Adjust this formula to your needs
-      log(
-        currentData.averageSentiment.toString(),
-        name: 'log:data.averageSentiment',
-      );
       final angle = 2 * pi * (currentData.hour - 6) / 24;
       final paint = Paint()
         ..color = switch (previousData != null) {
@@ -51,9 +48,14 @@ class ClockPainter extends CustomPainter {
         center.dx,
         center.dy,
       );
+      final partialLenght = partDialLength(
+        currentData: currentData,
+        lowerLimit: lowerStrokeLimit,
+        upperLimit: upperStokeLimit,
+      );
       final endOffset = Offset(
-        center.dx + radius * stroke.clamp(0.1, 0.78) * cos(angle),
-        center.dy + radius * stroke.clamp(0.1, 0.78) * sin(angle),
+        center.dx + partialLenght * cos(angle),
+        center.dy + partialLenght * sin(angle),
       );
       canvas.drawLine(startOffset, endOffset, paint);
       final textSpan = TextSpan(
@@ -73,6 +75,11 @@ class ClockPainter extends CustomPainter {
     }
   }
 
+  double calculateStroke(double radius, HourlyData hourlyData) {
+    // Adjust this formula to your needs
+    return radius * hourlyData.totalWritingTime / (60 * 60);
+  }
+
   Color getColor(double? sentiment) {
     return theme.colorScheme.onSurfaceVariant;
     // return switch (sentiment == null) {
@@ -88,5 +95,18 @@ class ClockPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true; // Adjust this to your needs
+  }
+
+  double partDialLength({
+    required HourlyData currentData,
+    required double lowerLimit,
+    required double upperLimit,
+  }) {
+    double stroke = calculateStroke(radius, currentData);
+    log(
+      stroke.toString(),
+      name: 'log:stroke at ${currentData.hour}',
+    );
+    return radius * stroke.clamp(lowerLimit, upperLimit) * 10;
   }
 }
