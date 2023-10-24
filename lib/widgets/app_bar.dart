@@ -1,8 +1,9 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart' hide AppBar, Page;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
@@ -22,6 +23,9 @@ class AppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showBackButton = ref.watch(navigationShowBackButtonProvider);
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     final appBarContent = RichText(
       text: TextSpan(
         children: [
@@ -34,16 +38,22 @@ class AppBar extends ConsumerWidget {
                       : pathNames[i],
               style: (i < pathNames.length - 1)
                   ? context.theme.textTheme.titleLarge!.copyWith(
-                      color: context.theme.colorScheme.outline,
+                      color: switch (smallNavigationElements) {
+                        true => context.theme.colorScheme.outline,
+                        false => context.theme.colorScheme.onSurfaceVariant,
+                      },
                     )
                   : context.theme.textTheme.headlineSmall!.copyWith(
-                      color: context.theme.colorScheme.secondary,
+                      color: switch (smallNavigationElements) {
+                        true => context.theme.colorScheme.secondary,
+                        false => context.theme.colorScheme.onSurfaceVariant,
+                      },
                     ),
             ),
         ],
       ),
     );
-    final showBackButton = ref.watch(navigationShowBackButtonProvider);
+
     final appBar = showBackButton && automaticallyImplyLeading!
         ? Row(
             mainAxisSize: MainAxisSize.max,
@@ -72,8 +82,6 @@ class AppBar extends ConsumerWidget {
             ],
           )
         : appBarContent;
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
     return AnimatedCrossFade(
       crossFadeState: switch (smallNavigationElements) {
         true => CrossFadeState.showFirst,
@@ -82,7 +90,6 @@ class AppBar extends ConsumerWidget {
       firstChild: appBar,
       secondChild: Container(
         padding: EdgeInsets.all(gap),
-        height: 42.h,
         decoration: BoxDecoration(
           color: context.theme.colorScheme.surfaceVariant,
           borderRadius: BorderRadius.circular(radius),
