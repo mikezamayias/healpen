@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../widgets/custom_list_tile.dart';
+import '../../../wrappers/keep_alive_wrapper.dart';
 import 'insights/emotional_echo/emotional_echo_tile.dart';
 import 'insights/journal_length_tile.dart';
 import 'insights/journaling_rhythm_tile.dart';
@@ -24,17 +25,6 @@ class AnalysisSection extends ConsumerStatefulWidget {
 }
 
 class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
-  late PageController pageController;
-  int currentPage = 0;
-
-  @override
-  void initState() {
-    pageController = PageController(
-      initialPage: currentPage,
-    );
-    super.initState();
-  }
-
   final tileData = <({
     String explanationString,
     String titleString,
@@ -108,6 +98,28 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
     ),
   ];
 
+  int currentPage = 0;
+  double viewPortFraction = 1;
+  double pageOffset = 0;
+
+  late PageController pageController;
+  late List<Widget> insightWidgets;
+
+  @override
+  void initState() {
+    insightWidgets =
+        tileData.map((e) => KeepAliveWrapper(child: e.content!)).toList();
+    pageController = PageController(
+      initialPage: currentPage,
+      viewportFraction: viewPortFraction,
+    )..addListener(() {
+        setState(() {
+          pageOffset = pageController.page!;
+        });
+      });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
@@ -124,57 +136,38 @@ class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
       ),
       enableSubtitleWrapper: false,
       expandSubtitle: true,
-      subtitle: Container(
-        padding: EdgeInsets.symmetric(vertical: gap),
-        decoration: BoxDecoration(
-          color: context.theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(radius - gap),
-        ),
-        child: PageView.builder(
-          itemCount: tileData.length,
-          // itemBuilder: (BuildContext context, int index) => Padding(
-          //   padding: EdgeInsets.symmetric(horizontal: gap),
-          //   child: tileData[index].content!,
-          // ),
-          itemBuilder: (context, index) {
-            final bool active = index == currentPage;
-            final double opacity = active ? 1 : 0;
-            final double slide = active
-                ? 0
-                : index < currentPage
-                    ? -1
-                    : 1;
-            return AnimatedContainer(
-              duration: standardDuration,
-              curve: standardEasing,
-              transform: Matrix4.identity()
-                ..translate(slide * 100.w)
-                ..scale(active ? 1.0 : 0.3),
-              child: AnimatedOpacity(
-                duration: standardDuration,
-                curve: standardEasing,
-                opacity: opacity,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: gap),
-                  child: tileData[index].content!,
-                ),
+      padSubtitle: true,
+      subtitle: PageView.builder(
+        itemCount: tileData.length,
+        itemBuilder: (BuildContext context, int index) {
+          double scale = 1 - (index - pageOffset).abs();
+          return Transform(
+            transform: Matrix4.identity()
+              ..setEntry(3, 2, 0.01)
+              ..scale(scale, scale),
+            alignment: Alignment.center,
+            child: PhysicalModel(
+              color: context.theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(radius - gap),
+              child: Padding(
+                padding: EdgeInsets.all(gap),
+                child: insightWidgets[index],
               ),
-            );
-          },
-          controller: pageController,
-          onPageChanged: (int index) {
-            vibrate(
-              ref.watch(navigationEnableHapticFeedbackProvider),
-              () {
-                setState(() {
-                  currentPage = index;
-                });
-              },
-            );
+            ),
+          );
+        },
+        controller: pageController,
+        onPageChanged: (int index) => vibrate(
+          ref.watch(navigationEnableHapticFeedbackProvider),
+          () {
+            setState(() {
+              currentPage = index;
+            });
           },
         ),
       ),
       explanationString: tileData.elementAt(currentPage).explanationString,
+      maxExplanationStringLines: 3,
     );
   }
 }

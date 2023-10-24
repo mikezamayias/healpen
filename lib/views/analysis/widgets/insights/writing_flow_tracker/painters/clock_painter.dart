@@ -1,5 +1,4 @@
-import 'dart:developer';
-import 'dart:math' hide log;
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
@@ -103,10 +102,6 @@ class ClockPainter extends CustomPainter {
     required double upperLimit,
   }) {
     double stroke = calculateStroke(radius, currentData);
-    log(
-      stroke.toString(),
-      name: 'log:stroke at ${currentData.hour}',
-    );
     return radius * stroke.clamp(lowerLimit, upperLimit) * 10;
   }
 }

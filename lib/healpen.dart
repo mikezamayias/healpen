@@ -24,12 +24,19 @@ class Healpen extends ConsumerStatefulWidget {
 
 class _HealpenState extends ConsumerState<Healpen> {
   List<PreferenceModel> _lastFetchedPreferences = [];
+  int currentPage = 0;
+  double pageOffset = 0;
 
   @override
   Widget build(BuildContext context) {
     // Moved pages creation to a separate function
     final pages = _buildPages();
-
+    ref.watch(HealpenController().pageControllerProvider).addListener(() {
+      setState(() {
+        pageOffset =
+            ref.watch(HealpenController().pageControllerProvider).page!;
+      });
+    });
     return StreamBuilder(
       stream: FirestorePreferencesController().getPreferences(),
       builder: (context, snapshot) {
@@ -50,9 +57,24 @@ class _HealpenState extends ConsumerState<Healpen> {
             preloadPagesCount: pages.length,
             controller: ref.watch(HealpenController().pageControllerProvider),
             physics: const NeverScrollableScrollPhysics(),
-            onPageChanged: (value) => _handlePageChange(value),
+            onPageChanged: (value) {
+              _handlePageChange(value);
+            },
             itemCount: pages.length,
-            itemBuilder: (context, index) => _buildPage(context, index, pages),
+            itemBuilder: (context, index) {
+              double scale = 1 - (index - pageOffset).abs();
+              return Transform(
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.01)
+                  ..scale(scale, scale),
+                alignment: Alignment.center,
+                child: PhysicalModel(
+                  color: context.theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(radius - gap),
+                  child: _buildPage(context, index, pages),
+                ),
+              );
+            },
           ),
           bottomNavigationBar: const CustomBottomNavigationBar(),
         );
@@ -107,7 +129,7 @@ class _HealpenState extends ConsumerState<Healpen> {
   Widget _buildPage(BuildContext context, int index, List<Animate> pages) {
     // Moved this logic to a separate function
     return AnimatedOpacity(
-      duration: slightlyLongEmphasizedDuration,
+      duration: emphasizedDuration,
       curve: emphasizedCurve,
       opacity: ref.watch(HealpenController().currentPageIndexProvider) == index
           ? 1

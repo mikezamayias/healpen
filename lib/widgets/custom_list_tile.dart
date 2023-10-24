@@ -14,6 +14,7 @@ import '../utils/helper_functions.dart';
 class CustomListTile extends ConsumerWidget {
   final String? titleString;
   final String? explanationString;
+  final int? maxExplanationStringLines;
   final String? subtitleString;
   final Widget? title;
   final Widget? subtitle;
@@ -29,6 +30,7 @@ class CustomListTile extends ConsumerWidget {
   final bool? showcaseLeadingIcon;
   final bool? enableSubtitleWrapper;
   final bool? expandSubtitle;
+  final bool? padSubtitle;
   final bool? enableExplanationWrapper;
   final Color? backgroundColor;
   final Color? textColor;
@@ -39,6 +41,7 @@ class CustomListTile extends ConsumerWidget {
     Key? key,
     this.titleString,
     this.explanationString,
+    this.maxExplanationStringLines = 1,
     this.subtitleString,
     this.leadingIconData,
     this.trailing,
@@ -57,6 +60,7 @@ class CustomListTile extends ConsumerWidget {
     this.enableSubtitleWrapper = true,
     this.enableExplanationWrapper = false,
     this.expandSubtitle = false,
+    this.padSubtitle = true,
     this.cornerRadius,
     this.contentPadding,
   }) : super(key: key);
@@ -191,9 +195,9 @@ class CustomListTile extends ConsumerWidget {
           ),
         if (subtitle != null || subtitleString != null)
           // if (expandSubtitle!)
-            // Expanded(child: _buildSubtitle(context))
+          // Expanded(child: _buildSubtitle(context))
           // else
-            Flexible(child: _buildSubtitle(context)),
+          Flexible(child: _buildSubtitle(context)),
         if (explanationString != null)
           Padding(
             padding: EdgeInsets.only(
@@ -214,6 +218,7 @@ class CustomListTile extends ConsumerWidget {
               child: SelectableText(
                 explanationString!,
                 onTap: onTap,
+                maxLines: maxExplanationStringLines,
                 enableInteractiveSelection: selectableText!,
                 style: TextStyle(
                   color: enableExplanationWrapper! || onTap == null
@@ -255,11 +260,13 @@ class CustomListTile extends ConsumerWidget {
 
   Padding _buildSubtitle(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        bottom: gap,
-        left: gap,
-        right: gap,
-      ),
+      padding: padSubtitle!
+          ? EdgeInsets.only(
+              bottom: gap,
+              left: gap,
+              right: gap,
+            )
+          : EdgeInsets.only(bottom: gap),
       child: Container(
         padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
         decoration: enableSubtitleWrapper!

@@ -11,7 +11,6 @@ import '../../../utils/constants.dart';
 import '../controllers/healpen/healpen_controller.dart';
 import '../extensions/widget_extensions.dart';
 import '../providers/settings_providers.dart';
-import '../utils/helper_functions.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
   const CustomBottomNavigationBar({Key? key}) : super(key: key);
@@ -61,10 +60,20 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                 currentIndex:
                     ref.watch(HealpenController().currentPageIndexProvider),
                 onTap: (int index) {
-                  goToPage(
-                    ref.watch(HealpenController().pageControllerProvider),
-                    index,
-                  );
+                  // goToPage(
+                  //   ref.watch(HealpenController().pageControllerProvider),
+                  //   index,
+                  // );
+                  ref
+                      .read(
+                        HealpenController().pageControllerProvider.notifier,
+                      )
+                      .state
+                      .animateToPage(
+                        index,
+                        duration: emphasizedDuration,
+                        curve: emphasizedCurve,
+                      );
                 },
                 selectedItemColor: context.theme.colorScheme.primary,
                 unselectedItemColor: context.theme.colorScheme.primary,
