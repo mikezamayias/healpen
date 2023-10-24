@@ -12,4 +12,9 @@ extension DateTimeExtension on DateTime {
     log('$res', name: 'DateTimeExtension:endOfMonth');
     return res;
   }
+  DateTime startOfDay() {
+    DateTime res = DateTime(year, month, day);
+    log('$res', name: 'DateTimeExtension:startOfDay');
+    return res;
+  }
 }
