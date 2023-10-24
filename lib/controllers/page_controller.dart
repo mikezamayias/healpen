@@ -42,14 +42,14 @@ class PageController {
     titleGenerator: (userName) => userName == null
         ? 'What\'s on your mind today?'
         : 'Hello $userName,\nWhat\'s on your mind today?',
-    label: 'writing',
+    label: 'expression',
     icon: FontAwesomeIcons.pencil,
     widget: const WritingView(),
   );
 
   final analysis = PageModel(
     titleGenerator: (userName) => 'Explore your writing insights',
-    label: 'analysis',
+    label: 'Mood',
     icon: FontAwesomeIcons.chartLine,
     widget: const AnalysisView(),
   );
