@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,9 +19,17 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double sentiment = ref
         .watch(AnalysisViewController.analysisModelListProvider)
-        .map((e) => e.sentiment!)
+        .map((e) => e.score)
         .average;
     num closestIndexSentiment = getClosestSentimentIndex(sentiment);
+    log(
+      '$closestIndexSentiment',
+      name: 'EmotionalEchoActiveTile:closestIndexSentiment',
+    );
+    log(
+      sentimentValues.toString(),
+      name: 'EmotionalEchoActiveTile:sentimentValues',
+    );
     return Stack(
       children: <Widget>[
         AnimatedPositioned(
@@ -48,17 +58,21 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: sentimentLabels.reversed.map(
                 (String label) {
-                  double labelColorIndex = sentimentLabels.indexOf(label) /
-                      (sentimentLabels.length - 1);
                   int labelIndex = sentimentLabels.indexOf(label);
+                  log(
+                    '$labelIndex',
+                    name: 'EmotionalEchoActiveTile:labelIndex',
+                  );
                   return Text(
                     label,
                     style: (labelIndex == closestIndexSentiment
                             ? context.theme.textTheme.titleLarge
                             : context.theme.textTheme.titleMedium)!
                         .copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: getShapeColorOnSentiment(context, labelColorIndex),
+                      fontWeight: labelIndex == closestIndexSentiment
+                          ? FontWeight.w900
+                          : FontWeight.w600,
+                      color: getShapeColorOnSentiment(context, label),
                     ),
                   );
                 },

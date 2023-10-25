@@ -38,17 +38,21 @@ final Duration longEmphasizedDuration = 1000.milliseconds;
 
 /// A list of sentiment labels used in the application.
 final sentimentLabels = [
+  'Very Negative',
   'Negative',
   'Neutral',
   'Positive',
+  'Very Positive',
 ];
 
 /// A list of sentiment icons used in the application.
 final sentimentIcons = [
+  FontAwesomeIcons.faceSadTear,
   FontAwesomeIcons.faceFrown,
   FontAwesomeIcons.faceMeh,
   FontAwesomeIcons.faceSmile,
+  FontAwesomeIcons.faceGrinWide,
 ];
 
 /// A list of sentiment values used in the application.
-final sentimentValues = [-1, 0, 1];
+final List<double> sentimentValues = [-1, -0.5, 0, 0.5, 1];
