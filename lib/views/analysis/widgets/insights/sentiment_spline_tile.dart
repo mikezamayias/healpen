@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../controllers/analysis_view_controller.dart';
 import '../../../../extensions/int_extensions.dart';
 import '../../../../models/analysis/analysis_model.dart';
+import '../../../../models/analysis/chart_data_model.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 import '../../../../widgets/text_divider.dart';
@@ -132,10 +133,4 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
       ),
     );
   }
-}
-
-class ChartData {
-  ChartData(this.x, this.y);
-  final DateTime x;
-  final double y;
 }

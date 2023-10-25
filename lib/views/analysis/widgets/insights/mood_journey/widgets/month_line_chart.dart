@@ -1,21 +1,24 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../../extensions/date_time_extensions.dart';
-import '../../../../../../extensions/int_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
-import '../../../../../../route_controller.dart';
+import '../../../../../../models/analysis/chart_data_model.dart';
+import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../services/firestore_service.dart';
 import '../../../../../../utils/constants.dart';
+import '../../../../../../utils/show_healpen_dialog.dart';
+import '../../../../../../widgets/custom_dialog.dart';
 import '../../../../../../widgets/custom_list_tile.dart';
+import '../../../../../history/widgets/calendar_tile/widgets/date_dialog.dart';
 
-class MonthLineChart extends StatelessWidget {
+class MonthLineChart extends ConsumerWidget {
   const MonthLineChart({
     super.key,
     required this.month,
@@ -24,14 +27,14 @@ class MonthLineChart extends StatelessWidget {
   final DateTime month;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<QuerySnapshot<AnalysisModel>>(
       stream: FirestoreService().getAnalysisBetweenDates(
         month.startOfMonth(),
         month.endOfMonth(),
       ),
       builder: (
-        context,
+        BuildContext context,
         AsyncSnapshot<QuerySnapshot<AnalysisModel>> snapshot,
       ) {
         if (!(snapshot.connectionState == ConnectionState.active)) {
@@ -42,13 +45,8 @@ class MonthLineChart extends StatelessWidget {
         final analysisModelList = snapshot.data!.docs
             .map((QueryDocumentSnapshot<AnalysisModel> analysisModel) =>
                 analysisModel.data())
-            .toList();
-        final List<ChartData> chartData = analysisModelList
-            .map((AnalysisModel analysisModel) => ChartData(
-                  analysisModel.timestamp.timestampToDateTime(),
-                  analysisModel.sentiment!,
-                ))
-            .toList();
+            .toList()
+            .averageDaysSentiment();
         return SfCartesianChart(
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
@@ -74,7 +72,7 @@ class MonthLineChart extends StatelessWidget {
           series: [
             // Renders spline chart
             ScatterSeries(
-              dataSource: chartData,
+              dataSource: analysisModelList,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               sortFieldValueMapper: (ChartData data, _) => data.x,
@@ -94,28 +92,31 @@ class MonthLineChart extends StatelessWidget {
               dataLabelSettings: const DataLabelSettings(
                 isVisible: false,
               ),
-              onPointDoubleTap: (pointInteractionDetails) async {
-                log(pointInteractionDetails.viewportPointIndex.toString());
-                log(
-                  analysisModelList
-                      .elementAt(
-                          pointInteractionDetails.viewportPointIndex!.toInt())
-                      .toString(),
-                );
-                final analysisModel = analysisModelList.elementAt(
-                    pointInteractionDetails.viewportPointIndex!.toInt());
-                final noteModel =
-                    (await FirestoreService().getNote(analysisModel.timestamp))
-                        .data()!;
-                if (context.mounted) {
-                  context.navigator.pushNamed(
-                    RouterController.noteViewRoute.route,
-                    arguments: (
-                      noteModel: noteModel,
-                      analysisModel: analysisModel,
+              onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
+                final date = analysisModelList
+                    .elementAt(pointInteractionDetails.pointIndex!)
+                    .x;
+                showHealpenDialog(
+                  context: context,
+                  doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+                  customDialog: CustomDialog(
+                    titleString: DateFormat('EEE d MMM yyyy').format(date),
+                    enableContentContainer: false,
+                    contentWidget: DateDialog(
+                      date: date,
                     ),
-                  );
-                }
+                    actions: [
+                      CustomListTile(
+                        responsiveWidth: true,
+                        titleString: 'Close',
+                        cornerRadius: radius - gap,
+                        onTap: () {
+                          Navigator.pop(navigatorKey.currentContext!);
+                        },
+                      )
+                    ],
+                  ),
+                );
               },
             )
           ],
@@ -123,10 +124,4 @@ class MonthLineChart extends StatelessWidget {
       },
     );
   }
-}
-
-class ChartData {
-  ChartData(this.x, this.y);
-  final DateTime x;
-  final double y;
 }
