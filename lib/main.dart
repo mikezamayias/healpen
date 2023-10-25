@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'env/env.dart';
-import 'wrappers/healpen_wrapper.dart';
 import 'services/firebase_service.dart';
+import 'wrappers/healpen_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
