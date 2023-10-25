@@ -48,19 +48,10 @@ class MonthCellTile extends ConsumerWidget {
               analysisModelListSnapshot.data!;
           if (analysisModelList.isNotEmpty) {
             dateSentiment = [
-              for (AnalysisModel element in analysisModelList)
-                element.sentiment!,
+              for (AnalysisModel element in analysisModelList) element.score,
             ].average;
-            shapeColor = Color.lerp(
-              context.theme.colorScheme.error,
-              context.theme.colorScheme.primary,
-              getSentimentRatio(dateSentiment),
-            )!;
-            textColor = Color.lerp(
-              context.theme.colorScheme.onError,
-              context.theme.colorScheme.onPrimary,
-              getSentimentRatio(dateSentiment),
-            )!;
+            shapeColor = getShapeColorOnSentiment(context, dateSentiment);
+            textColor = getTextColorOnSentiment(context, dateSentiment);
           }
         }
         return Padding(

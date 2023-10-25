@@ -6,7 +6,6 @@ import 'package:rive/rive.dart';
 
 import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../controllers/emotional_echo_controller.dart';
-import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 import '../../../../../../utils/rive/rive_color_component.dart';
@@ -44,19 +43,10 @@ class _EmotionalEchoInactiveTileState
   Widget build(BuildContext context) {
     double sentiment = ref
         .watch(AnalysisViewController.analysisModelListProvider)
-        .map((e) => e.sentiment!)
+        .map((e) => e.score)
         .average;
-    double sentimentRatio = (sentiment + 3) / (sentimentLabels.length - 1);
-    Color shapeColor = Color.lerp(
-      ref.watch(themeProvider).colorScheme.error,
-      ref.watch(themeProvider).colorScheme.primary,
-      sentimentRatio,
-    )!;
-    Color textColor = Color.lerp(
-      ref.watch(themeProvider).colorScheme.onError,
-      ref.watch(themeProvider).colorScheme.onPrimary,
-      sentimentRatio,
-    )!;
+    Color shapeColor = getShapeColorOnSentiment(context, sentiment);
+    Color textColor = getTextColorOnSentiment(context, sentiment);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -170,7 +171,25 @@ IconData getSentimentIcon(double sentiment) {
 
 /// Get sentiment ratio based on the given sentiment value.
 double getSentimentRatio(num sentiment) {
+  num minValue = sentimentValues.min;
+  num maxValue = sentimentValues.max;
   return double.parse(
-    (sentiment + 3 / (sentimentValues.length - 1)).toStringAsFixed(2),
+    ((sentiment - minValue) / (maxValue - minValue)).toStringAsFixed(2),
   );
+}
+
+Color getShapeColorOnSentiment(BuildContext context, double sentiment) {
+  return Color.lerp(
+    context.theme.colorScheme.error,
+    context.theme.colorScheme.primary,
+    getSentimentRatio(sentiment),
+  )!;
+}
+
+Color getTextColorOnSentiment(BuildContext context, double sentiment) {
+  return Color.lerp(
+    context.theme.colorScheme.onError,
+    context.theme.colorScheme.onPrimary,
+    getSentimentRatio(sentiment),
+  )!;
 }

@@ -45,24 +45,17 @@ class NoteTile extends ConsumerWidget {
         if (!snapshot.hasData) {
           return const LoadingTile(durationTitle: 'Loading note...');
         }
+        final noteModel = snapshot.data!.note;
+        final analysisModel = snapshot.data!.analysis;
         return CustomListTile(
-          textColor: snapshot.data!.analysis != null
-              ? Color.lerp(
-                  context.theme.colorScheme.onError,
-                  context.theme.colorScheme.onPrimary,
-                  getSentimentRatio(
-                    snapshot.data!.analysis!.sentiment!,
-                  ),
-                )!
+          textColor: analysisModel != null
+              ? getTextColorOnSentiment(context, analysisModel.score)
               : null,
-          backgroundColor: snapshot.data!.analysis != null
-              ? Color.lerp(
-                  context.theme.colorScheme.error,
-                  context.theme.colorScheme.primary,
-                  getSentimentRatio(
-                    snapshot.data!.analysis!.sentiment!,
-                  ),
-                )!
+          backgroundColor: analysisModel != null
+              ? getShapeColorOnSentiment(
+                  context,
+                  analysisModel.score,
+                )
               : null,
           cornerRadius: radius - gap,
           contentPadding: EdgeInsets.all(gap),
@@ -83,8 +76,8 @@ class NoteTile extends ConsumerWidget {
             context.navigator.pushNamed(
               RouterController.noteViewRoute.route,
               arguments: (
-                noteModel: snapshot.data!.note,
-                analysisModel: snapshot.data!.analysis,
+                noteModel: noteModel,
+                analysisModel: analysisModel,
               ),
             );
           },

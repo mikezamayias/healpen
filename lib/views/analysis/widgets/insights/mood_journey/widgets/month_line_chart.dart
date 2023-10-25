@@ -50,7 +50,6 @@ class MonthLineChart extends ConsumerWidget {
         return SfCartesianChart(
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
-            interval: 5,
             isVisible: true,
             opposedPosition: false,
             name: 'Sentiment',

@@ -6,7 +6,6 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../controllers/emotional_echo_controller.dart';
-import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 import 'inactive_tile.dart';
@@ -59,11 +58,7 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                             : context.theme.textTheme.titleMedium)!
                         .copyWith(
                       fontWeight: FontWeight.bold,
-                      color: Color.lerp(
-                        ref.watch(themeProvider).colorScheme.error,
-                        ref.watch(themeProvider).colorScheme.primary,
-                        labelColorIndex,
-                      ),
+                      color: getShapeColorOnSentiment(context, labelColorIndex),
                     ),
                   );
                 },

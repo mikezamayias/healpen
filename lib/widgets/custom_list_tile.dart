@@ -41,7 +41,7 @@ class CustomListTile extends ConsumerWidget {
     Key? key,
     this.titleString,
     this.explanationString,
-    this.maxExplanationStringLines = 1,
+    this.maxExplanationStringLines,
     this.subtitleString,
     this.leadingIconData,
     this.trailing,

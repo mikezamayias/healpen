@@ -23,7 +23,7 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
       ).toList();
       log(analysisModels.length.toString(), name: 'analysisModels');
       final double averageSentiment = analysisModels
-              .map((AnalysisModel analysisModel) => analysisModel.sentiment!)
+              .map((AnalysisModel analysisModel) => analysisModel.score)
               .reduce((double a, double b) => a + b) /
           analysisModels.length;
       log(averageSentiment.toString(), name: 'averageSentiment');
