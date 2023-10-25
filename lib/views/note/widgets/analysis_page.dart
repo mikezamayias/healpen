@@ -32,14 +32,14 @@ class AnalysisPage extends ConsumerWidget {
           CustomListTile(
             contentPadding: EdgeInsets.all(gap),
             title: Text(
-              getSentimentLabel(analysisModel.sentiment!),
+              getSentimentLabel(analysisModel.score),
               style: context.theme.textTheme.titleLarge!.copyWith(
                 color: getShapeColorOnSentiment(context, analysisModel.score),
                 fontWeight: FontWeight.bold,
               ),
             ),
             leading: FaIcon(
-              getSentimentIcon(analysisModel.sentiment!),
+              getSentimentIcon(analysisModel.score),
               size: radius * 2,
               color: getShapeColorOnSentiment(context, analysisModel.score),
             ),
