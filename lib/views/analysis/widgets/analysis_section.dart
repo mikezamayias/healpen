@@ -10,7 +10,7 @@ import '../../../widgets/custom_list_tile.dart';
 import '../../../wrappers/keep_alive_wrapper.dart';
 import 'insights/emotional_echo/emotional_echo_tile.dart';
 import 'insights/journal_length_tile.dart';
-import 'insights/journaling_rhythm_tile.dart';
+import 'insights/journaling_rhythm/journaling_rhythm_tile.dart';
 import 'insights/mood_journey/mood_journey_tile.dart';
 import 'insights/writing_flow_tracker/writing_flow_tracker_tile.dart';
 

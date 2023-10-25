@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -134,10 +133,6 @@ double combinedSentimentValue(double magnitude, double score) {
 }
 
 int getClosestSentimentIndex(double sentiment) {
-  log(
-    '$sentiment',
-    name: 'getClosestSentimentIndex:sentiment',
-  );
   double closestValue = sentimentValues[0];
   double smallestDifference = (sentiment - closestValue).abs();
   for (double value in sentimentValues) {

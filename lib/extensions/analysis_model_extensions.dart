@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import '../models/analysis/analysis_model.dart';
 import '../models/analysis/chart_data_model.dart';
 import 'date_time_extensions.dart';
@@ -15,18 +13,15 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
     final List<DateTime> uniqueDays = days.toSet().toList();
     for (int i = 0; i < uniqueDays.length; i++) {
       final DateTime currentDay = uniqueDays.elementAt(i);
-      log(currentDay.toString(), name: 'currentDay');
       final List<AnalysisModel> analysisModels = where(
         (AnalysisModel analysisModel) =>
             analysisModel.timestamp.timestampToDateTime().startOfDay() ==
             currentDay,
       ).toList();
-      log(analysisModels.length.toString(), name: 'analysisModels');
       final double averageSentiment = analysisModels
               .map((AnalysisModel analysisModel) => analysisModel.score)
               .reduce((double a, double b) => a + b) /
           analysisModels.length;
-      log(averageSentiment.toString(), name: 'averageSentiment');
       averageDaysSentiment.add(
         ChartData(
           currentDay,
@@ -34,10 +29,6 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
         ),
       );
     }
-    log(
-      averageDaysSentiment.toString(),
-      name: 'averageDaysSentiment.length',
-    );
     return averageDaysSentiment;
   }
 }

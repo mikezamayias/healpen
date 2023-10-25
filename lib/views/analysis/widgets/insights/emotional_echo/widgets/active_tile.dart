@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,14 +20,6 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
         .map((e) => e.score)
         .average;
     num closestIndexSentiment = getClosestSentimentIndex(sentiment);
-    log(
-      '$closestIndexSentiment',
-      name: 'EmotionalEchoActiveTile:closestIndexSentiment',
-    );
-    log(
-      sentimentValues.toString(),
-      name: 'EmotionalEchoActiveTile:sentimentValues',
-    );
     return Stack(
       children: <Widget>[
         AnimatedPositioned(
@@ -59,10 +49,6 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
               children: sentimentLabels.reversed.map(
                 (String label) {
                   int labelIndex = sentimentLabels.indexOf(label);
-                  log(
-                    '$labelIndex',
-                    name: 'EmotionalEchoActiveTile:labelIndex',
-                  );
                   return Text(
                     label,
                     style: (labelIndex == closestIndexSentiment
