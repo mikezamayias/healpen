@@ -115,7 +115,10 @@ class _HealpenState extends ConsumerState<Healpen> {
 
   void _setupGlobalStyles(BuildContext context) {
     // Moved this logic to a separate function
-    getSystemUIOverlayStyle(context.theme, ref.watch(themeAppearanceProvider));
+    getSystemUIOverlayStyle(
+      ref.watch(themeProvider),
+      ref.watch(themeAppearanceProvider),
+    );
   }
 
   void _handlePageChange(int value) {
