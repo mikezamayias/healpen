@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,6 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../../extensions/analysis_model_extensions.dart';
-import '../../../../../../extensions/date_time_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
 import '../../../../../../models/analysis/chart_data_model.dart';
 import '../../../../../../providers/settings_providers.dart';
@@ -18,21 +19,18 @@ import '../../../../../../widgets/custom_dialog.dart';
 import '../../../../../../widgets/custom_list_tile.dart';
 import '../../../../../history/widgets/calendar_tile/widgets/date_dialog.dart';
 
-class MonthLineChart extends ConsumerWidget {
-  const MonthLineChart(
-    this.month, {
+class WeekLineChart extends ConsumerWidget {
+  const WeekLineChart({
     super.key,
+    required this.week,
   });
 
-  final DateTime month;
+  final List<DateTime> week;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<QuerySnapshot<AnalysisModel>>(
-      stream: FirestoreService().getAnalysisBetweenDates(
-        month.startOfMonth(),
-        month.endOfMonth(),
-      ),
+      stream: FirestoreService().getAnalysisBetweenDates(week.first, week.last),
       builder: (
         BuildContext context,
         AsyncSnapshot<QuerySnapshot<AnalysisModel>> snapshot,
@@ -42,11 +40,12 @@ class MonthLineChart extends ConsumerWidget {
             titleString: 'Loading...',
           );
         }
-        final analysisModelList = snapshot.data!.docs
+        final actualData = snapshot.data!.docs
             .map((QueryDocumentSnapshot<AnalysisModel> analysisModel) =>
                 analysisModel.data())
             .toList()
             .averageDaysSentimentToChartData();
+        final weekData = initializeWeekData(actualData);
         return SfCartesianChart(
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
@@ -71,7 +70,7 @@ class MonthLineChart extends ConsumerWidget {
           series: [
             // Renders spline chart
             ScatterSeries(
-              dataSource: analysisModelList,
+              dataSource: weekData,
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               sortFieldValueMapper: (ChartData data, _) => data.x,
@@ -92,9 +91,8 @@ class MonthLineChart extends ConsumerWidget {
                 isVisible: false,
               ),
               onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
-                final date = analysisModelList
-                    .elementAt(pointInteractionDetails.pointIndex!)
-                    .x;
+                final date =
+                    weekData.elementAt(pointInteractionDetails.pointIndex!).x;
                 showHealpenDialog(
                   context: context,
                   doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
@@ -122,5 +120,27 @@ class MonthLineChart extends ConsumerWidget {
         );
       },
     );
+  }
+
+  List<ChartData> initializeWeekData(List<ChartData> actualData) {
+    List<ChartData> tempChartData = [
+      for (int i = 0; i < week.length; i++)
+        if (actualData
+            .map((ChartData chartData) => chartData.x)
+            .contains(week.elementAt(i)))
+          actualData.firstWhere(
+            (ChartData chartData) => chartData.x == week.elementAt(i),
+          )
+        else
+          ChartData(
+            week.elementAt(i),
+            null,
+          ),
+    ];
+    log('$tempChartData', name: 'tempChartData');
+    log('$actualData', name: 'actualData');
+    log('${tempChartData.length}', name: 'tempChartData.length');
+    log('${actualData.length}', name: 'actualData.length');
+    return tempChartData;
   }
 }

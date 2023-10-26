@@ -20,24 +20,24 @@ class MoodJourneyTile extends ConsumerWidget {
       reverse: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: monthSet
-            .map<Widget>(
-              (DateTime month) => SizedBox(
-                height: 30.h,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextDivider(
-                      DateFormat('y, MMMM').format(month),
-                    ),
-                    Expanded(
-                      child: MonthLineChart(month: month),
-                    )
-                  ],
-                ),
+        children: monthSet.map<Widget>(
+          (DateTime month) {
+            return SizedBox(
+              height: 30.h,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextDivider(
+                    DateFormat('y, MMMM').format(month),
+                  ),
+                  Expanded(
+                    child: MonthLineChart(month),
+                  )
+                ],
               ),
-            )
-            .toList(),
+            );
+          },
+        ).toList(),
       ),
     );
   }

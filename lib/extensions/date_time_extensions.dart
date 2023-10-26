@@ -13,4 +13,14 @@ extension DateTimeExtension on DateTime {
     DateTime res = DateTime(year, month, day);
     return res;
   }
+
+  DateTime startOfWeek() {
+    DateTime res = DateTime(year, month, day - weekday + 1);
+    return res;
+  }
+
+  DateTime endOfWeek() {
+    DateTime res = DateTime(year, month, day + (7 - weekday));
+    return res;
+  }
 }
