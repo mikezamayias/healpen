@@ -15,10 +15,10 @@ import '../../widgets/loading_tile.dart';
 import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
 import '../settings/writing/widgets/analyze_notes_tile.dart';
-import 'widgets/analysis_section.dart';
+import 'widgets/insights_tile.dart';
 
-class AnalysisView extends ConsumerWidget {
-  const AnalysisView({Key? key}) : super(key: key);
+class InsightsView extends ConsumerWidget {
+  const InsightsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +27,7 @@ class AnalysisView extends ConsumerWidget {
       appBar: AppBar(
         pathNames: [
           PageController()
-              .analysis
+              .insights
               .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         ],
       ),
@@ -70,7 +70,7 @@ class AnalysisView extends ConsumerWidget {
                     .watch(AnalysisViewController.analysisModelListProvider)
                     .add(element.data());
               }
-              return const AnalysisSection();
+              return const InsightsTile();
             }
           }
         },
