@@ -24,6 +24,7 @@ class AnalysisSection extends ConsumerStatefulWidget {
 }
 
 class _AnalysisSectionState extends ConsumerState<AnalysisSection> {
+  // TODO: Make this list user customizale under insight settings and move the explanation string to that reorderable list
   final tileData = <({
     String explanationString,
     String titleString,
