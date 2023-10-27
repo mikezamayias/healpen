@@ -91,16 +91,16 @@ class _AuthViewState extends ConsumerState<AuthView> {
             ),
             body: Center(
               child: switch (state.runtimeType) {
-                Uninitialized => const UninitializedState(),
-                SendingLink => const SendingLinkState(),
-                AwaitingDynamicLink => const AwaitingDynamicLinkState(),
-                SignedIn ||
-                SigningIn ||
-                UserCreated ||
-                CredentialLinked ||
-                CredentialReceived =>
+                const (Uninitialized) => const UninitializedState(),
+                const (SendingLink) => const SendingLinkState(),
+                const (AwaitingDynamicLink) => const AwaitingDynamicLinkState(),
+                const (SignedIn) ||
+                const (SigningIn) ||
+                const (UserCreated) ||
+                const (CredentialLinked) ||
+                const (CredentialReceived) =>
                   const SigningInState(),
-                AuthFailed => AuthFailedState(state: state),
+                const (AuthFailed) => AuthFailedState(state: state),
                 _ => UnknownState(state: state)
               },
             ),

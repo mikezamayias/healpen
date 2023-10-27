@@ -18,7 +18,7 @@ import '../settings/writing/widgets/analyze_notes_tile.dart';
 import 'widgets/insights_tile.dart';
 
 class InsightsView extends ConsumerWidget {
-  const InsightsView({Key? key}) : super(key: key);
+  const InsightsView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -39,7 +39,7 @@ class _EmotionalEchoInactiveTileState
     _load();
   }
 
-    @override
+  @override
   void dispose() {
     _riveArtboard!.removeController(_controller!);
     _controller!.dispose();

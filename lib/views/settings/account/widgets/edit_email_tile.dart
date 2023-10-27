@@ -12,7 +12,7 @@ import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class EditEmailTile extends ConsumerStatefulWidget {
-  const EditEmailTile({Key? key}) : super(key: key);
+  const EditEmailTile({super.key});
 
   @override
   ConsumerState<EditEmailTile> createState() => _EditEmailTileState();

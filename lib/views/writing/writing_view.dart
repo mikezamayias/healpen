@@ -16,7 +16,7 @@ import 'widgets/stopwatch_tile.dart';
 import 'widgets/writing_text_field.dart';
 
 class WritingView extends ConsumerStatefulWidget {
-  const WritingView({Key? key}) : super(key: key);
+  const WritingView({super.key});
 
   @override
   ConsumerState<WritingView> createState() => _WritingViewState();

@@ -18,7 +18,7 @@ import 'widgets/month_cell_tile.dart';
 class CalendarTile extends ConsumerStatefulWidget {
   final List<NoteModel> noteModels;
 
-  const CalendarTile({Key? key, required this.noteModels}) : super(key: key);
+  const CalendarTile({super.key, required this.noteModels});
 
   @override
   ConsumerState<CalendarTile> createState() => _CalendarTileState();

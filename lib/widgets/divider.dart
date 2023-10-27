@@ -4,7 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import '../utils/constants.dart' as constants;
 
 class Divider extends StatefulWidget {
-  const Divider({Key? key}) : super(key: key);
+  const Divider({super.key});
 
   @override
   State<Divider> createState() => _DividerState();

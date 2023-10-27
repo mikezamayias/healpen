@@ -9,8 +9,8 @@ class TextDivider extends StatelessWidget {
 
   const TextDivider(
     this.data, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

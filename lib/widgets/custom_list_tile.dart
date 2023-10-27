@@ -38,7 +38,7 @@ class CustomListTile extends ConsumerWidget {
   final EdgeInsetsGeometry? contentPadding;
 
   const CustomListTile({
-    Key? key,
+    super.key,
     this.titleString,
     this.explanationString,
     this.maxExplanationStringLines,
@@ -63,7 +63,7 @@ class CustomListTile extends ConsumerWidget {
     this.padSubtitle = true,
     this.cornerRadius,
     this.contentPadding,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

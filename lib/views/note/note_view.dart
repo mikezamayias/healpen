@@ -17,7 +17,7 @@ import 'widgets/analysis_page.dart';
 import 'widgets/details_page.dart';
 
 class NoteView extends ConsumerStatefulWidget {
-  const NoteView({Key? key}) : super(key: key);
+  const NoteView({super.key});
 
   @override
   ConsumerState<NoteView> createState() => _NoteViewState();

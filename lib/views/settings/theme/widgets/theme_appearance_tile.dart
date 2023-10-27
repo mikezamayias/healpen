@@ -13,7 +13,7 @@ import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ThemeAppearanceTile extends ConsumerWidget {
-  const ThemeAppearanceTile({Key? key}) : super(key: key);
+  const ThemeAppearanceTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

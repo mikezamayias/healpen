@@ -12,9 +12,9 @@ class AuthFailedState extends ConsumerWidget {
   final AuthState state;
 
   const AuthFailedState({
-    Key? key,
+    super.key,
     required this.state,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

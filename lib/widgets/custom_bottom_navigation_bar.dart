@@ -13,7 +13,7 @@ import '../extensions/widget_extensions.dart';
 import '../providers/settings_providers.dart';
 
 class CustomBottomNavigationBar extends ConsumerWidget {
-  const CustomBottomNavigationBar({Key? key}) : super(key: key);
+  const CustomBottomNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

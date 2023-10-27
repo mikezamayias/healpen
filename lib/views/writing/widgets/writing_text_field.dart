@@ -6,7 +6,7 @@ import '../../../controllers/writing_controller.dart';
 import '../../../utils/constants.dart';
 
 class WritingTextField extends ConsumerWidget {
-  const WritingTextField({Key? key}) : super(key: key);
+  const WritingTextField({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

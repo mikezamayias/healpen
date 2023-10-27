@@ -5,11 +5,11 @@ import '../utils/constants.dart';
 
 class CustomChip extends StatelessWidget {
   const CustomChip({
-    Key? key,
+    super.key,
     required this.label,
     this.condition,
     this.onTap,
-  }) : super(key: key);
+  });
 
   final String label;
   final bool? condition;

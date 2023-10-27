@@ -10,7 +10,7 @@ import '../../../../widgets/custom_list_tile.dart';
 import 'analyze_notes_dialog.dart';
 
 class AnalyzeNotesTile extends ConsumerWidget {
-  const AnalyzeNotesTile({Key? key}) : super(key: key);
+  const AnalyzeNotesTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

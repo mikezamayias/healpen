@@ -13,11 +13,11 @@ class AppBar extends ConsumerWidget {
   final VoidCallback? onBackButtonPressed;
 
   const AppBar({
-    Key? key,
+    super.key,
     required this.pathNames,
     this.automaticallyImplyLeading = false,
     this.onBackButtonPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

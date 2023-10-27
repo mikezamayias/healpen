@@ -4,7 +4,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'divider.dart';
 
 class BottomSheetHandle extends StatelessWidget {
-  const BottomSheetHandle({Key? key}) : super(key: key);
+  const BottomSheetHandle({super.key});
 
   @override
   Widget build(BuildContext context) {

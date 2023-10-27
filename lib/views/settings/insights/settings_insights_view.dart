@@ -8,7 +8,7 @@ import '../../blueprint/blueprint_view.dart';
 import 'widgets/reorder_insights_tile.dart';
 
 class SettingsInsightsView extends ConsumerWidget {
-  const SettingsInsightsView({Key? key}) : super(key: key);
+  const SettingsInsightsView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

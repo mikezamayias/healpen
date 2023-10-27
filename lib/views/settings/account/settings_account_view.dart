@@ -12,7 +12,7 @@ import 'widgets/save_settings_to_cloud_tile.dart';
 import 'widgets/sign_out_tile.dart';
 
 class SettingsAccountView extends ConsumerWidget {
-  const SettingsAccountView({Key? key}) : super(key: key);
+  const SettingsAccountView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

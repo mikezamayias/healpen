@@ -9,7 +9,7 @@ import 'widgets/theme_appearance_tile.dart';
 import 'widgets/theme_color_tile.dart';
 
 class SettingsThemeView extends ConsumerWidget {
-  const SettingsThemeView({Key? key}) : super(key: key);
+  const SettingsThemeView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

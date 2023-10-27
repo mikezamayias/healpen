@@ -11,7 +11,7 @@ import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class InfoButtonSettingsTile extends ConsumerWidget {
-  const InfoButtonSettingsTile({Key? key}) : super(key: key);
+  const InfoButtonSettingsTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

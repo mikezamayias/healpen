@@ -11,7 +11,7 @@ import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class HapticFeedbackSettingsTile extends ConsumerWidget {
-  const HapticFeedbackSettingsTile({Key? key}) : super(key: key);
+  const HapticFeedbackSettingsTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

@@ -159,13 +159,14 @@ IconData getSentimentIcon(double sentiment) {
 /// Get sentiment ratio based on the given sentiment value.
 double getSentimentRatio(dynamic sentiment) {
   return switch (sentiment.runtimeType) {
-    int => sentimentValues.indexOf(sentimentValues
+    const (int) => sentimentValues.indexOf(sentimentValues
             .elementAt(getClosestSentimentIndex(sentiment.toDouble()))) /
         (sentimentValues.length - 1),
-    double => sentimentValues.indexOf(
+    const (double) => sentimentValues.indexOf(
             sentimentValues.elementAt(getClosestSentimentIndex(sentiment))) /
         (sentimentValues.length - 1),
-    String => sentimentLabels.indexOf(sentiment) / (sentimentLabels.length - 1),
+    const (String) =>
+      sentimentLabels.indexOf(sentiment) / (sentimentLabels.length - 1),
     _ => throw UnsupportedError(
         'Sentiment value must be of type double or int or String.',
       ),

@@ -18,7 +18,7 @@ import 'theme/settings_theme_view.dart';
 import 'writing/settings_writing_view.dart';
 
 class SettingsView extends ConsumerWidget {
-  const SettingsView({Key? key}) : super(key: key);
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

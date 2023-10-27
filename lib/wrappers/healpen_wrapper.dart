@@ -12,7 +12,7 @@ import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
-  const HealpenWrapper({Key? key}) : super(key: key);
+  const HealpenWrapper({super.key});
 
   @override
   ConsumerState<HealpenWrapper> createState() => _HealpenWrapperState();

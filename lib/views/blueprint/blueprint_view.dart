@@ -11,12 +11,12 @@ import '../../utils/helper_functions.dart';
 
 class BlueprintView extends ConsumerWidget {
   const BlueprintView({
-    Key? key,
+    super.key,
     this.appBar,
     this.padBodyHorizontally = true,
     this.showAppBar,
     required this.body,
-  }) : super(key: key);
+  });
 
   final Widget? appBar;
   final Widget body;
