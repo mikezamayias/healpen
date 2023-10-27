@@ -54,6 +54,7 @@ class WeekLineChart extends ConsumerWidget {
             name: 'Sentiment',
             minimum: sentimentValues.min.toDouble(),
             maximum: sentimentValues.max.toDouble(),
+            rangePadding: ChartRangePadding.none,
             interval: 1,
           ),
           primaryXAxis: DateTimeCategoryAxis(
@@ -64,6 +65,7 @@ class WeekLineChart extends ConsumerWidget {
             labelRotation: -45,
             majorGridLines: const MajorGridLines(width: 0),
             minorGridLines: const MinorGridLines(width: 0),
+            rangePadding: ChartRangePadding.none,
             majorTickLines: const MajorTickLines(width: 0),
             minorTickLines: const MinorTickLines(width: 0),
             edgeLabelPlacement: EdgeLabelPlacement.shift,

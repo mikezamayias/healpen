@@ -36,8 +36,21 @@ class BubbleChart extends ConsumerWidget {
         majorTickLines: const MajorTickLines(width: 0),
         minorTickLines: const MinorTickLines(width: 0),
         edgeLabelPlacement: EdgeLabelPlacement.shift,
+        rangePadding: ChartRangePadding.none,
       ),
-      primaryYAxis: CategoryAxis(isVisible: true),
+      primaryYAxis: DateTimeCategoryAxis(
+        dateFormat: DateFormat('mm:ss'),
+        isVisible: true,
+        name: 'Duration',
+        intervalType: DateTimeIntervalType.minutes,
+        interval: 1,
+        majorGridLines: const MajorGridLines(width: 0),
+        minorGridLines: const MinorGridLines(width: 0),
+        majorTickLines: const MajorTickLines(width: 0),
+        minorTickLines: const MinorTickLines(width: 0),
+        rangePadding: ChartRangePadding.none,
+        edgeLabelPlacement: EdgeLabelPlacement.shift,
+      ),
       series: <CartesianSeries>[
         BubbleSeries<AnalysisModel, DateTime>(
           dataSource: analysisModelList,
