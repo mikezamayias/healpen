@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../controllers/analysis_view_controller.dart';
-import '../../../../../models/analysis/analysis_model.dart';
+import '../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../widgets/text_divider.dart';
 import 'widgets/month_line_chart.dart';
 
@@ -13,9 +13,9 @@ class MoodJourneyTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analysisModelList =
-        ref.watch(AnalysisViewController.analysisModelListProvider);
-    final monthSet = getMonthsFromAnalysisModelList(analysisModelList);
+    final monthSet = ref
+        .watch(AnalysisViewController.analysisModelListProvider)
+        .getMonthsFromAnalysisModelList();
     return SingleChildScrollView(
       reverse: true,
       child: Column(
@@ -40,20 +40,5 @@ class MoodJourneyTile extends ConsumerWidget {
         ).toList(),
       ),
     );
-  }
-
-  Set<DateTime> getMonthsFromAnalysisModelList(
-      List<AnalysisModel> analysisModelList) {
-    List<DateTime> monthList = <DateTime>[];
-    for (var analysisModel in analysisModelList) {
-      var month = DateTime.fromMillisecondsSinceEpoch(
-        analysisModel.timestamp,
-      ).month;
-      var year = DateTime.fromMillisecondsSinceEpoch(
-        analysisModel.timestamp,
-      ).year;
-      monthList.add(DateTime(year, month));
-    }
-    return monthList.toSet();
   }
 }

@@ -19,6 +19,20 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
     return result;
   }
 
+  Set<DateTime> getMonthsFromAnalysisModelList() {
+    List<DateTime> monthList = <DateTime>[];
+    for (var analysisModel in this) {
+      var month = DateTime.fromMillisecondsSinceEpoch(
+        analysisModel.timestamp,
+      ).month;
+      var year = DateTime.fromMillisecondsSinceEpoch(
+        analysisModel.timestamp,
+      ).year;
+      monthList.add(DateTime(year, month));
+    }
+    return monthList.toSet();
+  }
+
   List<AnalysisModel> averageDaysSentiment() {
     final List<AnalysisModel> averageDaysSentiment = [];
     final List<DateTime> days = map(
