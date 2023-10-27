@@ -49,8 +49,8 @@ class PageController {
 
   final analysis = PageModel(
     titleGenerator: (userName) => 'Explore your writing insights',
-    label: 'Mood',
-    icon: FontAwesomeIcons.chartLine,
+    label: 'Insights',
+    icon: FontAwesomeIcons.brain,
     widget: const AnalysisView(),
   );
 
