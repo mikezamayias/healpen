@@ -5,14 +5,17 @@ import 'int_extensions.dart';
 
 extension AnalysisModelListExtension on List<AnalysisModel> {
   List<ChartData> averageDaysSentimentToChartData() {
-    final List<ChartData> result = [
-      ...averageDaysSentiment().map(
-        (AnalysisModel element) => ChartData(
-          element.timestamp.timestampToDateTime(),
-          element.score,
-        ),
-      )
-    ];
+    final List<ChartData> result = averageDaysSentiment().toChartData();
+    return result;
+  }
+
+  List<ChartData> toChartData() {
+    final List<ChartData> result = map(
+      (AnalysisModel element) => ChartData(
+        element.timestamp.timestampToDateTime(),
+        element.score,
+      ),
+    ).toList();
     return result;
   }
 
