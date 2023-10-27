@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../controllers/analysis_view_controller.dart';
@@ -72,16 +69,6 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
         analysisModelList.last.timestamp.timestampToDateTime().endOfMonth();
     final startOfTheMonthOfLastAnalysisModelTimestamp =
         lastAnalysisModelTimestamp.startOfMonth();
-    log(
-      DateFormat('yyyy MMMM dd').format(lastAnalysisModelTimestamp),
-      name: 'JournalingRhythmTile:lastAnalysisModelTimestamp',
-    );
-    log(
-      DateFormat('yyyy MMMM dd')
-          .format(startOfTheMonthOfLastAnalysisModelTimestamp),
-      name: 'JournalingRhythmTile:startOfTheMonthOfLastAnalysisModelTimestamp',
-    );
-    // go down one day at a time until the start of the month is reached
     List<DateTime> startOfWeekList = <DateTime>[
       for (DateTime dateIndex = lastAnalysisModelTimestamp;
           dateIndex.isAfter(startOfTheMonthOfLastAnalysisModelTimestamp);
