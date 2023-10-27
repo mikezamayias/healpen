@@ -9,7 +9,6 @@ part 'analysis_model.g.dart';
 class AnalysisModel {
   int timestamp;
   int duration;
-
   String content;
   double score;
   double magnitude;
