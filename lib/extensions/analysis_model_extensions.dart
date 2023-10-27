@@ -37,7 +37,7 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
       averageDaysSentiment.add(
         AnalysisModel(
           timestamp: currentDay.millisecondsSinceEpoch,
-          score: averageSentiment,
+          score: double.parse(averageSentiment.toStringAsFixed(2)),
         ),
       );
     }
