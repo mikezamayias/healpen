@@ -86,12 +86,6 @@ class WeekLineChart extends ConsumerWidget {
                     )
                   : null,
               enableTooltip: true,
-              dataLabelSettings: DataLabelSettings(
-                isVisible: true,
-                useSeriesColor: true,
-                borderRadius: radius - gap,
-                margin: EdgeInsets.all(gap),
-              ),
               sortingOrder: SortingOrder.ascending,
               animationDuration: standardDuration.inSeconds.toDouble(),
               trendlines: <Trendline>[

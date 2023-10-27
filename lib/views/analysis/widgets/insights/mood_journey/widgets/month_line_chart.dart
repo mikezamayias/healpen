@@ -95,12 +95,6 @@ class MonthLineChart extends ConsumerWidget {
                   opacity: 0.2,
                 ),
               ],
-              dataLabelSettings: DataLabelSettings(
-                isVisible: true,
-                useSeriesColor: true,
-                borderRadius: radius - gap,
-                margin: EdgeInsets.all(gap),
-              ),
               onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
                 final date = analysisModelList
                     .elementAt(pointInteractionDetails.pointIndex!)
