@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ import '../../../../../../models/analysis/chart_data_model.dart';
 import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../services/firestore_service.dart';
 import '../../../../../../utils/constants.dart';
+import '../../../../../../utils/helper_functions.dart';
 import '../../../../../../utils/show_healpen_dialog.dart';
 import '../../../../../../widgets/custom_dialog.dart';
 import '../../../../../../widgets/custom_list_tile.dart';
@@ -47,6 +50,14 @@ class MonthLineChart extends ConsumerWidget {
                 analysisModel.data())
             .toList()
             .averageDaysSentimentToChartData();
+        log(
+          '${snapshot.data!.docs.length}',
+          name: 'MonthLineChart:docs.length',
+        );
+        log(
+          '${analysisModelList.length}',
+          name: 'MonthLineChart:analysisModelList.length',
+        );
         return SfCartesianChart(
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
@@ -61,7 +72,7 @@ class MonthLineChart extends ConsumerWidget {
             isVisible: true,
             name: 'Date',
             interval: 1,
-            labelRotation: 45,
+            labelRotation: -45,
             majorGridLines: const MajorGridLines(width: 0),
             minorGridLines: const MinorGridLines(width: 0),
             majorTickLines: const MajorTickLines(width: 0),
@@ -75,21 +86,30 @@ class MonthLineChart extends ConsumerWidget {
               xValueMapper: (ChartData data, _) => data.x,
               yValueMapper: (ChartData data, _) => data.y,
               sortFieldValueMapper: (ChartData data, _) => data.x,
-              color: context.theme.colorScheme.primary,
+              pointColorMapper: (ChartData data, _) => data.y != null
+                  ? getShapeColorOnSentiment(
+                      context,
+                      data.y,
+                    )
+                  : null,
               enableTooltip: true,
               sortingOrder: SortingOrder.ascending,
-              animationDuration: standardDuration.inSeconds.toDouble(),
+              animationDuration:
+                  longEmphasizedDuration.inMilliseconds.toDouble(),
               trendlines: <Trendline>[
                 Trendline(
                   animationDuration: standardDuration.inSeconds.toDouble(),
                   type: TrendlineType.polynomial,
                   width: gap,
-                  color: context.theme.colorScheme.primary,
+                  color: context.theme.colorScheme.outlineVariant,
                   opacity: 0.2,
                 ),
               ],
-              dataLabelSettings: const DataLabelSettings(
-                isVisible: false,
+              dataLabelSettings: DataLabelSettings(
+                isVisible: true,
+                useSeriesColor: true,
+                borderRadius: radius - gap,
+                margin: EdgeInsets.all(gap),
               ),
               onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
                 final date = analysisModelList

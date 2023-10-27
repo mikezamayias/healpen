@@ -68,60 +68,41 @@ class WeekLineChart extends ConsumerWidget {
             minorTickLines: const MinorTickLines(width: 0),
             edgeLabelPlacement: EdgeLabelPlacement.shift,
           ),
-          tooltipBehavior: TooltipBehavior(
-            activationMode: ActivationMode.singleTap,
-            enable: true,
-            shouldAlwaysShow: false,
-            animationDuration: standardDuration.inMilliseconds,
-            tooltipPosition: TooltipPosition.pointer,
-            color: context.theme.colorScheme.surface,
-            shadowColor: context.theme.colorScheme.onSurface,
-            builder: (data, point, series, pointIndex, seriesIndex) {
-              return Container(
-                padding: EdgeInsets.all(gap),
-                decoration: BoxDecoration(
-                  color: getShapeColorOnSentiment(
-                    context,
-                    double.parse('${point.y}'),
-                  ),
-                  borderRadius: BorderRadius.circular(radius),
-                ),
-                child: Text(
-                  '${point.y}',
-                  style: context.theme.textTheme.bodyMedium!.copyWith(
-                    color: getTextColorOnSentiment(
-                      context,
-                      double.parse('${point.y}'),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
           series: [
             // Renders spline chart
             ScatterSeries(
+              markerSettings: MarkerSettings(
+                width: gap,
+                height: gap,
+              ),
               dataSource: weekData,
               xValueMapper: (data, _) => data.x,
               yValueMapper: (data, _) => data.y,
               sortFieldValueMapper: (data, _) => data.x,
-              color: context.theme.colorScheme.primary,
+              pointColorMapper: (ChartData data, _) => data.y != null
+                  ? getShapeColorOnSentiment(
+                      context,
+                      data.y,
+                    )
+                  : null,
               enableTooltip: true,
+              dataLabelSettings: DataLabelSettings(
+                isVisible: true,
+                useSeriesColor: true,
+                borderRadius: radius - gap,
+                margin: EdgeInsets.all(gap),
+              ),
               sortingOrder: SortingOrder.ascending,
               animationDuration: standardDuration.inSeconds.toDouble(),
               trendlines: <Trendline>[
                 Trendline(
-                  enableTooltip: false,
                   animationDuration: standardDuration.inSeconds.toDouble(),
                   type: TrendlineType.polynomial,
                   width: gap,
-                  color: context.theme.colorScheme.primary,
+                  color: context.theme.colorScheme.outlineVariant,
                   opacity: 0.2,
                 ),
               ],
-              dataLabelSettings: const DataLabelSettings(
-                isVisible: false,
-              ),
               onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
                 final date =
                     weekData.elementAt(pointInteractionDetails.pointIndex!).x;

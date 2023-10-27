@@ -23,7 +23,7 @@ class MoodJourneyTile extends ConsumerWidget {
         children: monthSet.map<Widget>(
           (DateTime month) {
             return SizedBox(
-              height: 30.h,
+              height: 36.h,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

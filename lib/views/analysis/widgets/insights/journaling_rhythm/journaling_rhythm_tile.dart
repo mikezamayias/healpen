@@ -28,10 +28,6 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
     weekDates = initializeWeekDates(
       ref.watch(AnalysisViewController.analysisModelListProvider),
     );
-    log(
-      '${weekDates.length}',
-      name: 'JournalingRhythmTile:weekDates.length',
-    );
     return SingleChildScrollView(
       reverse: true,
       child: Column(
@@ -39,7 +35,7 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
         children: weekDates.reversed.map<Widget>(
           (List<DateTime> week) {
             return SizedBox(
-              height: 36.h,
+              height: 24.h,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
