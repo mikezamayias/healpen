@@ -82,7 +82,7 @@ class WeekLineChart extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: getShapeColorOnSentiment(
                     context,
-                    point.y,
+                    double.parse('${point.y}'),
                   ),
                   borderRadius: BorderRadius.circular(radius),
                 ),
