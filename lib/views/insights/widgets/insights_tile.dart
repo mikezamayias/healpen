@@ -5,10 +5,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
-import '../../../controllers/insight_controller.dart';
+import '../../../controllers/insights_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../widgets/custom_list_tile.dart';
-import '../../../wrappers/keep_alive_wrapper.dart';
 
 class InsightsTile extends ConsumerStatefulWidget {
   const InsightsTile({
@@ -20,8 +19,6 @@ class InsightsTile extends ConsumerStatefulWidget {
 }
 
 class _AnalysisSectionState extends ConsumerState<InsightsTile> {
-  // TODO: Make this list user customizale under insight settings and move the explanation string to that reorderable list
-
   int currentPage = 0;
   double viewPortFraction = 1;
   double pageOffset = 0;
@@ -44,20 +41,15 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
 
   @override
   Widget build(BuildContext context) {
-    insightWidgets = ref
-        .watch(insightControllerProvider)
-        .insightModels
-        .map((e) => KeepAliveWrapper(child: e.widget))
-        .toList();
+    final insightsContoller = ref.watch(insightsControllerProvider);
+    insightWidgets =
+        insightsContoller.insightModelList.map((e) => e.widget).toList();
     return CustomListTile(
-      titleString: ref
-          .watch(insightControllerProvider)
-          .insightModels
-          .elementAt(currentPage)
-          .title,
+      titleString:
+          insightsContoller.insightModelList.elementAt(currentPage).title,
       trailing: SmoothPageIndicator(
         controller: pageController,
-        count: ref.watch(insightControllerProvider).insightModels.length,
+        count: insightsContoller.insightModelList.length,
         effect: ExpandingDotsEffect(
           dotHeight: gap,
           dotWidth: gap,
@@ -69,7 +61,7 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
       expandSubtitle: true,
       padSubtitle: true,
       subtitle: PageView.builder(
-        itemCount: ref.watch(insightControllerProvider).insightModels.length,
+        itemCount: insightsContoller.insightModelList.length,
         itemBuilder: (BuildContext context, int index) {
           double scale = 1 - (index - pageOffset).abs();
           return Transform(
@@ -97,11 +89,8 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
           },
         ),
       ),
-      explanationString: ref
-          .watch(insightControllerProvider)
-          .insightModels
-          .elementAt(currentPage)
-          .explanation,
+      explanationString:
+          insightsContoller.insightModelList.elementAt(currentPage).explanation,
       maxExplanationStringLines: 3,
     );
   }

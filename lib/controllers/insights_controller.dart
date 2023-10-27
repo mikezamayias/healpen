@@ -7,15 +7,15 @@ import '../views/insights/widgets/insights/journaling_rhythm/journaling_rhythm_t
 import '../views/insights/widgets/insights/mood_journey/mood_journey_tile.dart';
 import '../views/insights/widgets/insights/writing_flow_tracker/writing_flow_tracker_tile.dart';
 
-final insightControllerProvider =
-    StateProvider<InsightController>((ref) => InsightController());
+final insightsControllerProvider =
+    StateProvider<InsightsController>((ref) => InsightsController());
 
-class InsightController {
+class InsightsController {
   // Singleton constructor
-  static final InsightController _instance = InsightController._internal();
-  factory InsightController() => _instance;
-  InsightController._internal() {
-    insightModels = [
+  static final InsightsController _instance = InsightsController._internal();
+  factory InsightsController() => _instance;
+  InsightsController._internal() {
+    insightModelList = [
       emotionalEcho,
       writingFlowTracker,
       moodJourney,
@@ -25,7 +25,7 @@ class InsightController {
   }
 
   // Members
-  List<InsightModel> insightModels = <InsightModel>[];
+  List<InsightModel> insightModelList = <InsightModel>[];
 
   /// This widget could be represented by a mood ring or color spectrum.
   /// The color changes according to the inferred mood from the journal
@@ -90,7 +90,7 @@ class InsightController {
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
-    final InsightModel insight = insightModels.removeAt(oldIndex);
-    insightModels.insert(newIndex, insight);
+    final InsightModel insight = insightModelList.removeAt(oldIndex);
+    insightModelList.insert(newIndex, insight);
   }
 }

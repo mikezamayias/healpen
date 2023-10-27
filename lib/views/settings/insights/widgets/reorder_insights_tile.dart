@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../../controllers/insight_controller.dart';
+import '../../../../controllers/insights_controller.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ReorderInsightsTile extends ConsumerWidget {
   const ReorderInsightsTile({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final insightsController = ref.watch(insightControllerProvider);
+    final insightsController = ref.watch(insightsControllerProvider);
     return CustomListTile(
       titleString: 'Reorder Insights',
       explanationString: 'Long press and drag to reorder insights',
@@ -21,22 +23,27 @@ class ReorderInsightsTile extends ConsumerWidget {
         itemBuilder: (context, index) {
           return Padding(
             key: ValueKey(index),
-            padding: index == insightsController.insightModels.length - 1
+            padding: index == insightsController.insightModelList.length - 1
                 ? EdgeInsets.zero
                 : EdgeInsets.only(bottom: gap),
             child: CustomListTile(
               cornerRadius: radius - gap,
               onTap: () {},
               titleString:
-                  insightsController.insightModels.elementAt(index).title,
-              explanationString:
-                  insightsController.insightModels.elementAt(index).explanation,
+                  insightsController.insightModelList.elementAt(index).title,
+              explanationString: insightsController.insightModelList
+                  .elementAt(index)
+                  .explanation,
               trailingIconData: FontAwesomeIcons.gripLines,
             ),
           );
         },
-        itemCount: insightsController.insightModels.length,
-        onReorder: insightsController.reorderInsights,
+        itemCount: insightsController.insightModelList.length,
+        onReorder: (oldIndex, newIndex) {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+            insightsController.reorderInsights(oldIndex, newIndex);
+          });
+        },
         proxyDecorator: (child, index, animation) {
           return Material(
             color: Colors.transparent,
