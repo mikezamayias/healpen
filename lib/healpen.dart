@@ -50,8 +50,6 @@ class _HealpenState extends ConsumerState<Healpen> {
           }
         }
 
-        _setupGlobalStyles(context);
-
         return Scaffold(
           body: PreloadPageView.builder(
             preloadPagesCount: pages.length,
@@ -110,15 +108,12 @@ class _HealpenState extends ConsumerState<Healpen> {
           );
         }
       }
-    });
-  }
 
-  void _setupGlobalStyles(BuildContext context) {
-    // Moved this logic to a separate function
-    getSystemUIOverlayStyle(
-      ref.watch(themeProvider),
-      ref.watch(themeAppearanceProvider),
-    );
+      ref.watch(themeProvider.notifier).state = createTheme(
+        ref.watch(themeColorProvider).color,
+        brightness(ref.watch(themeAppearanceProvider)),
+      );
+    });
   }
 
   void _handlePageChange(int value) {

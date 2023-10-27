@@ -34,22 +34,16 @@ class ThemeAppearanceTile extends ConsumerWidget {
         ],
         selected: {ref.watch(themeAppearanceProvider)},
         onSelectionChanged: (Set<ThemeAppearance> newSelection) {
-          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
             ref.watch(themeAppearanceProvider.notifier).state =
                 newSelection.first;
             log(
               '${newSelection.first}',
               name: 'Settings: ThemeAppearanceTile',
             );
-            FirestorePreferencesController.instance
-                .savePreference(PreferencesController.themeAppearance
-                    .withValue(ref.watch(themeAppearanceProvider)))
-                .whenComplete(() {
-              getSystemUIOverlayStyle(
-                ref.watch(themeProvider),
-                ref.watch(themeAppearanceProvider),
-              );
-            });
+            await FirestorePreferencesController.instance.savePreference(
+                PreferencesController.themeAppearance
+                    .withValue(ref.watch(themeAppearanceProvider)));
           });
         },
       ),

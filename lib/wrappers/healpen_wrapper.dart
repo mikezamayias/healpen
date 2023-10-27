@@ -43,10 +43,14 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       //  system appearance change without restarting the app
       setState(() {
         getSystemUIOverlayStyle(
-          context.theme,
+          theme,
           ref.watch(themeAppearanceProvider),
         );
       });
+      ref.watch(themeProvider.notifier).state = createTheme(
+        ref.watch(themeColorProvider).color,
+        brightness(ref.watch(themeAppearanceProvider)),
+      );
     }
   }
 
@@ -79,7 +83,10 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
             ClearFocusNavigatorObserver(),
           ],
           themeMode: themeMode(ref.watch(themeAppearanceProvider)),
-          theme: ref.watch(themeProvider),
+          theme: createTheme(
+            ref.watch(themeColorProvider).color,
+            brightness(ref.watch(themeAppearanceProvider)),
+          ),
           initialRoute: RouterController.authWrapperRoute.route,
           routes: RouterController().routes,
         ),

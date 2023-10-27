@@ -29,7 +29,7 @@ class BlueprintView extends ConsumerWidget {
         showAppBar ?? ref.watch(navigationShowAppBarProvider);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: getSystemUIOverlayStyle(
-        ref.watch(themeProvider),
+        context.theme,
         ref.watch(themeAppearanceProvider),
       ),
       child: Container(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../../../providers/settings_providers.dart';
 import '../../../../../services/data_analysis_service.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../widgets/custom_list_tile.dart';
@@ -16,7 +16,7 @@ class WritingFlowTrackerTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<List<HourlyData>>(
       stream: DataAnalysisService().getHourlyData(),
-      builder: (context, snapshot) => chooseWidget(snapshot, ref)
+      builder: (context, snapshot) => chooseWidget(snapshot, context)
           .animate()
           .fade(duration: shortStandardDuration, curve: standardEasing),
     );
@@ -24,7 +24,7 @@ class WritingFlowTrackerTile extends ConsumerWidget {
 
   Widget chooseWidget(
     AsyncSnapshot<List<HourlyData>> snapshot,
-    WidgetRef ref,
+    BuildContext context,
   ) {
     if (!snapshot.hasData || snapshot.data!.isEmpty) {
       return const CustomListTile(
@@ -38,7 +38,7 @@ class WritingFlowTrackerTile extends ConsumerWidget {
             child: AspectRatio(
               aspectRatio: 1,
               child: Container(
-                color: ref.read(themeProvider).colorScheme.surfaceVariant,
+                color: context.theme.colorScheme.surfaceVariant,
               ),
             ),
           ),
@@ -48,7 +48,7 @@ class WritingFlowTrackerTile extends ConsumerWidget {
             size: Size.fromRadius(42.w),
             painter: ClockPainter(
               hourlyData: snapshot.data!,
-              theme: ref.watch(themeProvider),
+              theme: context.theme,
             ),
           ),
         ),
