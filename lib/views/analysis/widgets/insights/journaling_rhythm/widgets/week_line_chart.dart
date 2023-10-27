@@ -40,12 +40,12 @@ class WeekLineChart extends ConsumerWidget {
             titleString: 'Loading...',
           );
         }
-        final actualData = snapshot.data!.docs
+        final List<ChartData> actualData = snapshot.data!.docs
             .map((QueryDocumentSnapshot<AnalysisModel> analysisModel) =>
                 analysisModel.data())
             .toList()
             .averageDaysSentimentToChartData();
-        final weekData = initializeWeekData(actualData);
+        final List<ChartData> weekData = initializeWeekData(actualData);
         return SfCartesianChart(
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
@@ -124,23 +124,15 @@ class WeekLineChart extends ConsumerWidget {
 
   List<ChartData> initializeWeekData(List<ChartData> actualData) {
     List<ChartData> tempChartData = [
-      for (int i = 0; i < week.length; i++)
-        if (actualData
-            .map((ChartData chartData) => chartData.x)
-            .contains(week.elementAt(i)))
-          actualData.firstWhere(
-            (ChartData chartData) => chartData.x == week.elementAt(i),
-          )
-        else
-          ChartData(
-            week.elementAt(i),
-            null,
-          ),
+      for (DateTime dayInWeek in week)
+        actualData.firstWhere(
+          (ChartData chartData) =>
+              DateFormat('yyyy-MM-dd').format(chartData.x) ==
+              DateFormat('yyyy-MM-dd').format(dayInWeek),
+          orElse: () => ChartData(dayInWeek, null),
+        )
     ];
     log('$tempChartData', name: 'tempChartData');
-    log('$actualData', name: 'actualData');
-    log('${tempChartData.length}', name: 'tempChartData.length');
-    log('${actualData.length}', name: 'actualData.length');
     return tempChartData;
   }
 }
