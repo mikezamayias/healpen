@@ -84,4 +84,13 @@ class InsightController {
     explanation: 'See how long your entries are.',
     widget: JournalLengthTile(),
   );
+
+  // Methods
+  void reorderInsights(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    final InsightModel insight = insightModels.removeAt(oldIndex);
+    insightModels.insert(newIndex, insight);
+  }
 }
