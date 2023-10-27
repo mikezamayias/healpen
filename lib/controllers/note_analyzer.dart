@@ -109,6 +109,7 @@ class NoteAnalyzer {
             );
     AnalysisModel analysisModel = AnalysisModel(
       timestamp: noteModel.timestamp,
+      duration: noteModel.duration,
       content: noteModel.content,
       score: result.documentSentiment!.score!,
       magnitude: result.documentSentiment!.magnitude!,
