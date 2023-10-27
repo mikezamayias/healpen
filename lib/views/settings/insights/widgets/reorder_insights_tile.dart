@@ -22,7 +22,9 @@ class ReorderInsightsTile extends ConsumerWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           return Padding(
-            key: ValueKey(index),
+            key: ValueKey(
+              insightsController.insightModelList.elementAt(index).title,
+            ),
             padding: index == insightsController.insightModelList.length - 1
                 ? EdgeInsets.zero
                 : EdgeInsets.only(bottom: gap),
@@ -42,6 +44,7 @@ class ReorderInsightsTile extends ConsumerWidget {
         onReorder: (oldIndex, newIndex) {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
             insightsController.reorderInsights(oldIndex, newIndex);
+            insightsController.pageController.jumpToPage(newIndex);
           });
         },
         proxyDecorator: (child, index, animation) {

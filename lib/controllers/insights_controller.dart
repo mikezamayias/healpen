@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/insight_model.dart';
@@ -26,6 +27,8 @@ class InsightsController {
 
   // Members
   List<InsightModel> insightModelList = <InsightModel>[];
+  PageController pageController = PageController();
+  int currentPage = 0;
 
   /// This widget could be represented by a mood ring or color spectrum.
   /// The color changes according to the inferred mood from the journal

@@ -13,7 +13,7 @@ class SettingsInsightsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
-      const ReorderInsightsTile()
+      const ReorderInsightsTile(),
     ].animateWidgetList();
 
     return BlueprintView(
