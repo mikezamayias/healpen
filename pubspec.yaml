@@ -15,9 +15,9 @@ dependencies:
   device_info_plus: ^9.0.3
   envied: ^0.3.0
   extension_google_sign_in_as_googleapis_auth: ^2.0.11
-  feedback: ^2.6.0
+  feedback: ^3.0.0
   firebase_analytics: ^10.4.3
-  firebase_app_check: ^0.1.4+3
+  firebase_app_check: ^0.2.1+2
   firebase_auth: ^4.6.3
   firebase_core: ^2.14.0
   firebase_crashlytics: ^3.3.3
@@ -37,7 +37,7 @@ dependencies:
   flutter_svg: ^2.0.7
   font_awesome_flutter: ^10.3.0
   github: ^9.17.0
-  google_fonts: ^5.1.0
+  google_fonts: ^6.1.0
   googleapis: ^11.4.0
   googleapis_auth: ^1.4.1
   http: ^1.1.0
@@ -47,7 +47,7 @@ dependencies:
   path_provider: ^2.1.1
   preload_page_view: ^0.2.0
   responsive_sizer: ^3.1.1
-  rive: ^0.11.4
+  rive: ^0.12.1
   salomon_bottom_bar: ^3.3.1
   shared_preferences: ^2.2.0
   simple_gesture_detector: ^0.2.0
@@ -64,7 +64,7 @@ dev_dependencies:
   build_runner: ^2.4.6
   custom_lint: ^0.5.2
   envied_generator: ^0.3.0+3
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
   freezed: ^2.3.2
