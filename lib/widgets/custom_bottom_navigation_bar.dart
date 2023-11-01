@@ -71,8 +71,8 @@ class CustomBottomNavigationBar extends ConsumerWidget {
                       .state
                       .animateToPage(
                         index,
-                        duration: emphasizedDuration,
-                        curve: emphasizedCurve,
+                        duration: standardDuration,
+                        curve: standardCurve,
                       );
                 },
                 selectedItemColor: context.theme.colorScheme.primary,

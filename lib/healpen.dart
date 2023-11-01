@@ -127,8 +127,8 @@ class _HealpenState extends ConsumerState<Healpen> {
   Widget _buildPage(BuildContext context, int index, List<Animate> pages) {
     // Moved this logic to a separate function
     return AnimatedOpacity(
-      duration: emphasizedDuration,
-      curve: emphasizedCurve,
+      duration: standardDuration,
+      curve: standardCurve,
       opacity: ref.watch(HealpenController().currentPageIndexProvider) == index
           ? 1
           : 0,
