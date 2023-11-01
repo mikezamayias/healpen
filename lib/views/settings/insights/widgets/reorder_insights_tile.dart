@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../controllers/insights_controller.dart';
+import '../../../../controllers/settings/firestore_preferences_controller.dart';
+import '../../../../models/insight_model.dart';
+import '../../../../models/settings/preference_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
@@ -41,11 +46,19 @@ class ReorderInsightsTile extends ConsumerWidget {
           );
         },
         itemCount: insightsController.insightModelList.length,
-        onReorder: (oldIndex, newIndex) {
+        onReorder: (int oldIndex, int newIndex) async {
           vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
             insightsController.reorderInsights(oldIndex, newIndex);
-            insightsController.pageController.jumpToPage(newIndex);
           });
+          var preferenceModel = PreferenceModel<List<String>>(
+            'insightOrder',
+            insightsController.insightModelList
+                .map((InsightModel e) => e.title)
+                .toList(),
+          );
+          log(preferenceModel.toString(), name: 'ReorderInsightsTile');
+          await FirestorePreferencesController()
+              .savePreference(preferenceModel);
         },
         proxyDecorator: (child, index, animation) {
           return Material(

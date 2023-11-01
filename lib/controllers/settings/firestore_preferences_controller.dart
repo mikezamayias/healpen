@@ -64,7 +64,7 @@ class FirestorePreferencesController {
   }
 
   /// Method to get a single preference from Firestore.
-  Stream<PreferenceModel?> getPreference<T>(
+  Stream<PreferenceModel<T>?> getPreference<T>(
     PreferenceModel<T> preferenceModel,
   ) {
     return FirestoreService()
