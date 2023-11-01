@@ -108,11 +108,6 @@ class _HealpenState extends ConsumerState<Healpen> {
           );
         }
       }
-
-      ref.watch(themeProvider.notifier).state = createTheme(
-        ref.watch(themeColorProvider).color,
-        brightness(ref.watch(themeAppearanceProvider)),
-      );
     });
   }
 
