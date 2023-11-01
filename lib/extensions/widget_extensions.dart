@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:sprung/sprung.dart';
 
 import '../utils/constants.dart';
 
@@ -17,8 +16,14 @@ extension WidgetListExtensions on List<Widget> {
       .fade(
         begin: 0,
       )
-      .scale(begin: const Offset(0, 0), curve: Sprung.overDamped)
-      .slideX(begin: -10, curve: Sprung.overDamped);
+      .scale(
+        begin: const Offset(0, 0),
+        curve: emphasizedCurve,
+      )
+      .slideX(
+        begin: -10,
+        curve: emphasizedCurve,
+      );
 }
 
 extension WidgetExtensions on Widget {

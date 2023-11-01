@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:sprung/sprung.dart';
 
 import '../controllers/settings/preferences_controller.dart';
 import '../providers/settings_providers.dart';
@@ -102,14 +101,14 @@ class CustomListTile extends ConsumerWidget {
                             ? [
                                 ShakeEffect(
                                   delay: 1.seconds,
-                                  curve: Sprung.criticallyDamped,
+                                  curve: emphasizedCurve,
                                   duration: 6.seconds,
                                   hz: 1,
                                   offset: const Offset(0, 3),
                                 ),
                                 ShakeEffect(
                                   delay: 2.seconds,
-                                  curve: Sprung.criticallyDamped,
+                                  curve: emphasizedCurve,
                                   duration: 6.seconds,
                                   hz: 1,
                                   offset: const Offset(3, 0),
