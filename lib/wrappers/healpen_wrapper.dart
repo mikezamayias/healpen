@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -47,49 +46,27 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           ref.watch(themeAppearanceProvider),
         );
       });
-      ref.watch(themeProvider.notifier).state = createTheme(
-        ref.watch(themeColorProvider).color,
-        brightness(ref.watch(themeAppearanceProvider)),
-      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return HideKeyboard(
-      child: BetterFeedback(
-        theme: FeedbackThemeData(
-          background: ref.watch(themeProvider).colorScheme.surfaceVariant,
-          feedbackSheetColor: ref.watch(themeProvider).colorScheme.background,
-          activeFeedbackModeColor:
-              ref.watch(themeProvider).colorScheme.onPrimary,
-          bottomSheetDescriptionStyle:
-              ref.watch(themeProvider).textTheme.bodyLarge!,
-          sheetIsDraggable: true,
-          feedbackSheetHeight: 0.2,
-          drawColors: [
-            Colors.red,
-            Colors.green,
-            Colors.blue,
-            Colors.yellow,
-          ],
+      child: MaterialApp(
+        title: 'Healpen',
+        scaffoldMessengerKey: scaffoldMessengerKey,
+        navigatorKey: navigatorKey,
+        debugShowCheckedModeBanner: false,
+        navigatorObservers: [
+          ClearFocusNavigatorObserver(),
+        ],
+        themeMode: themeMode(ref.watch(themeAppearanceProvider)),
+        theme: createTheme(
+          ref.watch(themeColorProvider).color,
+          brightness(ref.watch(themeAppearanceProvider)),
         ),
-        child: MaterialApp(
-          title: 'Healpen',
-          scaffoldMessengerKey: scaffoldMessengerKey,
-          navigatorKey: navigatorKey,
-          debugShowCheckedModeBanner: false,
-          navigatorObservers: [
-            ClearFocusNavigatorObserver(),
-          ],
-          themeMode: themeMode(ref.watch(themeAppearanceProvider)),
-          theme: createTheme(
-            ref.watch(themeColorProvider).color,
-            brightness(ref.watch(themeAppearanceProvider)),
-          ),
-          initialRoute: RouterController.authWrapperRoute.route,
-          routes: RouterController().routes,
-        ),
+        initialRoute: RouterController.authWrapperRoute.route,
+        routes: RouterController().routes,
       ),
     );
   }

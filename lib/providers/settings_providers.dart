@@ -1,9 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../controllers/settings/preferences_controller.dart';
 import '../enums/app_theming.dart';
-import '../utils/helper_functions.dart';
 
 final themeAppearanceProvider = StateProvider<ThemeAppearance>(
   (ref) => PreferencesController.themeAppearance.value,
@@ -11,13 +9,6 @@ final themeAppearanceProvider = StateProvider<ThemeAppearance>(
 
 final themeColorProvider = StateProvider<ThemeColor>(
   (ref) => PreferencesController.themeColor.value,
-);
-
-final themeProvider = StateProvider<ThemeData>(
-  (ref) => createTheme(
-    ref.watch(themeColorProvider).color,
-    brightness(ref.watch(themeAppearanceProvider)),
-  ),
 );
 
 /// Whether to reset the stopwatch when the user erases all the text.
