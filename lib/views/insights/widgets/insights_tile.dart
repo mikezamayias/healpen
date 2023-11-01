@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -38,13 +39,6 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
           pageOffset = insightsContoller.pageController.page!;
         });
       });
-    // final PreferenceModel<List<String>> preferenceModel =
-    //     PreferenceModel<List<String>>(
-    //   'insightOrder',
-    //   insightsContoller.insightModelList
-    //       .map((InsightModel e) => e.title)
-    //       .toList(),
-    // );
     return StreamBuilder(
         stream: FirestoreService().preferencesCollectionReference().snapshots(),
         builder: (context, snapshot) {
@@ -53,20 +47,22 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
               snapshot.data?.data()?['insightOrder'] != null) {
             List<String> insightOrder =
                 List<String>.from(snapshot.data?.data()?['insightOrder']);
-            log(
-              '$insightOrder',
-              name: 'InsightsTile:insightOrder',
-            );
-            List<InsightModel> tempInsightModelList = [];
-            for (String orderedTitle in insightOrder) {
-              tempInsightModelList.add(
-                insightsContoller.insightModelList.firstWhere(
-                  (InsightModel insightModel) =>
-                      insightModel.title == orderedTitle,
-                ),
+            if (checkIfListsAreSame(insightOrder, insightsContoller)) {
+              log(
+                '$insightOrder',
+                name: 'InsightsTile:insightOrder',
               );
+              List<InsightModel> tempInsightModelList = [];
+              for (String orderedTitle in insightOrder) {
+                tempInsightModelList.add(
+                  insightsContoller.insightModelList.firstWhere(
+                    (InsightModel insightModel) =>
+                        insightModel.title == orderedTitle,
+                  ),
+                );
+              }
+              insightsContoller.insightModelList = tempInsightModelList;
             }
-            insightsContoller.insightModelList = tempInsightModelList;
           }
           insightWidgets =
               insightsContoller.insightModelList.map((e) => e.widget).toList();
@@ -121,5 +117,33 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
             maxExplanationStringLines: 3,
           );
         });
+  }
+
+  bool checkIfListsAreSame(
+    List<String> insightOrder,
+    InsightsController insightsContoller,
+  ) {
+    final listOne = insightOrder
+        .map((String insightModel) => insightModel.hashCode)
+        .toSet()
+        .sum;
+    final listTwo = insightsContoller.insightModelList
+        .map((InsightModel insightModel) => insightModel.title.hashCode)
+        .toSet()
+        .sum;
+    log(
+      '$listOne',
+      name: 'InsightsTile:checkIfListsAreSame:listOne.hashCode',
+    );
+    log(
+      '$listTwo',
+      name: 'InsightsTile:checkIfListsAreSame:listTwo.hashCode',
+    );
+    bool check = listOne == listTwo;
+    log(
+      '$check',
+      name: 'InsightsTile:checkIfListsAreSame',
+    );
+    return check;
   }
 }
