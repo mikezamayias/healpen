@@ -5,9 +5,9 @@ import 'custom_chip.dart';
 
 class ChipBar extends StatelessWidget {
   const ChipBar({
-    Key? key,
+    super.key,
     required this.children,
-  }) : super(key: key);
+  });
 
   final List<CustomChip> children;
 

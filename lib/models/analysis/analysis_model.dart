@@ -8,6 +8,7 @@ part 'analysis_model.g.dart';
 @JsonSerializable()
 class AnalysisModel {
   int timestamp;
+  int duration;
   String content;
   double score;
   double magnitude;
@@ -19,6 +20,7 @@ class AnalysisModel {
 
   AnalysisModel({
     this.timestamp = 0,
+    this.duration = 0,
     this.content = '',
     this.score = 0,
     this.magnitude = 0,
@@ -41,14 +43,15 @@ class AnalysisModel {
   @override
   String toString() {
     return 'AnalysisModel('
-        'timestamp: $timestamp, content: $content, score: $score, '
-        'magnitude: $magnitude, sentiment: $sentiment, wordCount: $wordCount, '
-        'language: $language, sentences: $sentences'
+        'timestamp: $timestamp, duration: $duration, content: $content, '
+        'score: $score, magnitude: $magnitude, sentiment: $sentiment, '
+        'wordCount: $wordCount, language: $language, sentences: $sentences'
         ')';
   }
 
   AnalysisModel copyWith({
     int? timestamp,
+    int? duration,
     String? content,
     double? score,
     double? magnitude,
@@ -59,6 +62,7 @@ class AnalysisModel {
   }) {
     return AnalysisModel(
       timestamp: timestamp ?? this.timestamp,
+      duration: duration ?? this.duration,
       content: content ?? this.content,
       score: score ?? this.score,
       magnitude: magnitude ?? this.magnitude,

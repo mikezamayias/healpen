@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../healpen.dart';
 import '../models/page_model.dart';
-import '../views/analysis/analysis_view.dart';
+import '../views/insights/insights_view.dart';
 import '../views/auth/auth_view.dart';
 import '../views/history/history_view.dart';
 import '../views/note/note_view.dart';
@@ -22,7 +22,7 @@ class PageController {
     pages = [
       // home,
       writing,
-      analysis,
+      insights,
       history,
       settings,
     ];
@@ -42,16 +42,16 @@ class PageController {
     titleGenerator: (userName) => userName == null
         ? 'What\'s on your mind today?'
         : 'Hello $userName,\nWhat\'s on your mind today?',
-    label: 'writing',
+    label: 'expression',
     icon: FontAwesomeIcons.pencil,
     widget: const WritingView(),
   );
 
-  final analysis = PageModel(
+  final insights = PageModel(
     titleGenerator: (userName) => 'Explore your writing insights',
-    label: 'analysis',
-    icon: FontAwesomeIcons.chartLine,
-    widget: const AnalysisView(),
+    label: 'insights',
+    icon: FontAwesomeIcons.brain,
+    widget: const InsightsView(),
   );
 
   final history = PageModel(

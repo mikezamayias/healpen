@@ -14,7 +14,7 @@ import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class PrivateNoteCheckBox extends ConsumerWidget {
-  const PrivateNoteCheckBox({Key? key}) : super(key: key);
+  const PrivateNoteCheckBox({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

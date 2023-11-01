@@ -9,7 +9,7 @@ import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class UninitializedState extends ConsumerWidget {
-  const UninitializedState({Key? key}) : super(key: key);
+  const UninitializedState({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

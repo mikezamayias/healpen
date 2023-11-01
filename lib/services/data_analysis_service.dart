@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/analysis/analysis_model.dart';
@@ -51,9 +49,6 @@ class DataAnalysisService {
       24,
       (hour) => dataBuilders[hour]?.build(hour) ?? HourlyData.empty(hour),
     );
-    for (HourlyData hourlyData in res) {
-      log(hourlyData.toString());
-    }
     return res;
   }
 }

@@ -11,7 +11,7 @@ import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class SmallerNavigationElementsTile extends ConsumerWidget {
-  const SmallerNavigationElementsTile({Key? key}) : super(key: key);
+  const SmallerNavigationElementsTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

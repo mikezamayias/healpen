@@ -10,7 +10,7 @@ import 'widgets/analyze_notes_tile.dart';
 import 'widgets/enable_automatic_stopwatch_tile.dart';
 
 class SettingsWritingView extends ConsumerWidget {
-  const SettingsWritingView({Key? key}) : super(key: key);
+  const SettingsWritingView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

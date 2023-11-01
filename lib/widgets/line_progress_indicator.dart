@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../utils/constants.dart' as constants;
 
 class LineProgressIndicator extends StatelessWidget {
-  const LineProgressIndicator({Key? key}) : super(key: key);
+  const LineProgressIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {

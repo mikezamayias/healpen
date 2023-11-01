@@ -9,11 +9,11 @@ class ConditionalWideButton extends StatefulWidget {
   final Widget secondChild;
 
   const ConditionalWideButton({
-    Key? key,
+    super.key,
     required this.condition,
     required this.firstChild,
     required this.secondChild,
-  }) : super(key: key);
+  });
 
   @override
   State<ConditionalWideButton> createState() => _ConditionalWideButtonState();

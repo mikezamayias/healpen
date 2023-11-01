@@ -7,4 +7,9 @@ extension StringExtension on String {
       .split(' ')
       .map((str) => str.toCapitalized())
       .join(' ');
+
+  String toCamelCase() => replaceAll(RegExp(' +'), ' ')
+      .split(' ')
+      .map((str) => str.toCapitalized())
+      .join().replaceFirst(this[0], this[0].toLowerCase());
 }

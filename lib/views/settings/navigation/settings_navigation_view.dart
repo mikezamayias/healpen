@@ -12,7 +12,7 @@ import 'widgets/info_button_settings_tile.dart';
 import 'widgets/smaller_navigation_elements_tile.dart';
 
 class SettingsNavigationView extends ConsumerWidget {
-  const SettingsNavigationView({Key? key}) : super(key: key);
+  const SettingsNavigationView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

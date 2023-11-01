@@ -12,12 +12,13 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
+import 'insights/settings_insights_view.dart';
 import 'navigation/settings_navigation_view.dart';
 import 'theme/settings_theme_view.dart';
 import 'writing/settings_writing_view.dart';
 
 class SettingsView extends ConsumerWidget {
-  const SettingsView({Key? key}) : super(key: key);
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +37,11 @@ class SettingsView extends ConsumerWidget {
       ),
       'Writing': (
         const SettingsWritingView(),
-        FontAwesomeIcons.solidPenToSquare,
+        FontAwesomeIcons.pencil,
+      ),
+      'Insights': (
+        const SettingsInsightsView(),
+        FontAwesomeIcons.brain,
       ),
       'Data & Privacy': (
         const Placeholder(),

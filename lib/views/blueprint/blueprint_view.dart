@@ -11,12 +11,12 @@ import '../../utils/helper_functions.dart';
 
 class BlueprintView extends ConsumerWidget {
   const BlueprintView({
-    Key? key,
+    super.key,
     this.appBar,
     this.padBodyHorizontally = true,
     this.showAppBar,
     required this.body,
-  }) : super(key: key);
+  });
 
   final Widget? appBar;
   final Widget body;
@@ -46,7 +46,7 @@ class BlueprintView extends ConsumerWidget {
                 backgroundColor: Colors.transparent,
                 appBar: showAppBarSetting! && appBar != null
                     ? PreferredSize(
-                        preferredSize: Size.fromHeight(21.h),
+                        preferredSize: Size.fromHeight(18.h),
                         child: appBar!.animateAppBar(),
                       )
                     : null,

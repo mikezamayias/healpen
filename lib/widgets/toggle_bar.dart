@@ -10,11 +10,11 @@ class ToggleBar extends StatelessWidget {
   final Function(int)? onDestinationSelected;
 
   const ToggleBar({
-    Key? key,
+    super.key,
     required this.toggles,
     required this.currentIndex,
     this.onDestinationSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

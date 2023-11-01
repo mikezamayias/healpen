@@ -133,28 +133,16 @@ double combinedSentimentValue(double magnitude, double score) {
 }
 
 int getClosestSentimentIndex(double sentiment) {
-  // Round and clamp the sentiment value
-  int roundedClampedSentiment = sentiment.round().clamp(-5, 5).toInt();
-
-  // Try to find the index in the sentimentValues list
-  int index = sentimentValues.indexOf(roundedClampedSentiment);
-
-  if (index != -1) {
-    return index;
-  }
-
-  // If the exact index is not found, find the closest one
-  index = 0;
-  int minDiff = (sentimentValues[0] - roundedClampedSentiment).abs();
-
-  for (int i = 1; i < sentimentValues.length; i++) {
-    int diff = (sentimentValues[i] - roundedClampedSentiment).abs();
-    if (diff < minDiff) {
-      index = i;
-      minDiff = diff;
+  double closestValue = sentimentValues[0];
+  double smallestDifference = (sentiment - closestValue).abs();
+  for (double value in sentimentValues) {
+    double difference = (sentiment - value).abs();
+    if (difference < smallestDifference) {
+      closestValue = value;
+      smallestDifference = difference;
     }
   }
-
+  int index = sentimentValues.indexOf(closestValue);
   return index;
 }
 
@@ -169,8 +157,34 @@ IconData getSentimentIcon(double sentiment) {
 }
 
 /// Get sentiment ratio based on the given sentiment value.
-double getSentimentRatio(num sentiment) {
-  return double.parse(
-    (sentiment + 3 / (sentimentValues.length - 1)).toStringAsFixed(2),
-  );
+double getSentimentRatio(dynamic sentiment) {
+  return switch (sentiment.runtimeType) {
+    const (int) => sentimentValues.indexOf(sentimentValues
+            .elementAt(getClosestSentimentIndex(sentiment.toDouble()))) /
+        (sentimentValues.length - 1),
+    const (double) => sentimentValues.indexOf(
+            sentimentValues.elementAt(getClosestSentimentIndex(sentiment))) /
+        (sentimentValues.length - 1),
+    const (String) =>
+      sentimentLabels.indexOf(sentiment) / (sentimentLabels.length - 1),
+    _ => throw UnsupportedError(
+        'Sentiment value must be of type double or int or String.',
+      ),
+  };
+}
+
+Color getShapeColorOnSentiment(BuildContext context, dynamic sentiment) {
+  return Color.lerp(
+    context.theme.colorScheme.error,
+    context.theme.colorScheme.primary,
+    getSentimentRatio(sentiment),
+  )!;
+}
+
+Color getTextColorOnSentiment(BuildContext context, dynamic sentiment) {
+  return Color.lerp(
+    context.theme.colorScheme.onError,
+    context.theme.colorScheme.onPrimary,
+    getSentimentRatio(sentiment),
+  )!;
 }

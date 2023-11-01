@@ -10,8 +10,8 @@ import '../../../widgets/custom_list_tile.dart';
 
 class StopwatchTile extends ConsumerWidget {
   const StopwatchTile({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

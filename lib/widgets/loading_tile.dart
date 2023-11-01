@@ -6,10 +6,10 @@ import 'custom_list_tile.dart';
 
 class LoadingTile extends StatelessWidget {
   const LoadingTile({
-    Key? key,
+    super.key,
     required this.durationTitle,
     this.value,
-  }) : super(key: key);
+  });
 
   final String durationTitle;
   final double? value;

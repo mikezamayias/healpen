@@ -1,15 +1,26 @@
-import 'dart:developer';
-
 extension DateTimeExtension on DateTime {
   DateTime startOfMonth() {
     DateTime res = DateTime(year, month, 1);
-    log('$res', name: 'DateTimeExtension:startOfMonth');
     return res;
   }
 
   DateTime endOfMonth() {
     DateTime res = DateTime(year, month + 1, 0);
-    log('$res', name: 'DateTimeExtension:endOfMonth');
+    return res;
+  }
+
+  DateTime startOfDay() {
+    DateTime res = DateTime(year, month, day);
+    return res;
+  }
+
+  DateTime startOfWeek() {
+    DateTime res = DateTime(year, month, day - weekday + 1);
+    return res;
+  }
+
+  DateTime endOfWeek() {
+    DateTime res = DateTime(year, month, day + (7 - weekday));
     return res;
   }
 }
