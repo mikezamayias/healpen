@@ -46,7 +46,7 @@ class WeekLineChart extends ConsumerWidget {
             .averageDaysSentimentToChartData();
         final List<ChartData> weekData = initializeWeekData(actualData);
         return SfCartesianChart(
-          margin: EdgeInsets.only(top: gap),
+          margin: EdgeInsets.zero,
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
             isVisible: true,

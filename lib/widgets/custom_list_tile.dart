@@ -10,7 +10,7 @@ import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
 
-class CustomListTile extends ConsumerWidget {
+class CustomListTile extends ConsumerStatefulWidget {
   final String? titleString;
   final String? explanationString;
   final int? maxExplanationStringLines;
@@ -30,6 +30,7 @@ class CustomListTile extends ConsumerWidget {
   final bool? enableSubtitleWrapper;
   final bool? expandSubtitle;
   final bool? padSubtitle;
+  final bool? padExplanation;
   final bool? enableExplanationWrapper;
   final Color? backgroundColor;
   final Color? textColor;
@@ -60,24 +61,31 @@ class CustomListTile extends ConsumerWidget {
     this.enableExplanationWrapper = false,
     this.expandSubtitle = false,
     this.padSubtitle = true,
+    this.padExplanation = true,
     this.cornerRadius,
     this.contentPadding,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final padding = contentPadding ?? EdgeInsets.all(gap);
+  ConsumerState<CustomListTile> createState() => _CustomListTileState();
+}
+
+class _CustomListTileState extends ConsumerState<CustomListTile> {
+  @override
+  Widget build(BuildContext context) {
+    final padding = widget.contentPadding ?? EdgeInsets.all(gap);
     final listTile = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: expandSubtitle! ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisSize:
+          widget.expandSubtitle! ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        if (leading != null ||
-            leadingIconData != null ||
-            title != null ||
-            titleString != null ||
-            trailing != null ||
-            trailingIconData != null)
+        if (widget.leading != null ||
+            widget.leadingIconData != null ||
+            widget.title != null ||
+            widget.titleString != null ||
+            widget.trailing != null ||
+            widget.trailingIconData != null)
           Padding(
             padding: EdgeInsets.only(
               top: padding.vertical / 2,
@@ -87,17 +95,18 @@ class CustomListTile extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                if (leading != null || leadingIconData != null)
+                if (widget.leading != null || widget.leadingIconData != null)
                   Padding(
-                    padding: (title != null || titleString != null)
-                        ? padding.horizontal == 0
-                            ? EdgeInsets.only(right: gap)
-                            : EdgeInsets.only(right: padding.horizontal / 2)
-                        : EdgeInsets.zero,
+                    padding:
+                        (widget.title != null || widget.titleString != null)
+                            ? padding.horizontal == 0
+                                ? EdgeInsets.only(right: gap)
+                                : EdgeInsets.only(right: padding.horizontal / 2)
+                            : EdgeInsets.zero,
                     child: GestureDetector(
-                      onTap: leadingOnTap,
+                      onTap: widget.leadingOnTap,
                       child: Animate(
-                        effects: showcaseLeadingIcon!
+                        effects: widget.showcaseLeadingIcon!
                             ? [
                                 ShakeEffect(
                                   delay: 1.seconds,
@@ -115,7 +124,7 @@ class CustomListTile extends ConsumerWidget {
                                 ),
                               ]
                             : null,
-                        onInit: showcaseLeadingIcon!
+                        onInit: widget.showcaseLeadingIcon!
                             ? (_) async {
                                 if (!PreferencesController
                                     .navigationShowInfoButtons.value) {
@@ -126,13 +135,13 @@ class CustomListTile extends ConsumerWidget {
                                 }
                               }
                             : null,
-                        child: leading ??
+                        child: widget.leading ??
                             FaIcon(
-                              leadingIconData!,
-                              color: textColor ??
-                                  (leadingOnTap != null
+                              widget.leadingIconData!,
+                              color: widget.textColor ??
+                                  (widget.leadingOnTap != null
                                       ? context.theme.colorScheme.primary
-                                      : onTap == null
+                                      : widget.onTap == null
                                           ? context.theme.colorScheme
                                               .onSurfaceVariant
                                           : context
@@ -143,39 +152,40 @@ class CustomListTile extends ConsumerWidget {
                       ),
                     ),
                   ),
-                if (title != null || titleString != null)
+                if (widget.title != null || widget.titleString != null)
                   Expanded(
-                    child: title ??
+                    child: widget.title ??
                         Text(
-                          titleString!,
+                          widget.titleString!,
                           style: context.theme.textTheme.titleLarge!.copyWith(
-                            color: textColor ??
-                                (onTap == null
+                            color: widget.textColor ??
+                                (widget.onTap == null
                                     ? context.theme.colorScheme.onSurfaceVariant
                                     : context.theme.colorScheme.onPrimary),
                           ),
                         ),
                   ),
-                if (trailing != null || trailingIconData != null)
+                if (widget.trailing != null || widget.trailingIconData != null)
                   Padding(
-                    padding: (title != null || titleString != null)
-                        ? EdgeInsets.only(left: padding.horizontal / 2)
-                        : EdgeInsets.zero,
+                    padding:
+                        (widget.title != null || widget.titleString != null)
+                            ? EdgeInsets.only(left: padding.horizontal / 2)
+                            : EdgeInsets.zero,
                     child: GestureDetector(
-                      onTap: trailingOnTap,
-                      child: trailing ??
-                          (trailingOnTap != null
+                      onTap: widget.trailingOnTap,
+                      child: widget.trailing ??
+                          (widget.trailingOnTap != null
                               ? FaIcon(
-                                  trailingIconData!,
-                                  color: textColor ??
+                                  widget.trailingIconData!,
+                                  color: widget.textColor ??
                                       context.theme.colorScheme.primary,
                                   size: context
                                       .theme.textTheme.titleLarge!.fontSize,
                                 )
                               : FaIcon(
-                                  trailingIconData!,
-                                  color: textColor ??
-                                      (onTap == null
+                                  widget.trailingIconData!,
+                                  color: widget.textColor ??
+                                      (widget.onTap == null
                                           ? context.theme.colorScheme
                                               .onSurfaceVariant
                                           : context
@@ -189,67 +199,33 @@ class CustomListTile extends ConsumerWidget {
             ),
           )
         else
-          SizedBox(
-            height: padding.vertical / 2,
-          ),
-        if (subtitle != null || subtitleString != null)
-          // if (expandSubtitle!)
-          // Expanded(child: _buildSubtitle(context))
-          // else
-          Flexible(child: _buildSubtitle(context)),
-        if (explanationString != null)
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: gap,
-              left: gap,
-              right: gap,
-            ),
-            child: Container(
-              padding: enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
-              decoration: enableExplanationWrapper!
-                  ? BoxDecoration(
-                      color: context.theme.colorScheme.surface,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(radius - gap),
-                      ),
-                    )
-                  : null,
-              child: SelectableText(
-                explanationString!,
-                onTap: onTap,
-                maxLines: maxExplanationStringLines,
-                enableInteractiveSelection: selectableText!,
-                style: TextStyle(
-                  color: enableExplanationWrapper! || onTap == null
-                      ? context.theme.colorScheme.onSurfaceVariant
-                      : context.theme.colorScheme.onPrimary,
-                ),
-              ),
-            ),
-          ),
+          SizedBox(height: padding.vertical / 2),
+        if (widget.subtitle != null || widget.subtitleString != null)
+          Flexible(child: _buildSubtitle()),
+        if (widget.explanationString != null) _buildExplanation(),
       ],
     );
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: onTap != null
+      onTap: widget.onTap != null
           ? () {
               vibrate(
                 ref.watch(navigationEnableHapticFeedbackProvider),
-                onTap!,
+                widget.onTap!,
               );
             }
           : null,
       child: Container(
         decoration: BoxDecoration(
-          color: backgroundColor ??
-              (onTap == null
+          color: widget.backgroundColor ??
+              (widget.onTap == null
                   ? context.theme.colorScheme.surfaceVariant
                   : context.theme.colorScheme.primary),
           borderRadius: BorderRadius.all(
-            Radius.circular(cornerRadius ?? radius),
+            Radius.circular(widget.cornerRadius ?? radius),
           ),
         ),
-        child: switch (responsiveWidth) {
+        child: switch (widget.responsiveWidth) {
           true => IntrinsicWidth(child: listTile),
           _ => listTile,
         },
@@ -257,33 +233,82 @@ class CustomListTile extends ConsumerWidget {
     );
   }
 
-  Padding _buildSubtitle(BuildContext context) {
-    return Padding(
-      padding: padSubtitle!
+  Widget _buildExplanation() {
+    return AnimatedContainer(
+      duration: standardDuration,
+      curve: standardCurve,
+      padding: widget.padExplanation!
           ? EdgeInsets.only(
               bottom: gap,
               left: gap,
               right: gap,
             )
           : EdgeInsets.only(bottom: gap),
-      child: Container(
-        padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
-        decoration: enableSubtitleWrapper!
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        padding: widget.enableExplanationWrapper! &&
+                ref.watch(navigationSmallerNavigationElementsProvider)
+            ? EdgeInsets.all(gap)
+            : EdgeInsets.zero,
+        decoration: widget.enableExplanationWrapper!
             ? BoxDecoration(
                 color: context.theme.colorScheme.surface,
                 borderRadius: BorderRadius.all(
                   Radius.circular(radius - gap),
                 ),
               )
-            : null,
-        child: subtitle != null && subtitleString == null
-            ? subtitle!
+            : const BoxDecoration(),
+        child: SelectableText(
+          widget.explanationString!,
+          onTap: widget.onTap,
+          maxLines: widget.maxExplanationStringLines,
+          enableInteractiveSelection: widget.selectableText!,
+          style: TextStyle(
+            color: widget.enableExplanationWrapper! || widget.onTap == null
+                ? context.theme.colorScheme.onSurfaceVariant
+                : context.theme.colorScheme.onPrimary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubtitle() {
+    return AnimatedContainer(
+      duration: standardDuration,
+      curve: standardCurve,
+      padding: widget.padSubtitle!
+          ? EdgeInsets.only(
+              bottom: gap,
+              left: gap,
+              right: gap,
+            )
+          : EdgeInsets.only(bottom: gap),
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        padding: widget.enableSubtitleWrapper!
+            ? !ref.watch(navigationSmallerNavigationElementsProvider)
+                ? EdgeInsets.all(gap)
+                : EdgeInsets.zero
+            : EdgeInsets.zero,
+        decoration: widget.enableSubtitleWrapper!
+            ? BoxDecoration(
+                color: context.theme.colorScheme.surface,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(radius - gap),
+                ),
+              )
+            : const BoxDecoration(),
+        child: widget.subtitle != null && widget.subtitleString == null
+            ? widget.subtitle!
             : SelectableText(
-                subtitleString!,
-                onTap: onTap,
-                enableInteractiveSelection: selectableText!,
+                widget.subtitleString!,
+                onTap: widget.onTap,
+                enableInteractiveSelection: widget.selectableText!,
                 style: context.theme.textTheme.titleMedium!.copyWith(
-                  color: enableSubtitleWrapper! || onTap == null
+                  color: widget.enableSubtitleWrapper! || widget.onTap == null
                       ? context.theme.colorScheme.onSurfaceVariant
                       : context.theme.colorScheme.onPrimary,
                 ),

@@ -15,13 +15,15 @@ class StopwatchTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     return CustomListTile(
       cornerRadius: radius - gap,
+      contentPadding:
+          smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
       backgroundColor: context.theme.colorScheme.surface,
       textColor: context.theme.colorScheme.onSurface,
-      titleString: ref.watch(writingAutomaticStopwatchProvider)
-          ? 'Auto Stopwatch'
-          : 'Stopwatch',
+      titleString: 'Stopwatch',
       trailing: Text(
         ref.watch(writingControllerProvider).duration.writingDurationFormat(),
         style: context.theme.textTheme.titleLarge,

@@ -6,6 +6,7 @@ import '../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../extensions/date_time_extensions.dart';
 import '../../../../../extensions/int_extensions.dart';
 import '../../../../../models/analysis/analysis_model.dart';
+import '../../../../../utils/constants.dart';
 import '../../../../../widgets/text_divider.dart';
 import 'widgets/week_line_chart.dart';
 
@@ -36,7 +37,10 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextDivider(chartTitle(week)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: gap),
+                    child: TextDivider(chartTitle(week)),
+                  ),
                   Expanded(
                     child: WeekLineChart(week),
                   )

@@ -49,6 +49,7 @@ class MonthLineChart extends ConsumerWidget {
             .toList()
             .averageDaysSentimentToChartData();
         return SfCartesianChart(
+          margin: EdgeInsets.zero,
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
             isVisible: true,

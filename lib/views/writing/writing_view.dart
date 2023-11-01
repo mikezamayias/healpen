@@ -57,6 +57,8 @@ class _WritingViewState extends ConsumerState<WritingView>
         .writing
         .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         .split('\n');
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     return BlueprintView(
       showAppBar: ref.watch(navigationShowAppBarProvider),
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)
@@ -69,12 +71,17 @@ class _WritingViewState extends ConsumerState<WritingView>
                   pathNames.join('\n')
               ],
             ),
-      body: Container(
-        decoration: BoxDecoration(
-          color: context.theme.colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(radius),
-        ),
-        padding: EdgeInsets.all(gap),
+      body: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        decoration: smallNavigationElements
+            ? const BoxDecoration()
+            : BoxDecoration(
+                color: context.theme.colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(radius),
+              ),
+        padding:
+            smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
@@ -83,13 +90,23 @@ class _WritingViewState extends ConsumerState<WritingView>
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: gap),
-                  child: Row(
-                    children: [
-                      const Expanded(child: StopwatchTile()),
-                      SizedBox(width: gap),
-                      const SaveNoteButton(),
-                    ],
-                  ),
+                  child: smallNavigationElements
+                      ? Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            const StopwatchTile(),
+                            SizedBox(height: gap),
+                            const SaveNoteButton(),
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            const Expanded(child: StopwatchTile()),
+                            SizedBox(width: gap),
+                            const SaveNoteButton(),
+                          ],
+                        ),
                 ),
                 if (ref.watch(writingShowAnalyzeNotesButtonProvider))
                   Padding(

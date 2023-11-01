@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/writing_controller.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 
 class WritingTextField extends ConsumerWidget {
@@ -10,12 +11,18 @@ class WritingTextField extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(radius - gap),
-      ),
-      padding: EdgeInsets.all(gap),
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
+    return AnimatedContainer(
+      duration: standardDuration,
+      curve: standardCurve,
+      decoration: smallNavigationElements
+          ? const BoxDecoration()
+          : BoxDecoration(
+              color: context.theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(radius - gap),
+            ),
+      padding: smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
       child: TextField(
         controller: ref.read(writingControllerProvider.notifier).textController,
         onChanged:

@@ -26,6 +26,7 @@ class BubbleChart extends ConsumerWidget {
         ref.watch(AnalysisViewController.analysisModelListProvider);
     final monthSet = analysisModelList.getMonthsFromAnalysisModelList();
     return SfCartesianChart(
+      margin: EdgeInsets.zero,
       primaryXAxis: DateTimeCategoryAxis(
         dateFormat: DateFormat('MMM dd'),
         isVisible: true,

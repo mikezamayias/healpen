@@ -30,6 +30,8 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
 
   @override
   Widget build(BuildContext context) {
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     final insightsContoller = ref.watch(insightsControllerProvider);
     insightsContoller.pageController = PageController(
       initialPage: currentPage,
@@ -40,83 +42,103 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
         });
       });
     return StreamBuilder(
-        stream: FirestoreService().preferencesCollectionReference().snapshots(),
-        builder: (context, snapshot) {
-          List<Widget> insightWidgets = [];
-          if (snapshot.hasData &&
-              snapshot.data?.data()?['insightOrder'] != null) {
-            List<String> insightOrder =
-                List<String>.from(snapshot.data?.data()?['insightOrder']);
-            if (checkIfListsAreSame(insightOrder, insightsContoller)) {
-              log(
-                '$insightOrder',
-                name: 'InsightsTile:insightOrder',
+      stream: FirestoreService().preferencesCollectionReference().snapshots(),
+      builder: (context, snapshot) {
+        List<Widget> insightWidgets = [];
+        if (snapshot.hasData &&
+            snapshot.data?.data()?['insightOrder'] != null) {
+          List<String> insightOrder =
+              List<String>.from(snapshot.data?.data()?['insightOrder']);
+          if (checkIfListsAreSame(insightOrder, insightsContoller)) {
+            log(
+              '$insightOrder',
+              name: 'InsightsTile:insightOrder',
+            );
+            List<InsightModel> tempInsightModelList = [];
+            for (String orderedTitle in insightOrder) {
+              tempInsightModelList.add(
+                insightsContoller.insightModelList.firstWhere(
+                  (InsightModel insightModel) =>
+                      insightModel.title == orderedTitle,
+                ),
               );
-              List<InsightModel> tempInsightModelList = [];
-              for (String orderedTitle in insightOrder) {
-                tempInsightModelList.add(
-                  insightsContoller.insightModelList.firstWhere(
-                    (InsightModel insightModel) =>
-                        insightModel.title == orderedTitle,
-                  ),
-                );
-              }
-              insightsContoller.insightModelList = tempInsightModelList;
             }
+            insightsContoller.insightModelList = tempInsightModelList;
           }
-          insightWidgets =
-              insightsContoller.insightModelList.map((e) => e.widget).toList();
-          return CustomListTile(
-            titleString:
-                insightsContoller.insightModelList.elementAt(currentPage).title,
-            trailing: SmoothPageIndicator(
-              controller: insightsContoller.pageController,
-              count: insightsContoller.insightModelList.length,
-              effect: ExpandingDotsEffect(
-                dotHeight: gap,
-                dotWidth: gap,
-                activeDotColor: context.theme.colorScheme.primary,
-                dotColor: context.theme.colorScheme.outline,
-              ),
+        }
+        insightWidgets = insightsContoller.insightModelList
+            .map((e) => smallNavigationElements
+                ? Padding(
+                    padding: EdgeInsets.only(top: gap),
+                    child: e.widget,
+                  )
+                : e.widget)
+            .toList();
+        return CustomListTile(
+          backgroundColor: smallNavigationElements
+              ? context.theme.colorScheme.background
+              : null,
+          textColor: smallNavigationElements
+              ? context.theme.colorScheme.onBackground
+              : null,
+          contentPadding:
+              smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
+          titleString:
+              insightsContoller.insightModelList.elementAt(currentPage).title,
+          trailing: SmoothPageIndicator(
+            controller: insightsContoller.pageController,
+            count: insightsContoller.insightModelList.length,
+            effect: ExpandingDotsEffect(
+              dotHeight: gap,
+              dotWidth: gap,
+              activeDotColor: context.theme.colorScheme.primary,
+              dotColor: context.theme.colorScheme.outline,
             ),
-            enableSubtitleWrapper: false,
-            expandSubtitle: true,
-            padSubtitle: true,
-            subtitle: PageView.builder(
-              itemCount: insightsContoller.insightModelList.length,
-              itemBuilder: (BuildContext context, int index) {
-                double scale = 1 - (index - pageOffset).abs();
-                return Transform(
-                  transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.01)
-                    ..scale(scale, scale),
-                  alignment: Alignment.center,
-                  child: PhysicalModel(
-                    color: context.theme.colorScheme.surface,
-                    borderRadius: BorderRadius.circular(radius - gap),
-                    child: Padding(
-                      padding: EdgeInsets.all(gap),
-                      child: insightWidgets[index],
-                    ),
+          ),
+          enableSubtitleWrapper: false,
+          expandSubtitle: true,
+          padSubtitle: !smallNavigationElements,
+          padExplanation: !smallNavigationElements,
+          subtitle: PageView.builder(
+            itemCount: insightsContoller.insightModelList.length,
+            itemBuilder: (BuildContext context, int index) {
+              double scale = 1 - (index - pageOffset).abs();
+              return Transform(
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.01)
+                  ..scale(scale, scale),
+                alignment: Alignment.center,
+                child: PhysicalModel(
+                  color: context.theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(radius - gap),
+                  child: AnimatedContainer(
+                    duration: standardDuration,
+                    curve: standardCurve,
+                    padding: smallNavigationElements
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
+                    child: insightWidgets[index],
                   ),
-                );
+                ),
+              );
+            },
+            controller: insightsContoller.pageController,
+            onPageChanged: (int index) => vibrate(
+              ref.watch(navigationEnableHapticFeedbackProvider),
+              () {
+                setState(() {
+                  currentPage = index;
+                });
               },
-              controller: insightsContoller.pageController,
-              onPageChanged: (int index) => vibrate(
-                ref.watch(navigationEnableHapticFeedbackProvider),
-                () {
-                  setState(() {
-                    currentPage = index;
-                  });
-                },
-              ),
             ),
-            explanationString: insightsContoller.insightModelList
-                .elementAt(currentPage)
-                .explanation,
-            maxExplanationStringLines: 3,
-          );
-        });
+          ),
+          explanationString: insightsContoller.insightModelList
+              .elementAt(currentPage)
+              .explanation,
+          maxExplanationStringLines: 3,
+        );
+      },
+    );
   }
 
   bool checkIfListsAreSame(
