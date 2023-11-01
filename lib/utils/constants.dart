@@ -39,9 +39,9 @@ final Duration longEmphasizedDuration = 1000.milliseconds;
 /// A list of sentiment labels used in the application.
 final sentimentLabels = [
   'Very Negative',
-  'Negative',
+  'Slightly Negative',
   'Neutral',
-  'Positive',
+  'Slightly Positive',
   'Very Positive',
 ];
 
