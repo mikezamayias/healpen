@@ -75,14 +75,6 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
                 : e.widget)
             .toList();
         return CustomListTile(
-          backgroundColor: smallNavigationElements
-              ? context.theme.colorScheme.background
-              : null,
-          textColor: smallNavigationElements
-              ? context.theme.colorScheme.onBackground
-              : null,
-          contentPadding:
-              smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
           titleString:
               insightsContoller.insightModelList.elementAt(currentPage).title,
           trailing: SmoothPageIndicator(
@@ -99,37 +91,42 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
           expandSubtitle: true,
           padSubtitle: !smallNavigationElements,
           padExplanation: !smallNavigationElements,
-          subtitle: PageView.builder(
-            itemCount: insightsContoller.insightModelList.length,
-            itemBuilder: (BuildContext context, int index) {
-              double scale = 1 - (index - pageOffset).abs();
-              return Transform(
-                transform: Matrix4.identity()
-                  ..setEntry(3, 2, 0.01)
-                  ..scale(scale, scale),
-                alignment: Alignment.center,
-                child: PhysicalModel(
-                  color: context.theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(radius - gap),
-                  child: AnimatedContainer(
-                    duration: standardDuration,
-                    curve: standardCurve,
-                    padding: smallNavigationElements
-                        ? EdgeInsets.zero
-                        : EdgeInsets.all(gap),
-                    child: insightWidgets[index],
+          subtitle: Padding(
+            padding: smallNavigationElements
+                ? EdgeInsets.only(top: gap)
+                : EdgeInsets.zero,
+            child: PageView.builder(
+              itemCount: insightsContoller.insightModelList.length,
+              itemBuilder: (BuildContext context, int index) {
+                double scale = 1 - (index - pageOffset).abs();
+                return Transform(
+                  transform: Matrix4.identity()
+                    ..setEntry(3, 2, 0.01)
+                    ..scale(scale, scale),
+                  alignment: Alignment.center,
+                  child: PhysicalModel(
+                    color: context.theme.colorScheme.surface,
+                    borderRadius: smallNavigationElements
+                        ? BorderRadius.circular(radius)
+                        : BorderRadius.circular(radius - gap),
+                    child: AnimatedContainer(
+                      duration: standardDuration,
+                      curve: standardCurve,
+                      padding: EdgeInsets.all(gap),
+                      child: insightWidgets[index],
+                    ),
                   ),
-                ),
-              );
-            },
-            controller: insightsContoller.pageController,
-            onPageChanged: (int index) => vibrate(
-              ref.watch(navigationEnableHapticFeedbackProvider),
-              () {
-                setState(() {
-                  currentPage = index;
-                });
+                );
               },
+              controller: insightsContoller.pageController,
+              onPageChanged: (int index) => vibrate(
+                ref.watch(navigationEnableHapticFeedbackProvider),
+                () {
+                  setState(() {
+                    currentPage = index;
+                  });
+                },
+              ),
             ),
           ),
           explanationString: insightsContoller.insightModelList

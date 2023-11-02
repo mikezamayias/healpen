@@ -16,11 +16,14 @@ class HapticFeedbackSettingsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
+      useSmallerNavigationSetting:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
+      enableExplanationWrapper:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Enable haptic feedback',
       explanationString: 'Enables haptic feedback for buttons and other '
           'elements.',
-      enableExplanationWrapper: true,
       trailing: Switch(
         value: ref.watch(navigationEnableHapticFeedbackProvider),
         onChanged: (value) {

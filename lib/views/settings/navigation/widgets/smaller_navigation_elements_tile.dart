@@ -16,12 +16,15 @@ class SmallerNavigationElementsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
+      useSmallerNavigationSetting:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
+      enableExplanationWrapper:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Enable smaller navigation elements',
       explanationString:
           'When enabled, the app will show smaller navigation elements. '
           'This is useful for devices with smaller screens.',
-      enableExplanationWrapper: true,
       trailing: Switch(
         value: ref.watch(navigationSmallerNavigationElementsProvider),
         onChanged: (value) {

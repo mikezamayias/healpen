@@ -90,23 +90,13 @@ class _WritingViewState extends ConsumerState<WritingView>
               children: [
                 Padding(
                   padding: EdgeInsets.only(top: gap),
-                  child: smallNavigationElements
-                      ? Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const StopwatchTile(),
-                            SizedBox(height: gap),
-                            const SaveNoteButton(),
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            const Expanded(child: StopwatchTile()),
-                            SizedBox(width: gap),
-                            const SaveNoteButton(),
-                          ],
-                        ),
+                  child: Row(
+                    children: [
+                      const Expanded(child: StopwatchTile()),
+                      SizedBox(width: gap),
+                      const SaveNoteButton(),
+                    ],
+                  ),
                 ),
                 if (ref.watch(writingShowAnalyzeNotesButtonProvider))
                   Padding(

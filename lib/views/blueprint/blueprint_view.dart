@@ -33,17 +33,24 @@ class BlueprintView extends ConsumerWidget {
         ref.watch(themeAppearanceProvider),
       ),
       child: Container(
-        color: context.theme.colorScheme.background,
+        color: ref.watch(navigationSmallerNavigationElementsProvider)
+            ? context.theme.colorScheme.surfaceVariant
+            : context.theme.colorScheme.surface,
         child: SafeArea(
           child: GestureDetector(
             onTap: () => context.focusScope.unfocus(),
             child: Container(
-              color: context.theme.colorScheme.background,
+              color: ref.watch(navigationSmallerNavigationElementsProvider)
+                  ? context.theme.colorScheme.surfaceVariant
+                  : context.theme.colorScheme.surface,
               padding: EdgeInsets.symmetric(
                 horizontal: padBodyHorizontally! ? gap : 0,
               ),
               child: Scaffold(
-                backgroundColor: Colors.transparent,
+                backgroundColor:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? context.theme.colorScheme.surfaceVariant
+                        : context.theme.colorScheme.surface,
                 appBar: showAppBarSetting! && appBar != null
                     ? PreferredSize(
                         preferredSize: Size.fromHeight(18.h),

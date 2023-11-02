@@ -16,11 +16,14 @@ class InfoButtonSettingsTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
+      useSmallerNavigationSetting:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
+      enableExplanationWrapper:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
       contentPadding: EdgeInsets.all(gap),
       titleString: 'Enable info buttons',
       explanationString:
           'Shows an info button on the top left corner of many elements',
-      enableExplanationWrapper: true,
       trailing: Switch(
         value: ref.watch(navigationShowInfoButtonsProvider),
         onChanged: (value) {

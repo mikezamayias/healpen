@@ -51,6 +51,10 @@ class _HealpenState extends ConsumerState<Healpen> {
         }
 
         return Scaffold(
+          backgroundColor:
+              ref.watch(navigationSmallerNavigationElementsProvider)
+                  ? context.theme.colorScheme.surfaceVariant
+                  : context.theme.colorScheme.surface,
           body: PreloadPageView.builder(
             preloadPagesCount: pages.length,
             controller: ref.watch(HealpenController().pageControllerProvider),

@@ -18,7 +18,7 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
         ),
         color: colorScheme.primary,
       ),
-      scaffoldBackgroundColor: colorScheme.background,
+      scaffoldBackgroundColor: Colors.transparent,
       listTileTheme: listTileTheme,
       appBarTheme: AppBarTheme(
         elevation: elevation,

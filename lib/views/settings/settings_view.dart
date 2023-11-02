@@ -74,8 +74,6 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         iconData: FontAwesomeIcons.circleInfo,
       ),
     ];
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
     return BlueprintView(
       showAppBar: ref.watch(navigationShowAppBarProvider),
       appBar: AppBar(
@@ -86,8 +84,8 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         ],
       ),
       body: Wrap(
-        spacing: smallNavigationElements ? gap * 2 : gap,
-        runSpacing: smallNavigationElements ? gap * 2 : gap,
+        spacing: gap,
+        runSpacing: gap,
         children: [
           for (({
             String title,
@@ -110,32 +108,16 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     required String title,
     required Widget widget,
   }) {
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
     return CustomListTile(
-      responsiveWidth: !smallNavigationElements,
-      leadingIconData: iconData,
-      cornerRadius: smallNavigationElements ? radius - gap : null,
-      contentPadding: smallNavigationElements
-          ? EdgeInsets.zero
-          : EdgeInsets.symmetric(
-              horizontal: gap * 2,
-              vertical: gap,
-            ),
-      backgroundColor: smallNavigationElements
-          ? context.theme.colorScheme.surface
-          : context.theme.colorScheme.primary,
-      textColor: smallNavigationElements
-          ? context.theme.colorScheme.primary
-          : context.theme.colorScheme.onPrimary,
-      title: Text(
-        title,
-        style: context.theme.textTheme.titleLarge!.copyWith(
-          color: smallNavigationElements
-              ? context.theme.colorScheme.primary
-              : context.theme.colorScheme.onPrimary,
-        ),
+      useSmallerNavigationSetting: false,
+      cornerRadius: radius,
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 2 * gap,
+        vertical: gap,
       ),
+      responsiveWidth: true,
+      leadingIconData: iconData,
+      titleString: title,
       onTap: () {
         navigator.push(
           PageRouteBuilder(
@@ -163,13 +145,6 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                   opacity: animation,
                   child: child,
                 ),
-                // child: SlideTransition(
-                //   position: Tween<Offset>(
-                //     begin: const Offset(1, 0),
-                //     end: Offset.zero,
-                //   ).animate(animation),
-                //   child: child,
-                // ),
               );
             },
           ),

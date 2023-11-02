@@ -17,12 +17,15 @@ class WritingTextField extends ConsumerWidget {
       duration: standardDuration,
       curve: standardCurve,
       decoration: smallNavigationElements
-          ? const BoxDecoration()
+          ? BoxDecoration(
+              color: context.theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(radius),
+            )
           : BoxDecoration(
               color: context.theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(radius - gap),
             ),
-      padding: smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
+      padding: EdgeInsets.all(gap),
       child: TextField(
         controller: ref.read(writingControllerProvider.notifier).textController,
         onChanged:

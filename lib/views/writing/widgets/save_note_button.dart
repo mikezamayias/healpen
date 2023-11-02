@@ -19,19 +19,23 @@ class SaveNoteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
     final writingController = ref.watch(writingControllerProvider.notifier);
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
     return CustomListTile(
-      cornerRadius: radius - gap,
+      useSmallerNavigationSetting: false,
+      cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider)
+          ? radius
+          : radius - gap,
       leadingIconData: FontAwesomeIcons.solidFloppyDisk,
-      contentPadding:
-          smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 2 * gap,
+        vertical: gap,
+      ),
       onTap: state.content.isNotEmpty
           ? () {
               CustomSnackBar(
                 SnackBarConfig(
                   vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
-                  smallNavigationElements: smallNavigationElements,
+                  smallNavigationElements:
+                      ref.watch(navigationSmallerNavigationElementsProvider),
                   titleString1: 'Saving note...',
                   leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
                   trailingWidgets1: <({
@@ -55,32 +59,13 @@ class SaveNoteButton extends ConsumerWidget {
             }
           : null,
       backgroundColor: state.content.isEmpty
-          ? smallNavigationElements
-              ? context.theme.colorScheme.background
-              : context.theme.colorScheme.outline
-          : smallNavigationElements
-              ? context.theme.colorScheme.surface
-              : context.theme.colorScheme.primary,
+          ? context.theme.colorScheme.outline
+          : context.theme.colorScheme.primary,
       textColor: state.content.isEmpty
-          ? smallNavigationElements
-              ? context.theme.colorScheme.outline
-              : context.theme.colorScheme.background
-          : smallNavigationElements
-              ? context.theme.colorScheme.primary
-              : context.theme.colorScheme.onPrimary,
+          ? context.theme.colorScheme.surface
+          : context.theme.colorScheme.onPrimary,
       responsiveWidth: true,
-      title: Text(
-        'Save',
-        style: context.theme.textTheme.titleLarge!.copyWith(
-          color: state.content.isEmpty
-              ? smallNavigationElements
-                  ? context.theme.colorScheme.outline
-                  : context.theme.colorScheme.background
-              : smallNavigationElements
-                  ? context.theme.colorScheme.primary
-                  : context.theme.colorScheme.onPrimary,
-        ),
-      ),
+      titleString: 'Save',
     );
   }
 }
