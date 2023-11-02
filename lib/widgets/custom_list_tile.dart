@@ -30,6 +30,7 @@ class CustomListTile extends ConsumerStatefulWidget {
   final bool? enableSubtitleWrapper;
   final bool? expandSubtitle;
   final bool? padSubtitle;
+  final bool? useSmallerNavigationSetting;
   final bool? padExplanation;
   final bool? enableExplanationWrapper;
   final Color? backgroundColor;
@@ -62,6 +63,7 @@ class CustomListTile extends ConsumerStatefulWidget {
     this.expandSubtitle = false,
     this.padSubtitle = true,
     this.padExplanation = true,
+    this.useSmallerNavigationSetting = true,
     this.cornerRadius,
     this.contentPadding,
   });
@@ -86,13 +88,13 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
             widget.titleString != null ||
             widget.trailing != null ||
             widget.trailingIconData != null)
-          Padding(
-            padding: EdgeInsets.only(
-              top: padding.vertical / 2,
-              bottom: padding.vertical / 2,
-              left: padding.horizontal / 2,
-              right: padding.horizontal / 2,
-            ),
+          AnimatedContainer(
+            duration: standardDuration,
+            curve: standardCurve,
+            padding: widget.useSmallerNavigationSetting! &&
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                ? EdgeInsets.zero
+                : EdgeInsets.all(padding.vertical / 2),
             child: Row(
               children: [
                 if (widget.leading != null || widget.leadingIconData != null)
@@ -101,7 +103,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
                         (widget.title != null || widget.titleString != null)
                             ? padding.horizontal == 0
                                 ? EdgeInsets.only(right: gap)
-                                : EdgeInsets.only(right: padding.horizontal / 2)
+                                : EdgeInsets.only(right: padding.horizontal / 4)
                             : EdgeInsets.zero,
                     child: GestureDetector(
                       onTap: widget.leadingOnTap,
@@ -215,16 +217,21 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
               );
             }
           : null,
-      child: Container(
-        decoration: BoxDecoration(
-          color: widget.backgroundColor ??
-              (widget.onTap == null
-                  ? context.theme.colorScheme.surfaceVariant
-                  : context.theme.colorScheme.primary),
-          borderRadius: BorderRadius.all(
-            Radius.circular(widget.cornerRadius ?? radius),
-          ),
-        ),
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        decoration: widget.useSmallerNavigationSetting! &&
+                ref.watch(navigationSmallerNavigationElementsProvider)
+            ? const BoxDecoration()
+            : BoxDecoration(
+                color: widget.backgroundColor ??
+                    (widget.onTap == null
+                        ? context.theme.colorScheme.surfaceVariant
+                        : context.theme.colorScheme.primary),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(widget.cornerRadius ?? radius),
+                ),
+              ),
         child: switch (widget.responsiveWidth) {
           true => IntrinsicWidth(child: listTile),
           _ => listTile,
@@ -238,18 +245,23 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
       duration: standardDuration,
       curve: standardCurve,
       padding: widget.padExplanation!
-          ? EdgeInsets.only(
-              bottom: gap,
-              left: gap,
-              right: gap,
-            )
+          ? widget.useSmallerNavigationSetting! &&
+                  ref.watch(navigationSmallerNavigationElementsProvider)
+              ? EdgeInsets.zero
+              : EdgeInsets.only(
+                  bottom: gap,
+                  left: gap,
+                  right: gap,
+                )
           : EdgeInsets.only(bottom: gap),
       child: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
-        padding: widget.enableExplanationWrapper! ||
-                ref.watch(navigationSmallerNavigationElementsProvider)
-            ? EdgeInsets.all(gap)
+        padding: widget.enableExplanationWrapper!
+            ? widget.useSmallerNavigationSetting! &&
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                ? EdgeInsets.zero
+                : EdgeInsets.all(gap)
             : EdgeInsets.zero,
         decoration: widget.enableExplanationWrapper!
             ? BoxDecoration(
@@ -289,7 +301,8 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
         duration: standardDuration,
         curve: standardCurve,
         padding: widget.enableSubtitleWrapper! ||
-                ref.watch(navigationSmallerNavigationElementsProvider)
+                (widget.useSmallerNavigationSetting! &&
+                    ref.watch(navigationSmallerNavigationElementsProvider))
             ? EdgeInsets.all(gap)
             : EdgeInsets.zero,
         decoration: widget.enableSubtitleWrapper!

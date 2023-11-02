@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../extensions/widget_extensions.dart';
 import '../../../../utils/constants.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'widgets/show_app_bar_tile.dart';
@@ -34,7 +35,9 @@ class SettingsNavigationView extends ConsumerWidget {
         ],
       ),
       body: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: ref.watch(navigationSmallerNavigationElementsProvider)
+            ? BorderRadius.circular(0)
+            : BorderRadius.circular(radius),
         child: SingleChildScrollView(
           clipBehavior: Clip.hardEdge,
           child: Wrap(
