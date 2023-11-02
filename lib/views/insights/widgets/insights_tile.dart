@@ -75,6 +75,10 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
                 : e.widget)
             .toList();
         return CustomListTile(
+          useSmallerNavigationSetting:
+              !ref.watch(navigationSmallerNavigationElementsProvider),
+          enableExplanationWrapper:
+              !ref.watch(navigationSmallerNavigationElementsProvider),
           titleString:
               insightsContoller.insightModelList.elementAt(currentPage).title,
           trailing: SmoothPageIndicator(
@@ -87,10 +91,7 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
               dotColor: context.theme.colorScheme.outline,
             ),
           ),
-          enableSubtitleWrapper: false,
-          expandSubtitle: true,
-          padSubtitle: !smallNavigationElements,
-          padExplanation: !smallNavigationElements,
+          padSubtitle: false,
           subtitle: Padding(
             padding: smallNavigationElements
                 ? EdgeInsets.only(top: gap)
