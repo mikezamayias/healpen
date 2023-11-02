@@ -97,9 +97,8 @@ class SnackBarConfig {
           return AnimatedContainer(
             duration: standardDuration,
             curve: standardCurve,
-            padding: smallNavigationElements
-                ? EdgeInsets.all(gap)
-                : EdgeInsets.zero,
+            padding:
+                smallNavigationElements ? EdgeInsets.all(gap) : EdgeInsets.zero,
             child: CustomListTile(
               useSmallerNavigationSetting: false,
               contentPadding: EdgeInsets.symmetric(
