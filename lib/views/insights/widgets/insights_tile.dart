@@ -91,7 +91,7 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
               dotColor: context.theme.colorScheme.outline,
             ),
           ),
-          padSubtitle: false,
+          padSubtitle: !ref.watch(navigationSmallerNavigationElementsProvider),
           subtitle: Padding(
             padding: smallNavigationElements
                 ? EdgeInsets.only(top: gap)
