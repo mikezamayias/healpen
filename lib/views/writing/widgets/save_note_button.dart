@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -50,10 +49,10 @@ class SaveNoteButton extends ConsumerWidget {
                           .currentState!.removeCurrentSnackBar,
                     ),
                   ],
-                  // actionAfterSnackBar1: writingController.handleSaveNote,
-                  actionAfterSnackBar1: () {
-                    return Future.delayed(1.minutes);
-                  },
+                  // actionAfterSnackBar1: () {
+                  //   return Future.delayed(1.minutes);
+                  // },
+                  actionAfterSnackBar1: writingController.handleSaveNote,
                 ),
               ).showSnackBar(context);
             }
