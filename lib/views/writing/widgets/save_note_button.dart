@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../../controllers/settings/preferences_controller.dart';
 import '../../../controllers/writing_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
@@ -30,28 +30,26 @@ class SaveNoteButton extends ConsumerWidget {
           ? () {
               CustomSnackBar(
                 SnackBarConfig(
-                  vibrate: PreferencesController
-                      .navigationEnableHapticFeedback.value,
+                  vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+                  smallNavigationElements: smallNavigationElements,
                   titleString1: 'Saving note...',
                   leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
-                  trailingWidgets1: [
-                    CustomListTile(
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: gap * 2,
-                        vertical: gap,
-                      ),
-                      cornerRadius: radius - gap,
-                      responsiveWidth: true,
-                      backgroundColor:
-                          context.theme.colorScheme.primaryContainer,
-                      textColor: context.theme.colorScheme.onPrimaryContainer,
+                  trailingWidgets1: <({
+                    IconData? iconData,
+                    String? titleString,
+                    void Function()? onTap,
+                  })>[
+                    (
+                      iconData: FontAwesomeIcons.xmark,
+                      titleString: 'Cancel',
                       onTap: scaffoldMessengerKey
                           .currentState!.removeCurrentSnackBar,
-                      titleString: 'Cancel',
-                      leadingIconData: FontAwesomeIcons.xmark,
                     ),
                   ],
-                  actionAfterSnackBar1: writingController.handleSaveNote,
+                  // actionAfterSnackBar1: writingController.handleSaveNote,
+                  actionAfterSnackBar1: () {
+                    return Future.delayed(1.minutes);
+                  },
                 ),
               ).showSnackBar(context);
             }
