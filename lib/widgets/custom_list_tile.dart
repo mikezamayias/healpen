@@ -247,7 +247,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
       child: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
-        padding: widget.enableExplanationWrapper! &&
+        padding: widget.enableExplanationWrapper! ||
                 ref.watch(navigationSmallerNavigationElementsProvider)
             ? EdgeInsets.all(gap)
             : EdgeInsets.zero,
@@ -288,10 +288,9 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
       child: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
-        padding: widget.enableSubtitleWrapper!
-            ? !ref.watch(navigationSmallerNavigationElementsProvider)
-                ? EdgeInsets.all(gap)
-                : EdgeInsets.zero
+        padding: widget.enableSubtitleWrapper! ||
+                ref.watch(navigationSmallerNavigationElementsProvider)
+            ? EdgeInsets.all(gap)
             : EdgeInsets.zero,
         decoration: widget.enableSubtitleWrapper!
             ? BoxDecoration(

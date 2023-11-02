@@ -27,6 +27,8 @@ class CalendarTile extends ConsumerStatefulWidget {
 class _CalendarTileState extends ConsumerState<CalendarTile> {
   @override
   Widget build(BuildContext context) {
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     return SfCalendar(
       showCurrentTimeIndicator: false,
       showTodayButton: false,
@@ -41,13 +43,17 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       viewNavigationMode: ViewNavigationMode.snap,
       headerStyle: CalendarHeaderStyle(
         textStyle: context.theme.textTheme.titleLarge!.copyWith(
-          color: context.theme.colorScheme.onSurface,
+          color: smallNavigationElements
+              ? context.theme.colorScheme.onSurfaceVariant
+              : context.theme.colorScheme.onSurface,
         ),
       ),
       initialSelectedDate: DateTime.now(),
       firstDayOfWeek: 1,
       todayHighlightColor: context.theme.colorScheme.secondary,
-      cellBorderColor: context.theme.colorScheme.surface,
+      cellBorderColor: smallNavigationElements
+          ? context.theme.colorScheme.surface
+          : context.theme.colorScheme.surface,
       selectionDecoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius - gap / 2),
         border: Border.all(

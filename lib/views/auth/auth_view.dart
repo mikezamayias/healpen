@@ -89,7 +89,8 @@ class _AuthViewState extends ConsumerState<AuthView> {
               automaticallyImplyLeading: true,
               onBackButtonPressed: goBack,
             ),
-            body: Center(
+            body: Align(
+              alignment: Alignment.bottomCenter,
               child: switch (state.runtimeType) {
                 const (Uninitialized) => const UninitializedState(),
                 const (SendingLink) => const SendingLinkState(),

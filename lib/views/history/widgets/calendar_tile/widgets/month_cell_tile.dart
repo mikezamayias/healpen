@@ -39,8 +39,12 @@ class MonthCellTile extends ConsumerWidget {
         BuildContext context,
         AsyncSnapshot<List<AnalysisModel>> analysisModelListSnapshot,
       ) {
-        Color shapeColor = context.theme.colorScheme.surface;
-        Color textColor = context.theme.colorScheme.onSurface;
+        Color shapeColor = smallNavigationElements
+            ? context.theme.colorScheme.surfaceVariant
+            : context.theme.colorScheme.surface;
+        Color textColor = smallNavigationElements
+            ? context.theme.colorScheme.onSurfaceVariant
+            : context.theme.colorScheme.onSurface;
         double? dateSentiment;
         if (analysisModelListSnapshot.data != null &&
             analysisModelListSnapshot.data!.isNotEmpty) {
