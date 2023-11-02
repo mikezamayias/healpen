@@ -91,43 +91,33 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
               dotColor: context.theme.colorScheme.outline,
             ),
           ),
-          padSubtitle: !ref.watch(navigationSmallerNavigationElementsProvider),
-          subtitle: Padding(
-            padding: smallNavigationElements
-                ? EdgeInsets.only(top: gap)
-                : EdgeInsets.zero,
-            child: PageView.builder(
-              itemCount: insightsContoller.insightModelList.length,
-              itemBuilder: (BuildContext context, int index) {
-                double scale = 1 - (index - pageOffset).abs();
-                return Transform(
-                  transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.01)
-                    ..scale(scale, scale),
-                  alignment: Alignment.center,
-                  child: PhysicalModel(
-                    color: context.theme.colorScheme.surface,
-                    borderRadius: smallNavigationElements
-                        ? BorderRadius.circular(radius)
-                        : BorderRadius.circular(radius - gap),
-                    child: AnimatedContainer(
-                      duration: standardDuration,
-                      curve: standardCurve,
-                      padding: EdgeInsets.all(gap),
-                      child: insightWidgets[index],
-                    ),
-                  ),
-                );
+          padSubtitle: true,
+          subtitle: PageView.builder(
+            itemCount: insightsContoller.insightModelList.length,
+            itemBuilder: (BuildContext context, int index) {
+              double scale = 1 - (index - pageOffset).abs();
+              return Transform(
+                transform: Matrix4.identity()
+                  ..setEntry(3, 2, 0.01)
+                  ..scale(scale, scale),
+                alignment: Alignment.center,
+                child: PhysicalModel(
+                  color: context.theme.colorScheme.surface,
+                  borderRadius: smallNavigationElements
+                      ? BorderRadius.circular(radius)
+                      : BorderRadius.circular(radius - gap),
+                  child: insightWidgets[index],
+                ),
+              );
+            },
+            controller: insightsContoller.pageController,
+            onPageChanged: (int index) => vibrate(
+              ref.watch(navigationEnableHapticFeedbackProvider),
+              () {
+                setState(() {
+                  currentPage = index;
+                });
               },
-              controller: insightsContoller.pageController,
-              onPageChanged: (int index) => vibrate(
-                ref.watch(navigationEnableHapticFeedbackProvider),
-                () {
-                  setState(() {
-                    currentPage = index;
-                  });
-                },
-              ),
             ),
           ),
           explanationString: insightsContoller.insightModelList
