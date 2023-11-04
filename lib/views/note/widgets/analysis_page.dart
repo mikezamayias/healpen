@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../extensions/number_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -30,6 +31,10 @@ class AnalysisPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           CustomListTile(
+            useSmallerNavigationSetting:
+                !ref.watch(navigationSmallerNavigationElementsProvider),
+            enableExplanationWrapper:
+                !ref.watch(navigationSmallerNavigationElementsProvider),
             title: Text(
               getSentimentLabel(analysisModel.score),
               style: context.theme.textTheme.titleLarge!.copyWith(
@@ -52,7 +57,6 @@ class AnalysisPage extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            enableExplanationWrapper: true,
             explanationString: 'The sentiment score is a metric that indicates '
                 'the overall emotional tone of the text. It ranges from '
                 '$minValue to $maxValue, where $minValue is the most negative '
@@ -60,6 +64,10 @@ class AnalysisPage extends ConsumerWidget {
           ),
           Gap(gap),
           CustomListTile(
+            useSmallerNavigationSetting:
+                !ref.watch(navigationSmallerNavigationElementsProvider),
+            enableExplanationWrapper:
+                !ref.watch(navigationSmallerNavigationElementsProvider),
             titleString: 'Word Count',
             trailing: Text(
               '${analysisModel.wordCount}',
@@ -67,7 +75,6 @@ class AnalysisPage extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            enableExplanationWrapper: true,
             explanationString: 'The number of sentences in your note.',
           ),
         ],
