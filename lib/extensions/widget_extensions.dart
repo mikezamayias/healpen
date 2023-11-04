@@ -12,17 +12,13 @@ extension WidgetListExtensions on List<Widget> {
       )
       .slideY(begin: 0.6, curve: standardCurve);
 
-  List<Widget> animateLicences() => animate(interval: standardDuration)
-      .fade(
-        begin: 0,
-      )
-      .scale(
-        begin: const Offset(0, 0),
-        curve: emphasizedCurve,
-      )
+  List<Widget> animateLicenses() => animate(interval: shortStandardDuration)
+      .fade()
+      .scale(begin: const Offset(0, 0))
       .slideX(
         begin: -10,
-        curve: emphasizedCurve,
+        curve: standardEasing,
+        duration: standardDuration,
       );
 }
 

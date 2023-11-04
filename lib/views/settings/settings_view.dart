@@ -13,6 +13,7 @@ import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import 'account/settings_account_view.dart';
 import 'insights/settings_insights_view.dart';
+import 'licenses/settings_licenses_view.dart';
 import 'navigation/settings_navigation_view.dart';
 import 'theme/settings_theme_view.dart';
 import 'writing/settings_writing_view.dart';
@@ -73,6 +74,11 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         widget: const Placeholder(),
         iconData: FontAwesomeIcons.circleInfo,
       ),
+      (
+        title: 'Open Source Licenses',
+        widget: const SettingsLicensesView(),
+        iconData: FontAwesomeIcons.code,
+      )
     ];
     return BlueprintView(
       showAppBar: ref.watch(navigationShowAppBarProvider),

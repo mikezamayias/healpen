@@ -40,12 +40,14 @@ class AppBar extends ConsumerWidget {
                         true => context.theme.colorScheme.outline,
                         false => context.theme.colorScheme.onSurfaceVariant,
                       },
+                      overflow: TextOverflow.ellipsis,
                     )
                   : context.theme.textTheme.headlineSmall!.copyWith(
                       color: switch (smallNavigationElements) {
                         true => context.theme.colorScheme.secondary,
                         false => context.theme.colorScheme.onSurfaceVariant,
                       },
+                      overflow: TextOverflow.ellipsis,
                     ),
             ),
         ],
