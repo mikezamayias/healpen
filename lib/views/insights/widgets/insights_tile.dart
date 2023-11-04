@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,10 +48,6 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
           List<String> insightOrder =
               List<String>.from(snapshot.data?.data()?['insightOrder']);
           if (checkIfListsAreSame(insightOrder, insightsContoller)) {
-            log(
-              '$insightOrder',
-              name: 'InsightsTile:insightOrder',
-            );
             List<InsightModel> tempInsightModelList = [];
             for (String orderedTitle in insightOrder) {
               tempInsightModelList.add(
@@ -141,19 +135,7 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
         .map((InsightModel insightModel) => insightModel.title.hashCode)
         .toSet()
         .sum;
-    log(
-      '$listOne',
-      name: 'InsightsTile:checkIfListsAreSame:listOne.hashCode',
-    );
-    log(
-      '$listTwo',
-      name: 'InsightsTile:checkIfListsAreSame:listTwo.hashCode',
-    );
     bool check = listOne == listTwo;
-    log(
-      '$check',
-      name: 'InsightsTile:checkIfListsAreSame',
-    );
     return check;
   }
 }

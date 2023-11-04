@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -79,11 +77,6 @@ class _HealpenState extends ConsumerState<Healpen> {
         if (fetchedPreferenceMap.containsKey(key)) {
           ref.read(preferenceTuple.provider.notifier).state =
               fetchedPreferenceMap[key];
-          log(
-            'Updated ${preferenceTuple.preferenceModel.key} '
-            'with value: ${fetchedPreferenceMap[key]}',
-            name: '_HealpenWrapperState:StreamBuilder - Updating State',
-          );
         }
       }
     });

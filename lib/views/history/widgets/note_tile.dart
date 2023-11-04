@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -38,10 +36,6 @@ class NoteTile extends ConsumerWidget {
         BuildContext context,
         AsyncSnapshot<({NoteModel note, AnalysisModel? analysis})> snapshot,
       ) {
-        log(
-          '${snapshot.data?.note}',
-          name: 'NoteTile:build:StreamBuilder:snapshot.data',
-        );
         if (!snapshot.hasData) {
           return const LoadingTile(durationTitle: 'Loading note...');
         }

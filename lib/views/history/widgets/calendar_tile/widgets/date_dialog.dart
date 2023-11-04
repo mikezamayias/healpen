@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,10 +25,6 @@ class DateDialog extends ConsumerWidget {
         return StreamBuilder<List<AnalysisModel>>(
           stream: NoteAnalysisService().getAnalysisEntriesListOnDate(date),
           builder: (context, analysisListStreamSnapshot) {
-            log(
-              '$analysisListStreamSnapshot',
-              name: 'CalendarTile:analysisListStreamSnapshot',
-            );
             List<Widget> widgets = [
               if (noteListStreamSnapshot.hasData)
                 for (int i = 0; i < noteListStreamSnapshot.data!.length; i++)
