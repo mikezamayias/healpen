@@ -49,15 +49,15 @@ class BlueprintView extends ConsumerWidget {
                       preferredSize: Size.fromHeight(18.h),
                       child: appBar!
                           .animate(
-                            delay: slightlyLongEmphasizedDuration,
+                            delay: emphasizedDuration - shortStandardDuration,
                           )
                           .fade(
-                            duration: standardDuration,
-                            curve: standardEasing,
+                            duration: slightlyShortStandardDuration,
+                            curve: standardCurve,
                           )
                           .slideX(
-                            duration: standardDuration,
-                            curve: standardEasing,
+                            duration: slightlyShortStandardDuration,
+                            curve: standardCurve,
                             begin: -.3,
                             end: 0,
                           ),
