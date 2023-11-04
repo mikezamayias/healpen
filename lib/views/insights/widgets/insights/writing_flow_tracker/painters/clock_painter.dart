@@ -102,6 +102,6 @@ class ClockPainter extends CustomPainter {
     required double upperLimit,
   }) {
     double stroke = calculateStroke(radius, currentData);
-    return radius * stroke.clamp(lowerLimit, upperLimit) * 10;
+    return radius * 0.9 * stroke.clamp(lowerLimit, upperLimit) * 10;
   }
 }
