@@ -36,7 +36,11 @@ class EditNameTile extends ConsumerWidget {
           hintText: displayName ?? 'How should you be called?',
           hintStyle: context.theme.textTheme.titleLarge,
         ),
-        style: context.theme.textTheme.titleLarge,
+        style: context.theme.textTheme.titleLarge!.copyWith(
+          color: ref.watch(navigationSmallerNavigationElementsProvider)
+              ? context.theme.colorScheme.onSurface
+              : context.theme.colorScheme.onSurfaceVariant,
+        ),
         onSubmitted: (String newDisplayName) async {
           log(newDisplayName, name: 'newDisplayName');
           await FirebaseAuth.instance.currentUser?.updateDisplayName(

@@ -30,9 +30,7 @@ class SettingsWritingView extends ConsumerWidget {
         ],
       ),
       body: ClipRRect(
-        borderRadius: ref.watch(navigationSmallerNavigationElementsProvider)
-            ? BorderRadius.circular(0)
-            : BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(radius),
         child: SingleChildScrollView(
           clipBehavior: Clip.hardEdge,
           child: Wrap(
