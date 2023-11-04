@@ -62,7 +62,6 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
                     getSentimentLabel(sentiment).split(' ').join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(
                       color: textColor,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),

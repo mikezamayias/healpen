@@ -10,6 +10,7 @@ import '../../../../../../extensions/int_extensions.dart';
 import '../../../../../../extensions/stream_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
 import '../../../../../../models/note/note_model.dart';
+import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../route_controller.dart';
 import '../../../../../../services/firestore_service.dart';
 import '../../../../../../utils/constants.dart';
@@ -26,7 +27,9 @@ class BubbleChart extends ConsumerWidget {
         ref.watch(AnalysisViewController.analysisModelListProvider);
     final monthSet = analysisModelList.getMonthsFromAnalysisModelList();
     return SfCartesianChart(
-      margin: EdgeInsets.zero,
+      margin: ref.watch(navigationSmallerNavigationElementsProvider)
+          ? EdgeInsets.zero
+          : EdgeInsets.all(gap),
       primaryXAxis: DateTimeCategoryAxis(
         dateFormat: DateFormat('MMM dd'),
         isVisible: true,

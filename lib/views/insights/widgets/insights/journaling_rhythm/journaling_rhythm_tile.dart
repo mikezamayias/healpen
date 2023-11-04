@@ -6,6 +6,7 @@ import '../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../extensions/date_time_extensions.dart';
 import '../../../../../extensions/int_extensions.dart';
 import '../../../../../models/analysis/analysis_model.dart';
+import '../../../../../providers/settings_providers.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../widgets/text_divider.dart';
 import 'widgets/week_line_chart.dart';
@@ -26,29 +27,34 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
     weekDates = initializeWeekDates(
       ref.watch(AnalysisViewController.analysisModelListProvider),
     );
-    return SingleChildScrollView(
-      reverse: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: weekDates.reversed.map<Widget>(
-          (List<DateTime> week) {
-            return SizedBox(
-              height: 24.h,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: gap),
-                    child: TextDivider(chartTitle(week)),
-                  ),
-                  Expanded(
-                    child: WeekLineChart(week),
-                  )
-                ],
-              ),
-            );
-          },
-        ).toList(),
+    return Padding(
+      padding: ref.watch(navigationSmallerNavigationElementsProvider)
+          ? EdgeInsets.zero
+          : EdgeInsets.all(gap),
+      child: SingleChildScrollView(
+        reverse: true,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: weekDates.reversed.map<Widget>(
+            (List<DateTime> week) {
+              return SizedBox(
+                height: 24.h,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: gap),
+                      child: TextDivider(chartTitle(week)),
+                    ),
+                    Expanded(
+                      child: WeekLineChart(week),
+                    )
+                  ],
+                ),
+              );
+            },
+          ).toList(),
+        ),
       ),
     );
   }

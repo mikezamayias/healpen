@@ -47,14 +47,14 @@ class ClockPainter extends CustomPainter {
         center.dx,
         center.dy,
       );
-      final partialLenght = partDialLength(
+      final partialLength = partDialLength(
         currentData: currentData,
         lowerLimit: lowerStrokeLimit,
         upperLimit: upperStokeLimit,
       );
       final endOffset = Offset(
-        center.dx + partialLenght * cos(angle),
-        center.dy + partialLenght * sin(angle),
+        center.dx + partialLength * cos(angle),
+        center.dy + partialLength * sin(angle),
       );
       canvas.drawLine(startOffset, endOffset, paint);
       final textSpan = TextSpan(
