@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
@@ -104,17 +103,7 @@ class _WritingViewState extends ConsumerState<WritingView>
                     child: const AnalyzeNotesTile(),
                   ),
               ],
-            )
-                .animate()
-                .fadeIn(
-                  curve: standardCurve,
-                  duration: standardDuration,
-                )
-                .slideY(
-                  begin: gap,
-                  curve: standardCurve,
-                  duration: standardDuration,
-                ),
+            ),
           ],
         ),
       ),

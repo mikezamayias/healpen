@@ -54,12 +54,15 @@ extension WidgetExtensions on Widget {
   //       borderRadius: BorderRadius.all(Radius.circular(radius)),
   //     );
 
-  Widget animateAppBar() => animateSlideInFromTop()
-      .animate()
-      .fade(begin: -1, curve: standardCurve)
-      .slideY(begin: -1, curve: standardCurve)
-      .scale(
-        begin: const Offset(0.6, 0.6),
+  Widget animateAppBar() => animate()
+      .fade(
         duration: standardDuration,
+        curve: standardEasing,
+      )
+      .slideY(
+        duration: standardDuration,
+        curve: standardEasing,
+        begin: -.3,
+        end: 0,
       );
 }

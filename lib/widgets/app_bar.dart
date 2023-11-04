@@ -80,26 +80,29 @@ class AppBar extends ConsumerWidget {
             ],
           )
         : appBarContent;
-    return AnimatedCrossFade(
-      crossFadeState: switch (smallNavigationElements) {
-        true => CrossFadeState.showFirst,
-        false => CrossFadeState.showSecond
-      },
-      firstChild: appBar,
-      secondChild: Container(
-        padding: EdgeInsets.all(gap),
-        decoration: BoxDecoration(
-          color: context.theme.colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(radius),
-        ),
-        alignment: Alignment.bottomLeft,
-        child: appBar,
-      ),
-      duration: standardDuration,
-      reverseDuration: standardDuration,
-      sizeCurve: standardEasing,
-      secondCurve: standardCurve,
-      firstCurve: standardCurve,
+    // return AnimatedCrossFade(
+    //   crossFadeState: switch (smallNavigationElements) {
+    //     true => CrossFadeState.showFirst,
+    //     false => CrossFadeState.showSecond
+    //   },
+    //   firstChild: appBar,
+    //   secondChild: Container(
+    //     padding: EdgeInsets.all(gap),
+    //     decoration: BoxDecoration(
+    //       color: context.theme.colorScheme.surfaceVariant,
+    //       borderRadius: BorderRadius.circular(radius),
+    //     ),
+    //     alignment: Alignment.bottomLeft,
+    //     child: appBar,
+    //   ),
+    //   duration: standardDuration,
+    //   reverseDuration: standardDuration,
+    //   sizeCurve: standardEasing,
+    //   secondCurve: standardCurve,
+    //   firstCurve: standardCurve,
+    // );
+    return Container(
+      child: appBar,
     );
   }
 }
