@@ -70,7 +70,7 @@ class MonthCellTile extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Gap(gap),
+                Gap(gap / 2),
                 AnimatedContainer(
                   duration: standardDuration,
                   curve: standardCurve,
@@ -92,7 +92,7 @@ class MonthCellTile extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (smallNavigationElements) Gap(gap),
+                Gap(gap / 2),
                 Expanded(
                   child: Visibility(
                     visible: cellDetails.appointments.isNotEmpty,
@@ -124,7 +124,7 @@ class MonthCellTile extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (smallNavigationElements) Gap(gap),
+                Gap(gap / 2),
               ],
             ),
           ),
