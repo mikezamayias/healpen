@@ -25,7 +25,6 @@ class EditNameTile extends ConsumerWidget {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      contentPadding: EdgeInsets.all(gap),
       titleString: 'Name',
       subtitle: TextField(
         controller: textController,

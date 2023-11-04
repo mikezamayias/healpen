@@ -61,7 +61,6 @@ class NoteTile extends ConsumerWidget {
                 )
               : null,
           cornerRadius: radius - gap,
-          contentPadding: EdgeInsets.all(gap),
           explanationString: DateFormat('HH:mm')
               .format(
                 DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),

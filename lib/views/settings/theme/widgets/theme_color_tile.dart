@@ -7,7 +7,6 @@ import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../providers/settings_providers.dart';
-import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -21,7 +20,6 @@ class ThemeColorTile extends ConsumerWidget {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      contentPadding: EdgeInsets.all(gap),
       titleString: 'Color',
       explanationString: 'Changes the color of the app.',
       enableSubtitleWrapper: false,

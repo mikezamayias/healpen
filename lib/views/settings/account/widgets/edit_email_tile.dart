@@ -29,7 +29,6 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
   Widget build(BuildContext context) {
     // TODO: user should confirm email before updating
     return CustomListTile(
-      contentPadding: EdgeInsets.all(gap),
       titleString: 'Email',
       subtitle: Form(
         key: _formKey,

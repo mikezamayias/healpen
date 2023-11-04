@@ -15,7 +15,6 @@ class AnalyzeNotesTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
-      contentPadding: EdgeInsets.all(gap),
       cornerRadius: ref.watch(HealpenController().currentPageIndexProvider) == 0
           ? radius - gap
           : radius,

@@ -54,7 +54,6 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
         ),
     ];
     return CustomListTile(
-      contentPadding: EdgeInsets.all(gap),
       titleString: 'Sentiment Curve',
       enableSubtitleWrapper: false,
       subtitle: Column(

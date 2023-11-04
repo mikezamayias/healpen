@@ -25,7 +25,7 @@ class AnalyzeNotesDialog extends ConsumerWidget {
           // backgroundColor: context.theme.colorScheme.surface,
           // textColor: context.theme.colorScheme.onSurface,
           cornerRadius: radius - gap,
-          contentPadding: EdgeInsets.all(gap),
+
           titleString: switch (
               ref.watch(NoteAnalyzer.analysisProgressProvider)) {
             AnalysisProgress.removingPreviousAnalysis =>

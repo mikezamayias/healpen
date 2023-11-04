@@ -82,7 +82,6 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                 children: [
                   CustomListTile(
                     titleString: 'No notes yet',
-                    contentPadding: EdgeInsets.all(gap),
                     subtitle:
                         const Text('Start writing to see your notes here'),
                     onTap: () => ref

@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../models/settings/preference_model.dart';
-import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class SaveSettingsToCloudTile extends StatelessWidget {
@@ -16,7 +15,6 @@ class SaveSettingsToCloudTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      contentPadding: EdgeInsets.all(gap),
       titleString: 'Save settings to the cloud',
       enableExplanationWrapper: true,
       explanationString:

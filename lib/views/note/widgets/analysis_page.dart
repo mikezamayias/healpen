@@ -30,7 +30,6 @@ class AnalysisPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           CustomListTile(
-            contentPadding: EdgeInsets.all(gap),
             title: Text(
               getSentimentLabel(analysisModel.score),
               style: context.theme.textTheme.titleLarge!.copyWith(

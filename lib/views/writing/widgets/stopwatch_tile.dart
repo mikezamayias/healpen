@@ -20,7 +20,6 @@ class StopwatchTile extends ConsumerWidget {
       cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider)
           ? radius
           : radius - gap,
-      contentPadding: EdgeInsets.all(gap),
       backgroundColor: context.theme.colorScheme.surface,
       textColor: context.theme.colorScheme.onSurface,
       titleString: 'Stopwatch',

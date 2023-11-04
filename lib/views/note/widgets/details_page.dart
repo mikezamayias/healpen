@@ -30,7 +30,6 @@ class DetailsPage extends StatelessWidget {
                   child: CustomListTile(
                     titleString: 'Date and Time',
                     responsiveWidth: true,
-                    contentPadding: EdgeInsets.all(gap),
                     explanationString: DateFormat('MMM dd, yyyy - HH:mm')
                         // subtitleString: DateFormat('MMM dd, yyyy - hh:mm a')
                         .format(noteModel.timestamp.timestampToDateTime()),
@@ -41,7 +40,6 @@ class DetailsPage extends StatelessWidget {
                 Expanded(
                   child: CustomListTile(
                     responsiveWidth: true,
-                    contentPadding: EdgeInsets.all(gap),
                     titleString: 'Duration',
                     explanationString:
                         noteModel.duration.writingDurationFormat(),
@@ -53,7 +51,6 @@ class DetailsPage extends StatelessWidget {
             SizedBox(height: gap),
             CustomListTile(
               titleString: 'Content',
-              contentPadding: EdgeInsets.all(gap),
               explanationString: noteModel.content,
               enableExplanationWrapper: true,
             ),
