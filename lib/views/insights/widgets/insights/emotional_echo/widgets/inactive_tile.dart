@@ -8,46 +8,12 @@ import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
-import '../../../../../../utils/rive/rive_color_component.dart';
-import '../../../../../../utils/rive/rive_color_modifier.dart';
 
-class EmotionalEchoInactiveTile extends ConsumerStatefulWidget {
+class EmotionalEchoInactiveTile extends ConsumerWidget {
   const EmotionalEchoInactiveTile({super.key});
 
   @override
-  ConsumerState<EmotionalEchoInactiveTile> createState() =>
-      _EmotionalEchoInactiveTileState();
-}
-
-class _EmotionalEchoInactiveTileState
-    extends ConsumerState<EmotionalEchoInactiveTile> {
-  bool get isPlaying => _controller?.isActive ?? false;
-
-  Artboard? _riveArtboard;
-  RiveAnimationController? _controller;
-
-  Future<void> _load() async {
-    var file = await RiveFile.asset('assets/rive/emotional_echo.riv');
-    var artboard = file.mainArtboard;
-    artboard.addController(_controller = SimpleAnimation('AllCircles'));
-    setState(() => _riveArtboard = artboard);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
-  }
-
-  @override
-  void dispose() {
-    _riveArtboard!.removeController(_controller!);
-    _controller!.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double sentiment = ref
         .watch(AnalysisViewController.analysisModelListProvider)
         .map((e) => e.score)
@@ -57,20 +23,25 @@ class _EmotionalEchoInactiveTileState
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        if (_riveArtboard != null)
-          RiveColorModifier(
-            artboard: _riveArtboard!,
-            fit: BoxFit.contain,
-            components: ['core', 'inner', 'middle', 'outer']
-                .map(
-                  (String element) => RiveColorComponent(
-                    shapeName: element,
-                    fillName: '$element-fill',
-                    color: shapeColor,
-                  ),
-                )
-                .toList(),
-          ),
+        RiveAnimation.asset(
+          'assets/rive/emotional_echo.riv',
+          fit: BoxFit.contain,
+          controllers: [
+            SimpleAnimation('AllCircles'),
+          ],
+          onInit: (Artboard artboard) {
+            artboard.forEachComponent(
+              (child) {
+                if (child is Shape) {
+                  final Shape shape = child;
+                  shape.fills.first.paint.color = shapeColor.withOpacity(
+                    shape.fills.first.paint.color.opacity,
+                  );
+                }
+              },
+            );
+          },
+        ),
         Align(
           alignment: Alignment.center,
           child: TweenAnimationBuilder<double>(
@@ -91,6 +62,7 @@ class _EmotionalEchoInactiveTileState
                     getSentimentLabel(sentiment).split(' ').join('\n'),
                     style: context.theme.textTheme.titleLarge!.copyWith(
                       color: textColor,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
