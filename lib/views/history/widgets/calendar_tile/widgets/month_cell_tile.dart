@@ -54,8 +54,8 @@ class MonthCellTile extends ConsumerWidget {
             dateSentiment = [
               for (AnalysisModel element in analysisModelList) element.score,
             ].average;
-            shapeColor = getShapeColorOnSentiment(context, dateSentiment);
-            textColor = getTextColorOnSentiment(context, dateSentiment);
+            shapeColor = getShapeColorOnSentiment(context.theme, dateSentiment);
+            textColor = getTextColorOnSentiment(context.theme, dateSentiment);
           }
         }
         return Padding(

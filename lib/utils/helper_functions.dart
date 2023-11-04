@@ -173,18 +173,18 @@ double getSentimentRatio(dynamic sentiment) {
   };
 }
 
-Color getShapeColorOnSentiment(BuildContext context, dynamic sentiment) {
+Color getShapeColorOnSentiment(ThemeData theme, dynamic sentiment) {
   return Color.lerp(
-    context.theme.colorScheme.error,
-    context.theme.colorScheme.primary,
+    theme.colorScheme.error,
+    theme.colorScheme.primary,
     getSentimentRatio(sentiment),
   )!;
 }
 
-Color getTextColorOnSentiment(BuildContext context, dynamic sentiment) {
+Color getTextColorOnSentiment(ThemeData theme, dynamic sentiment) {
   return Color.lerp(
-    context.theme.colorScheme.onError,
-    context.theme.colorScheme.onPrimary,
+    theme.colorScheme.onError,
+    theme.colorScheme.onPrimary,
     getSentimentRatio(sentiment),
   )!;
 }

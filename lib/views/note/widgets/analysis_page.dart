@@ -33,19 +33,22 @@ class AnalysisPage extends ConsumerWidget {
             title: Text(
               getSentimentLabel(analysisModel.score),
               style: context.theme.textTheme.titleLarge!.copyWith(
-                color: getShapeColorOnSentiment(context, analysisModel.score),
+                color: getShapeColorOnSentiment(
+                    context.theme, analysisModel.score),
                 fontWeight: FontWeight.bold,
               ),
             ),
             leading: FaIcon(
               getSentimentIcon(analysisModel.score),
               size: radius * 2,
-              color: getShapeColorOnSentiment(context, analysisModel.score),
+              color:
+                  getShapeColorOnSentiment(context.theme, analysisModel.score),
             ),
             trailing: Text(
               analysisModel.score.toStringAsFixed(2),
               style: context.theme.textTheme.titleLarge!.copyWith(
-                color: getShapeColorOnSentiment(context, analysisModel.score),
+                color: getShapeColorOnSentiment(
+                    context.theme, analysisModel.score),
                 fontWeight: FontWeight.bold,
               ),
             ),

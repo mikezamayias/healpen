@@ -81,7 +81,7 @@ class MonthLineChart extends ConsumerWidget {
               sortFieldValueMapper: (ChartData data, _) => data.x,
               pointColorMapper: (ChartData data, _) => data.y != null
                   ? getShapeColorOnSentiment(
-                      context,
+                      context.theme,
                       data.y,
                     )
                   : null,

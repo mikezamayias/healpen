@@ -83,7 +83,7 @@ class WeekLineChart extends ConsumerWidget {
               sortFieldValueMapper: (data, _) => data.x,
               pointColorMapper: (ChartData data, _) => data.y != null
                   ? getShapeColorOnSentiment(
-                      context,
+                      context.theme,
                       data.y,
                     )
                   : null,

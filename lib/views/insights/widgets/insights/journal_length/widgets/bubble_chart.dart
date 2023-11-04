@@ -63,7 +63,7 @@ class BubbleChart extends ConsumerWidget {
           yValueMapper: (AnalysisModel data, _) => data.duration,
           sizeValueMapper: (AnalysisModel data, _) => data.duration,
           pointColorMapper: (AnalysisModel data, _) => getShapeColorOnSentiment(
-            context,
+            context.theme,
             data.score,
           ),
           enableTooltip: true,

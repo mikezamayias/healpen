@@ -50,13 +50,14 @@ class NoteTile extends ConsumerWidget {
         return CustomListTile(
           useSmallerNavigationSetting: false,
           textColor: analysisModel != null
-              ? getShapeColorOnSentiment(context, analysisModel.score).isDark
+              ? getShapeColorOnSentiment(context.theme, analysisModel.score)
+                      .isDark
                   ? context.theme.colorScheme.onSurface
                   : context.theme.colorScheme.surface
               : null,
           backgroundColor: analysisModel != null
               ? getShapeColorOnSentiment(
-                  context,
+                  context.theme,
                   analysisModel.score,
                 )
               : null,
@@ -71,7 +72,8 @@ class NoteTile extends ConsumerWidget {
             style: context.theme.textTheme.bodyLarge!.copyWith(
               overflow: TextOverflow.ellipsis,
               color:
-                  getShapeColorOnSentiment(context, analysisModel!.score).isDark
+                  getShapeColorOnSentiment(context.theme, analysisModel!.score)
+                          .isDark
                       ? context.theme.colorScheme.onSurface
                       : context.theme.colorScheme.surface,
             ),

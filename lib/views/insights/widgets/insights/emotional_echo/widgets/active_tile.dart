@@ -65,7 +65,7 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                         fontWeight: labelIndex == closestIndexSentiment
                             ? FontWeight.w900
                             : FontWeight.w600,
-                        color: getShapeColorOnSentiment(context, label),
+                        color: getShapeColorOnSentiment(context.theme, label),
                       ),
                     );
                   },

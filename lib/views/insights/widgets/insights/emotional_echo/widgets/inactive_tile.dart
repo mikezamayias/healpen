@@ -18,8 +18,8 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
         .watch(AnalysisViewController.analysisModelListProvider)
         .map((e) => e.score)
         .average;
-    Color shapeColor = getShapeColorOnSentiment(context, sentiment);
-    Color textColor = getTextColorOnSentiment(context, sentiment);
+    Color shapeColor = getShapeColorOnSentiment(context.theme, sentiment);
+    Color textColor = getTextColorOnSentiment(context.theme, sentiment);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
