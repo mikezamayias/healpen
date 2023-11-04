@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../services/data_analysis_service.dart';
 import '../../../../../../utils/constants.dart';
+import '../../../../../../utils/helper_functions.dart';
 
 class ClockPainter extends CustomPainter {
   final List<HourlyData> hourlyData;
@@ -80,15 +81,11 @@ class ClockPainter extends CustomPainter {
   }
 
   Color getColor(double? sentiment) {
-    return theme.colorScheme.onSurfaceVariant;
-    // return switch (sentiment == null) {
-    //   true => theme.colorScheme.outline,
-    //   false => Color.lerp(
-    //       ref.read(themeProvider).colorScheme.error,
-    //       ref.read(themeProvider).colorScheme.primary,
-    //       (sentiment! + 3) / (sentimentLabels.length - 1),
-    //     )!,
-    // };
+    // return theme.colorScheme.onSurfaceVariant;
+    return switch (sentiment == null) {
+      true => theme.colorScheme.outline,
+      false => getShapeColorOnSentiment(theme, sentiment)
+    };
   }
 
   @override
