@@ -85,11 +85,13 @@ class AppBar extends ConsumerWidget {
       curve: standardCurve,
       child: smallNavigationElements
           ? Container(
+              height: gap * 6,
               padding: EdgeInsets.symmetric(vertical: gap),
               alignment: Alignment.bottomLeft,
               child: appBar,
             )
           : Container(
+              height: gap * 15,
               padding: EdgeInsets.all(gap),
               decoration: BoxDecoration(
                 color: context.theme.colorScheme.surfaceVariant,

@@ -66,7 +66,9 @@ class BlueprintView extends ConsumerWidget {
               body: AnimatedContainer(
                 duration: standardDuration,
                 curve: standardCurve,
-                padding: EdgeInsets.symmetric(vertical: gap),
+                padding: ref.watch(navigationSmallerNavigationElementsProvider)
+                    ? EdgeInsets.only(top: gap, bottom: gap * 2)
+                    : EdgeInsets.symmetric(vertical: gap),
                 child: ScrollConfiguration(
                   behavior: ScrollConfiguration.of(context).copyWith(
                     scrollbars: false,
