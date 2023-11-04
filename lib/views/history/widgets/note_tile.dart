@@ -48,8 +48,11 @@ class NoteTile extends ConsumerWidget {
         final noteModel = snapshot.data!.note;
         final analysisModel = snapshot.data!.analysis;
         return CustomListTile(
+          useSmallerNavigationSetting: false,
           textColor: analysisModel != null
-              ? getTextColorOnSentiment(context, analysisModel.score)
+              ? getShapeColorOnSentiment(context, analysisModel.score).isDark
+                  ? context.theme.colorScheme.onSurface
+                  : context.theme.colorScheme.surface
               : null,
           backgroundColor: analysisModel != null
               ? getShapeColorOnSentiment(
@@ -67,8 +70,11 @@ class NoteTile extends ConsumerWidget {
           title: Text(
             noteModel.content,
             style: context.theme.textTheme.bodyLarge!.copyWith(
-              color: context.theme.colorScheme.onPrimary,
               overflow: TextOverflow.ellipsis,
+              color:
+                  getShapeColorOnSentiment(context, analysisModel!.score).isDark
+                      ? context.theme.colorScheme.onSurface
+                      : context.theme.colorScheme.surface,
             ),
             maxLines: 1,
           ),

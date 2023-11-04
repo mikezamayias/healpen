@@ -70,7 +70,7 @@ class MonthCellTile extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                if (smallNavigationElements) Gap(gap),
+                Gap(gap),
                 AnimatedContainer(
                   duration: standardDuration,
                   curve: standardCurve,
@@ -82,7 +82,7 @@ class MonthCellTile extends ConsumerWidget {
                               !dateAfterTodayCheck &&
                               !dateBeforeFirstRecordCheck
                           ? textColor
-                          : context.theme.colorScheme.outlineVariant,
+                          : textColor.withOpacity(0.5),
                       fontWeight: currentMonthCheck &&
                               !dateAfterTodayCheck &&
                               !dateBeforeFirstRecordCheck &&
