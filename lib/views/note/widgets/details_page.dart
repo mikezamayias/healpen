@@ -20,44 +20,44 @@ class DetailsPage extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: gap),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: CustomListTile(
-                      titleString: 'Date and Time',
-                      responsiveWidth: true,
-                      contentPadding: EdgeInsets.all(gap),
-                      subtitleString: DateFormat('MMM dd, yyyy - HH:mm')
-                          // subtitleString: DateFormat('MMM dd, yyyy - hh:mm a')
-                          .format(noteModel.timestamp.timestampToDateTime()),
-                    ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: CustomListTile(
+                    titleString: 'Date and Time',
+                    responsiveWidth: true,
+                    contentPadding: EdgeInsets.all(gap),
+                    explanationString: DateFormat('MMM dd, yyyy - HH:mm')
+                        // subtitleString: DateFormat('MMM dd, yyyy - hh:mm a')
+                        .format(noteModel.timestamp.timestampToDateTime()),
+                    enableExplanationWrapper: true,
                   ),
-                  SizedBox(width: gap),
-                  Expanded(
-                    child: CustomListTile(
-                      responsiveWidth: true,
-                      contentPadding: EdgeInsets.all(gap),
-                      titleString: 'Duration',
-                      subtitleString:
-                          noteModel.duration.writingDurationFormat(),
-                    ),
+                ),
+                SizedBox(width: gap),
+                Expanded(
+                  child: CustomListTile(
+                    responsiveWidth: true,
+                    contentPadding: EdgeInsets.all(gap),
+                    titleString: 'Duration',
+                    explanationString:
+                        noteModel.duration.writingDurationFormat(),
+                    enableExplanationWrapper: true,
                   ),
-                ],
-              ),
-              SizedBox(height: gap),
-              CustomListTile(
-                titleString: 'Content',
-                contentPadding: EdgeInsets.all(gap),
-                subtitleString: noteModel.content,
-                selectableText: true,
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            SizedBox(height: gap),
+            CustomListTile(
+              titleString: 'Content',
+              contentPadding: EdgeInsets.all(gap),
+              explanationString: noteModel.content,
+              enableExplanationWrapper: true,
+            ),
+          ],
         ),
       ),
     );

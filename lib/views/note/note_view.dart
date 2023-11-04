@@ -50,8 +50,8 @@ class _NoteViewState extends ConsumerState<NoteView> {
     final AnalysisModel? analysisModel = args.analysisModel;
     final showAnalysis = !noteModel.isPrivate && analysisModel != null;
     final pages = [
-      DetailsPage(noteModel: noteModel),
       if (showAnalysis) AnalysisPage(analysisModel: analysisModel),
+      DetailsPage(noteModel: noteModel),
     ];
     return BlueprintView(
       showAppBar: true,
