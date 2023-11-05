@@ -10,6 +10,7 @@ Healpen is a mental health-focused application developed using Flutter. It aims 
 ## Built With
 
 - [Flutter](https://flutter.dev/) - The UI framework used
+- [Riverpod](https://riverpod.dev/) - The state management library used
 - [Firebase](https://firebase.google.com/) - The backend service used
 - [Google Natural Language API](https://cloud.google.com/natural-language) - The API used for sentiment analysis
 - [Rive](https://rive.app/) - The animation software used
@@ -20,4 +21,4 @@ Healpen is a mental health-focused application developed using Flutter. It aims 
 
 ## License
 
-This project is licensed under the BSD 3-Clause License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
