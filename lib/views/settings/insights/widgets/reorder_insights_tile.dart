@@ -24,7 +24,7 @@ class ReorderInsightsTile extends ConsumerWidget {
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       titleString: 'Reorder Insights',
-      explanationString: 'Long press and drag to reorder insights',
+      explanationString: 'Long press and drag to reorder insights.',
       enableSubtitleWrapper: false,
       subtitle: ReorderableListView.builder(
         shrinkWrap: true,

@@ -20,7 +20,7 @@ class OpenSourceLicensesTile extends ConsumerWidget {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper: false,
       titleString: 'Open Source Licenses',
-      explanationString: 'View the licenses of the open source packages used',
+      explanationString: 'View the licenses of the open source packages used.',
       leadingIconData: FontAwesomeIcons.code,
       onTap: () {
         context.navigator.push(
