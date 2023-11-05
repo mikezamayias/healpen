@@ -84,23 +84,18 @@ class AppBar extends ConsumerWidget {
     return AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
-      child: smallNavigationElements
-          ? Container(
-              height: gap * 12,
-              padding: EdgeInsets.symmetric(vertical: gap),
-              alignment: Alignment.bottomLeft,
-              child: appBar,
-            )
-          : Container(
-              height: gap * 15,
-              padding: EdgeInsets.all(gap),
-              decoration: BoxDecoration(
-                color: context.theme.colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.circular(radius),
-              ),
-              alignment: Alignment.bottomLeft,
-              child: appBar,
+      height: smallNavigationElements ? gap * 12 : gap * 15,
+      padding: smallNavigationElements
+          ? EdgeInsets.symmetric(vertical: gap)
+          : EdgeInsets.all(gap),
+      decoration: smallNavigationElements
+          ? const BoxDecoration()
+          : BoxDecoration(
+              color: context.theme.colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(radius),
             ),
+      alignment: Alignment.bottomLeft,
+      child: appBar,
     );
   }
 }

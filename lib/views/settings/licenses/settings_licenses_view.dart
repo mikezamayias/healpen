@@ -2,11 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider, PageController;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../extensions/widget_extensions.dart';
 import '../../../models/license_model.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -14,17 +16,18 @@ import '../../../widgets/loading_tile.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'widgets/license_item_view.dart';
 
-class SettingsLicensesView extends StatelessWidget {
+class SettingsLicensesView extends ConsumerWidget {
   const SettingsLicensesView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return BlueprintView(
       appBar: const AppBar(
         automaticallyImplyLeading: true,
         pathNames: [
           'Settings',
-          'Licenses',
+          'About',
+          'Open Source Licenses',
         ],
       ),
       body: CustomLicensePage(
@@ -55,6 +58,10 @@ class SettingsLicensesView extends StatelessWidget {
               ...licences.map(
                 (LicenceModel licence) {
                   return CustomListTile(
+                         useSmallerNavigationSetting:
+                        !ref.watch(navigationSmallerNavigationElementsProvider),
+                    enableExplanationWrapper:
+                        !ref.watch(navigationSmallerNavigationElementsProvider),
                     responsiveWidth: true,
                     leadingIconData: licence.packageName == 'healpen'
                         ? FontAwesomeIcons.solidHeart

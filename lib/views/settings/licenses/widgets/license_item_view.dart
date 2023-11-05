@@ -23,7 +23,8 @@ class LicenseItemView extends StatelessWidget {
         automaticallyImplyLeading: true,
         pathNames: [
           'Settings',
-          'Licenses',
+          'About',
+          'Open Source Licenses',
           licenceModel.packageName,
         ],
       ),
