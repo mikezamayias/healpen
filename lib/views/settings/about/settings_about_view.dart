@@ -7,6 +7,7 @@ import '../../blueprint/blueprint_view.dart';
 import 'widgets/author_tile.dart';
 import 'widgets/open_source_licenses_tile.dart';
 import 'widgets/privacy_policy_tile.dart';
+import 'widgets/terms_of_service_tile.dart';
 
 class SettingsAboutView extends ConsumerWidget {
   const SettingsAboutView({super.key});
@@ -15,9 +16,10 @@ class SettingsAboutView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
       // custom list tile for licenses
-      const AuthorTile(),
+      const TermsOfServiceTile(),
       const PrivacyPolicyTile(),
       const OpenSourceLicensesTile(),
+      const AuthorTile(),
     ];
 
     return BlueprintView(

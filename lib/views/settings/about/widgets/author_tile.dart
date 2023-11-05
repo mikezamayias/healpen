@@ -15,8 +15,8 @@ class AuthorTile extends ConsumerWidget {
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper: false,
-      titleString: 'Mike Zamayias, App Author',
-      explanationString: 'Personal website',
+      titleString: 'Mike Zamayias',
+      explanationString: 'Visit the developer\'s personal website.',
       leadingIconData: FontAwesomeIcons.laptopCode,
       onTap: () {
         launchUrl(

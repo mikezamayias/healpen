@@ -5,8 +5,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class PrivacyPolicyTile extends ConsumerWidget {
-  const PrivacyPolicyTile({super.key});
+class TermsOfServiceTile extends ConsumerWidget {
+  const TermsOfServiceTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -14,11 +14,11 @@ class PrivacyPolicyTile extends ConsumerWidget {
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper: false,
-      titleString: 'Privacy Policy',
-      explanationString: 'View the privacy policy for this app.',
-      leadingIconData: FontAwesomeIcons.userShield,
+      titleString: 'Terms of Service',
+      explanationString: 'View the terms of service for this app.',
+      leadingIconData: FontAwesomeIcons.fileContract,
       onTap: () {
-        // TODO: add privacy policy url
+        // TODO: add terms of service url
       },
     );
   }
