@@ -86,7 +86,7 @@ class AppBar extends ConsumerWidget {
       curve: standardCurve,
       child: smallNavigationElements
           ? Container(
-              height: gap * 6,
+              height: gap * 12,
               padding: EdgeInsets.symmetric(vertical: gap),
               alignment: Alignment.bottomLeft,
               child: appBar,
