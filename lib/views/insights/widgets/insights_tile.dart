@@ -22,7 +22,6 @@ class InsightsTile extends ConsumerStatefulWidget {
 }
 
 class _AnalysisSectionState extends ConsumerState<InsightsTile> {
-  int currentPage = 0;
   double viewPortFraction = 1;
   double pageOffset = 0;
 
@@ -32,7 +31,7 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
         ref.watch(navigationSmallerNavigationElementsProvider);
     final insightsContoller = ref.watch(insightsControllerProvider);
     insightsContoller.pageController = PageController(
-      initialPage: currentPage,
+      initialPage: insightsContoller.currentPage,
       viewportFraction: viewPortFraction,
     )..addListener(() {
         setState(() {
@@ -73,8 +72,9 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
               !ref.watch(navigationSmallerNavigationElementsProvider),
           enableExplanationWrapper:
               !ref.watch(navigationSmallerNavigationElementsProvider),
-          titleString:
-              insightsContoller.insightModelList.elementAt(currentPage).title,
+          titleString: insightsContoller.insightModelList
+              .elementAt(insightsContoller.currentPage)
+              .title,
           trailing: SmoothPageIndicator(
             controller: insightsContoller.pageController,
             count: insightsContoller.insightModelList.length,
@@ -109,13 +109,13 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
               ref.watch(navigationEnableHapticFeedbackProvider),
               () {
                 setState(() {
-                  currentPage = index;
+                  insightsContoller.currentPage = index;
                 });
               },
             ),
           ),
           explanationString: insightsContoller.insightModelList
-              .elementAt(currentPage)
+              .elementAt(insightsContoller.currentPage)
               .explanation,
           maxExplanationStringLines: 3,
         );
