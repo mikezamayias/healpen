@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider, PageController;
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -33,7 +35,6 @@ class SettingsLicensesView extends StatelessWidget {
                 (e) => LicenceModel(
                   packageName: e,
                   licenceParagraphs: [
-                    '',
                     for (int i in licenceData.data!.packageLicenseBindings[e]!)
                       licenceData.data!.licenses
                           .elementAt(i)
@@ -44,49 +45,61 @@ class SettingsLicensesView extends StatelessWidget {
                 ),
               ),
             ];
+            licences.insert(
+              0,
+              licences.removeAt(licences.indexWhere(
+                (LicenceModel element) => element.packageName == 'healpen',
+              )),
+            );
             List<Widget> licenceTiles = [
               ...licences.map(
-                (licence) => CustomListTile(
-                  responsiveWidth: true,
-                  leadingIconData: licence.packageName == 'code_time'
-                      ? FontAwesomeIcons.heart
-                      : null,
-                  titleString: licence.packageName,
-                  onTap: () {
-                    context.navigator.push(
-                      PageRouteBuilder(
-                        transitionDuration: standardDuration,
-                        reverseTransitionDuration: standardDuration,
-                        pageBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                        ) {
-                          return LicenseItemView(
-                            licenceModel: licence,
-                          );
-                        },
-                        transitionsBuilder: (
-                          context,
-                          animation,
-                          secondaryAnimation,
-                          child,
-                        ) {
-                          return FadeTransition(
-                            opacity: Tween<double>(
-                              begin: -1,
-                              end: 1,
-                            ).animate(animation),
-                            child: FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            ),
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
+                (LicenceModel licence) {
+                  return CustomListTile(
+                    responsiveWidth: true,
+                    leadingIconData: licence.packageName == 'healpen'
+                        ? FontAwesomeIcons.solidHeart
+                        : null,
+                    titleString: licence.packageName,
+                    onTap: () {
+                      log(
+                        licence.toString(),
+                        name: 'Licence ${licence.packageName} tapped',
+                      );
+                      context.navigator.push(
+                        PageRouteBuilder(
+                          transitionDuration: standardDuration,
+                          reverseTransitionDuration: standardDuration,
+                          pageBuilder: (
+                            context,
+                            animation,
+                            secondaryAnimation,
+                          ) {
+                            return LicenseItemView(
+                              licenceModel: licence,
+                            );
+                          },
+                          transitionsBuilder: (
+                            context,
+                            animation,
+                            secondaryAnimation,
+                            child,
+                          ) {
+                            return FadeTransition(
+                              opacity: Tween<double>(
+                                begin: -1,
+                                end: 1,
+                              ).animate(animation),
+                              child: FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
               )
             ].animateLicenses();
             return ClipRRect(

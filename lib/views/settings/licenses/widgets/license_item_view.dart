@@ -27,20 +27,27 @@ class LicenseItemView extends StatelessWidget {
           licenceModel.packageName,
         ],
       ),
-      body: ListView.separated(
-        itemBuilder: (_, int index) {
-          return SelectableText(
-            licenceModel.licenceParagraphs[index],
-            style: context.theme.textTheme.bodyLarge,
-          ).animate().fade(
-                curve: standardCurve,
-                duration: standardDuration,
-              );
-        },
-        separatorBuilder: (_, int index) => TextDivider(
-          'Licence ${index + 1}/${licenceModel.licenceParagraphs.length - 1}',
+      body: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: ListView.builder(
+          itemCount: licenceModel.licenceParagraphs.length,
+          itemBuilder: (_, int index) {
+            return Column(
+              children: [
+                TextDivider(
+                    'Licence ${index + 1}/${licenceModel.licenceParagraphs.length}'),
+                SelectableText(
+                  licenceModel.licenceParagraphs[index],
+                  style: context.theme.textTheme.bodyLarge,
+                ).animate().fade(
+                      curve: standardCurve,
+                      duration: standardDuration,
+                    ),
+                Gap(gap),
+              ],
+            );
+          },
         ),
-        itemCount: licenceModel.licenceParagraphs.length - 1,
       ),
     );
   }
