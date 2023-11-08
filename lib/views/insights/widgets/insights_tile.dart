@@ -31,7 +31,6 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
         ref.watch(navigationSmallerNavigationElementsProvider);
     final insightsContoller = ref.watch(insightsControllerProvider);
     insightsContoller.pageController = PageController(
-      initialPage: insightsContoller.currentPage,
       viewportFraction: viewPortFraction,
     )..addListener(() {
         setState(() {
@@ -88,6 +87,13 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
           padSubtitle: true,
           subtitle: PageView.builder(
             itemCount: insightsContoller.insightModelList.length,
+            onPageChanged: (int index) {
+              vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+                insightsContoller.currentPage = index;
+                animateToPage(insightsContoller.pageController, index);
+              });
+            },
+            controller: insightsContoller.pageController,
             itemBuilder: (BuildContext context, int index) {
               double scale = 1 - (index - pageOffset).abs();
               return Transform(
@@ -104,15 +110,6 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
                 ),
               );
             },
-            controller: insightsContoller.pageController,
-            onPageChanged: (int index) => vibrate(
-              ref.watch(navigationEnableHapticFeedbackProvider),
-              () {
-                setState(() {
-                  insightsContoller.currentPage = index;
-                });
-              },
-            ),
           ),
           explanationString: insightsContoller.insightModelList
               .elementAt(insightsContoller.currentPage)
