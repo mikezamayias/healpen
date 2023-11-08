@@ -1,10 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:rive/rive.dart';
 
-import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
@@ -14,10 +12,8 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double sentiment = ref
-        .watch(AnalysisViewController.analysisModelListProvider)
-        .map((e) => e.score)
-        .average;
+    double sentiment =
+        ref.watch(emotionalEchoControllerProvider).sentimentScore;
     Color shapeColor = getShapeColorOnSentiment(context.theme, sentiment);
     Color textColor = getTextColorOnSentiment(context.theme, sentiment);
     return Stack(

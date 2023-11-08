@@ -1,10 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
@@ -16,10 +14,8 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double sentiment = ref
-        .watch(AnalysisViewController.analysisModelListProvider)
-        .map((e) => e.score)
-        .average;
+    double sentiment =
+        ref.watch(emotionalEchoControllerProvider).sentimentScore;
     num closestIndexSentiment = getClosestSentimentIndex(sentiment);
     return Padding(
       padding: ref.watch(navigationSmallerNavigationElementsProvider)

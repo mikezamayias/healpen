@@ -6,6 +6,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
+import '../../../controllers/analysis_view_controller.dart';
+import '../../../controllers/emotional_echo_controller.dart';
 import '../../../controllers/insights_controller.dart';
 import '../../../models/insight_model.dart';
 import '../../../providers/settings_providers.dart';
@@ -37,6 +39,10 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
           pageOffset = insightsContoller.pageController.page!;
         });
       });
+    ref.watch(emotionalEchoControllerProvider).sentimentScore = ref
+        .watch(AnalysisViewController.analysisModelListProvider)
+        .map((e) => e.score)
+        .average;
     return StreamBuilder(
       stream: FirestoreService().preferencesCollectionReference().snapshots(),
       builder: (context, snapshot) {
