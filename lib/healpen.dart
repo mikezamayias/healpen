@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
@@ -25,11 +26,14 @@ class _HealpenState extends ConsumerState<Healpen> {
   @override
   Widget build(BuildContext context) {
     // Moved pages creation to a separate function
+    final healpenPreloadPageController =
+        ref.watch(HealpenController().preloadPageControllerProvider);
     final pages = HealpenController().pages;
-    ref.watch(HealpenController().pageControllerProvider).addListener(() {
+    ref
+        .watch(HealpenController().preloadPageControllerProvider)
+        .addListener(() {
       setState(() {
-        pageOffset =
-            ref.watch(HealpenController().pageControllerProvider).page!;
+        pageOffset = healpenPreloadPageController.page!;
       });
     });
     return StreamBuilder(
@@ -50,8 +54,9 @@ class _HealpenState extends ConsumerState<Healpen> {
               ref.watch(navigationSmallerNavigationElementsProvider)
                   ? context.theme.colorScheme.surfaceVariant
                   : context.theme.colorScheme.surface,
-          body: PageView.builder(
-            controller: ref.watch(HealpenController().pageControllerProvider),
+          body: PreloadPageView.builder(
+            preloadPagesCount: pages.length,
+            controller: healpenPreloadPageController,
             physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (value) {
               _handlePageChange(value);
