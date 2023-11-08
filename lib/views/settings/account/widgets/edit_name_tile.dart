@@ -25,7 +25,7 @@ class EditNameTile extends ConsumerWidget {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      titleString: 'Name',
+      titleString: 'How should you be called?',
       subtitle: TextField(
         controller: textController,
         decoration: InputDecoration(
