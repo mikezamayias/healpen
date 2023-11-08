@@ -62,6 +62,7 @@ class _HealpenState extends ConsumerState<Healpen> {
               _handlePageChange(value);
             },
             itemCount: pages.length,
+            // add a transition builder because preloading removes animations
             itemBuilder: (context, index) => pages.elementAt(index),
           ),
           bottomNavigationBar: const HealpenNavigationBar(),

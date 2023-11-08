@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -47,14 +46,8 @@ class BlueprintView extends ConsumerWidget {
               appBar: showAppBarSetting! && appBar != null
                   ? PreferredSize(
                       preferredSize: Size.fromHeight(18.h),
-                      child: appBar!
-                          .animate(
-                            delay: emphasizedDuration - shortStandardDuration,
-                          )
-                          .fade(
-                            duration: emphasizedDuration,
-                            curve: emphasizedCurve,
-                          ))
+                      child: appBar!,
+                    )
                   : null,
               body: AnimatedContainer(
                 duration: standardDuration,
@@ -69,18 +62,7 @@ class BlueprintView extends ConsumerWidget {
                   ),
                   child: body,
                 ),
-              )
-                  .animate()
-                  .fade(
-                    duration: emphasizedDuration,
-                    curve: emphasizedCurve,
-                  )
-                  .slideY(
-                    duration: emphasizedDuration,
-                    curve: emphasizedCurve,
-                    begin: -1,
-                    end: 0,
-                  ),
+              ),
             ),
           ),
         ),
