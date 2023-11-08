@@ -33,6 +33,7 @@ class CustomListTile extends ConsumerStatefulWidget {
   final Color? textColor;
   final double? cornerRadius;
   final EdgeInsetsGeometry? contentPadding;
+  final EdgeInsetsGeometry? subtitlePadding;
 
   const CustomListTile({
     super.key,
@@ -62,6 +63,7 @@ class CustomListTile extends ConsumerStatefulWidget {
     this.useSmallerNavigationSetting = true,
     this.cornerRadius,
     this.contentPadding,
+    this.subtitlePadding,
   });
 
   @override
@@ -262,11 +264,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
       child: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
-        padding: widget.enableSubtitleWrapper! &&
-                (widget.useSmallerNavigationSetting! &&
-                    ref.watch(navigationSmallerNavigationElementsProvider))
-            ? EdgeInsets.all(gap)
-            : EdgeInsets.zero,
+        padding: widget.subtitlePadding,
         decoration: widget.enableSubtitleWrapper!
             ? BoxDecoration(
                 color: context.theme.colorScheme.surface,

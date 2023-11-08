@@ -57,6 +57,10 @@ class NoteView extends ConsumerWidget {
                 titleString: 'Content',
                 subtitleString: noteModel.content,
                 selectableText: true,
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
               ),
               if (showAnalysis)
                 CustomListTile(
@@ -78,6 +82,10 @@ class NoteView extends ConsumerWidget {
                 responsiveWidth: true,
                 titleString: 'Duration',
                 subtitleString: noteModel.duration.writingDurationFormat(),
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
               ),
               if (showAnalysis)
                 CustomListTile(
@@ -88,6 +96,10 @@ class NoteView extends ConsumerWidget {
                       !ref.watch(navigationSmallerNavigationElementsProvider),
                   titleString: 'Word Count',
                   subtitleString: '${analysisModel.wordCount}',
+                  subtitlePadding:
+                      ref.watch(navigationSmallerNavigationElementsProvider)
+                          ? EdgeInsets.zero
+                          : EdgeInsets.all(gap),
                 ),
             ],
           ),
