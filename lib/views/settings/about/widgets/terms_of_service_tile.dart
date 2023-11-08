@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../providers/settings_providers.dart';
 import '../../../../widgets/custom_list_tile.dart';
+import '../../../../widgets/custom_snack_bar.dart';
 
 class TermsOfServiceTile extends ConsumerWidget {
   const TermsOfServiceTile({super.key});
@@ -18,7 +19,15 @@ class TermsOfServiceTile extends ConsumerWidget {
       explanationString: 'View the terms of service for this app.',
       leadingIconData: FontAwesomeIcons.fileContract,
       onTap: () {
-        // TODO: add terms of service url
+        CustomSnackBar(
+          SnackBarConfig(
+            vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
+            smallNavigationElements:
+                ref.watch(navigationSmallerNavigationElementsProvider),
+            titleString1: 'To be implemented.',
+            leadingIconData1: FontAwesomeIcons.triangleExclamation,
+          ),
+        ).showSnackBar(context);
       },
     );
   }
