@@ -41,20 +41,16 @@ class NoteTile extends ConsumerWidget {
         }
         final noteModel = snapshot.data!.note;
         final analysisModel = snapshot.data!.analysis;
+        Color? shapeColor = analysisModel != null
+            ? getShapeColorOnSentiment(context.theme, analysisModel.score)
+            : null;
+        Color? textColor = analysisModel != null
+            ? getTextColorOnSentiment(context.theme, analysisModel.score)
+            : null;
         return CustomListTile(
           useSmallerNavigationSetting: false,
-          textColor: analysisModel != null
-              ? getShapeColorOnSentiment(context.theme, analysisModel.score)
-                      .isDark
-                  ? context.theme.colorScheme.onSurface
-                  : context.theme.colorScheme.surface
-              : null,
-          backgroundColor: analysisModel != null
-              ? getShapeColorOnSentiment(
-                  context.theme,
-                  analysisModel.score,
-                )
-              : null,
+          textColor: textColor,
+          backgroundColor: shapeColor,
           cornerRadius: radius - gap,
           explanationString: DateFormat('HH:mm')
               .format(
@@ -65,11 +61,7 @@ class NoteTile extends ConsumerWidget {
             noteModel.content,
             style: context.theme.textTheme.bodyLarge!.copyWith(
               overflow: TextOverflow.ellipsis,
-              color:
-                  getShapeColorOnSentiment(context.theme, analysisModel!.score)
-                          .isDark
-                      ? context.theme.colorScheme.onSurface
-                      : context.theme.colorScheme.surface,
+              color: textColor,
             ),
             maxLines: 1,
           ),
