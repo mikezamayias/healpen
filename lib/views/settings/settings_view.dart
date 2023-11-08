@@ -31,51 +31,55 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     List<
         ({
           String title,
+          String description,
           IconData iconData,
           Widget widget,
         })>? pageWidgets = [
       (
         title: 'Theme',
+        description: 'Change the look of the app.',
         widget: const SettingsThemeView(),
         iconData: FontAwesomeIcons.swatchbook,
       ),
       (
         title: 'Navigation',
+        description: 'Change the way you navigate.',
         widget: const SettingsNavigationView(),
         iconData: FontAwesomeIcons.route,
       ),
       (
         title: 'Account',
+        description: 'Change your account settings.',
         widget: const SettingsAccountView(),
         iconData: FontAwesomeIcons.userLarge,
       ),
       (
         title: 'Writing',
+        description: 'Change the way you write.',
         widget: const SettingsWritingView(),
         iconData: FontAwesomeIcons.pencil,
       ),
       (
         title: 'Insights',
+        description: 'Change the way you see your data.',
         widget: const SettingsInsightsView(),
         iconData: FontAwesomeIcons.brain,
       ),
       (
         title: 'Data & Privacy',
+        description: 'Learn more about your data.',
         widget: const Placeholder(),
         iconData: FontAwesomeIcons.scroll,
       ),
       (
         title: 'Help & Support',
+        description: 'Get help with the app.',
         widget: const Placeholder(),
         iconData: FontAwesomeIcons.solidMessage,
       ),
       (
         title: 'About',
-        widget: const Placeholder(),
-        iconData: FontAwesomeIcons.circleInfo,
-      ),
-      (
-        title: 'About',
+        description: 'Learn more about the app.',
         widget: const SettingsAboutView(),
         iconData: FontAwesomeIcons.circleInfo,
       ),
@@ -100,15 +104,11 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                 children: [
                   for (({
                     String title,
+                    String description,
                     IconData iconData,
                     Widget widget,
                   }) element in pageWidgets)
-                    if (element.widget is! Placeholder)
-                      _settingButton(
-                        title: element.title,
-                        iconData: element.iconData,
-                        widget: element.widget,
-                      ),
+                    if (element.widget is! Placeholder) _settingButton(element),
                 ],
               ),
             ),
@@ -118,11 +118,13 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     );
   }
 
-  CustomListTile _settingButton({
-    required IconData iconData,
-    required String title,
-    required Widget widget,
-  }) {
+  CustomListTile _settingButton(
+      ({
+        String title,
+        String description,
+        IconData iconData,
+        Widget widget,
+      }) element) {
     return CustomListTile(
       useSmallerNavigationSetting: false,
       cornerRadius: radius - gap,
@@ -130,9 +132,9 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         horizontal: 2 * gap,
         vertical: gap,
       ),
-      responsiveWidth: true,
-      leadingIconData: iconData,
-      titleString: title,
+      leadingIconData: element.iconData,
+      titleString: element.title,
+      explanationString: element.description,
       onTap: () {
         navigator.push(
           PageRouteBuilder(
@@ -143,7 +145,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
               animation,
               secondaryAnimation,
             ) {
-              return widget;
+              return element.widget;
             },
             transitionsBuilder: (
               context,
