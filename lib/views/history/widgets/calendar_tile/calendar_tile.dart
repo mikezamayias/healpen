@@ -27,43 +27,45 @@ class CalendarTile extends ConsumerStatefulWidget {
 class _CalendarTileState extends ConsumerState<CalendarTile> {
   @override
   Widget build(BuildContext context) {
-    return SfCalendar(
-      showCurrentTimeIndicator: false,
-      showTodayButton: false,
-      showWeekNumber: false,
-      allowViewNavigation: false,
-      showNavigationArrow: false,
-      showDatePickerButton: false,
-      view: CalendarView.month,
-      maxDate: DateTime.now(),
-      minDate:
-          HistoryViewController.noteModels.last.timestamp.timestampToDateTime(),
-      viewNavigationMode: ViewNavigationMode.snap,
-      headerStyle: CalendarHeaderStyle(
-        textStyle: context.theme.textTheme.titleLarge!.copyWith(
-          color: context.theme.colorScheme.onSurface,
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
+    return Padding(
+      padding:
+          smallNavigationElements ? EdgeInsets.all(gap / 2) : EdgeInsets.zero,
+      child: SfCalendar(
+        showCurrentTimeIndicator: false,
+        showTodayButton: false,
+        showWeekNumber: false,
+        allowViewNavigation: false,
+        showNavigationArrow: false,
+        showDatePickerButton: false,
+        view: CalendarView.month,
+        maxDate: DateTime.now(),
+        minDate: HistoryViewController.noteModels.last.timestamp
+            .timestampToDateTime(),
+        viewNavigationMode: ViewNavigationMode.snap,
+        headerStyle: CalendarHeaderStyle(
+          textStyle: context.theme.textTheme.titleLarge!.copyWith(
+            color: smallNavigationElements
+                ? context.theme.colorScheme.onSurfaceVariant
+                : context.theme.colorScheme.onSurface,
+          ),
         ),
-      ),
-      initialSelectedDate: DateTime.now(),
-      firstDayOfWeek: 1,
-      todayHighlightColor: context.theme.colorScheme.secondary,
-      cellBorderColor: context.theme.colorScheme.surface,
-      selectionDecoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius - gap / 2),
-        border: Border.all(
-          color: context.theme.colorScheme.primary,
-          width: gap / 3,
+        initialSelectedDate: DateTime.now(),
+        firstDayOfWeek: 1,
+        todayHighlightColor: context.theme.colorScheme.secondary,
+        cellBorderColor: context.theme.colorScheme.surface,
+        selectionDecoration: const BoxDecoration(),
+        monthViewSettings: const MonthViewSettings(
+          showAgenda: false,
+          dayFormat: 'EEE',
+          appointmentDisplayMode: MonthAppointmentDisplayMode.none,
+          showTrailingAndLeadingDates: false,
         ),
+        dataSource: DataSource(_createAppointments(widget.noteModels, context)),
+        onTap: _onTap,
+        monthCellBuilder: _monthlyBuilder,
       ),
-      monthViewSettings: const MonthViewSettings(
-        showAgenda: false,
-        dayFormat: 'EEE',
-        appointmentDisplayMode: MonthAppointmentDisplayMode.none,
-        showTrailingAndLeadingDates: false,
-      ),
-      dataSource: DataSource(_createAppointments(widget.noteModels, context)),
-      onTap: _onTap,
-      monthCellBuilder: _monthlyBuilder,
     );
   }
 
@@ -108,6 +110,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         contentWidget: DateDialog(date: details.date!),
         actions: [
           CustomListTile(
+            useSmallerNavigationSetting: false,
             responsiveWidth: true,
             titleString: 'Close',
             cornerRadius: radius - gap,

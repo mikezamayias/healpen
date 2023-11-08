@@ -39,8 +39,12 @@ class MonthCellTile extends ConsumerWidget {
         BuildContext context,
         AsyncSnapshot<List<AnalysisModel>> analysisModelListSnapshot,
       ) {
-        Color shapeColor = context.theme.colorScheme.surface;
-        Color textColor = context.theme.colorScheme.onSurface;
+        Color shapeColor = smallNavigationElements
+            ? context.theme.colorScheme.surfaceVariant
+            : context.theme.colorScheme.surface;
+        Color textColor = smallNavigationElements
+            ? context.theme.colorScheme.onSurfaceVariant
+            : context.theme.colorScheme.onSurface;
         double? dateSentiment;
         if (analysisModelListSnapshot.data != null &&
             analysisModelListSnapshot.data!.isNotEmpty) {
@@ -50,8 +54,8 @@ class MonthCellTile extends ConsumerWidget {
             dateSentiment = [
               for (AnalysisModel element in analysisModelList) element.score,
             ].average;
-            shapeColor = getShapeColorOnSentiment(context, dateSentiment);
-            textColor = getTextColorOnSentiment(context, dateSentiment);
+            shapeColor = getShapeColorOnSentiment(context.theme, dateSentiment);
+            textColor = getTextColorOnSentiment(context.theme, dateSentiment);
           }
         }
         return Padding(
@@ -66,7 +70,7 @@ class MonthCellTile extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                if (smallNavigationElements) Gap(gap),
+                Gap(gap / 2),
                 AnimatedContainer(
                   duration: standardDuration,
                   curve: standardCurve,
@@ -78,7 +82,7 @@ class MonthCellTile extends ConsumerWidget {
                               !dateAfterTodayCheck &&
                               !dateBeforeFirstRecordCheck
                           ? textColor
-                          : context.theme.colorScheme.outlineVariant,
+                          : textColor.withOpacity(0.5),
                       fontWeight: currentMonthCheck &&
                               !dateAfterTodayCheck &&
                               !dateBeforeFirstRecordCheck &&
@@ -88,7 +92,7 @@ class MonthCellTile extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (smallNavigationElements) Gap(gap),
+                Gap(gap / 2),
                 Expanded(
                   child: Visibility(
                     visible: cellDetails.appointments.isNotEmpty,
@@ -120,7 +124,7 @@ class MonthCellTile extends ConsumerWidget {
                     ),
                   ),
                 ),
-                if (smallNavigationElements) Gap(gap),
+                Gap(gap / 2),
               ],
             ),
           ),

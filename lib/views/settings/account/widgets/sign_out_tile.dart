@@ -12,6 +12,7 @@ import '../../../../controllers/healpen/healpen_controller.dart';
 import '../../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../models/settings/preference_model.dart';
+import '../../../../providers/settings_providers.dart';
 import '../../../../route_controller.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_list_tile.dart';
@@ -29,6 +30,10 @@ class _SignOutTileState extends ConsumerState<SignOutTile> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
+      useSmallerNavigationSetting:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
+      enableExplanationWrapper:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
       responsiveWidth: true,
       contentPadding: EdgeInsets.symmetric(
         horizontal: gap * 2,

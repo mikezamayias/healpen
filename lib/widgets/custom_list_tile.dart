@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../controllers/settings/preferences_controller.dart';
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
 
-class CustomListTile extends ConsumerWidget {
+class CustomListTile extends ConsumerStatefulWidget {
   final String? titleString;
   final String? explanationString;
   final int? maxExplanationStringLines;
@@ -30,11 +26,14 @@ class CustomListTile extends ConsumerWidget {
   final bool? enableSubtitleWrapper;
   final bool? expandSubtitle;
   final bool? padSubtitle;
+  final bool? useSmallerNavigationSetting;
+  final bool? padExplanation;
   final bool? enableExplanationWrapper;
   final Color? backgroundColor;
   final Color? textColor;
   final double? cornerRadius;
   final EdgeInsetsGeometry? contentPadding;
+  final EdgeInsetsGeometry? subtitlePadding;
 
   const CustomListTile({
     super.key,
@@ -60,231 +59,231 @@ class CustomListTile extends ConsumerWidget {
     this.enableExplanationWrapper = false,
     this.expandSubtitle = false,
     this.padSubtitle = true,
+    this.padExplanation = true,
+    this.useSmallerNavigationSetting = true,
     this.cornerRadius,
     this.contentPadding,
+    this.subtitlePadding,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final padding = contentPadding ?? EdgeInsets.all(gap);
+  ConsumerState<CustomListTile> createState() => _CustomListTileState();
+}
+
+class _CustomListTileState extends ConsumerState<CustomListTile> {
+  @override
+  Widget build(BuildContext context) {
+    final padding = _getPadding();
     final listTile = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: expandSubtitle! ? MainAxisSize.max : MainAxisSize.min,
+      mainAxisSize:
+          widget.expandSubtitle! ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        if (leading != null ||
-            leadingIconData != null ||
-            title != null ||
-            titleString != null ||
-            trailing != null ||
-            trailingIconData != null)
-          Padding(
-            padding: EdgeInsets.only(
-              top: padding.vertical / 2,
-              bottom: padding.vertical / 2,
-              left: padding.horizontal / 2,
-              right: padding.horizontal / 2,
-            ),
-            child: Row(
-              children: [
-                if (leading != null || leadingIconData != null)
-                  Padding(
-                    padding: (title != null || titleString != null)
-                        ? padding.horizontal == 0
-                            ? EdgeInsets.only(right: gap)
-                            : EdgeInsets.only(right: padding.horizontal / 2)
-                        : EdgeInsets.zero,
-                    child: GestureDetector(
-                      onTap: leadingOnTap,
-                      child: Animate(
-                        effects: showcaseLeadingIcon!
-                            ? [
-                                ShakeEffect(
-                                  delay: 1.seconds,
-                                  curve: emphasizedCurve,
-                                  duration: 6.seconds,
-                                  hz: 1,
-                                  offset: const Offset(0, 3),
-                                ),
-                                ShakeEffect(
-                                  delay: 2.seconds,
-                                  curve: emphasizedCurve,
-                                  duration: 6.seconds,
-                                  hz: 1,
-                                  offset: const Offset(3, 0),
-                                ),
-                              ]
-                            : null,
-                        onInit: showcaseLeadingIcon!
-                            ? (_) async {
-                                if (!PreferencesController
-                                    .navigationShowInfoButtons.value) {
-                                  await Future.delayed(
-                                    1.seconds,
-                                    HapticFeedback.vibrate,
-                                  );
-                                }
-                              }
-                            : null,
-                        child: leading ??
-                            FaIcon(
-                              leadingIconData!,
-                              color: textColor ??
-                                  (leadingOnTap != null
-                                      ? context.theme.colorScheme.primary
-                                      : onTap == null
-                                          ? context.theme.colorScheme
-                                              .onSurfaceVariant
-                                          : context
-                                              .theme.colorScheme.onPrimary),
-                              size:
-                                  context.theme.textTheme.titleLarge!.fontSize,
-                            ),
-                      ),
-                    ),
-                  ),
-                if (title != null || titleString != null)
-                  Expanded(
-                    child: title ??
-                        Text(
-                          titleString!,
-                          style: context.theme.textTheme.titleLarge!.copyWith(
-                            color: textColor ??
-                                (onTap == null
-                                    ? context.theme.colorScheme.onSurfaceVariant
-                                    : context.theme.colorScheme.onPrimary),
-                          ),
-                        ),
-                  ),
-                if (trailing != null || trailingIconData != null)
-                  Padding(
-                    padding: (title != null || titleString != null)
-                        ? EdgeInsets.only(left: padding.horizontal / 2)
-                        : EdgeInsets.zero,
-                    child: GestureDetector(
-                      onTap: trailingOnTap,
-                      child: trailing ??
-                          (trailingOnTap != null
-                              ? FaIcon(
-                                  trailingIconData!,
-                                  color: textColor ??
-                                      context.theme.colorScheme.primary,
-                                  size: context
-                                      .theme.textTheme.titleLarge!.fontSize,
-                                )
-                              : FaIcon(
-                                  trailingIconData!,
-                                  color: textColor ??
-                                      (onTap == null
-                                          ? context.theme.colorScheme
-                                              .onSurfaceVariant
-                                          : context
-                                              .theme.colorScheme.onPrimary),
-                                  size: context
-                                      .theme.textTheme.titleLarge!.fontSize,
-                                )),
-                    ),
-                  ),
-              ],
-            ),
-          )
-        else
-          SizedBox(
-            height: padding.vertical / 2,
-          ),
-        if (subtitle != null || subtitleString != null)
-          // if (expandSubtitle!)
-          // Expanded(child: _buildSubtitle(context))
-          // else
-          Flexible(child: _buildSubtitle(context)),
-        if (explanationString != null)
-          Padding(
-            padding: EdgeInsets.only(
-              bottom: gap,
-              left: gap,
-              right: gap,
-            ),
-            child: Container(
-              padding: enableExplanationWrapper! ? EdgeInsets.all(gap) : null,
-              decoration: enableExplanationWrapper!
-                  ? BoxDecoration(
-                      color: context.theme.colorScheme.surface,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(radius - gap),
-                      ),
-                    )
-                  : null,
-              child: SelectableText(
-                explanationString!,
-                onTap: onTap,
-                maxLines: maxExplanationStringLines,
-                enableInteractiveSelection: selectableText!,
-                style: TextStyle(
-                  color: enableExplanationWrapper! || onTap == null
-                      ? context.theme.colorScheme.onSurfaceVariant
-                      : context.theme.colorScheme.onPrimary,
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap != null
-          ? () {
-              vibrate(
-                ref.watch(navigationEnableHapticFeedbackProvider),
-                onTap!,
-              );
-            }
-          : null,
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor ??
-              (onTap == null
-                  ? context.theme.colorScheme.surfaceVariant
-                  : context.theme.colorScheme.primary),
-          borderRadius: BorderRadius.all(
-            Radius.circular(cornerRadius ?? radius),
+        AnimatedContainer(
+          duration: standardDuration,
+          curve: standardCurve,
+          padding: widget.useSmallerNavigationSetting! &&
+                  ref.watch(navigationSmallerNavigationElementsProvider)
+              ? EdgeInsets.zero
+              : EdgeInsets.all(padding.vertical / 2),
+          child: Row(
+            children: [
+              _buildLeading(),
+              _buildTitle(),
+              _buildTrailing(),
+            ],
           ),
         ),
-        child: switch (responsiveWidth) {
-          true => IntrinsicWidth(child: listTile),
-          _ => listTile,
-        },
+        if (widget.subtitle != null || widget.subtitleString != null)
+          Flexible(child: _buildSubtitle()),
+        if (widget.explanationString != null) _buildExplanation(),
+      ],
+    );
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: widget.onTap,
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        decoration: widget.useSmallerNavigationSetting! &&
+                ref.watch(navigationSmallerNavigationElementsProvider)
+            ? const BoxDecoration()
+            : BoxDecoration(
+                color: widget.backgroundColor ??
+                    (widget.onTap != null
+                        ? context.theme.colorScheme.primary
+                        : ref.watch(navigationSmallerNavigationElementsProvider)
+                            ? context.theme.colorScheme.surface
+                            : context.theme.colorScheme.surfaceVariant),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(widget.cornerRadius ?? radius),
+                ),
+              ),
+        child: widget.responsiveWidth!
+            ? IntrinsicWidth(child: listTile)
+            : listTile,
       ),
     );
   }
 
-  Padding _buildSubtitle(BuildContext context) {
-    return Padding(
-      padding: padSubtitle!
-          ? EdgeInsets.only(
-              bottom: gap,
-              left: gap,
-              right: gap,
-            )
+  Color _getTextColor() {
+    return widget.textColor ??
+        (widget.onTap != null
+            ? context.theme.colorScheme.onPrimary
+            : ref.watch(navigationSmallerNavigationElementsProvider)
+                ? context.theme.colorScheme.onSurface
+                : context.theme.colorScheme.onSurfaceVariant);
+  }
+
+  EdgeInsetsGeometry _getPadding() {
+    return widget.contentPadding ?? EdgeInsets.all(gap);
+  }
+
+  Widget _buildLeading() {
+    if (widget.leading != null || widget.leadingIconData != null) {
+      final padding = _getPadding();
+      return Padding(
+        padding: (widget.title != null || widget.titleString != null)
+            ? padding.horizontal == 0
+                ? EdgeInsets.only(right: gap)
+                : EdgeInsets.only(right: padding.horizontal / 4)
+            : EdgeInsets.zero,
+        child: GestureDetector(
+          onTap: widget.leadingOnTap,
+          child: widget.leading ??
+              FaIcon(
+                widget.leadingIconData!,
+                color: _getTextColor(),
+                size: context.theme.textTheme.titleLarge!.fontSize,
+              ),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildTitle() {
+    if (widget.title != null || widget.titleString != null) {
+      return Expanded(
+        child: widget.title ??
+            Text(
+              widget.titleString!,
+              style: context.theme.textTheme.titleLarge!.copyWith(
+                color: _getTextColor(),
+              ),
+            ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildTrailing() {
+    if (widget.trailing != null || widget.trailingIconData != null) {
+      final padding = _getPadding();
+      return Padding(
+        padding: (widget.title != null || widget.titleString != null)
+            ? EdgeInsets.only(left: padding.horizontal / 2)
+            : EdgeInsets.zero,
+        child: GestureDetector(
+          onTap: widget.trailingOnTap,
+          child: widget.trailing ??
+              FaIcon(
+                widget.trailingIconData!,
+                color: _getTextColor(),
+                size: context.theme.textTheme.titleLarge!.fontSize,
+              ),
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildExplanation() {
+    return AnimatedContainer(
+      duration: standardDuration,
+      curve: standardCurve,
+      padding: widget.padExplanation!
+          ? widget.useSmallerNavigationSetting! &&
+                  ref.watch(navigationSmallerNavigationElementsProvider)
+              ? EdgeInsets.zero
+              : EdgeInsets.only(
+                  bottom: gap,
+                  left: gap,
+                  right: gap,
+                )
           : EdgeInsets.only(bottom: gap),
-      child: Container(
-        padding: enableSubtitleWrapper! ? EdgeInsets.all(gap) : null,
-        decoration: enableSubtitleWrapper!
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        padding: widget.enableExplanationWrapper! &&
+                (widget.useSmallerNavigationSetting! ||
+                    ref.watch(navigationSmallerNavigationElementsProvider))
+            ? EdgeInsets.all(gap)
+            : EdgeInsets.zero,
+        decoration: widget.enableExplanationWrapper!
             ? BoxDecoration(
                 color: context.theme.colorScheme.surface,
                 borderRadius: BorderRadius.all(
                   Radius.circular(radius - gap),
                 ),
               )
-            : null,
-        child: subtitle != null && subtitleString == null
-            ? subtitle!
+            : const BoxDecoration(),
+        child: SelectableText(
+          widget.explanationString!,
+          onTap: widget.onTap,
+          maxLines: widget.maxExplanationStringLines,
+          enableInteractiveSelection: widget.selectableText!,
+          style: TextStyle(
+            color: widget.textColor ??
+                (widget.onTap != null
+                    ? context.theme.colorScheme.onPrimary
+                    : widget.enableExplanationWrapper! &&
+                            ref.watch(
+                                navigationSmallerNavigationElementsProvider)
+                        ? context.theme.colorScheme.onSurface
+                        : context.theme.colorScheme.onSurfaceVariant),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSubtitle() {
+    return AnimatedContainer(
+      duration: standardDuration,
+      curve: standardCurve,
+      padding: widget.padSubtitle!
+          ? EdgeInsets.only(
+              bottom: gap,
+              left: gap,
+              right: gap,
+            )
+          : EdgeInsets.only(bottom: gap),
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        padding: widget.subtitlePadding,
+        decoration: widget.enableSubtitleWrapper!
+            ? BoxDecoration(
+                color: context.theme.colorScheme.surface,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(radius - gap),
+                ),
+              )
+            : const BoxDecoration(),
+        child: widget.subtitle != null && widget.subtitleString == null
+            ? widget.subtitle!
             : SelectableText(
-                subtitleString!,
-                onTap: onTap,
-                enableInteractiveSelection: selectableText!,
+                widget.subtitleString!,
+                onTap: widget.onTap,
+                enableInteractiveSelection: widget.selectableText!,
                 style: context.theme.textTheme.titleMedium!.copyWith(
-                  color: enableSubtitleWrapper! || onTap == null
-                      ? context.theme.colorScheme.onSurfaceVariant
+                  color: widget.enableSubtitleWrapper! && widget.onTap == null
+                      ? ref.watch(navigationSmallerNavigationElementsProvider)
+                          ? context.theme.colorScheme.onSurface
+                          : context.theme.colorScheme.onSurfaceVariant
                       : context.theme.colorScheme.onPrimary,
                 ),
               ),

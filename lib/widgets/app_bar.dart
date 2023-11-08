@@ -26,27 +26,26 @@ class AppBar extends ConsumerWidget {
         ref.watch(navigationSmallerNavigationElementsProvider);
     final appBarContent = RichText(
       text: TextSpan(
+        style: const TextStyle(),
         children: [
           for (int i = 0; i < pathNames.length; i++)
-            TextSpan(
-              text: i < pathNames.length - 1
-                  ? '${pathNames[i]} / '
-                  : pathNames.length != 1 && pathNames.length > 2
-                      ? '\n${pathNames[i]}'
-                      : pathNames[i],
-              style: (i < pathNames.length - 1)
-                  ? context.theme.textTheme.titleLarge!.copyWith(
-                      color: switch (smallNavigationElements) {
-                        true => context.theme.colorScheme.outline,
-                        false => context.theme.colorScheme.onSurfaceVariant,
-                      },
-                    )
-                  : context.theme.textTheme.headlineSmall!.copyWith(
-                      color: switch (smallNavigationElements) {
-                        true => context.theme.colorScheme.secondary,
-                        false => context.theme.colorScheme.onSurfaceVariant,
-                      },
-                    ),
+            WidgetSpan(
+              child: Text(
+                i < pathNames.length - 1 ? '${pathNames[i]} / ' : pathNames[i],
+                style: (i < pathNames.length - 1)
+                    ? context.theme.textTheme.titleLarge!.copyWith(
+                        color: smallNavigationElements
+                            ? context.theme.colorScheme.outline
+                            : context.theme.colorScheme.onSurfaceVariant,
+                      )
+                    : context.theme.textTheme.headlineSmall!.copyWith(
+                        color: smallNavigationElements
+                            ? context.theme.colorScheme.secondary
+                            : context.theme.colorScheme.onSurfaceVariant,
+                      ),
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
         ],
       ),
@@ -76,30 +75,25 @@ class AppBar extends ConsumerWidget {
                 icon: const FaIcon(FontAwesomeIcons.chevronLeft),
               ),
               SizedBox(width: gap),
-              appBarContent,
+              Flexible(child: appBarContent),
             ],
           )
         : appBarContent;
-    return AnimatedCrossFade(
-      crossFadeState: switch (smallNavigationElements) {
-        true => CrossFadeState.showFirst,
-        false => CrossFadeState.showSecond
-      },
-      firstChild: appBar,
-      secondChild: Container(
-        padding: EdgeInsets.all(gap),
-        decoration: BoxDecoration(
-          color: context.theme.colorScheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(radius),
-        ),
-        alignment: Alignment.bottomLeft,
-        child: appBar,
-      ),
+    return AnimatedContainer(
       duration: standardDuration,
-      reverseDuration: standardDuration,
-      sizeCurve: standardEasing,
-      secondCurve: standardCurve,
-      firstCurve: standardCurve,
+      curve: standardCurve,
+      height: smallNavigationElements ? gap * 12 : gap * 15,
+      padding: smallNavigationElements
+          ? EdgeInsets.symmetric(vertical: gap)
+          : EdgeInsets.all(gap),
+      decoration: smallNavigationElements
+          ? const BoxDecoration()
+          : BoxDecoration(
+              color: context.theme.colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(radius),
+            ),
+      alignment: Alignment.bottomLeft,
+      child: appBar,
     );
   }
 }

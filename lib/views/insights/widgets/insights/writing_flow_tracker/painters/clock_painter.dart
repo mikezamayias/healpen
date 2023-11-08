@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../services/data_analysis_service.dart';
 import '../../../../../../utils/constants.dart';
+import '../../../../../../utils/helper_functions.dart';
 
 class ClockPainter extends CustomPainter {
   final List<HourlyData> hourlyData;
@@ -47,14 +48,14 @@ class ClockPainter extends CustomPainter {
         center.dx,
         center.dy,
       );
-      final partialLenght = partDialLength(
+      final partialLength = partDialLength(
         currentData: currentData,
         lowerLimit: lowerStrokeLimit,
         upperLimit: upperStokeLimit,
       );
       final endOffset = Offset(
-        center.dx + partialLenght * cos(angle),
-        center.dy + partialLenght * sin(angle),
+        center.dx + partialLength * cos(angle),
+        center.dy + partialLength * sin(angle),
       );
       canvas.drawLine(startOffset, endOffset, paint);
       final textSpan = TextSpan(
@@ -80,15 +81,11 @@ class ClockPainter extends CustomPainter {
   }
 
   Color getColor(double? sentiment) {
-    return theme.colorScheme.onSurfaceVariant;
-    // return switch (sentiment == null) {
-    //   true => theme.colorScheme.outline,
-    //   false => Color.lerp(
-    //       ref.read(themeProvider).colorScheme.error,
-    //       ref.read(themeProvider).colorScheme.primary,
-    //       (sentiment! + 3) / (sentimentLabels.length - 1),
-    //     )!,
-    // };
+    // return theme.colorScheme.onSurfaceVariant;
+    return switch (sentiment == null) {
+      true => theme.colorScheme.outline,
+      false => getShapeColorOnSentiment(theme, sentiment)
+    };
   }
 
   @override
@@ -102,6 +99,6 @@ class ClockPainter extends CustomPainter {
     required double upperLimit,
   }) {
     double stroke = calculateStroke(radius, currentData);
-    return radius * stroke.clamp(lowerLimit, upperLimit) * 10;
+    return radius * 0.9 * stroke.clamp(lowerLimit, upperLimit) * 10;
   }
 }

@@ -37,9 +37,12 @@ class CustomSnackBar {
 
 class SnackBarConfig {
   final bool vibrate;
+  final bool smallNavigationElements;
   final String titleString1;
   final IconData leadingIconData1;
-  final List<Widget>? trailingWidgets1;
+  final List<
+          ({IconData? iconData, String? titleString, void Function()? onTap})>?
+      trailingWidgets1;
   final EdgeInsets? snackBarMargin;
   final Future Function()? actionAfterSnackBar1;
 
@@ -48,6 +51,7 @@ class SnackBarConfig {
 
   SnackBarConfig({
     required this.vibrate,
+    required this.smallNavigationElements,
     required this.titleString1,
     required this.leadingIconData1,
     this.trailingWidgets1,
@@ -76,27 +80,61 @@ class SnackBarConfig {
     String titleString,
     IconData leadingIconData, [
     EdgeInsets? snackBarMargin,
-    List<Widget>? trailingWidgets,
+    List<
+            ({
+              IconData? iconData,
+              String? titleString,
+              void Function()? onTap,
+            })>?
+        trailingWidgets,
   ]) {
     return SnackBar(
-      margin: snackBarMargin ?? EdgeInsets.all(gap),
+      // this parameter can be conditionally used to keep a specific margin for 
+      // the snackbar
       padding: EdgeInsets.zero,
-      duration: 3.seconds,
+      duration: 1.minutes,
       content: Builder(
         builder: (BuildContext context) {
-          return CustomListTile(
-            backgroundColor: context.theme.colorScheme.secondary,
-            textColor: context.theme.colorScheme.onSecondary,
-            titleString: titleString,
-            leadingIconData: leadingIconData,
-            contentPadding: EdgeInsets.all(gap),
-            cornerRadius: radius,
-            trailing: trailingWidgets != null
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: trailingWidgets,
-                  )
-                : null,
+          return AnimatedContainer(
+            duration: standardDuration,
+            curve: standardCurve,
+            padding:
+                smallNavigationElements ? EdgeInsets.all(gap) : EdgeInsets.zero,
+            child: CustomListTile(
+              useSmallerNavigationSetting: false,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: gap,
+                vertical: smallNavigationElements ? 0 : gap,
+              ),
+              backgroundColor: context.theme.colorScheme.secondary,
+              textColor: context.theme.colorScheme.onSecondary,
+              titleString: titleString,
+              leadingIconData: leadingIconData,
+              trailing: trailingWidgets != null
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        for (final e in trailingWidgets)
+                          CustomListTile(
+                            useSmallerNavigationSetting: false,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: gap,
+                              vertical: gap,
+                            ),
+                            cornerRadius: radius - gap,
+                            responsiveWidth: true,
+                            backgroundColor:
+                                context.theme.colorScheme.primaryContainer,
+                            textColor:
+                                context.theme.colorScheme.onPrimaryContainer,
+                            onTap: e.onTap,
+                            titleString: e.titleString,
+                            leadingIconData: e.iconData,
+                          ),
+                      ],
+                    )
+                  : null,
+            ),
           );
         },
       ),

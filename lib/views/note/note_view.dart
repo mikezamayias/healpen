@@ -1,47 +1,24 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../controllers/page_controller.dart' as page_controller;
-import '../../controllers/settings/preferences_controller.dart';
+import '../../controllers/emotional_echo_controller.dart';
+import '../../extensions/int_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../models/note/note_model.dart';
+import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
-import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
-import 'widgets/analysis_page.dart';
-import 'widgets/details_page.dart';
+import '../insights/widgets/insights/emotional_echo/emotional_echo_tile.dart';
 
-class NoteView extends ConsumerStatefulWidget {
+class NoteView extends ConsumerWidget {
   const NoteView({super.key});
 
   @override
-  ConsumerState<NoteView> createState() => _NoteViewState();
-}
-
-class _NoteViewState extends ConsumerState<NoteView> {
-  late PageController controller;
-  final segments = ['details', 'analysis'];
-  int selectedPage = 0;
-
-  @override
-  void initState() {
-    controller = PageController(initialPage: selectedPage);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final args = ModalRoute.of(context)!.settings.arguments as ({
       NoteModel noteModel,
       AnalysisModel? analysisModel
@@ -49,107 +26,84 @@ class _NoteViewState extends ConsumerState<NoteView> {
     final NoteModel noteModel = args.noteModel;
     final AnalysisModel? analysisModel = args.analysisModel;
     final showAnalysis = !noteModel.isPrivate && analysisModel != null;
-    final pages = [
-      DetailsPage(noteModel: noteModel),
-      if (showAnalysis) AnalysisPage(analysisModel: analysisModel),
-    ];
+    if (showAnalysis) {
+      ref.watch(emotionalEchoControllerProvider).sentimentScore =
+          analysisModel.score;
+    }
     return BlueprintView(
-      showAppBar: true,
-      appBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: gap),
-        child: AppBar(
-          pathNames: [
-            page_controller.PageController()
-                .noteView
-                .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
-          ],
-          automaticallyImplyLeading: true,
-        ),
-      ),
-      padBodyHorizontally: false,
-      body: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              clipBehavior: Clip.none,
-              controller: controller,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final bool active = index == selectedPage;
-                final double opacity = active ? 1 : 0;
-                final double slide = active
-                    ? 0
-                    : index < selectedPage
-                        ? -1
-                        : 1;
-                return AnimatedContainer(
-                  duration: standardDuration,
-                  curve: standardEasing,
-                  transform: Matrix4.identity()
-                    ..translate(slide * 100.w)
-                    ..scale(active ? 1.0 : 0.3),
-                  child: AnimatedOpacity(
-                    duration: standardDuration,
-                    curve: standardEasing,
-                    opacity: opacity,
-                    child: pages.elementAt(index),
-                  ),
-                );
-              },
-            ),
+      appBar: AppBar(
+        pathNames: [
+          DateFormat('EEE d MMM yyyy').format(
+            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
           ),
-          if (showAnalysis)
-            Padding(
-              padding: EdgeInsets.only(top: gap),
-              child: SegmentedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(radius),
-                    ),
+          DateFormat('HH:mm:ss').format(
+            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+          ),
+        ],
+        automaticallyImplyLeading: true,
+      ),
+      body: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: SingleChildScrollView(
+          child: Wrap(
+            spacing: gap,
+            runSpacing: gap,
+            children: [
+              CustomListTile(
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                titleString: 'Content',
+                subtitleString: noteModel.content,
+                selectableText: true,
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
+              ),
+              if (showAnalysis)
+                CustomListTile(
+                  useSmallerNavigationSetting:
+                      !ref.watch(navigationSmallerNavigationElementsProvider),
+                  enableExplanationWrapper:
+                      !ref.watch(navigationSmallerNavigationElementsProvider),
+                  titleString: 'Sentiment',
+                  subtitle: SizedBox(
+                    height: 39.h,
+                    child: const EmotionalEchoTile(),
                   ),
                 ),
-                showSelectedIcon: false,
-                segments: [
-                  ButtonSegment(
-                    value: 'details',
-                    label: const Text('Details'),
-                    icon: FaIcon(
-                      FontAwesomeIcons.circleInfo,
-                      color: selectedPage == 0
-                          ? theme.colorScheme.onPrimary
-                          : theme.colorScheme.onBackground,
-                    ),
-                  ),
-                  ButtonSegment(
-                    value: 'analysis',
-                    label: const Text('Analysis'),
-                    icon: FaIcon(
-                      FontAwesomeIcons.chartPie,
-                      color: selectedPage == 1
-                          ? theme.colorScheme.onPrimary
-                          : theme.colorScheme.onBackground,
-                    ),
-                  ),
-                ],
-                selected: {segments[selectedPage]},
-                onSelectionChanged: (Set<String> value) {
-                  vibrate(
-                      PreferencesController
-                          .navigationEnableHapticFeedback.value, () {
-                    setState(() {
-                      selectedPage = segments.indexOf(value.first);
-                      controller.animateToPage(
-                        selectedPage,
-                        duration: emphasizedDuration,
-                        curve: emphasizedCurve,
-                      );
-                    });
-                  });
-                },
+              CustomListTile(
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                responsiveWidth: true,
+                titleString: 'Duration',
+                subtitleString: noteModel.duration.writingDurationFormat(),
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
               ),
-            )
-        ],
+              if (showAnalysis)
+                CustomListTile(
+                  responsiveWidth: true,
+                  useSmallerNavigationSetting:
+                      !ref.watch(navigationSmallerNavigationElementsProvider),
+                  enableExplanationWrapper:
+                      !ref.watch(navigationSmallerNavigationElementsProvider),
+                  titleString: 'Word Count',
+                  subtitleString: '${analysisModel.wordCount}',
+                  subtitlePadding:
+                      ref.watch(navigationSmallerNavigationElementsProvider)
+                          ? EdgeInsets.zero
+                          : EdgeInsets.all(gap),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

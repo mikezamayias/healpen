@@ -11,5 +11,6 @@ extension StringExtension on String {
   String toCamelCase() => replaceAll(RegExp(' +'), ' ')
       .split(' ')
       .map((str) => str.toCapitalized())
-      .join().replaceFirst(this[0], this[0].toLowerCase());
+      .join()
+      .replaceFirst(this[0], this[0].toLowerCase());
 }

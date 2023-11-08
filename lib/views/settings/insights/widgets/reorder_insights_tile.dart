@@ -19,8 +19,12 @@ class ReorderInsightsTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final insightsController = ref.watch(insightsControllerProvider);
     return CustomListTile(
+      useSmallerNavigationSetting:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
+      enableExplanationWrapper:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
       titleString: 'Reorder Insights',
-      explanationString: 'Long press and drag to reorder insights',
+      explanationString: 'Long press and drag to reorder insights.',
       enableSubtitleWrapper: false,
       subtitle: ReorderableListView.builder(
         shrinkWrap: true,
@@ -34,6 +38,9 @@ class ReorderInsightsTile extends ConsumerWidget {
                 ? EdgeInsets.zero
                 : EdgeInsets.only(bottom: gap),
             child: CustomListTile(
+              useSmallerNavigationSetting:
+                  !ref.watch(navigationSmallerNavigationElementsProvider),
+              enableExplanationWrapper: false,
               cornerRadius: radius - gap,
               onTap: () {},
               titleString:

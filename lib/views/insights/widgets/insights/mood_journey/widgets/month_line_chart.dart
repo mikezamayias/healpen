@@ -49,6 +49,7 @@ class MonthLineChart extends ConsumerWidget {
             .toList()
             .averageDaysSentimentToChartData();
         return SfCartesianChart(
+          margin: EdgeInsets.zero,
           plotAreaBorderWidth: 0,
           primaryYAxis: NumericAxis(
             isVisible: true,
@@ -80,7 +81,7 @@ class MonthLineChart extends ConsumerWidget {
               sortFieldValueMapper: (ChartData data, _) => data.x,
               pointColorMapper: (ChartData data, _) => data.y != null
                   ? getShapeColorOnSentiment(
-                      context,
+                      context.theme,
                       data.y,
                     )
                   : null,
@@ -112,6 +113,7 @@ class MonthLineChart extends ConsumerWidget {
                     ),
                     actions: [
                       CustomListTile(
+                        useSmallerNavigationSetting: false,
                         responsiveWidth: true,
                         titleString: 'Close',
                         cornerRadius: radius - gap,

@@ -12,17 +12,13 @@ extension WidgetListExtensions on List<Widget> {
       )
       .slideY(begin: 0.6, curve: standardCurve);
 
-  List<Widget> animateLicences() => animate(interval: standardDuration)
-      .fade(
-        begin: 0,
-      )
-      .scale(
-        begin: const Offset(0, 0),
-        curve: emphasizedCurve,
-      )
+  List<Widget> animateLicenses() => animate(interval: shortStandardDuration)
+      .fade()
+      .scale(begin: const Offset(0, 0))
       .slideX(
         begin: -10,
-        curve: emphasizedCurve,
+        curve: standardEasing,
+        duration: standardDuration,
       );
 }
 
@@ -54,12 +50,15 @@ extension WidgetExtensions on Widget {
   //       borderRadius: BorderRadius.all(Radius.circular(radius)),
   //     );
 
-  Widget animateAppBar() => animateSlideInFromTop()
-      .animate()
-      .fade(begin: -1, curve: standardCurve)
-      .slideY(begin: -1, curve: standardCurve)
-      .scale(
-        begin: const Offset(0.6, 0.6),
+  Widget animateAppBar() => animate()
+      .fade(
         duration: standardDuration,
+        curve: standardEasing,
+      )
+      .slideY(
+        duration: standardDuration,
+        curve: standardEasing,
+        begin: -.3,
+        end: 0,
       );
 }

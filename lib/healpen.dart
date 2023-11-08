@@ -1,19 +1,14 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
-import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
-import 'widgets/custom_bottom_navigation_bar.dart';
+import 'widgets/healpen_navigation_bar.dart';
 
 class Healpen extends ConsumerStatefulWidget {
   const Healpen({super.key});
@@ -30,7 +25,7 @@ class _HealpenState extends ConsumerState<Healpen> {
   @override
   Widget build(BuildContext context) {
     // Moved pages creation to a separate function
-    final pages = _buildPages();
+    final pages = HealpenController().pages;
     ref.watch(HealpenController().pageControllerProvider).addListener(() {
       setState(() {
         pageOffset =
@@ -51,42 +46,23 @@ class _HealpenState extends ConsumerState<Healpen> {
         }
 
         return Scaffold(
-          body: PreloadPageView.builder(
-            preloadPagesCount: pages.length,
+          backgroundColor:
+              ref.watch(navigationSmallerNavigationElementsProvider)
+                  ? context.theme.colorScheme.surfaceVariant
+                  : context.theme.colorScheme.surface,
+          body: PageView.builder(
             controller: ref.watch(HealpenController().pageControllerProvider),
             physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (value) {
               _handlePageChange(value);
             },
             itemCount: pages.length,
-            itemBuilder: (context, index) {
-              double scale = 1 - (index - pageOffset).abs();
-              return Transform(
-                transform: Matrix4.identity()
-                  ..setEntry(3, 2, 0.01)
-                  ..scale(scale, scale),
-                alignment: Alignment.center,
-                child: PhysicalModel(
-                  color: context.theme.colorScheme.surface,
-                  borderRadius: BorderRadius.circular(radius - gap),
-                  child: _buildPage(context, index, pages),
-                ),
-              );
-            },
+            itemBuilder: (context, index) => pages.elementAt(index),
           ),
-          bottomNavigationBar: const CustomBottomNavigationBar(),
+          bottomNavigationBar: const HealpenNavigationBar(),
         );
       },
     );
-  }
-
-  List<Animate> _buildPages() {
-    return [
-      for (final page in HealpenController().pages)
-        page
-            .animate()
-            .fade(duration: emphasizedDuration, curve: emphasizedCurve),
-    ];
   }
 
   void _updatePreferences(List<PreferenceModel> fetchedPreferences) {
@@ -101,11 +77,6 @@ class _HealpenState extends ConsumerState<Healpen> {
         if (fetchedPreferenceMap.containsKey(key)) {
           ref.read(preferenceTuple.provider.notifier).state =
               fetchedPreferenceMap[key];
-          log(
-            'Updated ${preferenceTuple.preferenceModel.key} '
-            'with value: ${fetchedPreferenceMap[key]}',
-            name: '_HealpenWrapperState:StreamBuilder - Updating State',
-          );
         }
       }
     });
@@ -117,18 +88,6 @@ class _HealpenState extends ConsumerState<Healpen> {
       ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
           value;
     });
-  }
-
-  Widget _buildPage(BuildContext context, int index, List<Animate> pages) {
-    // Moved this logic to a separate function
-    return AnimatedOpacity(
-      duration: standardDuration,
-      curve: standardCurve,
-      opacity: ref.watch(HealpenController().currentPageIndexProvider) == index
-          ? 1
-          : 0,
-      child: pages.elementAt(index),
-    );
   }
 
   bool _havePreferencesChanged(List<PreferenceModel> newPreferences) {

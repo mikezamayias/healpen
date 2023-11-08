@@ -20,7 +20,6 @@ class PrivateNoteCheckBox extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.all(gap),
       backgroundColor: context.theme.colorScheme.surface,
       responsiveWidth: true,
       showcaseLeadingIcon: ref.watch(shakePrivateNoteInfoProvider),

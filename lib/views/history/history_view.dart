@@ -57,12 +57,22 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
             }
             if (snapshot.data!.isNotEmpty) {
               HistoryViewController.noteModels = snapshot.data!;
-              return Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(radius),
-                  color: context.theme.colorScheme.surfaceVariant,
-                ),
-                padding: EdgeInsets.all(gap / 2),
+              return AnimatedContainer(
+                duration: standardDuration,
+                curve: standardCurve,
+                decoration:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? BoxDecoration(
+                            borderRadius: BorderRadius.circular(radius),
+                            color: context.theme.colorScheme.surface,
+                          )
+                        : BoxDecoration(
+                            borderRadius: BorderRadius.circular(radius),
+                            color: context.theme.colorScheme.surfaceVariant,
+                          ),
+                padding: ref.watch(navigationSmallerNavigationElementsProvider)
+                    ? EdgeInsets.zero
+                    : EdgeInsets.all(gap / 2),
                 child: CalendarTile(
                   noteModels: HistoryViewController.notesToAnalyze,
                 ),
@@ -72,7 +82,6 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                 children: [
                   CustomListTile(
                     titleString: 'No notes yet',
-                    contentPadding: EdgeInsets.all(gap),
                     subtitle:
                         const Text('Start writing to see your notes here'),
                     onTap: () => ref

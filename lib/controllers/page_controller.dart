@@ -8,6 +8,7 @@ import '../views/auth/auth_view.dart';
 import '../views/history/history_view.dart';
 import '../views/note/note_view.dart';
 import '../views/onboarding/onboarding_view.dart';
+import '../views/settings/licenses/settings_licenses_view.dart';
 import '../views/settings/settings_view.dart';
 import '../views/writing/writing_view.dart';
 import '../wrappers/auth_wrapper.dart';
@@ -102,5 +103,12 @@ class PageController {
     label: 'healpen',
     icon: FontAwesomeIcons.pen,
     widget: const Healpen(),
+  );
+
+  final licenses = PageModel(
+    titleGenerator: (userName) => 'Open Source Licenses',
+    label: 'licenses',
+    icon: FontAwesomeIcons.scroll,
+    widget: const SettingsLicensesView(),
   );
 }

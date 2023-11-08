@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -38,37 +36,30 @@ class NoteTile extends ConsumerWidget {
         BuildContext context,
         AsyncSnapshot<({NoteModel note, AnalysisModel? analysis})> snapshot,
       ) {
-        log(
-          '${snapshot.data?.note}',
-          name: 'NoteTile:build:StreamBuilder:snapshot.data',
-        );
         if (!snapshot.hasData) {
           return const LoadingTile(durationTitle: 'Loading note...');
         }
         final noteModel = snapshot.data!.note;
         final analysisModel = snapshot.data!.analysis;
+        Color? shapeColor = analysisModel != null
+            ? getShapeColorOnSentiment(context.theme, analysisModel.score)
+            : null;
+        Color? textColor = analysisModel != null
+            ? getTextColorOnSentiment(context.theme, analysisModel.score)
+            : null;
         return CustomListTile(
-          textColor: analysisModel != null
-              ? getTextColorOnSentiment(context, analysisModel.score)
-              : null,
-          backgroundColor: analysisModel != null
-              ? getShapeColorOnSentiment(
-                  context,
-                  analysisModel.score,
-                )
-              : null,
+          useSmallerNavigationSetting: false,
+          textColor: textColor,
+          backgroundColor: shapeColor,
           cornerRadius: radius - gap,
-          contentPadding: EdgeInsets.all(gap),
-          explanationString: DateFormat('HH:mm')
-              .format(
-                DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
-              )
-              .toString(),
+          explanationString: DateFormat('HH:mm').format(
+            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+          ),
           title: Text(
             noteModel.content,
             style: context.theme.textTheme.bodyLarge!.copyWith(
-              color: context.theme.colorScheme.onPrimary,
               overflow: TextOverflow.ellipsis,
+              color: textColor,
             ),
             maxLines: 1,
           ),
