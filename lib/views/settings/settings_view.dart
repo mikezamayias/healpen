@@ -89,21 +89,30 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
               .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         ],
       ),
-      body: Wrap(
-        spacing: gap,
-        runSpacing: gap,
+      body: Column(
         children: [
-          for (({
-            String title,
-            IconData iconData,
-            Widget widget,
-          }) element in pageWidgets)
-            if (element.widget is! Placeholder)
-              _settingButton(
-                title: element.title,
-                iconData: element.iconData,
-                widget: element.widget,
+          Expanded(
+            child: CustomListTile(
+              useSmallerNavigationSetting: false,
+              title: Wrap(
+                spacing: gap,
+                runSpacing: gap,
+                children: [
+                  for (({
+                    String title,
+                    IconData iconData,
+                    Widget widget,
+                  }) element in pageWidgets)
+                    if (element.widget is! Placeholder)
+                      _settingButton(
+                        title: element.title,
+                        iconData: element.iconData,
+                        widget: element.widget,
+                      ),
+                ],
               ),
+            ),
+          ),
         ],
       ),
     );
@@ -116,7 +125,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
   }) {
     return CustomListTile(
       useSmallerNavigationSetting: false,
-      cornerRadius: radius,
+      cornerRadius: radius - gap,
       contentPadding: EdgeInsets.symmetric(
         horizontal: 2 * gap,
         vertical: gap,
