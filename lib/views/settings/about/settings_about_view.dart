@@ -31,16 +31,10 @@ class SettingsAboutView extends ConsumerWidget {
           'About',
         ],
       ),
-      body: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: SingleChildScrollView(
-          clipBehavior: Clip.hardEdge,
-          child: Wrap(
-            spacing: gap,
-            runSpacing: gap,
-            children: pageWidgets,
-          ),
-        ),
+      body: Wrap(
+        spacing: gap,
+        runSpacing: gap,
+        children: pageWidgets,
       ),
     );
   }
