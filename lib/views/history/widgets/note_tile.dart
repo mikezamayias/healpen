@@ -52,11 +52,9 @@ class NoteTile extends ConsumerWidget {
           textColor: textColor,
           backgroundColor: shapeColor,
           cornerRadius: radius - gap,
-          explanationString: DateFormat('HH:mm')
-              .format(
-                DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
-              )
-              .toString(),
+          explanationString: DateFormat('HH:mm').format(
+            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+          ),
           title: Text(
             noteModel.content,
             style: context.theme.textTheme.bodyLarge!.copyWith(
