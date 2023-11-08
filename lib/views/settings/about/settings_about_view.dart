@@ -16,10 +16,10 @@ class SettingsAboutView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
       // custom list tile for licenses
+      const AuthorTile(),
       const TermsOfServiceTile(),
       const PrivacyPolicyTile(),
       const OpenSourceLicensesTile(),
-      const AuthorTile(),
     ];
 
     return BlueprintView(
