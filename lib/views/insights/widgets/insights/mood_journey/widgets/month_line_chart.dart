@@ -113,6 +113,7 @@ class MonthLineChart extends ConsumerWidget {
                     ),
                     actions: [
                       CustomListTile(
+                        useSmallerNavigationSetting: false,
                         responsiveWidth: true,
                         titleString: 'Close',
                         cornerRadius: radius - gap,
