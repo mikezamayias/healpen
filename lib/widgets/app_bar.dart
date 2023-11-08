@@ -31,9 +31,7 @@ class AppBar extends ConsumerWidget {
           for (int i = 0; i < pathNames.length; i++)
             WidgetSpan(
               child: Text(
-                i < pathNames.length - 1
-                    ? '${pathNames[i]} / '
-                    : pathNames[i],
+                i < pathNames.length - 1 ? '${pathNames[i]} / ' : pathNames[i],
                 style: (i < pathNames.length - 1)
                     ? context.theme.textTheme.titleLarge!.copyWith(
                         color: smallNavigationElements

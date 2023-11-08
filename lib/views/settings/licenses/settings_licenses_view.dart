@@ -58,7 +58,7 @@ class SettingsLicensesView extends ConsumerWidget {
               ...licences.map(
                 (LicenceModel licence) {
                   return CustomListTile(
-                         useSmallerNavigationSetting:
+                    useSmallerNavigationSetting:
                         !ref.watch(navigationSmallerNavigationElementsProvider),
                     enableExplanationWrapper:
                         !ref.watch(navigationSmallerNavigationElementsProvider),
@@ -145,9 +145,9 @@ class SettingsLicensesView extends ConsumerWidget {
 /// [LicenseRegistry] API, which can be used to add more licenses to the list.
 class CustomLicensePage extends StatefulWidget {
   const CustomLicensePage({
-    Key? key,
+    super.key,
     required this.builder,
-  }) : super(key: key);
+  });
 
   final Widget Function(BuildContext, AsyncSnapshot<LicenseData>) builder;
 
