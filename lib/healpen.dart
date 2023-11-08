@@ -8,7 +8,7 @@ import 'controllers/settings/preferences_controller.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'utils/helper_functions.dart';
-import 'widgets/custom_bottom_navigation_bar.dart';
+import 'widgets/healpen_navigation_bar.dart';
 
 class Healpen extends ConsumerStatefulWidget {
   const Healpen({super.key});
@@ -59,7 +59,7 @@ class _HealpenState extends ConsumerState<Healpen> {
             itemCount: pages.length,
             itemBuilder: (context, index) => pages.elementAt(index),
           ),
-          bottomNavigationBar: const CustomBottomNavigationBar(),
+          bottomNavigationBar: const HealpenNavigationBar(),
         );
       },
     );
