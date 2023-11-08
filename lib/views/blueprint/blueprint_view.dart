@@ -52,16 +52,9 @@ class BlueprintView extends ConsumerWidget {
                             delay: emphasizedDuration - shortStandardDuration,
                           )
                           .fade(
-                            duration: slightlyShortStandardDuration,
-                            curve: standardCurve,
-                          )
-                          .slideX(
-                            duration: slightlyShortStandardDuration,
-                            curve: standardCurve,
-                            begin: -.3,
-                            end: 0,
-                          ),
-                    )
+                            duration: emphasizedDuration,
+                            curve: emphasizedCurve,
+                          ))
                   : null,
               body: AnimatedContainer(
                 duration: standardDuration,
