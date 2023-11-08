@@ -89,7 +89,8 @@ class SnackBarConfig {
         trailingWidgets,
   ]) {
     return SnackBar(
-      margin: snackBarMargin ?? EdgeInsets.all(gap),
+      // this parameter can be conditionally used to keep a specific margin for 
+      // the snackbar
       padding: EdgeInsets.zero,
       duration: 1.minutes,
       content: Builder(
