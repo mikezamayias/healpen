@@ -3,6 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../controllers/settings/preferences_controller.dart';
 import '../enums/app_theming.dart';
 
+final isDeviceConnectedProvider = StateProvider<bool>(
+  (ref) => true,
+);
+
 final themeAppearanceProvider = StateProvider<ThemeAppearance>(
   (ref) => PreferencesController.themeAppearance.value,
 );

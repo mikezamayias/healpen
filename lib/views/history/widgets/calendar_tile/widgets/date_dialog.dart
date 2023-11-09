@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../models/analysis/analysis_model.dart';
 import '../../../../../models/note/note_model.dart';
+import '../../../../../providers/settings_providers.dart';
 import '../../../../../services/note_analysis_service.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../widgets/custom_list_tile.dart';
@@ -64,9 +66,28 @@ class DateDialog extends ConsumerWidget {
                           separatorBuilder: (_, __) => SizedBox(height: gap),
                           itemCount: widgets.length,
                         ),
-                        secondChild: CustomListTile(
-                          titleString: 'Loading notes',
-                          cornerRadius: radius - gap,
+                        secondChild: AnimatedCrossFade(
+                          firstChild: CustomListTile(
+                            titleString: 'Loading notes',
+                            cornerRadius: radius - gap,
+                          ),
+                          secondChild: CustomListTile(
+                            titleString: 'You are offline',
+                            cornerRadius: radius - gap,
+                            leadingIconData: FontAwesomeIcons.globe,
+                            backgroundColor: context.theme.colorScheme.error,
+                            textColor: context.theme.colorScheme.onError,
+                          ),
+                          crossFadeState: switch (
+                              ref.watch(isDeviceConnectedProvider)) {
+                            true => CrossFadeState.showFirst,
+                            false => CrossFadeState.showSecond
+                          },
+                          duration: standardDuration,
+                          reverseDuration: standardDuration,
+                          sizeCurve: standardCurve,
+                          firstCurve: standardCurve,
+                          secondCurve: standardCurve,
                         ),
                         crossFadeState: switch (widgets.isNotEmpty) {
                           true => CrossFadeState.showFirst,
