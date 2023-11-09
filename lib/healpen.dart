@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
@@ -25,28 +22,6 @@ class _HealpenState extends ConsumerState<Healpen> {
   List<PreferenceModel> _lastFetchedPreferences = [];
   int currentPage = 0;
   double pageOffset = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    InternetConnectionChecker().onStatusChange.listen(
-      (InternetConnectionStatus result) async {
-        if (result == InternetConnectionStatus.connected) {
-          ref.read(isDeviceConnectedProvider.notifier).state = true;
-        } else {
-          ref.read(isDeviceConnectedProvider.notifier).state = false;
-        }
-        log(
-          '$result',
-          name: 'InternetConnectionChecker',
-        );
-        log(
-          '${ref.read(isDeviceConnectedProvider.notifier).state}',
-          name: 'device is connected',
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
