@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../providers/settings_providers.dart';
 import '../../../../widgets/custom_list_tile.dart';
-import '../../../../widgets/custom_snack_bar.dart';
 
 class TermsOfServiceTile extends ConsumerWidget {
   const TermsOfServiceTile({super.key});
@@ -15,19 +15,17 @@ class TermsOfServiceTile extends ConsumerWidget {
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper: false,
-      titleString: 'Terms of Service',
-      explanationString: 'View the terms of service for this app.',
+      titleString: 'Terms and Conditions',
+      explanationString: 'View the terms and conditions for this app.',
       leadingIconData: FontAwesomeIcons.fileContract,
       onTap: () {
-        CustomSnackBar(
-          SnackBarConfig(
-            vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
-            smallNavigationElements:
-                ref.watch(navigationSmallerNavigationElementsProvider),
-            titleString1: 'To be implemented.',
-            leadingIconData1: FontAwesomeIcons.triangleExclamation,
+        launchUrl(
+          Uri.https(
+            'iubenda.com',
+            'terms-and-conditions/29795832',
           ),
-        ).showSnackBar(context);
+          mode: LaunchMode.externalApplication,
+        );
       },
     );
   }

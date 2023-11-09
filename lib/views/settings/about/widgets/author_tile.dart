@@ -20,7 +20,10 @@ class AuthorTile extends ConsumerWidget {
       leadingIconData: FontAwesomeIcons.laptopCode,
       onTap: () {
         launchUrl(
-          Uri.https('mikezamayias.com', ''),
+          Uri.https(
+            'mikezamayias.com',
+            '',
+          ),
           mode: LaunchMode.externalApplication,
         );
       },
