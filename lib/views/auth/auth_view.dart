@@ -15,6 +15,7 @@ import '../blueprint/blueprint_view.dart';
 import '../onboarding/onboarding_view.dart';
 import 'widgets/auth_failed_state.dart';
 import 'widgets/awaiting_dynamic_link_state.dart';
+import 'widgets/legal_prompt.dart';
 import 'widgets/sending_link_state.dart';
 import 'widgets/signing_in_state.dart';
 import 'widgets/uninitialized_state.dart';
@@ -89,21 +90,27 @@ class _AuthViewState extends ConsumerState<AuthView> {
               automaticallyImplyLeading: true,
               onBackButtonPressed: goBack,
             ),
-            body: Align(
-              alignment: Alignment.bottomCenter,
-              child: switch (state.runtimeType) {
-                const (Uninitialized) => const UninitializedState(),
-                const (SendingLink) => const SendingLinkState(),
-                const (AwaitingDynamicLink) => const AwaitingDynamicLinkState(),
-                const (SignedIn) ||
-                const (SigningIn) ||
-                const (UserCreated) ||
-                const (CredentialLinked) ||
-                const (CredentialReceived) =>
-                  const SigningInState(),
-                const (AuthFailed) => AuthFailedState(state: state),
-                _ => UnknownState(state: state)
-              },
+            body: Column(
+              children: [
+                const Spacer(flex: 3),
+                switch (state.runtimeType) {
+                  const (Uninitialized) => const UninitializedState(),
+                  const (SendingLink) => const SendingLinkState(),
+                  const (AwaitingDynamicLink) =>
+                    const AwaitingDynamicLinkState(),
+                  const (SignedIn) ||
+                  const (SigningIn) ||
+                  const (UserCreated) ||
+                  const (CredentialLinked) ||
+                  const (CredentialReceived) =>
+                    const SigningInState(),
+                  const (AuthFailed) => AuthFailedState(state: state),
+                  _ => UnknownState(state: state)
+                },
+                const Spacer(flex: 1),
+                const LegalPrompt(),
+                const Spacer(flex: 3),
+              ],
             ),
           ),
         );

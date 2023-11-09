@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:validated/validated.dart' as validate;
 
 import '../../../providers/custom_auth_provider.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
@@ -61,13 +62,15 @@ class UninitializedState extends ConsumerWidget {
             responsiveWidth: true,
             titleString: 'Send link',
             leadingIconData: FontAwesomeIcons.solidPaperPlane,
-            onTap: () {
-              if (formKey.currentState!.validate()) {
-                ref
-                    .watch(CustomAuthProvider().emailLinkAuthProvider)
-                    .sendLink(emailAddress);
-              }
-            },
+            onTap: ref.watch(isDeviceConnectedProvider)
+                ? () {
+                    if (formKey.currentState!.validate()) {
+                      ref
+                          .watch(CustomAuthProvider().emailLinkAuthProvider)
+                          .sendLink(emailAddress);
+                    }
+                  }
+                : null,
           ),
         ],
       ),
