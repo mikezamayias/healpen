@@ -12,7 +12,7 @@ class LegalPrompt extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        text: 'By continuing, you agree to our ',
+        text: 'By continuing, you agree to Healpen\'s ',
         style: context.theme.textTheme.bodyMedium!.copyWith(
           color: context.theme.colorScheme.onSurface,
         ),
