@@ -15,7 +15,6 @@ import '../blueprint/blueprint_view.dart';
 import '../onboarding/onboarding_view.dart';
 import 'widgets/auth_failed_state.dart';
 import 'widgets/awaiting_dynamic_link_state.dart';
-import 'widgets/legal_prompt.dart';
 import 'widgets/sending_link_state.dart';
 import 'widgets/signing_in_state.dart';
 import 'widgets/uninitialized_state.dart';
@@ -108,7 +107,6 @@ class _AuthViewState extends ConsumerState<AuthView> {
                   _ => UnknownState(state: state)
                 },
                 const Spacer(flex: 1),
-                const LegalPrompt(),
                 const Spacer(flex: 3),
               ],
             ),
