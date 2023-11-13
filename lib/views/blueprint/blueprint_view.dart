@@ -39,26 +39,25 @@ class BlueprintView extends ConsumerWidget {
             (ref.watch(navigationSmallerNavigationElementsProvider)
                 ? context.theme.colorScheme.surfaceVariant
                 : context.theme.colorScheme.surface),
-        padding: EdgeInsets.symmetric(
-          horizontal: padBodyHorizontally! ? gap : 0,
-        ),
         child: SafeArea(
           child: GestureDetector(
             onTap: () => context.focusScope.unfocus(),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: showAppBarSetting! && appBar != null
-                  ? PreferredSize(
-                      preferredSize: Size.fromHeight(18.h),
-                      child: appBar!,
+            child: Padding(
+              padding: ModalRoute.of(context)?.settings.name ==
+                      RouterController.authWrapperRoute.route
+                  ? EdgeInsets.symmetric(
+                      horizontal: padBodyHorizontally! ? gap : 0,
                     )
-                  : null,
-              body: Padding(
-                padding: ModalRoute.of(context)?.settings.name ==
-                        RouterController.authWrapperRoute.route
-                    ? EdgeInsets.zero
-                    : EdgeInsets.symmetric(vertical: gap),
-                child: ScrollConfiguration(
+                  : EdgeInsets.all(gap),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: showAppBarSetting! && appBar != null
+                    ? PreferredSize(
+                        preferredSize: Size.fromHeight(18.h),
+                        child: appBar!,
+                      )
+                    : null,
+                body: ScrollConfiguration(
                   behavior: ScrollConfiguration.of(context).copyWith(
                     scrollbars: false,
                     overscroll: false,

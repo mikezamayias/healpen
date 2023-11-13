@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../providers/settings_providers.dart';
+import '../route_controller.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
 
@@ -86,18 +87,25 @@ class AppBar extends ConsumerWidget {
     return AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
-      height: smallNavigationElements ? 9.h : 15.h,
-      padding: smallNavigationElements
-          ? EdgeInsets.only(top: gap)
-          : EdgeInsets.all(gap),
-      decoration: smallNavigationElements
-          ? const BoxDecoration()
-          : BoxDecoration(
-              color: context.theme.colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(radius),
-            ),
-      alignment: Alignment.bottomLeft,
-      child: appBar,
+      padding: ModalRoute.of(context)?.settings.name !=
+              RouterController.authWrapperRoute.route
+          ? EdgeInsets.zero
+          : EdgeInsets.only(bottom: gap),
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        height: smallNavigationElements ? 9.h : 15.h,
+        padding:
+            smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
+        decoration: smallNavigationElements
+            ? const BoxDecoration()
+            : BoxDecoration(
+                color: context.theme.colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(radius),
+              ),
+        alignment: Alignment.bottomLeft,
+        child: appBar,
+      ),
     );
   }
 }

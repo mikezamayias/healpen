@@ -8,6 +8,7 @@ import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
+import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'widgets/healpen_navigation_bar.dart';
 
@@ -54,16 +55,19 @@ class _HealpenState extends ConsumerState<Healpen> {
               ref.watch(navigationSmallerNavigationElementsProvider)
                   ? context.theme.colorScheme.surfaceVariant
                   : context.theme.colorScheme.surface,
-          body: PreloadPageView.builder(
-            preloadPagesCount: pages.length,
-            controller: healpenPreloadPageController,
-            physics: const NeverScrollableScrollPhysics(),
-            onPageChanged: (value) {
-              _handlePageChange(value);
-            },
-            itemCount: pages.length,
-            // add a transition builder because preloading removes animations
-            itemBuilder: (context, index) => pages.elementAt(index),
+          body: Padding(
+            padding: EdgeInsets.symmetric(vertical: gap),
+            child: PreloadPageView.builder(
+              preloadPagesCount: pages.length,
+              controller: healpenPreloadPageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (value) {
+                _handlePageChange(value);
+              },
+              itemCount: pages.length,
+              // add a transition builder because preloading removes animations
+              itemBuilder: (context, index) => pages.elementAt(index),
+            ),
           ),
           bottomNavigationBar: const HealpenNavigationBar(),
         );
