@@ -34,12 +34,18 @@ class AppBar extends ConsumerWidget {
               child: Text(
                 i < pathNames.length - 1 ? '${pathNames[i]} / ' : pathNames[i],
                 style: (i < pathNames.length - 1)
-                    ? context.theme.textTheme.titleLarge!.copyWith(
+                    ? (smallNavigationElements
+                            ? context.theme.textTheme.titleMedium
+                            : context.theme.textTheme.titleLarge)!
+                        .copyWith(
                         color: smallNavigationElements
                             ? context.theme.colorScheme.outline
                             : context.theme.colorScheme.onSurfaceVariant,
                       )
-                    : context.theme.textTheme.headlineSmall!.copyWith(
+                    : (smallNavigationElements
+                            ? context.theme.textTheme.titleLarge
+                            : context.theme.textTheme.headlineSmall)!
+                        .copyWith(
                         color: smallNavigationElements
                             ? context.theme.colorScheme.secondary
                             : context.theme.colorScheme.onSurfaceVariant,
@@ -83,7 +89,7 @@ class AppBar extends ConsumerWidget {
     return AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
-      height: smallNavigationElements ? 12.h : 15.h,
+      height: smallNavigationElements ? 9.h : 15.h,
       padding: smallNavigationElements
           ? EdgeInsets.symmetric(vertical: gap)
           : EdgeInsets.all(gap),
