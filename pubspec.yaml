@@ -65,11 +65,9 @@ dev_dependencies:
 flutter:
   assets:
     - shorebird.yaml
-    - assets/images/onboarding/screen_1.svg
-    - assets/images/onboarding/screen_2.svg
-    - assets/images/onboarding/screen_3.svg
-    - assets/images/onboarding/screen_4.svg
-    - assets/images/onboarding/screen_5.svg
-    - assets/images/onboarding/screen_6.svg
+    - assets/images/onboarding/welcome.svg
+    - assets/images/onboarding/journal.svg
+    - assets/images/onboarding/insights.svg
+    - assets/images/onboarding/begin.svg
     - assets/rive/emotional_echo.riv
   uses-material-design: true

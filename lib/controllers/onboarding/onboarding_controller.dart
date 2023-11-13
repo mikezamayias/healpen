@@ -16,45 +16,29 @@ class OnboardingController {
   /// Members
   static bool onboardingCompleted = false;
   final List<OnboardingModel> onboardingScreenModels = [
-    // 1
+    // Welcome
     OnboardingModel(
       title: 'Welcome to Healpen',
-      description: 'Connect with Yourself & Enhance Your Well-being',
-      imagePath: 'assets/images/onboarding/screen_1.svg',
+      description: 'Enhance Your Well-being',
+      imagePath: 'assets/images/onboarding/welcome.svg',
     ),
-    // 2
+    // Insights
     OnboardingModel(
-      title: 'Embrace Expressive Writing',
-      description:
-          'Discover the positive impact of expressive writing on your well-being: relieve stress, reduce anxiety, enhance self-awareness, and promote emotional healing.',
-      imagePath: 'assets/images/onboarding/screen_2.svg',
+      title: 'Gain Insights',
+      description: 'Deepen your self-reflection',
+      imagePath: 'assets/images/onboarding/insights.svg',
     ),
-    // 3
+    // Journal
     OnboardingModel(
-      title: 'Give Shape to Your Emotions',
-      description:
-          'Effortlessly convert your thoughts and emotions into words using our user-friendly text editor.',
-      imagePath: 'assets/images/onboarding/screen_3.svg',
+      title: 'Explore Your Journal',
+      description: 'Observe your mood evolve',
+      imagePath: 'assets/images/onboarding/journal.svg',
     ),
-    // 4
+    // Begin
     OnboardingModel(
-      title: 'Gain Valuable Insights',
-      description:
-          'Discover valuable understanding and analysis to deepen your self-reflection on your expressive journey.',
-      imagePath: 'assets/images/onboarding/screen_4.svg',
-    ),
-    // 5
-    OnboardingModel(
-      title: 'Explore Your Expressive Journal',
-      description:
-          'Take a journey through your past expressions and witness the evolution of your thoughts and emotions over time.',
-      imagePath: 'assets/images/onboarding/screen_5.svg',
-    ),
-    // 6
-    OnboardingModel(
-      title: 'Ready to Begin Your Journey?',
-      description: 'Start your expressive writing journey today!',
-      imagePath: 'assets/images/onboarding/screen_6.svg',
+      title: 'Begin Your Journey',
+      description: 'Start writing today!',
+      imagePath: 'assets/images/onboarding/begin.svg',
     ),
   ];
 
@@ -76,6 +60,10 @@ class OnboardingController {
   /// Get [OnboardingScreenView]
   OnboardingScreenView currentOnboardingScreenView(int currentIndex) =>
       _onboardingScreenView(currentIndex);
+
+  /// Get [OnboardingModel]
+  OnboardingModel currentOnboardingScreenModel(int currentIndex) =>
+      onboardingScreenModels[currentIndex];
 
   _onboardingScreenView(int index) => OnboardingScreenView(
         onboardingScreenModel: onboardingScreenModels[index],

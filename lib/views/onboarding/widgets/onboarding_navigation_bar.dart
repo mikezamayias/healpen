@@ -4,25 +4,27 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../controllers/page_controller.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
 import 'onboarding_button.dart';
 
-class OnboardingNavigationBar extends ConsumerStatefulWidget {
+class OnboardingNavigationBar extends ConsumerWidget {
   const OnboardingNavigationBar({super.key});
 
   @override
-  ConsumerState<OnboardingNavigationBar> createState() =>
-      _OnboardingNavigationBarState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: EdgeInsets.only(top: gap * 2, bottom: gap * 6),
+      child: OnboardingButton(
+        titleString: 'Start Writing Now',
+        onTap: () => goToAuth(context, ref),
+      ),
+    );
+  }
 
-class _OnboardingNavigationBarState
-    extends ConsumerState<OnboardingNavigationBar> {
-  void goToAuth() async {
+  void goToAuth(BuildContext context, WidgetRef ref) async {
     ref.read(OnboardingController.onboardingCompletedProvider.notifier).state =
         true;
-    navigator.pushReplacement(
+    context.navigator.pushReplacement(
       PageRouteBuilder(
         transitionDuration: emphasizedDuration,
         reverseTransitionDuration: emphasizedDuration,
@@ -42,59 +44,6 @@ class _OnboardingNavigationBarState
             child: child,
           ),
         ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    int currentPageIndex = ref.watch(
-      OnboardingController().currentPageIndexProvider,
-    );
-    int onboardingViewsLength =
-        OnboardingController().onboardingScreenViews.length - 1;
-    return Padding(
-      padding: EdgeInsets.all(gap),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          OnboardingButton(
-            titleString: currentPageIndex == 0 ? 'Skip' : 'Back',
-            onTap: () {
-              if (currentPageIndex == 0) {
-                vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
-                  goToAuth,
-                );
-              } else {
-                animateToPage(
-                  ref.watch(OnboardingController().pageControllerProvider),
-                  currentPageIndex - 1,
-                );
-              }
-            },
-          ),
-          OnboardingButton(
-            titleString: currentPageIndex == onboardingViewsLength
-                ? 'Start Writing Now'
-                : currentPageIndex == 0
-                    ? 'Get Started'
-                    : 'Next',
-            onTap: () {
-              if (currentPageIndex == onboardingViewsLength) {
-                vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
-                  goToAuth,
-                );
-              } else {
-                animateToPage(
-                  ref.watch(OnboardingController().pageControllerProvider),
-                  currentPageIndex + 1,
-                );
-              }
-            },
-          ),
-        ],
       ),
     );
   }
