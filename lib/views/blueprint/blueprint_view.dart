@@ -12,6 +12,7 @@ class BlueprintView extends ConsumerWidget {
   const BlueprintView({
     super.key,
     this.appBar,
+    this.backgroundColor,
     this.padBodyHorizontally = true,
     this.showAppBar,
     required this.body,
@@ -19,6 +20,7 @@ class BlueprintView extends ConsumerWidget {
 
   final Widget? appBar;
   final Widget body;
+  final Color? backgroundColor;
   final bool? padBodyHorizontally;
   final bool? showAppBar;
 
@@ -32,9 +34,10 @@ class BlueprintView extends ConsumerWidget {
         ref.watch(themeAppearanceProvider),
       ),
       child: Container(
-        color: ref.watch(navigationSmallerNavigationElementsProvider)
-            ? context.theme.colorScheme.surfaceVariant
-            : context.theme.colorScheme.surface,
+        color: backgroundColor ??
+            (ref.watch(navigationSmallerNavigationElementsProvider)
+                ? context.theme.colorScheme.surfaceVariant
+                : context.theme.colorScheme.surface),
         padding: EdgeInsets.symmetric(
           horizontal: padBodyHorizontally! ? gap : 0,
         ),
