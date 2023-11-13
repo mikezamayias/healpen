@@ -34,7 +34,6 @@ class AuthFailedState extends ConsumerWidget {
           ),
           leadingIconData: FontAwesomeIcons.circleExclamation,
           selectableText: true,
-          enableExplanationWrapper: true,
           backgroundColor: context.theme.colorScheme.error,
           textColor: context.theme.colorScheme.onError,
           titleString: 'Something went wrong',
