@@ -95,7 +95,7 @@ jobs:
           HEALPEN_SIGNING_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           HEALPEN_SIGNING_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
           HEALPEN_SIGNING_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-        run: flutter build appbundle --no-shrink --no-obfuscate --split-per-abi --release
+        run: flutter build appbundle --obfuscate --release
       - name: Rename AAB
         run: |
           cd "build/app/outputs/bundle/release"
