@@ -24,21 +24,27 @@ class InsightsTile extends ConsumerStatefulWidget {
 }
 
 class _AnalysisSectionState extends ConsumerState<InsightsTile> {
+  late PageController pageController;
   double viewPortFraction = 1;
   double pageOffset = 0;
 
   @override
-  Widget build(BuildContext context) {
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
-    final insightsContoller = ref.watch(insightsControllerProvider);
-    insightsContoller.pageController = PageController(
+  void initState() {
+    pageController = PageController(
       viewportFraction: viewPortFraction,
     )..addListener(() {
         setState(() {
-          pageOffset = insightsContoller.pageController.page!;
+          pageOffset = pageController.page!;
         });
       });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final insightsContoller = ref.watch(insightsControllerProvider);
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     ref.watch(emotionalEchoControllerProvider).sentimentScore = ref
         .watch(AnalysisViewController.analysisModelListProvider)
         .map((e) => e.score)
@@ -78,10 +84,10 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
           enableExplanationWrapper:
               !ref.watch(navigationSmallerNavigationElementsProvider),
           titleString: insightsContoller.insightModelList
-              .elementAt(insightsContoller.currentPage)
+              .elementAt(pageOffset.round())
               .title,
           trailing: SmoothPageIndicator(
-            controller: insightsContoller.pageController,
+            controller: pageController,
             count: insightsContoller.insightModelList.length,
             effect: ExpandingDotsEffect(
               dotHeight: gap,
@@ -95,11 +101,10 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
             itemCount: insightsContoller.insightModelList.length,
             onPageChanged: (int index) {
               vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-                insightsContoller.currentPage = index;
-                animateToPage(insightsContoller.pageController, index);
+                animateToPage(pageController, index);
               });
             },
-            controller: insightsContoller.pageController,
+            controller: pageController,
             itemBuilder: (BuildContext context, int index) {
               double scale = 1 - (index - pageOffset).abs();
               return Transform(
@@ -118,7 +123,7 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
             },
           ),
           explanationString: insightsContoller.insightModelList
-              .elementAt(insightsContoller.currentPage)
+              .elementAt(pageOffset.round())
               .explanation,
           maxExplanationStringLines: 3,
         );

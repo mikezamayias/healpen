@@ -5,8 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:validated/validated.dart' as validate;
 
 import '../../../providers/custom_auth_provider.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
+import 'legal_prompt.dart';
 
 class UninitializedState extends ConsumerWidget {
   const UninitializedState({super.key});
@@ -32,6 +34,7 @@ class UninitializedState extends ConsumerWidget {
             textColor: context.theme.colorScheme.onSurfaceVariant,
             title: IntrinsicWidth(
               child: TextFormField(
+                autofocus: true,
                 autocorrect: false,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.emailAddress,
@@ -51,6 +54,8 @@ class UninitializedState extends ConsumerWidget {
                 },
               ),
             ),
+            subtitlePadding: EdgeInsets.all(gap),
+            subtitle: const LegalPrompt(),
           ),
           SizedBox(height: gap),
           CustomListTile(
@@ -61,13 +66,15 @@ class UninitializedState extends ConsumerWidget {
             responsiveWidth: true,
             titleString: 'Send link',
             leadingIconData: FontAwesomeIcons.solidPaperPlane,
-            onTap: () {
-              if (formKey.currentState!.validate()) {
-                ref
-                    .watch(CustomAuthProvider().emailLinkAuthProvider)
-                    .sendLink(emailAddress);
-              }
-            },
+            onTap: ref.watch(isDeviceConnectedProvider)
+                ? () {
+                    if (formKey.currentState!.validate()) {
+                      ref
+                          .watch(CustomAuthProvider().emailLinkAuthProvider)
+                          .sendLink(emailAddress);
+                    }
+                  }
+                : null,
           ),
         ],
       ),

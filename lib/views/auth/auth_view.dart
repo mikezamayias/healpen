@@ -89,21 +89,26 @@ class _AuthViewState extends ConsumerState<AuthView> {
               automaticallyImplyLeading: true,
               onBackButtonPressed: goBack,
             ),
-            body: Align(
-              alignment: Alignment.bottomCenter,
-              child: switch (state.runtimeType) {
-                const (Uninitialized) => const UninitializedState(),
-                const (SendingLink) => const SendingLinkState(),
-                const (AwaitingDynamicLink) => const AwaitingDynamicLinkState(),
-                const (SignedIn) ||
-                const (SigningIn) ||
-                const (UserCreated) ||
-                const (CredentialLinked) ||
-                const (CredentialReceived) =>
-                  const SigningInState(),
-                const (AuthFailed) => AuthFailedState(state: state),
-                _ => UnknownState(state: state)
-              },
+            body: Column(
+              children: [
+                const Spacer(flex: 3),
+                switch (state.runtimeType) {
+                  const (Uninitialized) => const UninitializedState(),
+                  const (SendingLink) => const SendingLinkState(),
+                  const (AwaitingDynamicLink) =>
+                    const AwaitingDynamicLinkState(),
+                  const (SignedIn) ||
+                  const (SigningIn) ||
+                  const (UserCreated) ||
+                  const (CredentialLinked) ||
+                  const (CredentialReceived) =>
+                    const SigningInState(),
+                  const (AuthFailed) => AuthFailedState(state: state),
+                  _ => UnknownState(state: state)
+                },
+                const Spacer(flex: 1),
+                const Spacer(flex: 3),
+              ],
             ),
           ),
         );

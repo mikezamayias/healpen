@@ -2,8 +2,10 @@ import 'package:flutter/material.dart' hide AppBar, Page;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../providers/settings_providers.dart';
+import '../route_controller.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
 
@@ -54,25 +56,28 @@ class AppBar extends ConsumerWidget {
     final appBar = showBackButton && automaticallyImplyLeading!
         ? Row(
             mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              IconButton.filled(
-                padding: EdgeInsets.zero,
-                enableFeedback: true,
-                iconSize: context.theme.textTheme.titleLarge!.fontSize,
-                onPressed: () {
-                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
-                      () {
-                    if (onBackButtonPressed != null) {
-                      onBackButtonPressed!();
-                    } else {
-                      context.navigator.pop();
-                    }
-                  });
-                },
-                color: context.theme.colorScheme.onPrimary,
-                icon: const FaIcon(FontAwesomeIcons.chevronLeft),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: IconButton.filled(
+                  padding: EdgeInsets.zero,
+                  enableFeedback: true,
+                  iconSize: context.theme.textTheme.titleLarge!.fontSize,
+                  onPressed: () {
+                    vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
+                        () {
+                      if (onBackButtonPressed != null) {
+                        onBackButtonPressed!();
+                      } else {
+                        context.navigator.pop();
+                      }
+                    });
+                  },
+                  color: context.theme.colorScheme.onPrimary,
+                  icon: const FaIcon(FontAwesomeIcons.chevronLeft),
+                ),
               ),
               SizedBox(width: gap),
               Flexible(child: appBarContent),
@@ -82,18 +87,25 @@ class AppBar extends ConsumerWidget {
     return AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
-      height: smallNavigationElements ? gap * 12 : gap * 15,
-      padding: smallNavigationElements
-          ? EdgeInsets.symmetric(vertical: gap)
-          : EdgeInsets.all(gap),
-      decoration: smallNavigationElements
-          ? const BoxDecoration()
-          : BoxDecoration(
-              color: context.theme.colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(radius),
-            ),
-      alignment: Alignment.bottomLeft,
-      child: appBar,
+      padding: ModalRoute.of(context)?.settings.name !=
+              RouterController.authWrapperRoute.route
+          ? EdgeInsets.zero
+          : EdgeInsets.only(bottom: gap),
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        height: smallNavigationElements ? 9.h : 15.h,
+        padding:
+            smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
+        decoration: smallNavigationElements
+            ? const BoxDecoration()
+            : BoxDecoration(
+                color: context.theme.colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.circular(radius),
+              ),
+        alignment: Alignment.bottomLeft,
+        child: appBar,
+      ),
     );
   }
 }

@@ -22,7 +22,7 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
             vertical: gap,
           ),
           titleString: 'We\'ve sent a link to your email',
-          subtitleString:
+          explanationString:
               'Click the link to sign in! Please check your inbox and spam folders.',
           leadingIconData: FontAwesomeIcons.solidEnvelopeOpen,
         ),
@@ -36,7 +36,6 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
           leadingIconData: FontAwesomeIcons.arrowLeft,
           titleString: 'Something not right?',
           explanationString: 'Start again.',
-          enableExplanationWrapper: true,
           onTap: () {
             context.navigator.pushReplacementNamed('/auth');
           },

@@ -8,6 +8,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  animated_snack_bar: ^0.4.0
   cloud_firestore: ^4.8.1
   collection: ^1.17.1
   cupertino_icons: ^1.0.5
@@ -34,6 +35,7 @@ dependencies:
   googleapis: ^11.4.0
   googleapis_auth: ^1.4.1
   http: ^1.1.0
+  internet_connection_checker: ^1.0.0+1
   intl: ^0.18.1
   json_annotation: ^4.8.0
   package_info_plus: ^4.1.0
@@ -63,11 +65,9 @@ dev_dependencies:
 flutter:
   assets:
     - shorebird.yaml
-    - assets/images/onboarding/screen_1.svg
-    - assets/images/onboarding/screen_2.svg
-    - assets/images/onboarding/screen_3.svg
-    - assets/images/onboarding/screen_4.svg
-    - assets/images/onboarding/screen_5.svg
-    - assets/images/onboarding/screen_6.svg
+    - assets/images/onboarding/welcome.svg
+    - assets/images/onboarding/journal.svg
+    - assets/images/onboarding/insights.svg
+    - assets/images/onboarding/begin.svg
     - assets/rive/emotional_echo.riv
   uses-material-design: true
