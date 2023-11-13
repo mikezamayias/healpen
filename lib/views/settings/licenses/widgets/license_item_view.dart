@@ -22,8 +22,6 @@ class LicenseItemView extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         pathNames: [
-          'Settings',
-          'About',
           'Open Source Licenses',
           licenceModel.packageName,
         ],
