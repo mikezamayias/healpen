@@ -5,6 +5,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../providers/settings_providers.dart';
+import '../../route_controller.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 
@@ -52,11 +53,10 @@ class BlueprintView extends ConsumerWidget {
                       child: appBar!,
                     )
                   : null,
-              body: AnimatedContainer(
-                duration: standardDuration,
-                curve: standardCurve,
-                padding: ref.watch(navigationSmallerNavigationElementsProvider)
-                    ? EdgeInsets.only(top: gap, bottom: gap * 2)
+              body: Padding(
+                padding: ModalRoute.of(context)?.settings.name ==
+                        RouterController.authWrapperRoute.route
+                    ? EdgeInsets.zero
                     : EdgeInsets.symmetric(vertical: gap),
                 child: ScrollConfiguration(
                   behavior: ScrollConfiguration.of(context).copyWith(
