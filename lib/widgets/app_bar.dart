@@ -34,18 +34,12 @@ class AppBar extends ConsumerWidget {
               child: Text(
                 i < pathNames.length - 1 ? '${pathNames[i]} / ' : pathNames[i],
                 style: (i < pathNames.length - 1)
-                    ? (smallNavigationElements
-                            ? context.theme.textTheme.titleMedium
-                            : context.theme.textTheme.titleLarge)!
-                        .copyWith(
+                    ? context.theme.textTheme.titleLarge!.copyWith(
                         color: smallNavigationElements
                             ? context.theme.colorScheme.outline
                             : context.theme.colorScheme.onSurfaceVariant,
                       )
-                    : (smallNavigationElements
-                            ? context.theme.textTheme.titleLarge
-                            : context.theme.textTheme.headlineSmall)!
-                        .copyWith(
+                    : context.theme.textTheme.headlineSmall!.copyWith(
                         color: smallNavigationElements
                             ? context.theme.colorScheme.secondary
                             : context.theme.colorScheme.onSurfaceVariant,
@@ -61,25 +55,28 @@ class AppBar extends ConsumerWidget {
     final appBar = showBackButton && automaticallyImplyLeading!
         ? Row(
             mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              IconButton.filled(
-                padding: EdgeInsets.zero,
-                enableFeedback: true,
-                iconSize: context.theme.textTheme.titleLarge!.fontSize,
-                onPressed: () {
-                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
-                      () {
-                    if (onBackButtonPressed != null) {
-                      onBackButtonPressed!();
-                    } else {
-                      context.navigator.pop();
-                    }
-                  });
-                },
-                color: context.theme.colorScheme.onPrimary,
-                icon: const FaIcon(FontAwesomeIcons.chevronLeft),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: IconButton.filled(
+                  padding: EdgeInsets.zero,
+                  enableFeedback: true,
+                  iconSize: context.theme.textTheme.titleLarge!.fontSize,
+                  onPressed: () {
+                    vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
+                        () {
+                      if (onBackButtonPressed != null) {
+                        onBackButtonPressed!();
+                      } else {
+                        context.navigator.pop();
+                      }
+                    });
+                  },
+                  color: context.theme.colorScheme.onPrimary,
+                  icon: const FaIcon(FontAwesomeIcons.chevronLeft),
+                ),
               ),
               SizedBox(width: gap),
               Flexible(child: appBarContent),
@@ -91,7 +88,7 @@ class AppBar extends ConsumerWidget {
       curve: standardCurve,
       height: smallNavigationElements ? 9.h : 15.h,
       padding: smallNavigationElements
-          ? EdgeInsets.symmetric(vertical: gap)
+          ? EdgeInsets.only(top: gap)
           : EdgeInsets.all(gap),
       decoration: smallNavigationElements
           ? const BoxDecoration()
