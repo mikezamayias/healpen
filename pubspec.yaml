@@ -25,6 +25,7 @@ dependencies:
     sdk: flutter
   flutter_animate: ^4.1.1+1
   flutter_iterum: ^0.0.3
+  flutter_launcher_icons: ^0.13.1
   flutter_riverpod: ^2.1.3
   flutter_screwdriver: ^3.0.0
   flutter_slidable: ^3.0.0
@@ -71,3 +72,15 @@ flutter:
     - assets/images/onboarding/begin.svg
     - assets/rive/emotional_echo.riv
   uses-material-design: true
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon-2x.png"
+  min_sdk_android: 19 # android min sdk min:16, default 21
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false
