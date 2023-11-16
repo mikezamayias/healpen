@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart' hide AppBar, Page;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -95,10 +93,6 @@ class AppBar extends ConsumerWidget {
             ],
           )
         : appBarContent;
-    log('${context.theme.colorScheme.primary}', name: 'primary');
-    log('${context.theme.colorScheme.surface}', name: 'surface');
-    log('${context.theme.colorScheme.background}', name: 'background');
-    log('${context.theme.colorScheme.surfaceVariant}', name: 'surfaceVariant');
     return AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
