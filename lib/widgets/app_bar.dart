@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' hide AppBar, Page;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
@@ -100,7 +99,6 @@ class AppBar extends ConsumerWidget {
       child: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
-        height: smallNavigationElements ? 9.h : 15.h,
         padding:
             smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
         decoration: smallNavigationElements

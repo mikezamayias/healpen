@@ -19,9 +19,8 @@ class SmallerNavigationElementsTile extends ConsumerWidget {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      titleString: 'Enable smaller navigation elements',
-      explanationString:
-          'When enabled, the app will show smaller navigation elements. '
+      titleString: 'Enable smaller buttons and menus',
+      explanationString: 'Shows smaller buttons and menus. '
           'This is useful for devices with smaller screens.',
       trailing: Switch(
         value: ref.watch(navigationSmallerNavigationElementsProvider),

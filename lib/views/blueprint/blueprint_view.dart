@@ -29,6 +29,8 @@ class BlueprintView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final showAppBarSetting =
         showAppBar ?? ref.watch(navigationShowAppBarProvider);
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: getSystemUIOverlayStyle(
         context.theme,
@@ -53,7 +55,9 @@ class BlueprintView extends ConsumerWidget {
                 backgroundColor: Colors.transparent,
                 appBar: showAppBarSetting! && appBar != null
                     ? PreferredSize(
-                        preferredSize: Size.fromHeight(18.h),
+                        preferredSize: Size.fromHeight(
+                          smallNavigationElements ? 9.h : 18.h,
+                        ),
                         child: appBar!,
                       )
                     : null,
