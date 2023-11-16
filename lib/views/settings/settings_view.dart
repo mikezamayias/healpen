@@ -93,18 +93,23 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
               .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         ],
       ),
-      body: Wrap(
-        spacing: gap,
-        runSpacing: gap,
-        children: [
-          for (({
-            String title,
-            String description,
-            IconData iconData,
-            Widget widget,
-          }) element in pageWidgets)
-            if (element.widget is! Placeholder) _settingButton(element),
-        ],
+      body: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: SingleChildScrollView(
+          child: Wrap(
+            spacing: gap,
+            runSpacing: gap,
+            children: [
+              for (({
+                String title,
+                String description,
+                IconData iconData,
+                Widget widget,
+              }) element in pageWidgets)
+                if (element.widget is! Placeholder) _settingButton(element),
+            ],
+          ),
+        ),
       ),
     );
   }
