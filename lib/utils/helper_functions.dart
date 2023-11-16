@@ -188,3 +188,48 @@ Color getTextColorOnSentiment(ThemeData theme, dynamic sentiment) {
     getSentimentRatio(sentiment),
   )!;
 }
+
+pushWithAnimation({
+  required BuildContext context,
+  required Widget widget,
+  bool replacement = false,
+}) {
+  final builder = PageRouteBuilder(
+    transitionDuration: emphasizedDuration,
+    reverseTransitionDuration: emphasizedDuration,
+    pageBuilder: (
+      context,
+      animation,
+      secondaryAnimation,
+    ) {
+      return widget;
+    },
+    transitionsBuilder: (
+      context,
+      animation,
+      secondaryAnimation,
+      child,
+    ) {
+      final curvedAnimation = CurvedAnimation(
+        parent: animation,
+        curve: emphasizedCurve,
+        reverseCurve: emphasizedCurve.flipped,
+      );
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ).animate(curvedAnimation),
+        child: FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      );
+    },
+  );
+  if (replacement) {
+    context.navigator.pushReplacement(builder);
+  } else {
+    context.navigator.push(builder);
+  }
+}

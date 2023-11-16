@@ -131,27 +131,10 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
   void goToAuth(BuildContext context, WidgetRef ref) async {
     ref.read(OnboardingController.onboardingCompletedProvider.notifier).state =
         true;
-    context.navigator.pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: emphasizedDuration,
-        reverseTransitionDuration: emphasizedDuration,
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            page_controller.PageController().authView.widget,
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            FadeTransition(
-          opacity: Tween<double>(
-            begin: -1,
-            end: 1,
-          ).animate(animation),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(1, 0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        ),
-      ),
+    pushWithAnimation(
+      context: context,
+      widget: page_controller.PageController().authView.widget,
+      replacement: true,
     );
   }
 }

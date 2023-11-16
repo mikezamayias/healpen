@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart'
     hide AppBar, ListTile, Feedback, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/page_controller.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
+import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
@@ -132,36 +132,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
       titleString: element.title,
       explanationString: element.description,
       onTap: () {
-        navigator.push(
-          PageRouteBuilder(
-            transitionDuration: standardDuration,
-            reverseTransitionDuration: standardDuration,
-            pageBuilder: (
-              context,
-              animation,
-              secondaryAnimation,
-            ) {
-              return element.widget;
-            },
-            transitionsBuilder: (
-              context,
-              animation,
-              secondaryAnimation,
-              child,
-            ) {
-              return FadeTransition(
-                opacity: Tween<double>(
-                  begin: -1,
-                  end: 1,
-                ).animate(animation),
-                child: FadeTransition(
-                  opacity: animation,
-                  child: child,
-                ),
-              );
-            },
-          ),
-        );
+        pushWithAnimation(context: context, widget: element.widget);
       },
     );
   }
