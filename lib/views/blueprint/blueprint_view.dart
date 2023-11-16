@@ -56,7 +56,7 @@ class BlueprintView extends ConsumerWidget {
                 appBar: showAppBarSetting! && appBar != null
                     ? PreferredSize(
                         preferredSize: Size.fromHeight(
-                          smallNavigationElements ? 9.h : 18.h,
+                          smallNavigationElements ? kToolbarHeight : 18.h,
                         ),
                         child: appBar!,
                       )

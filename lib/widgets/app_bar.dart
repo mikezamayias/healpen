@@ -24,24 +24,26 @@ class AppBar extends ConsumerWidget {
     final showBackButton = ref.watch(navigationShowBackButtonProvider);
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
+    final pathsLenth = smallNavigationElements ? 1 : pathNames.length;
     final appBarContent = AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
-      padding:
-          showBackButton && pathNames.length < 3 && automaticallyImplyLeading!
-              ? EdgeInsets.only(bottom: gap)
-              : EdgeInsets.zero,
+      padding: showBackButton && pathsLenth < 3 && automaticallyImplyLeading!
+          ? EdgeInsets.only(bottom: gap / 2)
+          : EdgeInsets.zero,
       child: RichText(
         text: TextSpan(
           style: const TextStyle(),
           children: [
-            for (int i = 0; i < pathNames.length; i++)
+            for (int i = 0; i < pathsLenth; i++)
               WidgetSpan(
                 child: Text(
-                  i < pathNames.length - 1
-                      ? '${pathNames[i]} / '
-                      : pathNames[i],
-                  style: (i < pathNames.length - 1)
+                  smallNavigationElements
+                      ? pathNames.last
+                      : (i < pathNames.length - 1
+                          ? '${pathNames[i]} / '
+                          : pathNames[i]),
+                  style: (i == pathsLenth)
                       ? context.theme.textTheme.titleLarge!.copyWith(
                           color: smallNavigationElements
                               ? context.theme.colorScheme.outline
