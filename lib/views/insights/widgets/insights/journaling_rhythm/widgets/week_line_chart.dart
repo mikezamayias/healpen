@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +30,14 @@ class WeekLineChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    log(
+      '${week.first}',
+      name: 'WeekLineChart:build() - week.first',
+    );
+    log(
+      '${week.last}',
+      name: 'WeekLineChart:build() - week.last',
+    );
     return StreamBuilder<QuerySnapshot<AnalysisModel>>(
       stream: FirestoreService().getAnalysisBetweenDates(week.first, week.last),
       builder: (
@@ -39,6 +49,13 @@ class WeekLineChart extends ConsumerWidget {
             titleString: 'Loading...',
           );
         }
+        // for (var item in snapshot.data!.docs) {
+        //   log(
+        //     item.data().toString(),
+        //     name: DateFormat('yyyy-MM-dd HH:mm:ss')
+        //         .format(item.data().timestamp.timestampToDateTime()),
+        //   );
+        // }
         final List<ChartData> actualData = snapshot.data!.docs
             .map((QueryDocumentSnapshot<AnalysisModel> analysisModel) =>
                 analysisModel.data())
@@ -58,11 +75,10 @@ class WeekLineChart extends ConsumerWidget {
             interval: 1,
           ),
           primaryXAxis: DateTimeCategoryAxis(
-            dateFormat: DateFormat('EEE dd'),
+            dateFormat: DateFormat('MMM\nEEE\ndd'),
             isVisible: true,
             name: 'Date',
             interval: 1,
-            labelRotation: -45,
             majorGridLines: const MajorGridLines(width: 0),
             minorGridLines: const MinorGridLines(width: 0),
             rangePadding: ChartRangePadding.none,
@@ -113,6 +129,7 @@ class WeekLineChart extends ConsumerWidget {
                     ),
                     actions: [
                       CustomListTile(
+                        useSmallerNavigationSetting: false,
                         responsiveWidth: true,
                         titleString: 'Close',
                         cornerRadius: radius - gap,
@@ -131,6 +148,11 @@ class WeekLineChart extends ConsumerWidget {
     );
   }
 
+  /// Initializes the week data for the line chart.
+  ///
+  /// Given a list of [actualData], this method maps each day in the [week] list to the corresponding data in [actualData].
+  /// If there is no data available for a specific day, a [ChartData] object with a null value is created.
+  /// The resulting list of [ChartData] objects is returned.
   List<ChartData> initializeWeekData(List<ChartData> actualData) {
     return week.map((DateTime dayInWeek) {
       return actualData.firstWhere(

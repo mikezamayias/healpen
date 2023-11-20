@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../controllers/analysis_view_controller.dart';
-import '../../../../../extensions/date_time_extensions.dart';
 import '../../../../../extensions/int_extensions.dart';
 import '../../../../../models/analysis/analysis_model.dart';
 import '../../../../../providers/settings_providers.dart';
@@ -75,17 +78,35 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
   Set<DateTime> getMonthsFromAnalysisModelList(
     List<AnalysisModel> analysisModelList,
   ) {
-    final lastAnalysisModelTimestamp =
-        analysisModelList.last.timestamp.timestampToDateTime().endOfMonth();
-    final startOfTheMonthOfLastAnalysisModelTimestamp =
-        lastAnalysisModelTimestamp.startOfMonth();
-    List<DateTime> startOfWeekList = <DateTime>[
-      for (DateTime dateIndex = lastAnalysisModelTimestamp;
-          dateIndex.isAfter(startOfTheMonthOfLastAnalysisModelTimestamp);
-          dateIndex = dateIndex.subtract(const Duration(days: 1)))
-        dateIndex
-    ];
-    return startOfWeekList.toSet();
+    final start = DateTime.parse(
+      DateFormat('yyyy-MM-dd').format(DateTime.now().add(1.days)),
+    ).millisecondsSinceEpoch.timestampToDateTime();
+    log(
+      DateFormat('yyyy-MM-dd HH:mm:ss').format(start),
+      name: 'today',
+    );
+    final lastAnalysisDateTime = DateTime.parse(
+      DateFormat('yyyy-MM-dd').format(
+        analysisModelList.first.timestamp.timestampToDateTime(),
+      ),
+    );
+    log(
+      DateFormat('yyyy-MM-dd HH:mm:ss').format(lastAnalysisDateTime),
+      name: 'lastAnalysisDateTime',
+    );
+    List<DateTime> startOfWeekList = <DateTime>[];
+    for (DateTime date = lastAnalysisDateTime;
+        date.millisecondsSinceEpoch <= start.millisecondsSinceEpoch;
+        date = date.add(const Duration(days: 1))) {
+      log(
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(date),
+        name: 'date',
+      );
+      startOfWeekList.add(
+        DateTime.parse(DateFormat('yyyy-MM-dd').format(date)),
+      );
+    }
+    return startOfWeekList.reversed.toSet();
   }
 
   String chartTitle(List<DateTime> week) {
@@ -93,11 +114,7 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
     return switch (currentWeekIndex) {
       0 => 'This week',
       1 => 'Last week',
-      2 => '2 weeks ago',
-      3 => '3 weeks ago',
-      4 => '4 weeks ago',
-      5 => '5 weeks ago',
-      _ => '6 weeks ago',
+      _ => '$currentWeekIndex weeks ago',
     };
   }
 }

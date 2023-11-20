@@ -60,11 +60,10 @@ class MonthLineChart extends ConsumerWidget {
             rangePadding: ChartRangePadding.none,
           ),
           primaryXAxis: DateTimeCategoryAxis(
-            dateFormat: DateFormat('MMM dd'),
+            dateFormat: DateFormat('EEE\ndd'),
             isVisible: true,
             name: 'Date',
             interval: 1,
-            labelRotation: -45,
             majorGridLines: const MajorGridLines(width: 0),
             minorGridLines: const MinorGridLines(width: 0),
             rangePadding: ChartRangePadding.none,
