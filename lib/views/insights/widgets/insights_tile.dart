@@ -81,8 +81,9 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
         return CustomListTile(
           useSmallerNavigationSetting:
               !ref.watch(navigationSmallerNavigationElementsProvider),
-          enableExplanationWrapper:
-              !ref.watch(navigationSmallerNavigationElementsProvider),
+          // enableExplanationWrapper:
+          //     !ref.watch(navigationSmallerNavigationElementsProvider),
+          
           titleString: insightsContoller.insightModelList
               .elementAt(pageOffset.round())
               .title,
