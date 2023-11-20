@@ -83,7 +83,6 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
               !ref.watch(navigationSmallerNavigationElementsProvider),
           // enableExplanationWrapper:
           //     !ref.watch(navigationSmallerNavigationElementsProvider),
-          
           titleString: insightsContoller.insightModelList
               .elementAt(pageOffset.round())
               .title,
@@ -123,9 +122,11 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
               );
             },
           ),
-          explanationString: insightsContoller.insightModelList
-              .elementAt(pageOffset.round())
-              .explanation,
+          explanationString: ref.watch(navigationShowInfoProvider)
+              ? insightsContoller.insightModelList
+                  .elementAt(pageOffset.round())
+                  .explanation
+              : null,
           maxExplanationStringLines: 3,
         );
       },
