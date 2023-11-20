@@ -36,8 +36,8 @@ class PreferencesController {
     'navigationShowBackButton',
     true,
   );
-  static final navigationShowInfoButtons = PreferenceModel<bool>(
-    'navigationShowInfoButtons',
+  static final navigationShowInfo = PreferenceModel<bool>(
+    'navigationShowInfo',
     true,
   );
   static final navigationEnableHapticFeedback = PreferenceModel<bool>(
@@ -83,10 +83,7 @@ class PreferencesController {
       preferenceModel: navigationShowBackButton,
       provider: navigationShowBackButtonProvider
     ),
-    (
-      preferenceModel: navigationShowInfoButtons,
-      provider: navigationShowInfoButtonsProvider
-    ),
+    (preferenceModel: navigationShowInfo, provider: navigationShowInfoProvider),
     (
       preferenceModel: navigationEnableHapticFeedback,
       provider: navigationEnableHapticFeedbackProvider

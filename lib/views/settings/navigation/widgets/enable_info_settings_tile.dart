@@ -9,8 +9,8 @@ import '../../../../providers/settings_providers.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class InfoButtonSettingsTile extends ConsumerWidget {
-  const InfoButtonSettingsTile({super.key});
+class EnableInfoSettingsTile extends ConsumerWidget {
+  const EnableInfoSettingsTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,25 +19,24 @@ class InfoButtonSettingsTile extends ConsumerWidget {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      titleString: 'Enable info buttons',
+      titleString: 'Enable informatory text',
       explanationString:
-          'Shows an info button on the top left corner of many elements',
+          'Enable the informatory text on below elements to learn more about them',
       trailing: Switch(
-        value: ref.watch(navigationShowInfoButtonsProvider),
+        value: ref.watch(navigationShowInfoProvider),
         onChanged: (value) {
           vibrate(
             ref.watch(navigationEnableHapticFeedbackProvider),
             () async {
-              ref.read(navigationShowInfoButtonsProvider.notifier).state =
-                  value;
+              ref.read(navigationShowInfoProvider.notifier).state = value;
               await FirestorePreferencesController.instance.savePreference(
-                PreferencesController.navigationShowInfoButtons.withValue(
-                  ref.watch(navigationShowInfoButtonsProvider),
+                PreferencesController.navigationShowInfo.withValue(
+                  ref.watch(navigationShowInfoProvider),
                 ),
               );
               log(
-                '${ref.watch(navigationShowInfoButtonsProvider)}',
-                name: 'SettingsView:ShowAppBarTitle',
+                '${ref.watch(navigationShowInfoProvider)}',
+                name: 'SettingsView:EnableInfoSettingsTile',
               );
             },
           );
