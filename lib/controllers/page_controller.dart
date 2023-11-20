@@ -42,7 +42,9 @@ class PageController {
   final writing = PageModel(
     titleGenerator: (userName) => userName == null
         ? 'What\'s on your mind today?'
-        : 'Hello $userName,\nWhat\'s on your mind today?',
+        : userName.isEmpty
+            ? 'Hello,\nWhat\'s on your mind today?'
+            : 'Hello $userName,\nWhat\'s on your mind today?',
     label: 'expression',
     icon: FontAwesomeIcons.pencil,
     widget: const WritingView(),
