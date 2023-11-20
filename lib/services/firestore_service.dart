@@ -70,7 +70,9 @@ class FirestoreService {
   }
 
   Stream<QuerySnapshot<AnalysisModel>> getAnalysisBetweenDates(
-      DateTime start, DateTime end) {
+    DateTime start,
+    DateTime end,
+  ) {
     return analysisCollectionReference()
         .where(
           'timestamp',
