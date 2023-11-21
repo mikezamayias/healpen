@@ -98,10 +98,6 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
     for (DateTime date = lastAnalysisDateTime;
         date.millisecondsSinceEpoch <= start.millisecondsSinceEpoch;
         date = date.add(const Duration(days: 1))) {
-      log(
-        DateFormat('yyyy-MM-dd HH:mm:ss').format(date),
-        name: 'date',
-      );
       startOfWeekList.add(
         DateTime.parse(DateFormat('yyyy-MM-dd').format(date)),
       );
