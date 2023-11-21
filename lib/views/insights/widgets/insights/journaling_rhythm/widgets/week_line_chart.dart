@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
@@ -30,14 +28,6 @@ class WeekLineChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    log(
-      '${week.first}',
-      name: 'WeekLineChart:build() - week.first',
-    );
-    log(
-      '${week.last}',
-      name: 'WeekLineChart:build() - week.last',
-    );
     return StreamBuilder<QuerySnapshot<AnalysisModel>>(
       stream: FirestoreService().getAnalysisBetweenDates(week.first, week.last),
       builder: (
@@ -49,13 +39,6 @@ class WeekLineChart extends ConsumerWidget {
             titleString: 'Loading...',
           );
         }
-        // for (var item in snapshot.data!.docs) {
-        //   log(
-        //     item.data().toString(),
-        //     name: DateFormat('yyyy-MM-dd HH:mm:ss')
-        //         .format(item.data().timestamp.timestampToDateTime()),
-        //   );
-        // }
         final List<ChartData> actualData = snapshot.data!.docs
             .map((QueryDocumentSnapshot<AnalysisModel> analysisModel) =>
                 analysisModel.data())
