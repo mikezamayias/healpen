@@ -23,4 +23,8 @@ extension DateTimeExtension on DateTime {
     DateTime res = DateTime(year, month, day + (7 - weekday));
     return res;
   }
+
+  int weeksBefore(DateTime date) {
+    return date.difference(this).inDays ~/ 7;
+  }
 }
