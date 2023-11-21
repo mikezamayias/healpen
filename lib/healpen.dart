@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
@@ -8,8 +7,8 @@ import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
-import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
+import 'views/blueprint/blueprint_view.dart';
 import 'widgets/healpen_navigation_bar.dart';
 
 class Healpen extends ConsumerStatefulWidget {
@@ -50,24 +49,18 @@ class _HealpenState extends ConsumerState<Healpen> {
           }
         }
 
-        return Scaffold(
-          backgroundColor:
-              ref.watch(navigationSmallerNavigationElementsProvider)
-                  ? context.theme.colorScheme.surfaceVariant
-                  : context.theme.colorScheme.surface,
-          body: Padding(
-            padding: EdgeInsets.symmetric(vertical: gap),
-            child: PreloadPageView.builder(
-              preloadPagesCount: pages.length,
-              controller: healpenPreloadPageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (value) {
-                _handlePageChange(value);
-              },
-              itemCount: pages.length,
-              // add a transition builder because preloading removes animations
-              itemBuilder: (context, index) => pages.elementAt(index),
-            ),
+        return BlueprintView(
+          padBodyHorizontally: false,
+          body: PreloadPageView.builder(
+            preloadPagesCount: pages.length,
+            controller: healpenPreloadPageController,
+            physics: const NeverScrollableScrollPhysics(),
+            onPageChanged: (value) {
+              _handlePageChange(value);
+            },
+            itemCount: pages.length,
+            // add a transition builder because preloading removes animations
+            itemBuilder: (context, index) => pages.elementAt(index),
           ),
           bottomNavigationBar: const HealpenNavigationBar(),
         );

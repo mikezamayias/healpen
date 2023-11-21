@@ -22,7 +22,7 @@ class HealpenNavigationBar extends ConsumerWidget {
         ref.watch(navigationSmallerNavigationElementsProvider);
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(bottom: gap),
+        padding: EdgeInsets.symmetric(vertical: gap),
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
