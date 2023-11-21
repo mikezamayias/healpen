@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../../../controllers/analysis_view_controller.dart';
+import '../../../../../extensions/date_time_extensions.dart';
 import '../../../../../extensions/int_extensions.dart';
 import '../../../../../models/analysis/analysis_model.dart';
 import '../../../../../providers/settings_providers.dart';
@@ -12,6 +15,17 @@ import '../../../../../utils/constants.dart';
 import '../../../../../widgets/text_divider.dart';
 import 'widgets/week_line_chart.dart';
 
+/// A tile widget that displays the journaling rhythm.
+///
+/// This widget is used to display a column of week-based line charts,
+/// representing the journaling rhythm over time. Each chart represents a week,
+/// with the most recent week at the top. The charts are generated based on the
+/// provided [analysisModelList], which contains the analysis data for each
+/// journal entry. The [weekDates] list is initialized using the
+/// [initializeWeekDates] method, which calculates the start and end dates for
+/// each week based on the analysis data. The [chartTitle] method generates the
+/// title for each chart based on the week's position relative to the current
+/// date.
 class JournalingRhythmTile extends ConsumerStatefulWidget {
   const JournalingRhythmTile({super.key});
 
@@ -60,9 +74,26 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
     );
   }
 
+  /// Initializes the list of week dates based on the provided
+  /// [analysisModelList].
+  ///
+  /// This method calculates the start and end dates for each week based on the
+  /// analysis data in [analysisModelList]. It first extracts the months from
+  /// the analysis data, then groups the dates into weeks. The resulting list
+  /// of week dates is filtered to remove weeks that do not have any analysis
+  /// data. Finally, the start and end dates of each week are logged for
+  /// debugging purposes.
   List<List<DateTime>> initializeWeekDates(
     List<AnalysisModel> analysisModelList,
   ) {
+    log(
+      '${analysisModelList.first.timestamp.timestampToDateTime()}',
+      name: 'analysisModelList.first.timestamp.timestampToDateTime()',
+    );
+    log(
+      '${analysisModelList.last.timestamp.timestampToDateTime()}',
+      name: 'analysisModelList.last.timestamp.timestampToDateTime()',
+    );
     final weekSet = getMonthsFromAnalysisModelList(analysisModelList).toList();
     final List<List<DateTime>> weekList = [];
     while (weekSet.isNotEmpty) {
@@ -70,9 +101,35 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
       weekList.add(weekSet.sublist(0, remainingDays).reversed.toList());
       weekSet.removeRange(0, remainingDays);
     }
+    weekList.removeWhere(
+      (week) => !analysisModelList.any(
+        (note) =>
+            note.timestamp.timestampToDateTime().isAfter(week.first) &&
+            note.timestamp.timestampToDateTime().isBefore(week.last),
+      ),
+    );
+    for (var element in weekList) {
+      var start = element.first;
+      var end = element.last;
+      log(
+        '$start',
+        name: 'start',
+      );
+      log(
+        '$end',
+        name: 'end',
+      );
+    }
     return weekList;
   }
 
+  /// Extracts the months from the provided [analysisModelList].
+  ///
+  /// This method takes the analysis data in [analysisModelList] and extracts
+  /// the months from the timestamps. It starts from the current date and goes
+  /// backwards until the timestamp of the first analysis model in the list.
+  /// The resulting list of start of week dates is reversed and converted to a
+  /// set to remove duplicates.
   Set<DateTime> getMonthsFromAnalysisModelList(
     List<AnalysisModel> analysisModelList,
   ) {
@@ -95,12 +152,20 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
     return startOfWeekList.reversed.toSet();
   }
 
+  /// Generates the title for the chart based on the provided [week].
+  ///
+  /// This method calculates the number of weeks between the last week in the
+  /// [weekDates] list and the current date. It returns a string representing
+  /// the title of the chart based on the number of weeks. If the number of
+  /// weeks is 0, it returns 'This week'. If it is 1, it returns 'Last week'.
+  /// Otherwise, it returns '$delta weeks ago', where delta is the number of
+  /// weeks.
   String chartTitle(List<DateTime> week) {
-    final currentWeekIndex = weekDates.indexOf(week);
-    return switch (currentWeekIndex) {
+    final delta = week.last.weeksBefore(DateTime.now());
+    return switch (delta) {
       0 => 'This week',
       1 => 'Last week',
-      _ => '$currentWeekIndex weeks ago',
+      _ => '$delta weeks ago',
     };
   }
 }
