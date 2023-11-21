@@ -103,19 +103,29 @@ class MonthCellTile extends ConsumerWidget {
                         builder:
                             (context, AsyncSnapshot<List<NoteModel>> snapshot) {
                           if (snapshot.hasData) {
-                            return Text(
-                              '${snapshot.data!.length}',
-                              textAlign: TextAlign.center,
-                              style:
-                                  context.theme.textTheme.titleSmall!.copyWith(
+                            return ClipOval(
+                              child: Container(
                                 color: textColor,
-                                fontWeight: FontWeight.bold,
-                                textBaseline: TextBaseline.alphabetic,
+                                width: context
+                                    .theme.textTheme.headlineSmall!.fontSize!,
+                                height: context
+                                    .theme.textTheme.headlineSmall!.fontSize!,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${snapshot.data!.length}',
+                                  textAlign: TextAlign.center,
+                                  style: context.theme.textTheme.titleSmall!
+                                      .copyWith(
+                                    color: shapeColor,
+                                    fontWeight: FontWeight.bold,
+                                    textBaseline: TextBaseline.alphabetic,
+                                  ),
+                                ).animate().fade(
+                                      duration: standardDuration,
+                                      curve: standardCurve,
+                                    ),
                               ),
-                            ).animate().fade(
-                                  duration: standardDuration,
-                                  curve: standardCurve,
-                                );
+                            );
                           } else {
                             return const SizedBox();
                           }
