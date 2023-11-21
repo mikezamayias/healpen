@@ -14,14 +14,17 @@ class SmallerNavigationElementsTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
     return CustomListTile(
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       titleString: 'Enable smaller buttons and menus',
-      explanationString: 'Shows smaller buttons and menus. '
-          'This is useful for devices with smaller screens.',
+      explanationString: enableInformatoryText
+          ? 'Shows smaller buttons and menus. '
+              'This is useful for devices with smaller screens.'
+          : null,
       trailing: Switch(
         value: ref.watch(navigationSmallerNavigationElementsProvider),
         onChanged: (value) {

@@ -14,14 +14,16 @@ class EnableInfoSettingsTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
     return CustomListTile(
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       titleString: 'Enable informatory text',
-      explanationString:
-          'Enable the informatory text on below elements to learn more about them',
+      explanationString: enableInformatoryText
+          ? 'Enable the informatory text on below elements to learn more about them'
+          : null,
       trailing: Switch(
         value: ref.watch(navigationShowInfoProvider),
         onChanged: (value) {

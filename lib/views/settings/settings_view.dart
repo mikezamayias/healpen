@@ -121,6 +121,8 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         IconData iconData,
         Widget widget,
       }) element) {
+    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
+
     return CustomListTile(
       useSmallerNavigationSetting: false,
       cornerRadius: radius,
@@ -130,7 +132,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
       ),
       leadingIconData: element.iconData,
       titleString: element.title,
-      explanationString: element.description,
+      explanationString: enableInformatoryText ? element.description : null,
       onTap: () {
         pushWithAnimation(context: context, widget: element.widget);
       },

@@ -16,13 +16,15 @@ class ThemeAppearanceTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
     return CustomListTile(
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       titleString: 'Appearance',
-      explanationString: 'Changes the appearance of the app.',
+      explanationString:
+          enableInformatoryText ? 'Changes the appearance of the app.' : null,
       enableSubtitleWrapper: false,
       subtitle: SegmentedButton<ThemeAppearance>(
         showSelectedIcon: false,

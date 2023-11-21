@@ -14,15 +14,17 @@ class BackButtonSettingsTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
     return CustomListTile(
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       titleString: 'Enable back button in app bar',
-      explanationString:
-          'Shows a back button at the top of the screen, making it simpler to '
-          'return to previous pages.',
+      explanationString: enableInformatoryText
+          ? 'Shows a back button at the top of the screen, making it simpler to '
+              'return to previous pages.'
+          : null,
       trailing: Switch(
         value: ref.watch(navigationShowBackButtonProvider),
         onChanged: (value) {
