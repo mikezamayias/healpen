@@ -58,6 +58,17 @@ class MonthCellTile extends ConsumerWidget {
             textColor = getTextColorOnSentiment(context.theme, dateSentiment);
           }
         }
+        int noteCount = 0;
+        final DateTime cellDate = cellDetails.date;
+        for (NoteModel note in HistoryViewController.notesToAnalyze) {
+          DateTime noteDate =
+              DateTime.fromMillisecondsSinceEpoch(note.timestamp);
+          if (noteDate.year == cellDate.year &&
+              noteDate.month == cellDate.month &&
+              noteDate.day == cellDate.day) {
+            noteCount++;
+          }
+        }
         return Padding(
           padding: EdgeInsets.all(gap / 2),
           child: AnimatedContainer(
@@ -68,7 +79,7 @@ class MonthCellTile extends ConsumerWidget {
               color: shapeColor,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Gap(gap / 2),
                 AnimatedContainer(
@@ -92,49 +103,32 @@ class MonthCellTile extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Gap(gap / 2),
-                Expanded(
-                  child: Visibility(
-                    visible: cellDetails.appointments.isNotEmpty,
-                    child: Center(
-                      child: StreamBuilder(
-                        stream: NoteAnalysisService()
-                            .getNoteEntriesListOnDate(cellDetails.date),
-                        builder:
-                            (context, AsyncSnapshot<List<NoteModel>> snapshot) {
-                          if (snapshot.hasData) {
-                            return ClipOval(
-                              child: Container(
-                                color: textColor,
-                                width: context
-                                    .theme.textTheme.headlineSmall!.fontSize!,
-                                height: context
-                                    .theme.textTheme.headlineSmall!.fontSize!,
-                                alignment: Alignment.center,
-                                child: Text(
-                                  '${snapshot.data!.length}',
-                                  textAlign: TextAlign.center,
-                                  style: context.theme.textTheme.titleSmall!
-                                      .copyWith(
-                                    color: shapeColor,
-                                    fontWeight: FontWeight.bold,
-                                    textBaseline: TextBaseline.alphabetic,
-                                  ),
-                                ).animate().fade(
-                                      duration: standardDuration,
-                                      curve: standardCurve,
-                                    ),
-                              ),
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
+                const Spacer(),
+                if (noteCount != 0)
+                  Center(
+                    child: ClipOval(
+                      child: Container(
+                        color: textColor,
+                        width: context.theme.textTheme.headlineSmall!.fontSize!,
+                        height:
+                            context.theme.textTheme.headlineSmall!.fontSize!,
+                        alignment: Alignment.center,
+                        child: Text(
+                          '$noteCount',
+                          textAlign: TextAlign.center,
+                          style: context.theme.textTheme.titleSmall!.copyWith(
+                            color: shapeColor,
+                            fontWeight: FontWeight.bold,
+                            textBaseline: TextBaseline.alphabetic,
+                          ),
+                        ).animate().fade(
+                              duration: standardDuration,
+                              curve: standardCurve,
+                            ),
                       ),
                     ),
                   ),
-                ),
-                Gap(gap / 2),
+                Gap(gap),
               ],
             ),
           ),
