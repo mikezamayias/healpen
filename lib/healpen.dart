@@ -53,12 +53,12 @@ class _HealpenState extends ConsumerState<Healpen> {
           padBodyHorizontally: false,
           body: PreloadPageView.builder(
             preloadPagesCount: pages.length,
+            itemCount: pages.length,
             controller: healpenPreloadPageController,
             physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (value) {
               _handlePageChange(value);
             },
-            itemCount: pages.length,
             // add a transition builder because preloading removes animations
             itemBuilder: (context, index) => pages.elementAt(index),
           ),
