@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -81,18 +79,10 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
     final start = DateTime.parse(
       DateFormat('yyyy-MM-dd').format(DateTime.now().add(1.days)),
     ).millisecondsSinceEpoch.timestampToDateTime();
-    log(
-      DateFormat('yyyy-MM-dd HH:mm:ss').format(start),
-      name: 'today',
-    );
     final lastAnalysisDateTime = DateTime.parse(
       DateFormat('yyyy-MM-dd').format(
         analysisModelList.first.timestamp.timestampToDateTime(),
       ),
-    );
-    log(
-      DateFormat('yyyy-MM-dd HH:mm:ss').format(lastAnalysisDateTime),
-      name: 'lastAnalysisDateTime',
     );
     List<DateTime> startOfWeekList = <DateTime>[];
     for (DateTime date = lastAnalysisDateTime;
