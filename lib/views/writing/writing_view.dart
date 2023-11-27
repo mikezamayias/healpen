@@ -14,39 +14,11 @@ import 'widgets/save_note_button.dart';
 import 'widgets/stopwatch_tile.dart';
 import 'widgets/writing_text_field.dart';
 
-class WritingView extends ConsumerStatefulWidget {
+class WritingView extends ConsumerWidget {
   const WritingView({super.key});
 
   @override
-  ConsumerState<WritingView> createState() => _WritingViewState();
-}
-
-class _WritingViewState extends ConsumerState<WritingView>
-    with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeMetrics() {
-    final bottomInset = View.of(context).viewInsets.bottom;
-    final newValue = bottomInset > 0.0;
-    if (newValue != ref.watch(WritingController().isKeyboardOpenProvider)) {
-      ref.read(WritingController().isKeyboardOpenProvider.notifier).state =
-          newValue;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     WritingController.writingAutomaticStopwatch =
         ref.watch(writingAutomaticStopwatchProvider);
     // WritingController().updateAllUserNotes();
@@ -71,9 +43,9 @@ class _WritingViewState extends ConsumerState<WritingView>
               ],
             ),
       body: Padding(
-        padding: EdgeInsets.only(
-          bottom: gap,
-        ),
+        padding: ref.watch(WritingController().isKeyboardOpenProvider)
+            ? EdgeInsets.only(bottom: gap)
+            : EdgeInsets.zero,
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
@@ -87,7 +59,7 @@ class _WritingViewState extends ConsumerState<WritingView>
               smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
           child: Column(
             mainAxisSize: MainAxisSize.max,
-            children: [
+            children: <Widget>[
               const Expanded(child: WritingTextField()),
               Column(
                 children: [

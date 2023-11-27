@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:keyboard_detection/keyboard_detection.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
+import 'controllers/writing_controller.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'utils/helper_functions.dart';
@@ -45,18 +47,30 @@ class _HealpenState extends ConsumerState<Healpen> {
           }
         }
 
-        return BlueprintView(
-          padBodyHorizontally: false,
-          body: PageView.builder(
-            itemCount: pages.length,
-            controller: healpenPageController,
-            physics: const NeverScrollableScrollPhysics(),
-            onPageChanged: (value) {
-              _handlePageChange(value);
+        return KeyboardDetection(
+          controller: KeyboardDetectionController(
+            onChanged: (KeyboardState keyboardState) {
+              ref
+                  .read(WritingController().isKeyboardOpenProvider.notifier)
+                  .state = [
+                KeyboardState.visibling,
+                KeyboardState.visible,
+              ].contains(keyboardState);
             },
-            itemBuilder: (context, index) => pages.elementAt(index),
           ),
-          bottomNavigationBar: const HealpenNavigationBar(),
+          child: BlueprintView(
+            padBodyHorizontally: false,
+            body: PageView.builder(
+              itemCount: pages.length,
+              controller: healpenPageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (value) {
+                _handlePageChange(value);
+              },
+              itemBuilder: (context, index) => pages.elementAt(index),
+            ),
+            bottomNavigationBar: const HealpenNavigationBar(),
+          ),
         );
       },
     );
