@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../controllers/insights_controller.dart';
 import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../models/insight_model.dart';
 import '../../../../models/settings/preference_model.dart';
-import '../../../../providers/insights_provider.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
