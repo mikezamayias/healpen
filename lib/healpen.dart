@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
@@ -25,15 +24,12 @@ class _HealpenState extends ConsumerState<Healpen> {
 
   @override
   Widget build(BuildContext context) {
-    // Moved pages creation to a separate function
-    final healpenPreloadPageController =
-        ref.watch(HealpenController().preloadPageControllerProvider);
+    final healpenPageController =
+        ref.watch(HealpenController().pageControllerProvider);
     final pages = HealpenController().pages;
-    ref
-        .watch(HealpenController().preloadPageControllerProvider)
-        .addListener(() {
+    healpenPageController.addListener(() {
       setState(() {
-        pageOffset = healpenPreloadPageController.page!;
+        pageOffset = healpenPageController.page!;
       });
     });
     return StreamBuilder(
@@ -51,15 +47,13 @@ class _HealpenState extends ConsumerState<Healpen> {
 
         return BlueprintView(
           padBodyHorizontally: false,
-          body: PreloadPageView.builder(
-            preloadPagesCount: pages.length,
+          body: PageView.builder(
             itemCount: pages.length,
-            controller: healpenPreloadPageController,
+            controller: healpenPageController,
             physics: const NeverScrollableScrollPhysics(),
             onPageChanged: (value) {
               _handlePageChange(value);
             },
-            // add a transition builder because preloading removes animations
             itemBuilder: (context, index) => pages.elementAt(index),
           ),
           bottomNavigationBar: const HealpenNavigationBar(),
