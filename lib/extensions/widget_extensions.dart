@@ -42,14 +42,6 @@ extension WidgetExtensions on Widget {
   Widget animateBottomNavigationBar(BuildContext context) =>
       animateSlideInFromTop().animate();
 
-  // animateSlideInFromTop().animate().elevation(
-  //       end: 90,
-  //       duration: animationDuration.microseconds,
-  //       curve: curve,
-  //       color: context.theme.colorScheme.primary,
-  //       borderRadius: BorderRadius.all(Radius.circular(radius)),
-  //     );
-
   Widget animateAppBar() => animate()
       .fade(
         duration: standardDuration,
@@ -60,5 +52,10 @@ extension WidgetExtensions on Widget {
         curve: standardEasing,
         begin: -.3,
         end: 0,
+      );
+
+  Widget animateBody() => animate().fade(
+        duration: emphasizedDuration,
+        curve: emphasizedCurve,
       );
 }
