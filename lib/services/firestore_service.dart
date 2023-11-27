@@ -10,7 +10,12 @@ import '../models/sentence/sentence_model.dart';
 
 class FirestoreService {
   // Singleton Constructor
-  FirestoreService._();
+  FirestoreService._() {
+    log(
+      'FirestoreService:instance',
+      name: 'FirestoreService',
+    );
+  }
 
   static final instance = FirestoreService._();
 
@@ -21,6 +26,10 @@ class FirestoreService {
 
   // Methods
   CollectionReference<NoteModel> writingCollectionReference() {
+    log(
+      'FirestoreService:writingCollectionReference()',
+      name: 'FirestoreService',
+    );
     return FirebaseFirestore.instance
         .collection('writing-temp')
         .doc(currentUser.uid)
@@ -32,6 +41,10 @@ class FirestoreService {
   }
 
   CollectionReference<AnalysisModel> analysisCollectionReference() {
+    log(
+      'FirestoreService:analysisCollectionReference()',
+      name: 'FirestoreService',
+    );
     return FirebaseFirestore.instance
         .collection('analysis-temp')
         .doc(currentUser.uid)
@@ -44,6 +57,10 @@ class FirestoreService {
   }
 
   DocumentReference<Map<String, dynamic>> preferencesCollectionReference() {
+    log(
+      'FirestoreService:preferencesCollectionReference()',
+      name: 'FirestoreService',
+    );
     return FirebaseFirestore.instance
         .collection('preferences-temp')
         .doc(currentUser.uid);

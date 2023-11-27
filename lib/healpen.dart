@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
@@ -21,7 +23,6 @@ class Healpen extends ConsumerStatefulWidget {
 
 class _HealpenState extends ConsumerState<Healpen> {
   List<PreferenceModel> _lastFetchedPreferences = [];
-  int currentPage = 0;
   double pageOffset = 0;
 
   @override
@@ -49,14 +50,12 @@ class _HealpenState extends ConsumerState<Healpen> {
 
         return KeyboardDetection(
           controller: KeyboardDetectionController(
-            onChanged: (KeyboardState keyboardState) {
-              ref
-                  .read(WritingController().isKeyboardOpenProvider.notifier)
-                  .state = [
-                KeyboardState.visibling,
-                KeyboardState.visible,
-              ].contains(keyboardState);
-            },
+            onChanged: (KeyboardState keyboardState) => ref
+                .read(WritingController().isKeyboardOpenProvider.notifier)
+                .state = [
+              KeyboardState.visibling,
+              KeyboardState.visible,
+            ].contains(keyboardState),
           ),
           child: BlueprintView(
             padBodyHorizontally: false,
@@ -64,10 +63,16 @@ class _HealpenState extends ConsumerState<Healpen> {
               itemCount: pages.length,
               controller: healpenPageController,
               physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (value) {
+              onPageChanged: (int value) {
                 _handlePageChange(value);
               },
-              itemBuilder: (context, index) => pages.elementAt(index),
+              itemBuilder: (context, index) {
+                log(
+                  HealpenController().models.elementAt(index).label,
+                  name: 'Healpen:PageView.builder:itemBuilder',
+                );
+                return pages.elementAt(index);
+              },
             ),
             bottomNavigationBar: const HealpenNavigationBar(),
           ),
