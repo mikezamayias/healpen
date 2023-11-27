@@ -25,6 +25,7 @@ class HealpenNavigationBar extends ConsumerWidget {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.only(
+          top: gap,
           bottom: Platform.isIOS ? 0 : gap,
         ),
         child: AnimatedContainer(
