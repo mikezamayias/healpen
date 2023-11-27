@@ -78,22 +78,17 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
                 ),
               );
             } else {
-              return Column(
-                children: [
-                  CustomListTile(
-                    titleString: 'No notes yet',
-                    subtitle:
-                        const Text('Start writing to see your notes here'),
-                    onTap: () => ref
-                        .read(HealpenController()
-                            .currentPageIndexProvider
-                            .notifier)
-                        .state = 0,
-                    leadingIconData: FontAwesomeIcons.pencil,
-                    showcaseLeadingIcon: true,
-                  ),
-                  const Spacer(),
-                ],
+              return Center(
+                child: CustomListTile(
+                  titleString: 'No notes yet',
+                  subtitle: const Text('Start writing to see your notes here'),
+                  onTap: () => ref
+                      .read(
+                          HealpenController().currentPageIndexProvider.notifier)
+                      .state = 0,
+                  leadingIconData: FontAwesomeIcons.pencil,
+                  showcaseLeadingIcon: true,
+                ),
               );
             }
           }

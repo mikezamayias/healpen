@@ -70,41 +70,46 @@ class _WritingViewState extends ConsumerState<WritingView>
                   pathNames.join('\n')
               ],
             ),
-      body: AnimatedContainer(
-        duration: standardDuration,
-        curve: standardCurve,
-        decoration: smallNavigationElements
-            ? const BoxDecoration()
-            : BoxDecoration(
-                color: context.theme.colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.circular(radius),
-              ),
-        padding:
-            smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            const Expanded(child: WritingTextField()),
-            Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(top: gap),
-                  child: Row(
-                    children: [
-                      const Expanded(child: StopwatchTile()),
-                      SizedBox(width: gap),
-                      const SaveNoteButton(),
-                    ],
-                  ),
+      body: Padding(
+        padding: EdgeInsets.only(
+          bottom: gap,
+        ),
+        child: AnimatedContainer(
+          duration: standardDuration,
+          curve: standardCurve,
+          decoration: smallNavigationElements
+              ? const BoxDecoration()
+              : BoxDecoration(
+                  color: context.theme.colorScheme.surfaceVariant,
+                  borderRadius: BorderRadius.circular(radius),
                 ),
-                if (ref.watch(writingShowAnalyzeNotesButtonProvider))
+          padding:
+              smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const Expanded(child: WritingTextField()),
+              Column(
+                children: [
                   Padding(
                     padding: EdgeInsets.only(top: gap),
-                    child: const AnalyzeNotesTile(),
+                    child: Row(
+                      children: [
+                        const Expanded(child: StopwatchTile()),
+                        SizedBox(width: gap),
+                        const SaveNoteButton(),
+                      ],
+                    ),
                   ),
-              ],
-            ),
-          ],
+                  if (ref.watch(writingShowAnalyzeNotesButtonProvider))
+                    Padding(
+                      padding: EdgeInsets.only(top: gap),
+                      child: const AnalyzeNotesTile(),
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

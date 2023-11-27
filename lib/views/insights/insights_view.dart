@@ -42,6 +42,7 @@ class InsightsView extends ConsumerWidget {
           } else {
             if (analysisSnapshot.data!.docs.isEmpty) {
               return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const CustomListTile(
                     titleString: 'No data found',
