@@ -14,36 +14,24 @@ import 'utils/helper_functions.dart';
 import 'views/blueprint/blueprint_view.dart';
 import 'widgets/healpen_navigation_bar.dart';
 
-class Healpen extends ConsumerStatefulWidget {
+List<PreferenceModel> _lastFetchedPreferences = [];
+
+class Healpen extends ConsumerWidget {
   const Healpen({super.key});
 
   @override
-  ConsumerState<Healpen> createState() => _HealpenState();
-}
-
-class _HealpenState extends ConsumerState<Healpen> {
-  List<PreferenceModel> _lastFetchedPreferences = [];
-  double pageOffset = 0;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final healpenPageController =
         ref.watch(HealpenController().pageControllerProvider);
     final pages = HealpenController().pages;
-    healpenPageController.addListener(() {
-      setState(() {
-        pageOffset = healpenPageController.page!;
-      });
-    });
     return StreamBuilder(
       stream: FirestorePreferencesController().getPreferences(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          List<PreferenceModel> currentPreferences =
-              snapshot.data as List<PreferenceModel>;
+          List<PreferenceModel> currentPreferences = snapshot.data!;
 
           if (_havePreferencesChanged(currentPreferences)) {
-            _updatePreferences(currentPreferences);
+            _updatePreferences(ref, currentPreferences);
             _lastFetchedPreferences = currentPreferences;
           }
         }
@@ -64,14 +52,17 @@ class _HealpenState extends ConsumerState<Healpen> {
               controller: healpenPageController,
               physics: const NeverScrollableScrollPhysics(),
               onPageChanged: (int value) {
-                _handlePageChange(value);
+                _handlePageChange(ref, value);
               },
               itemBuilder: (context, index) {
-                log(
-                  HealpenController().models.elementAt(index).label,
-                  name: 'Healpen:PageView.builder:itemBuilder',
+                final model = HealpenController().models.elementAt(index);
+                log(model.label, name: 'Healpen:PageView.builder:itemBuilder');
+
+                // Assign a UniqueKey to each page
+                return KeyedSubtree(
+                  key: UniqueKey(),
+                  child: pages.elementAt(index),
                 );
-                return pages.elementAt(index);
               },
             ),
             bottomNavigationBar: const HealpenNavigationBar(),
@@ -81,7 +72,10 @@ class _HealpenState extends ConsumerState<Healpen> {
     );
   }
 
-  void _updatePreferences(List<PreferenceModel> fetchedPreferences) {
+  void _updatePreferences(
+    WidgetRef ref,
+    List<PreferenceModel> fetchedPreferences,
+  ) {
     Future.microtask(() {
       // Moved this logic to a separate function
       var fetchedPreferenceMap = {
@@ -98,7 +92,7 @@ class _HealpenState extends ConsumerState<Healpen> {
     });
   }
 
-  void _handlePageChange(int value) {
+  void _handlePageChange(WidgetRef ref, int value) {
     // Moved this logic to a separate function
     vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
       ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
