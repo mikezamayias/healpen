@@ -789,6 +789,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.7.1"
+  keyboard_detection:
+    dependency: "direct main"
+    description:
+      name: keyboard_detection
+      sha256: ec3401618966ce4eea9cc705bd803b92e21aa69e533746ab93c5e76bbbb14079
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   lint:
     dependency: "direct dev"
     description:
@@ -973,14 +981,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.5.1"
-  preload_page_view:
-    dependency: "direct main"
-    description:
-      name: preload_page_view
-      sha256: "488a10c158c5c2e9ba9d77e5dbc09b1e49e37a20df2301e5ba02992eac802b7a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
   pub_semver:
     dependency: transitive
     description:
