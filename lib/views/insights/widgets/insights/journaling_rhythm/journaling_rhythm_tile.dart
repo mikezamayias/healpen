@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -86,14 +84,6 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
   List<List<DateTime>> initializeWeekDates(
     List<AnalysisModel> analysisModelList,
   ) {
-    log(
-      '${analysisModelList.first.timestamp.timestampToDateTime()}',
-      name: 'analysisModelList.first.timestamp.timestampToDateTime()',
-    );
-    log(
-      '${analysisModelList.last.timestamp.timestampToDateTime()}',
-      name: 'analysisModelList.last.timestamp.timestampToDateTime()',
-    );
     final weekSet = getMonthsFromAnalysisModelList(analysisModelList).toList();
     final List<List<DateTime>> weekList = [];
     while (weekSet.isNotEmpty) {
@@ -108,18 +98,6 @@ class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
             note.timestamp.timestampToDateTime().isBefore(week.last),
       ),
     );
-    for (var element in weekList) {
-      var start = element.first;
-      var end = element.last;
-      log(
-        '$start',
-        name: 'start',
-      );
-      log(
-        '$end',
-        name: 'end',
-      );
-    }
     return weekList;
   }
 
