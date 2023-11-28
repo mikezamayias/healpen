@@ -12,7 +12,7 @@ class WordCloudTile extends ConsumerWidget {
     // final wordCloudGenerator = WordCloudGenerator();
     // final List<Map> wordCloudData = [];
     // for (final analysisModel
-    //     in ref.watch(AnalysisViewController.analysisModelListProvider)) {
+    //     in ref.watch(analysisModelListProvider)) {
     //   wordCloudData
     //       .addAll(wordCloudGenerator.generateWordCloudData(analysisModel));
     // }

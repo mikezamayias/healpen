@@ -34,12 +34,11 @@ class MonthCellTile extends ConsumerWidget {
         ? context.theme.colorScheme.onSurfaceVariant
         : context.theme.colorScheme.onSurface;
     final DateTime cellDate = cellDetails.date;
-    final analysisModelList = ref
-        .watch(AnalysisViewController.analysisModelListProvider)
-        .getAnalysisBetweenDates(
-          start: cellDate.startOfDay(),
-          end: cellDate.endOfDay(),
-        );
+    final analysisModelList =
+        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+              start: cellDate.startOfDay(),
+              end: cellDate.endOfDay(),
+            );
     bool todayCheck = DateFormat('yyyy-MM-dd').format(cellDate) ==
         DateFormat('yyyy-MM-dd').format(DateTime.now());
     bool currentMonthCheck =

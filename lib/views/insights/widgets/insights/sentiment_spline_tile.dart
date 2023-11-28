@@ -28,7 +28,7 @@ class _SplineSentimentTileState extends ConsumerState<SplineSentimentTile> {
   @override
   Widget build(BuildContext context) {
     final List<AnalysisModel> sentimentData =
-        ref.watch(AnalysisViewController.analysisModelListProvider);
+        ref.watch(analysisModelListProvider);
     final sentimentDataLength = sentimentData.length;
     Map<int, String> periodRanges = {
       0: 'all time',

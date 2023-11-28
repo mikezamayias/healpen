@@ -43,10 +43,8 @@ class _AnalysisSectionState extends ConsumerState<InsightsTile> {
     final insightsContoller = ref.watch(insightsControllerProvider);
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
-    ref.watch(emotionalEchoControllerProvider).sentimentScore = ref
-        .watch(AnalysisViewController.analysisModelListProvider)
-        .map((e) => e.score)
-        .average;
+    ref.watch(emotionalEchoControllerProvider).sentimentScore =
+        ref.watch(analysisModelListProvider).map((e) => e.score).average;
     List<Widget> insightWidgets = [];
     insightWidgets = insightsContoller.insightModelList
         .map((e) => smallNavigationElements

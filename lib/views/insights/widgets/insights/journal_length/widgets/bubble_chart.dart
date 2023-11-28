@@ -24,7 +24,7 @@ class BubbleChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final List<AnalysisModel> analysisModelList =
-        ref.watch(AnalysisViewController.analysisModelListProvider);
+        ref.watch(analysisModelListProvider);
     final monthSet = analysisModelList.getMonthsFromAnalysisModelList();
     return SfCartesianChart(
       margin: ref.watch(navigationSmallerNavigationElementsProvider)

@@ -27,7 +27,7 @@ class WeekLineChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final List<ChartData> actualData = ref
-        .watch(AnalysisViewController.analysisModelListProvider)
+        .watch(analysisModelListProvider)
         .getAnalysisBetweenDates(start: week.first, end: week.last)
         .averageDaysSentimentToChartData();
     final List<ChartData> weekData = initializeWeekData(actualData);

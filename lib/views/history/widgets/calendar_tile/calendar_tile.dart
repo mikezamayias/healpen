@@ -29,16 +29,16 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   Widget build(BuildContext context) {
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
-    final analysisModelList =
-        ref.watch(AnalysisViewController.analysisModelListProvider);
+    final analysisModelList = ref.watch(analysisModelListProvider);
     final maxDate = DateTime.now();
     log('$maxDate', name: 'maxDate');
     final minDate = analysisModelList.first.timestamp.timestampToDateTime();
     log('$minDate', name: 'minDate');
     return Container(
       decoration: BoxDecoration(
-          color: theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(radius)),
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(radius),
+      ),
       padding: EdgeInsets.all(gap / 2),
       child: SfCalendar(
         showCurrentTimeIndicator: false,

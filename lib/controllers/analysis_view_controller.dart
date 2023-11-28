@@ -8,17 +8,6 @@ enum AnalysisProgress {
   completed,
 }
 
-class AnalysisViewController {
-  /// Singleton constructor
-  static final AnalysisViewController _instance =
-      AnalysisViewController._internal();
-
-  factory AnalysisViewController() => _instance;
-
-  AnalysisViewController._internal();
-
-  /// Attributes
-  static final analysisModelListProvider = StateProvider<List<AnalysisModel>>(
-    (ref) => <AnalysisModel>[],
-  );
-}
+final analysisModelListProvider = StateProvider<List<AnalysisModel>>(
+  (ref) => <AnalysisModel>[],
+);

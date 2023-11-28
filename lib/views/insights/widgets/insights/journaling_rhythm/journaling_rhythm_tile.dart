@@ -30,7 +30,7 @@ class JournalingRhythmTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weekDates = initializeWeekDates(
-      ref.watch(AnalysisViewController.analysisModelListProvider),
+      ref.watch(analysisModelListProvider),
     );
     return Padding(
       padding: ref.watch(navigationSmallerNavigationElementsProvider)

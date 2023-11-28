@@ -62,65 +62,14 @@ class HistoryView extends ConsumerWidget {
                 ],
               );
             } else {
-              ref
-                  .watch(AnalysisViewController.analysisModelListProvider)
-                  .clear();
+              ref.watch(analysisModelListProvider).clear();
               for (QueryDocumentSnapshot<AnalysisModel> element
                   in analysisSnapshot.data!.docs) {
-                ref
-                    .watch(AnalysisViewController.analysisModelListProvider)
-                    .add(element.data());
+                ref.watch(analysisModelListProvider).add(element.data());
               }
               return const CalendarTile();
             }
           }
-          // if (analysisSnapshot.data == null) {
-          //   return const LoadingTile(durationTitle: 'Loading metrics');
-          // } else {
-          //   if (analysisSnapshot.hasError) {
-          //     return Center(
-          //       child: CustomListTile(
-          //         titleString: 'Something went wrong',
-          //         backgroundColor: context.theme.colorScheme.error,
-          //         textColor: context.theme.colorScheme.onError,
-          //         subtitle: SelectableText(snapshot.error.toString()),
-          //       ),
-          //     );
-          //   }
-          //   if (analysisSnapshot.data!.isNotEmpty) {
-          //     return AnimatedContainer(
-          //       duration: standardDuration,
-          //       curve: standardCurve,
-          //       decoration:
-          //           ref.watch(navigationSmallerNavigationElementsProvider)
-          //               ? BoxDecoration(
-          //                   borderRadius: BorderRadius.circular(radius),
-          //                   color: context.theme.colorScheme.surface,
-          //                 )
-          //               : BoxDecoration(
-          //                   borderRadius: BorderRadius.circular(radius),
-          //                   color: context.theme.colorScheme.surfaceVariant,
-          //                 ),
-          //       padding: ref.watch(navigationSmallerNavigationElementsProvider)
-          //           ? EdgeInsets.zero
-          //           : EdgeInsets.all(gap / 2),
-          //       child: const CalendarTile(),
-          //     );
-          //   } else {
-          //     return Center(
-          //       child: CustomListTile(
-          //         titleString: 'No notes yet',
-          //         subtitle: const Text('Start writing to see your notes here'),
-          //         onTap: () => ref
-          //             .read(
-          //                 HealpenController().currentPageIndexProvider.notifier)
-          //             .state = 0,
-          //         leadingIconData: FontAwesomeIcons.pencil,
-          //         showcaseLeadingIcon: true,
-          //       ),
-          //     );
-          //   }
-          // }
         },
       ),
     );
