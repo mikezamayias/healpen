@@ -113,5 +113,9 @@ class PreferencesController {
       preferenceModel: onboardingCompleted,
       provider: OnboardingController.onboardingCompletedProvider
     ),
+    (
+      preferenceModel: insightOrder,
+      provider: insightsControllerProvider
+    )
   ];
 }
