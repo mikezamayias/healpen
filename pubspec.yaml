@@ -19,6 +19,7 @@ dependencies:
   firebase_auth: ^4.6.3
   firebase_core: ^2.14.0
   firebase_crashlytics: ^3.3.3
+  firebase_pagination: ^3.0.1
   firebase_storage: ^11.2.6
   firebase_ui_auth: ^1.5.0
   flutter:
