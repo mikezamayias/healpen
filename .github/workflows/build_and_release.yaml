@@ -71,7 +71,7 @@ jobs:
         id: flutter-action
         with:
           cache: true
-          flutter-version: 3.13.9
+          flutter-version: 3.16.0
           architecture: arm64
       - name: Update pubspec version
         run: |
