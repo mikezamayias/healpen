@@ -56,11 +56,11 @@ class _AuthViewState extends ConsumerState<AuthView> {
           '${FirebaseAuth.instance.currentUser}',
           name: 'AuthView',
         );
-        return WillPopScope(
-          onWillPop: () {
+        return PopScope(
+          onPopInvoked: (_) {
             goBack();
-            return Future.value(true);
           },
+          canPop: true,
           child: BlueprintView(
             appBar: AppBar(
               pathNames: [
