@@ -1,10 +1,11 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
+import 'controllers/page_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'controllers/writing_controller.dart';
@@ -57,12 +58,11 @@ class Healpen extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final model = HealpenController().models.elementAt(index);
                 log(model.label, name: 'Healpen:PageView.builder:itemBuilder');
-
-                // Assign a UniqueKey to each page
-                return KeyedSubtree(
-                  key: UniqueKey(),
-                  child: pages.elementAt(index),
-                );
+                if ([
+                  PageController().history.label,
+                  PageController().insights.label
+                ].contains(model.label)) {}
+                return pages.elementAt(index);
               },
             ),
             bottomNavigationBar: const HealpenNavigationBar(),
