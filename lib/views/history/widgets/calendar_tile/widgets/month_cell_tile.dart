@@ -34,7 +34,7 @@ class MonthCellTile extends ConsumerWidget {
         ? context.theme.colorScheme.onSurfaceVariant
         : context.theme.colorScheme.onSurface;
     final DateTime cellDate = cellDetails.date;
-    final analysisModelList =
+    final dateAnalysisModelList =
         ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
               start: cellDate.startOfDay(),
               end: cellDate.endOfDay(),
@@ -44,15 +44,17 @@ class MonthCellTile extends ConsumerWidget {
     bool currentMonthCheck =
         cellDate.month == cellDetails.visibleDates[15].month;
     bool dateAfterTodayCheck = cellDate.isAfter(DateTime.now());
-    bool dateBeforeFirstRecordCheck = analysisModelList.isNotEmpty &&
-        cellDate.isBefore(
-          analysisModelList.first.timestamp
-              .timestampToDateTime()
-              .subtract(1.days),
-        );
+    bool dateBeforeFirstRecordCheck = cellDate.isBefore(
+      ref
+          .watch(analysisModelListProvider)
+          .first
+          .timestamp
+          .timestampToDateTime()
+          .subtract(1.days),
+    );
     double? dateSentiment;
-    if (analysisModelList.isNotEmpty) {
-      dateSentiment = analysisModelList
+    if (dateAnalysisModelList.isNotEmpty) {
+      dateSentiment = dateAnalysisModelList
           .map((AnalysisModel element) => element.score)
           .average;
       shapeColor = getShapeColorOnSentiment(context.theme, dateSentiment);
@@ -93,7 +95,7 @@ class MonthCellTile extends ConsumerWidget {
               ),
             ),
             const Spacer(),
-            if (analysisModelList.isNotEmpty)
+            if (dateAnalysisModelList.isNotEmpty)
               Center(
                 child: ClipOval(
                   child: Container(
@@ -102,7 +104,7 @@ class MonthCellTile extends ConsumerWidget {
                     height: context.theme.textTheme.headlineSmall!.fontSize!,
                     alignment: Alignment.center,
                     child: Text(
-                      '${analysisModelList.length}',
+                      '${dateAnalysisModelList.length}',
                       textAlign: TextAlign.center,
                       style: context.theme.textTheme.titleSmall!.copyWith(
                         color: shapeColor,

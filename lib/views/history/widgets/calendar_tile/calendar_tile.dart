@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -31,12 +29,12 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         ref.watch(navigationSmallerNavigationElementsProvider);
     final analysisModelList = ref.watch(analysisModelListProvider);
     final maxDate = DateTime.now();
-    log('$maxDate', name: 'maxDate');
     final minDate = analysisModelList.first.timestamp.timestampToDateTime();
-    log('$minDate', name: 'minDate');
     return Container(
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
+        color: smallNavigationElements
+            ? theme.colorScheme.surface
+            : theme.colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(radius),
       ),
       padding: EdgeInsets.all(gap / 2),
@@ -69,7 +67,9 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
           appointmentDisplayMode: MonthAppointmentDisplayMode.none,
           showTrailingAndLeadingDates: false,
         ),
-        dataSource: DataSource(_createAppointments(analysisModelList, context)),
+        dataSource: DataSource(
+          _createAppointments(analysisModelList, context),
+        ),
         onTap: _onTap,
         monthCellBuilder: _monthlyBuilder,
       ),
