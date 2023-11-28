@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
+import 'controllers/insights_controller.dart';
 import 'controllers/page_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'controllers/writing_controller.dart';
+import 'models/insight_model.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'utils/helper_functions.dart';
@@ -30,7 +32,6 @@ class Healpen extends ConsumerWidget {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<PreferenceModel> currentPreferences = snapshot.data!;
-
           if (_havePreferencesChanged(currentPreferences)) {
             _updatePreferences(ref, currentPreferences);
             _lastFetchedPreferences = currentPreferences;
@@ -77,16 +78,32 @@ class Healpen extends ConsumerWidget {
     List<PreferenceModel> fetchedPreferences,
   ) {
     Future.microtask(() {
-      // Moved this logic to a separate function
-      var fetchedPreferenceMap = {
-        for (var p in fetchedPreferences) p.key: p.value
+      Map<String, dynamic> fetchedPreferenceMap = {
+        for (PreferenceModel p in fetchedPreferences) p.key: p.value
       };
 
-      for (var preferenceTuple in PreferencesController().preferences) {
-        var key = preferenceTuple.preferenceModel.key;
+      for (({
+        PreferenceModel preferenceModel,
+        StateProvider provider
+      }) preferenceTuple in PreferencesController().preferences) {
+        String key = preferenceTuple.preferenceModel.key;
         if (fetchedPreferenceMap.containsKey(key)) {
-          ref.read(preferenceTuple.provider.notifier).state =
-              fetchedPreferenceMap[key];
+          if (key == PreferencesController.insightOrder.key) {
+            List<String> fetchedInsightOrder =
+                List.from(fetchedPreferenceMap[key]);
+            List<InsightModel> insightModelList =
+                ref.read(insightsControllerProvider).insightModelList;
+            List<InsightModel> updatedInsightModelList =
+                fetchedInsightOrder.map((String title) {
+              return insightModelList
+                  .firstWhere((element) => element.title == title);
+            }).toList();
+            ref.read(preferenceTuple.provider.notifier).state.insightModelList =
+                updatedInsightModelList;
+          } else {
+            ref.read(preferenceTuple.provider.notifier).state =
+                fetchedPreferenceMap[key];
+          }
         }
       }
     });

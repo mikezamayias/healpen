@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../enums/app_theming.dart';
+import '../../models/insight_model.dart';
 import '../../models/settings/preference_model.dart';
 import '../../providers/settings_providers.dart';
+import '../insights_controller.dart';
 import '../onboarding/onboarding_controller.dart';
 
 class PreferencesController {
@@ -59,6 +61,13 @@ class PreferencesController {
   static final writingShowAnalyzeNotesButton = PreferenceModel<bool>(
     'writingShowAnalyzeNotesButton',
     true,
+  );
+  static final insightOrder = PreferenceModel<List<String>>(
+    'insightOrder',
+    InsightsController()
+        .insightModelList
+        .map((InsightModel element) => element.title)
+        .toList(),
   );
 
   List<({PreferenceModel preferenceModel, StateProvider provider})>
