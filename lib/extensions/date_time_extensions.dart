@@ -27,4 +27,8 @@ extension DateTimeExtension on DateTime {
   int weeksBefore(DateTime date) {
     return date.difference(this).inDays ~/ 7;
   }
+
+  bool isBetween({required DateTime start, required DateTime end}) {
+    return isAfter(start) && isBefore(end);
+  }
 }

@@ -24,20 +24,12 @@ import 'widgets/week_line_chart.dart';
 /// each week based on the analysis data. The [chartTitle] method generates the
 /// title for each chart based on the week's position relative to the current
 /// date.
-class JournalingRhythmTile extends ConsumerStatefulWidget {
+class JournalingRhythmTile extends ConsumerWidget {
   const JournalingRhythmTile({super.key});
 
   @override
-  ConsumerState<JournalingRhythmTile> createState() =>
-      _JournalingRhythmTileState();
-}
-
-class _JournalingRhythmTileState extends ConsumerState<JournalingRhythmTile> {
-  late List<List<DateTime>> weekDates;
-
-  @override
-  Widget build(BuildContext context) {
-    weekDates = initializeWeekDates(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final weekDates = initializeWeekDates(
       ref.watch(AnalysisViewController.analysisModelListProvider),
     );
     return Padding(
