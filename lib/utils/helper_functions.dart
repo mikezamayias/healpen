@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 
 import '../enums/app_theming.dart';
 import '../themes/blueprint_theme.dart';
@@ -91,10 +90,7 @@ void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
   }
 }
 
-void animateToPage(dynamic pageController, int index) {
-  assert(
-    pageController is PageController || pageController is PreloadPageController,
-  );
+void animateToPage(PageController pageController, int index) {
   pageController.animateToPage(
     index,
     duration: standardDuration,
@@ -102,10 +98,7 @@ void animateToPage(dynamic pageController, int index) {
   );
 }
 
-void goToPage(dynamic pageController, int index) {
-  assert(
-    pageController is PageController || pageController is PreloadPageController,
-  );
+void goToPage(PageController pageController, int index) {
   pageController.jumpToPage(
     index,
   );
@@ -187,4 +180,49 @@ Color getTextColorOnSentiment(ThemeData theme, dynamic sentiment) {
     theme.colorScheme.onPrimary,
     getSentimentRatio(sentiment),
   )!;
+}
+
+pushWithAnimation({
+  required BuildContext context,
+  required Widget widget,
+  bool replacement = false,
+}) {
+  final builder = PageRouteBuilder(
+    transitionDuration: emphasizedDuration,
+    reverseTransitionDuration: emphasizedDuration,
+    pageBuilder: (
+      context,
+      animation,
+      secondaryAnimation,
+    ) {
+      return widget;
+    },
+    transitionsBuilder: (
+      context,
+      animation,
+      secondaryAnimation,
+      child,
+    ) {
+      final curvedAnimation = CurvedAnimation(
+        parent: animation,
+        curve: emphasizedCurve,
+        reverseCurve: emphasizedCurve.flipped,
+      );
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ).animate(curvedAnimation),
+        child: FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+      );
+    },
+  );
+  if (replacement) {
+    context.navigator.pushReplacement(builder);
+  } else {
+    context.navigator.push(builder);
+  }
 }

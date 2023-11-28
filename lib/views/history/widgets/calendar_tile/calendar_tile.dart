@@ -4,9 +4,10 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../../../controllers/history_view_controller.dart';
+import '../../../../controllers/analysis_view_controller.dart';
+import '../../../../extensions/date_time_extensions.dart';
 import '../../../../extensions/int_extensions.dart';
-import '../../../../models/note/note_model.dart';
+import '../../../../models/analysis/analysis_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/show_healpen_dialog.dart';
@@ -16,9 +17,7 @@ import 'widgets/date_dialog.dart';
 import 'widgets/month_cell_tile.dart';
 
 class CalendarTile extends ConsumerStatefulWidget {
-  final List<NoteModel> noteModels;
-
-  const CalendarTile({super.key, required this.noteModels});
+  const CalendarTile({super.key});
 
   @override
   ConsumerState<CalendarTile> createState() => _CalendarTileState();
@@ -29,9 +28,17 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   Widget build(BuildContext context) {
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
-    return Padding(
-      padding:
-          smallNavigationElements ? EdgeInsets.all(gap / 2) : EdgeInsets.zero,
+    final analysisModelList = ref.watch(analysisModelListProvider);
+    final maxDate = DateTime.now();
+    final minDate = analysisModelList.first.timestamp.timestampToDateTime();
+    return Container(
+      decoration: BoxDecoration(
+        color: smallNavigationElements
+            ? theme.colorScheme.surface
+            : theme.colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      padding: EdgeInsets.all(gap / 2),
       child: SfCalendar(
         showCurrentTimeIndicator: false,
         showTodayButton: false,
@@ -40,9 +47,8 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         showNavigationArrow: false,
         showDatePickerButton: false,
         view: CalendarView.month,
-        maxDate: DateTime.now(),
-        minDate: HistoryViewController.noteModels.last.timestamp
-            .timestampToDateTime(),
+        maxDate: maxDate,
+        minDate: minDate,
         viewNavigationMode: ViewNavigationMode.snap,
         headerStyle: CalendarHeaderStyle(
           textStyle: context.theme.textTheme.titleLarge!.copyWith(
@@ -62,7 +68,9 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
           appointmentDisplayMode: MonthAppointmentDisplayMode.none,
           showTrailingAndLeadingDates: false,
         ),
-        dataSource: DataSource(_createAppointments(widget.noteModels, context)),
+        dataSource: DataSource(
+          _createAppointments(analysisModelList, context),
+        ),
         onTap: _onTap,
         monthCellBuilder: _monthlyBuilder,
       ),
@@ -74,7 +82,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
 
   // Utility method to create Appointments
   List<Appointment> _createAppointments(
-    List<NoteModel> noteModels,
+    List<AnalysisModel> noteModels,
     BuildContext context,
   ) {
     return noteModels.map((noteModel) {
@@ -107,7 +115,10 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       customDialog: CustomDialog(
         titleString: DateFormat('EEE d MMM yyyy').format(details.date!),
         enableContentContainer: false,
-        contentWidget: DateDialog(date: details.date!),
+        contentWidget: DateDialog(
+          startDate: details.date!.startOfDay(),
+          endDate: details.date!.endOfDay(),
+        ),
         actions: [
           CustomListTile(
             useSmallerNavigationSetting: false,

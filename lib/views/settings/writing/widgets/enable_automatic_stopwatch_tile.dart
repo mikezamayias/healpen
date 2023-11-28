@@ -14,6 +14,7 @@ class EnableAutomaticStopwatchTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
     return CustomListTile(
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
@@ -21,8 +22,9 @@ class EnableAutomaticStopwatchTile extends ConsumerWidget {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableSubtitleWrapper: true,
       titleString: 'Enable automatic stopwatch',
-      explanationString:
-          'Pauses the stopwatch when you stop typing and resets it when you clear all text.',
+      explanationString: enableInformatoryText
+          ? 'Pauses the stopwatch when you stop typing and resets it when you clear all text.'
+          : null,
       trailing: Switch(
         value: ref.watch(writingAutomaticStopwatchProvider),
         onChanged: (value) {

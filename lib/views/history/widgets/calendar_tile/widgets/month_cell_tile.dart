@@ -6,130 +6,122 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../../../../controllers/history_view_controller.dart';
+import '../../../../../controllers/analysis_view_controller.dart';
+import '../../../../../extensions/analysis_model_extensions.dart';
+import '../../../../../extensions/date_time_extensions.dart';
 import '../../../../../extensions/int_extensions.dart';
 import '../../../../../models/analysis/analysis_model.dart';
-import '../../../../../models/note/note_model.dart';
 import '../../../../../providers/settings_providers.dart';
-import '../../../../../services/note_analysis_service.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/helper_functions.dart';
 
 class MonthCellTile extends ConsumerWidget {
   final MonthCellDetails cellDetails;
-  const MonthCellTile({super.key, required this.cellDetails});
+
+  const MonthCellTile({
+    super.key,
+    required this.cellDetails,
+  });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool todayCheck = DateFormat('yyyy-MM-dd').format(cellDetails.date) ==
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
+    Color shapeColor = smallNavigationElements
+        ? context.theme.colorScheme.surfaceVariant
+        : context.theme.colorScheme.surface;
+    Color textColor = smallNavigationElements
+        ? context.theme.colorScheme.onSurfaceVariant
+        : context.theme.colorScheme.onSurface;
+    final DateTime cellDate = cellDetails.date;
+    final dateAnalysisModelList =
+        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+              start: cellDate.startOfDay(),
+              end: cellDate.endOfDay(),
+            );
+    bool todayCheck = DateFormat('yyyy-MM-dd').format(cellDate) ==
         DateFormat('yyyy-MM-dd').format(DateTime.now());
     bool currentMonthCheck =
-        cellDetails.date.month == cellDetails.visibleDates[15].month;
-    bool dateAfterTodayCheck = cellDetails.date.isAfter(DateTime.now());
-    bool dateBeforeFirstRecordCheck = cellDetails.date.isBefore(
-      HistoryViewController.noteModels.last.timestamp
+        cellDate.month == cellDetails.visibleDates[15].month;
+    bool dateAfterTodayCheck = cellDate.isAfter(DateTime.now());
+    bool dateBeforeFirstRecordCheck = cellDate.isBefore(
+      ref
+          .watch(analysisModelListProvider)
+          .first
+          .timestamp
           .timestampToDateTime()
           .subtract(1.days),
     );
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
-    return StreamBuilder(
-      stream:
-          NoteAnalysisService().getAnalysisEntriesListOnDate(cellDetails.date),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<AnalysisModel>> analysisModelListSnapshot,
-      ) {
-        Color shapeColor = smallNavigationElements
-            ? context.theme.colorScheme.surfaceVariant
-            : context.theme.colorScheme.surface;
-        Color textColor = smallNavigationElements
-            ? context.theme.colorScheme.onSurfaceVariant
-            : context.theme.colorScheme.onSurface;
-        double? dateSentiment;
-        if (analysisModelListSnapshot.data != null &&
-            analysisModelListSnapshot.data!.isNotEmpty) {
-          List<AnalysisModel> analysisModelList =
-              analysisModelListSnapshot.data!;
-          if (analysisModelList.isNotEmpty) {
-            dateSentiment = [
-              for (AnalysisModel element in analysisModelList) element.score,
-            ].average;
-            shapeColor = getShapeColorOnSentiment(context.theme, dateSentiment);
-            textColor = getTextColorOnSentiment(context.theme, dateSentiment);
-          }
-        }
-        return Padding(
-          padding: EdgeInsets.all(gap / 2),
-          child: AnimatedContainer(
-            duration: standardDuration,
-            curve: standardCurve,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(radius - gap),
-              color: shapeColor,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Gap(gap / 2),
-                AnimatedContainer(
-                  duration: standardDuration,
-                  curve: standardCurve,
-                  alignment: Alignment.center,
-                  child: Text(
-                    cellDetails.date.day.toString(),
-                    style: context.theme.textTheme.titleMedium!.copyWith(
-                      color: currentMonthCheck &&
-                              !dateAfterTodayCheck &&
-                              !dateBeforeFirstRecordCheck
-                          ? textColor
-                          : textColor.withOpacity(0.5),
-                      fontWeight: currentMonthCheck &&
-                              !dateAfterTodayCheck &&
-                              !dateBeforeFirstRecordCheck &&
-                              todayCheck
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
-                  ),
+    double? dateSentiment;
+    if (dateAnalysisModelList.isNotEmpty) {
+      dateSentiment = dateAnalysisModelList
+          .map((AnalysisModel element) => element.score)
+          .average;
+      shapeColor = getShapeColorOnSentiment(context.theme, dateSentiment);
+      textColor = getTextColorOnSentiment(context.theme, dateSentiment);
+    }
+    return Padding(
+      padding: EdgeInsets.all(gap / 2),
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius - gap),
+          color: shapeColor,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Gap(gap / 2),
+            AnimatedContainer(
+              duration: standardDuration,
+              curve: standardCurve,
+              alignment: Alignment.center,
+              child: Text(
+                cellDate.day.toString(),
+                style: context.theme.textTheme.titleMedium!.copyWith(
+                  color: currentMonthCheck &&
+                          !dateAfterTodayCheck &&
+                          !dateBeforeFirstRecordCheck
+                      ? textColor
+                      : textColor.withOpacity(0.5),
+                  fontWeight: currentMonthCheck &&
+                          !dateAfterTodayCheck &&
+                          !dateBeforeFirstRecordCheck &&
+                          todayCheck
+                      ? FontWeight.bold
+                      : FontWeight.normal,
                 ),
-                Gap(gap / 2),
-                Expanded(
-                  child: Visibility(
-                    visible: cellDetails.appointments.isNotEmpty,
-                    child: Center(
-                      child: StreamBuilder(
-                        stream: NoteAnalysisService()
-                            .getNoteEntriesListOnDate(cellDetails.date),
-                        builder:
-                            (context, AsyncSnapshot<List<NoteModel>> snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(
-                              '${snapshot.data!.length}',
-                              textAlign: TextAlign.center,
-                              style:
-                                  context.theme.textTheme.titleSmall!.copyWith(
-                                color: textColor,
-                                fontWeight: FontWeight.bold,
-                                textBaseline: TextBaseline.alphabetic,
-                              ),
-                            ).animate().fade(
-                                  duration: standardDuration,
-                                  curve: standardCurve,
-                                );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
+              ),
+            ),
+            const Spacer(),
+            if (dateAnalysisModelList.isNotEmpty)
+              Center(
+                child: ClipOval(
+                  child: Container(
+                    color: textColor,
+                    width: context.theme.textTheme.headlineSmall!.fontSize!,
+                    height: context.theme.textTheme.headlineSmall!.fontSize!,
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${dateAnalysisModelList.length}',
+                      textAlign: TextAlign.center,
+                      style: context.theme.textTheme.titleSmall!.copyWith(
+                        color: shapeColor,
+                        fontWeight: FontWeight.bold,
+                        textBaseline: TextBaseline.alphabetic,
                       ),
-                    ),
+                    ).animate().fade(
+                          duration: standardDuration,
+                          curve: standardCurve,
+                        ),
                   ),
                 ),
-                Gap(gap / 2),
-              ],
-            ),
-          ),
-        );
-      },
+              ),
+            Gap(gap),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../extensions/widget_extensions.dart';
 import '../../providers/settings_providers.dart';
-import '../../route_controller.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 
@@ -13,6 +13,7 @@ class BlueprintView extends ConsumerWidget {
   const BlueprintView({
     super.key,
     this.appBar,
+    this.bottomNavigationBar,
     this.backgroundColor,
     this.padBodyHorizontally = true,
     this.showAppBar,
@@ -20,6 +21,7 @@ class BlueprintView extends ConsumerWidget {
   });
 
   final Widget? appBar;
+  final Widget? bottomNavigationBar;
   final Widget body;
   final Color? backgroundColor;
   final bool? padBodyHorizontally;
@@ -29,6 +31,8 @@ class BlueprintView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final showAppBarSetting =
         showAppBar ?? ref.watch(navigationShowAppBarProvider);
+    final smallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: getSystemUIOverlayStyle(
         context.theme,
@@ -43,18 +47,17 @@ class BlueprintView extends ConsumerWidget {
           child: GestureDetector(
             onTap: () => context.focusScope.unfocus(),
             child: Padding(
-              padding: ModalRoute.of(context)?.settings.name ==
-                      RouterController.authWrapperRoute.route
-                  ? EdgeInsets.symmetric(
-                      horizontal: padBodyHorizontally! ? gap : 0,
-                    )
-                  : EdgeInsets.all(gap),
+              padding: EdgeInsets.symmetric(
+                horizontal: padBodyHorizontally! ? gap : 0,
+              ),
               child: Scaffold(
                 backgroundColor: Colors.transparent,
                 appBar: showAppBarSetting! && appBar != null
                     ? PreferredSize(
-                        preferredSize: Size.fromHeight(18.h),
-                        child: appBar!,
+                        preferredSize: Size.fromHeight(
+                          smallNavigationElements ? kToolbarHeight : 18.h,
+                        ),
+                        child: appBar!.animateAppBar(),
                       )
                     : null,
                 body: ScrollConfiguration(
@@ -62,8 +65,9 @@ class BlueprintView extends ConsumerWidget {
                     scrollbars: false,
                     overscroll: false,
                   ),
-                  child: body,
+                  child: body.animateBody(),
                 ),
+                bottomNavigationBar: bottomNavigationBar,
               ),
             ),
           ),

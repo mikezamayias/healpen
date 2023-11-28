@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-  <application android:label="healpen" android:name="${applicationName}" android:icon="@mipmap/ic_launcher">
+  <application android:label="healpen" android:name="${applicationName}" android:icon="@mipmap/launcher_icon">
     <activity android:name=".MainActivity" android:exported="true" android:launchMode="singleTop" android:theme="@style/LaunchTheme" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
       <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
@@ -15,6 +15,19 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:host="healpen.firebaseapp.com" android:scheme="https"/>
+      </intent-filter>
+      <!-- Make sure you explicitly set android:autoVerify to "true". -->
+      <intent-filter android:autoVerify="true">
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <!-- If a user clicks on a shared link that uses the "http" scheme, your
+         app should be able to delegate that traffic to "https". -->
+        <data android:scheme="http" />
+        <data android:scheme="https" />
+        <!-- Include one or more domains that should be verified. -->
+        <data android:host="healpen.firebaseapp.com" />
+        <data android:host="com.mikezamayias.healpen" />
       </intent-filter>
     </activity>
     <!-- Don't delete the meta-data below.

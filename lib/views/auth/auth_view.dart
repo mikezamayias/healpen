@@ -4,12 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
 import '../../providers/custom_auth_provider.dart';
-import '../../utils/constants.dart';
+import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
 import '../onboarding/onboarding_view.dart';
@@ -36,28 +35,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
         // TODO: check if the following implementation is correct
         // documentation mentions only the SignedIn check
         if (newState is SignedIn) {
-          navigator.pushReplacement(
-            PageRouteBuilder(
-              transitionDuration: emphasizedDuration,
-              reverseTransitionDuration: emphasizedDuration,
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  page_controller.PageController().authWrapper.widget,
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) =>
-                      FadeTransition(
-                opacity: Tween<double>(
-                  begin: -1,
-                  end: 1,
-                ).animate(animation),
-                child: SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(1, 0),
-                    end: Offset.zero,
-                  ).animate(animation),
-                  child: child,
-                ),
-              ),
-            ),
+          pushWithAnimation(
+            context: context,
+            widget: page_controller.PageController().authWrapper.widget,
+            replacement: true,
           );
         }
       },
@@ -75,11 +56,11 @@ class _AuthViewState extends ConsumerState<AuthView> {
           '${FirebaseAuth.instance.currentUser}',
           name: 'AuthView',
         );
-        return WillPopScope(
-          onWillPop: () {
+        return PopScope(
+          onPopInvoked: (_) {
             goBack();
-            return Future.value(true);
           },
+          canPop: true,
           child: BlueprintView(
             appBar: AppBar(
               pathNames: [
@@ -121,27 +102,10 @@ class _AuthViewState extends ConsumerState<AuthView> {
         PageController();
     ref.read(OnboardingController().currentPageIndexProvider.notifier).state =
         0;
-    navigator.pushReplacement(
-      PageRouteBuilder(
-        transitionDuration: emphasizedDuration,
-        reverseTransitionDuration: emphasizedDuration,
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const OnboardingView(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-            FadeTransition(
-          opacity: Tween<double>(
-            begin: -1,
-            end: 1,
-          ).animate(animation),
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: const Offset(1, 0),
-              end: Offset.zero,
-            ).animate(animation),
-            child: child,
-          ),
-        ),
-      ),
+    pushWithAnimation(
+      context: context,
+      widget: const OnboardingView(),
+      replacement: true,
     );
   }
 }

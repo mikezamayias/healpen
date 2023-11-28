@@ -21,17 +21,15 @@ import '../../../widgets/loading_tile.dart';
 class NoteTile extends ConsumerWidget {
   const NoteTile({
     super.key,
-    required this.noteModel,
-    this.analysisModel,
+    required this.timestamp,
   });
 
-  final NoteModel noteModel;
-  final AnalysisModel? analysisModel;
+  final int timestamp;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Widget tile = StreamBuilder<({NoteModel note, AnalysisModel? analysis})>(
-      stream: FirestoreService().getNoteAndAnalysis(noteModel.timestamp),
+    return FutureBuilder<({NoteModel note, AnalysisModel analysis})>(
+      future: FirestoreService().getNoteAndAnalysis(timestamp),
       builder: (
         BuildContext context,
         AsyncSnapshot<({NoteModel note, AnalysisModel? analysis})> snapshot,
@@ -47,100 +45,99 @@ class NoteTile extends ConsumerWidget {
         Color? textColor = analysisModel != null
             ? getTextColorOnSentiment(context.theme, analysisModel.score)
             : null;
-        return CustomListTile(
-          useSmallerNavigationSetting: false,
-          textColor: textColor,
-          backgroundColor: shapeColor,
-          cornerRadius: radius - gap,
-          explanationString: DateFormat('HH:mm').format(
-            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
-          ),
-          title: Text(
-            noteModel.content,
-            style: context.theme.textTheme.bodyLarge!.copyWith(
-              overflow: TextOverflow.ellipsis,
-              color: textColor,
-            ),
-            maxLines: 1,
-          ),
-          onTap: () {
-            context.navigator.pushNamed(
-              RouterController.noteViewRoute.route,
-              arguments: (
-                noteModel: noteModel,
-                analysisModel: analysisModel,
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(radius - gap),
+          child: IntrinsicWidth(
+            child: Slidable(
+              key: ValueKey(timestamp.toString()),
+              endActionPane: ActionPane(
+                motion: const ScrollMotion(),
+                dragDismissible: true,
+                extentRatio: 0.6,
+                children: [
+                  SizedBox(width: gap),
+                  SlidableAction(
+                    icon: FontAwesomeIcons.trashCan,
+                    autoClose: true,
+                    backgroundColor: context.theme.colorScheme.tertiary,
+                    foregroundColor: context.theme.colorScheme.onTertiary,
+                    borderRadius: BorderRadius.circular(radius - gap),
+                    padding: EdgeInsets.all(gap),
+                    spacing: gap,
+                    onPressed: (context) {
+                      showHealpenDialog(
+                        context: context,
+                        doVibrate: PreferencesController
+                            .navigationEnableHapticFeedback.value,
+                        customDialog: CustomDialog(
+                          titleString: 'Delete note?',
+                          contentString: 'You cannot undo this action.',
+                          actions: [
+                            CustomListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: gap * 2,
+                                vertical: gap,
+                              ),
+                              cornerRadius: radius - gap,
+                              responsiveWidth: true,
+                              titleString: 'Delete',
+                              backgroundColor: context.theme.colorScheme.error,
+                              textColor: context.theme.colorScheme.onError,
+                              onTap: () {
+                                HistoryViewController()
+                                    .deleteNote(noteModel: noteModel);
+                                Navigator.pop(navigatorKey.currentContext!);
+                              },
+                            ),
+                            CustomListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: gap * 2,
+                                vertical: gap,
+                              ),
+                              cornerRadius: radius - gap,
+                              responsiveWidth: true,
+                              titleString: 'Go back',
+                              onTap: () {
+                                Navigator.pop(navigatorKey.currentContext!);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            );
-          },
-        );
-      },
-    );
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius - gap),
-      child: IntrinsicWidth(
-        child: Slidable(
-          key: ValueKey(noteModel.timestamp.toString()),
-          endActionPane: ActionPane(
-            motion: const ScrollMotion(),
-            dragDismissible: true,
-            extentRatio: 0.6,
-            children: [
-              SizedBox(width: gap),
-              SlidableAction(
-                icon: FontAwesomeIcons.trashCan,
-                autoClose: true,
-                backgroundColor: context.theme.colorScheme.tertiary,
-                foregroundColor: context.theme.colorScheme.onTertiary,
-                borderRadius: BorderRadius.circular(radius - gap),
-                padding: EdgeInsets.all(gap),
-                spacing: gap,
-                onPressed: (context) {
-                  showHealpenDialog(
-                    context: context,
-                    doVibrate: PreferencesController
-                        .navigationEnableHapticFeedback.value,
-                    customDialog: CustomDialog(
-                      titleString: 'Delete note?',
-                      contentString: 'You cannot undo this action.',
-                      actions: [
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: gap * 2,
-                            vertical: gap,
-                          ),
-                          cornerRadius: radius - gap,
-                          responsiveWidth: true,
-                          titleString: 'Delete',
-                          backgroundColor: context.theme.colorScheme.error,
-                          textColor: context.theme.colorScheme.onError,
-                          onTap: () {
-                            HistoryViewController()
-                                .deleteNote(noteModel: noteModel);
-                            Navigator.pop(navigatorKey.currentContext!);
-                          },
-                        ),
-                        CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: gap * 2,
-                            vertical: gap,
-                          ),
-                          cornerRadius: radius - gap,
-                          responsiveWidth: true,
-                          titleString: 'Go back',
-                          onTap: () {
-                            Navigator.pop(navigatorKey.currentContext!);
-                          },
-                        ),
-                      ],
+              child: CustomListTile(
+                useSmallerNavigationSetting: false,
+                textColor: textColor,
+                backgroundColor: shapeColor,
+                cornerRadius: radius - gap,
+                explanationString: DateFormat('HH:mm').format(
+                  DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+                ),
+                title: Text(
+                  noteModel.content,
+                  style: context.theme.textTheme.bodyLarge!.copyWith(
+                    overflow: TextOverflow.ellipsis,
+                    color: textColor,
+                  ),
+                  maxLines: 1,
+                ),
+                onTap: () {
+                  context.navigator.pushNamed(
+                    RouterController.noteViewRoute.route,
+                    arguments: (
+                      noteModel: noteModel,
+                      analysisModel: analysisModel,
                     ),
                   );
                 },
               ),
-            ],
+            ),
           ),
-          child: tile,
-        ),
-      ),
+        );
+      },
     );
   }
 }

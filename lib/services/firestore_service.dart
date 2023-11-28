@@ -10,7 +10,12 @@ import '../models/sentence/sentence_model.dart';
 
 class FirestoreService {
   // Singleton Constructor
-  FirestoreService._();
+  FirestoreService._() {
+    log(
+      'FirestoreService:instance',
+      name: 'FirestoreService',
+    );
+  }
 
   static final instance = FirestoreService._();
 
@@ -21,6 +26,10 @@ class FirestoreService {
 
   // Methods
   CollectionReference<NoteModel> writingCollectionReference() {
+    log(
+      'FirestoreService:writingCollectionReference()',
+      name: 'FirestoreService',
+    );
     return FirebaseFirestore.instance
         .collection('writing-temp')
         .doc(currentUser.uid)
@@ -32,6 +41,10 @@ class FirestoreService {
   }
 
   CollectionReference<AnalysisModel> analysisCollectionReference() {
+    log(
+      'FirestoreService:analysisCollectionReference()',
+      name: 'FirestoreService',
+    );
     return FirebaseFirestore.instance
         .collection('analysis-temp')
         .doc(currentUser.uid)
@@ -44,6 +57,10 @@ class FirestoreService {
   }
 
   DocumentReference<Map<String, dynamic>> preferencesCollectionReference() {
+    log(
+      'FirestoreService:preferencesCollectionReference()',
+      name: 'FirestoreService',
+    );
     return FirebaseFirestore.instance
         .collection('preferences-temp')
         .doc(currentUser.uid);
@@ -70,7 +87,13 @@ class FirestoreService {
   }
 
   Stream<QuerySnapshot<AnalysisModel>> getAnalysisBetweenDates(
-      DateTime start, DateTime end) {
+    DateTime start,
+    DateTime end,
+  ) {
+    log(
+      'FirestoreService:getAnalysisBetweenDates()',
+      name: 'FirestoreService',
+    );
     return analysisCollectionReference()
         .where(
           'timestamp',
@@ -116,6 +139,10 @@ class FirestoreService {
   Future<DocumentSnapshot<AnalysisModel>> getAnalysis(
     int timestamp,
   ) {
+    log(
+      'FirestoreService:getAnalysis()',
+      name: 'FirestoreService',
+    );
     return analysisCollectionReference().doc('$timestamp').get();
   }
 
@@ -189,6 +216,10 @@ class FirestoreService {
   Future<void> analyzeSentiment(
     DocumentSnapshot<NoteModel> note,
   ) async {
+    log(
+      'FirestoreService:analyzeSentiment()',
+      name: 'FirestoreService',
+    );
     writingCollectionReference()
         .doc(note.id)
         .get()
@@ -220,16 +251,18 @@ class FirestoreService {
     });
   }
 
-  Stream<({NoteModel note, AnalysisModel? analysis})> getNoteAndAnalysis(
+  Future<({NoteModel note, AnalysisModel analysis})> getNoteAndAnalysis(
     int timestamp,
-  ) async* {
-    NoteModel noteEntry = (await FirestoreService().getNote(timestamp)).data()!;
-    AnalysisModel? analysisData =
-        (await FirestoreService().getAnalysis(timestamp)).data();
-    AnalysisModel? analysisEntry;
-    if (analysisData != null) {
-      analysisEntry = analysisData;
-    }
-    yield (note: noteEntry, analysis: analysisEntry);
+  ) async {
+    log(
+      'FirestoreService:getNoteAndAnalysis()',
+      name: 'FirestoreService',
+    );
+    final noteEntry = await FirestoreService().getNote(timestamp);
+    final analysisEntry = await FirestoreService().getAnalysis(timestamp);
+    return (
+      note: noteEntry.data()!,
+      analysis: analysisEntry.data()!,
+    );
   }
 }

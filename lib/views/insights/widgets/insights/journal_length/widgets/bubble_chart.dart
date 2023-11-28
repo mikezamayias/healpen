@@ -7,7 +7,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../../extensions/int_extensions.dart';
-import '../../../../../../extensions/stream_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
 import '../../../../../../models/note/note_model.dart';
 import '../../../../../../providers/settings_providers.dart';
@@ -24,7 +23,7 @@ class BubbleChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final List<AnalysisModel> analysisModelList =
-        ref.watch(AnalysisViewController.analysisModelListProvider);
+        ref.watch(analysisModelListProvider);
     final monthSet = analysisModelList.getMonthsFromAnalysisModelList();
     return SfCartesianChart(
       margin: ref.watch(navigationSmallerNavigationElementsProvider)
@@ -83,16 +82,18 @@ class BubbleChart extends ConsumerWidget {
                 .getNoteAndAnalysis(analysisModelList
                     .elementAt(pointInteractionDetails.pointIndex!)
                     .timestamp)
-                .toFuture<({AnalysisModel? analysis, NoteModel note})>()
-                .then((({AnalysisModel? analysis, NoteModel note}) data) {
-              context.navigator.pushNamed(
-                RouterController.noteViewRoute.route,
-                arguments: (
-                  noteModel: data.note,
-                  analysisModel: data.analysis,
-                ),
-              );
-            });
+                .then(
+                  (
+                    ({AnalysisModel? analysis, NoteModel note}) data,
+                  ) =>
+                      context.navigator.pushNamed(
+                    RouterController.noteViewRoute.route,
+                    arguments: (
+                      noteModel: data.note,
+                      analysisModel: data.analysis,
+                    ),
+                  ),
+                );
           },
         ),
       ],

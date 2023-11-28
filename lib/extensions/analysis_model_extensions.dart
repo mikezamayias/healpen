@@ -1,5 +1,6 @@
 import '../models/analysis/analysis_model.dart';
 import '../models/analysis/chart_data_model.dart';
+import '../services/data_analysis_service.dart';
 import 'date_time_extensions.dart';
 import 'int_extensions.dart';
 
@@ -59,5 +60,33 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
       );
     }
     return averageDaysSentiment;
+  }
+
+  List<AnalysisModel> getAnalysisBetweenDates({
+    required DateTime start,
+    required DateTime end,
+  }) {
+    return where(
+      (AnalysisModel analysisModel) =>
+          analysisModel.timestamp.timestampToDateTime().isBetween(
+                start: start,
+                end: end,
+              ),
+    ).toList();
+  }
+
+  List<HourlyData> hourlyAnalysis() {
+    final Map<int, HourlyDataBuilder> dataBuilders = {};
+    for (AnalysisModel analysisModel in this) {
+      final hour =
+          DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp).hour;
+      final builder = dataBuilders.putIfAbsent(hour, () => HourlyDataBuilder());
+      builder.addAnalysis(analysisModel);
+    }
+    List<HourlyData> processedData = List.generate(
+      24,
+      (hour) => dataBuilders[hour]?.build(hour) ?? HourlyData.empty(hour),
+    );
+    return processedData;
   }
 }

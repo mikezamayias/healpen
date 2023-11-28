@@ -15,13 +15,15 @@ class ThemeColorTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
     return CustomListTile(
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
       titleString: 'Color',
-      explanationString: 'Changes the color of the app.',
+      explanationString:
+          enableInformatoryText ? 'Changes the color of the app.' : null,
       enableSubtitleWrapper: false,
       subtitle: SegmentedButton<ThemeColor>(
         showSelectedIcon: false,

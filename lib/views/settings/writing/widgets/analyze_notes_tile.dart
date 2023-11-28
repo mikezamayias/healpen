@@ -14,6 +14,7 @@ class AnalyzeNotesTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
     return CustomListTile(
       cornerRadius: ref.watch(HealpenController().currentPageIndexProvider) == 0
           ? radius - gap
@@ -23,7 +24,9 @@ class AnalyzeNotesTile extends ConsumerWidget {
               ? false
               : true,
       titleString: 'Update note analysis',
-      explanationString: 'Update the analysis of all your notes.',
+      explanationString: enableInformatoryText
+          ? 'Update the analysis of all your notes.'
+          : null,
       onTap: () async {
         NoteAnalyzer.completed(ref);
         showHealpenDialog(

@@ -42,6 +42,7 @@ class InsightsView extends ConsumerWidget {
           } else {
             if (analysisSnapshot.data!.docs.isEmpty) {
               return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const CustomListTile(
                     titleString: 'No data found',
@@ -61,14 +62,10 @@ class InsightsView extends ConsumerWidget {
                 ],
               );
             } else {
-              ref
-                  .watch(AnalysisViewController.analysisModelListProvider)
-                  .clear();
+              ref.watch(analysisModelListProvider).clear();
               for (QueryDocumentSnapshot<AnalysisModel> element
                   in analysisSnapshot.data!.docs) {
-                ref
-                    .watch(AnalysisViewController.analysisModelListProvider)
-                    .add(element.data());
+                ref.watch(analysisModelListProvider).add(element.data());
               }
               return const InsightsTile();
             }
