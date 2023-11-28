@@ -251,20 +251,18 @@ class FirestoreService {
     });
   }
 
-  Stream<({NoteModel note, AnalysisModel? analysis})> getNoteAndAnalysis(
+  Future<({NoteModel note, AnalysisModel analysis})> getNoteAndAnalysis(
     int timestamp,
-  ) async* {
+  ) async {
     log(
       'FirestoreService:getNoteAndAnalysis()',
       name: 'FirestoreService',
     );
-    NoteModel noteEntry = (await FirestoreService().getNote(timestamp)).data()!;
-    AnalysisModel? analysisData =
-        (await FirestoreService().getAnalysis(timestamp)).data();
-    AnalysisModel? analysisEntry;
-    if (analysisData != null) {
-      analysisEntry = analysisData;
-    }
-    yield (note: noteEntry, analysis: analysisEntry);
+    final noteEntry = await FirestoreService().getNote(timestamp);
+    final analysisEntry = await FirestoreService().getAnalysis(timestamp);
+    return (
+      note: noteEntry.data()!,
+      analysis: analysisEntry.data()!,
+    );
   }
 }

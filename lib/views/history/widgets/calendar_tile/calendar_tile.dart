@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../../controllers/analysis_view_controller.dart';
+import '../../../../extensions/date_time_extensions.dart';
 import '../../../../extensions/int_extensions.dart';
 import '../../../../models/analysis/analysis_model.dart';
 import '../../../../providers/settings_providers.dart';
@@ -114,7 +115,10 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
       customDialog: CustomDialog(
         titleString: DateFormat('EEE d MMM yyyy').format(details.date!),
         enableContentContainer: false,
-        contentWidget: DateDialog(date: details.date!),
+        contentWidget: DateDialog(
+          startDate: details.date!.startOfDay(),
+          endDate: details.date!.endOfDay(),
+        ),
         actions: [
           CustomListTile(
             useSmallerNavigationSetting: false,

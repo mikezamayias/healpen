@@ -27,13 +27,12 @@ class MonthLineChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analysisModelList = ref
-        .watch(analysisModelListProvider)
-        .getAnalysisBetweenDates(
-          start: month.startOfMonth(),
-          end: month.endOfMonth(),
-        )
-        .averageDaysSentimentToChartData();
+    final dateAnalysisModelList =
+        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+              start: month.startOfMonth(),
+              end: month.endOfMonth(),
+            );
+    final chartData = dateAnalysisModelList.averageDaysSentimentToChartData();
     return SfCartesianChart(
       margin: EdgeInsets.zero,
       plotAreaBorderWidth: 0,
@@ -60,7 +59,7 @@ class MonthLineChart extends ConsumerWidget {
       series: [
         // Renders spline chart
         ScatterSeries(
-          dataSource: analysisModelList,
+          dataSource: chartData,
           xValueMapper: (ChartData data, _) => data.x,
           yValueMapper: (ChartData data, _) => data.y,
           sortFieldValueMapper: (ChartData data, _) => data.x,
@@ -83,17 +82,19 @@ class MonthLineChart extends ConsumerWidget {
             ),
           ],
           onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
-            final date = analysisModelList
-                .elementAt(pointInteractionDetails.pointIndex!)
-                .x;
+            final date =
+                chartData.elementAt(pointInteractionDetails.pointIndex!).x;
             showHealpenDialog(
               context: context,
               doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
               customDialog: CustomDialog(
-                titleString: DateFormat('EEE d MMM yyyy').format(date),
+                titleString: DateFormat('EEE d MMM yyyy').format(
+                  date,
+                ),
                 enableContentContainer: false,
                 contentWidget: DateDialog(
-                  date: date,
+                  startDate: date.startOfDay(),
+                  endDate: date.endOfDay(),
                 ),
                 actions: [
                   CustomListTile(

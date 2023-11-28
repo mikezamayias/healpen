@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../extensions/analysis_model_extensions.dart';
+import '../../../../../../extensions/date_time_extensions.dart';
 import '../../../../../../models/analysis/chart_data_model.dart';
 import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
@@ -26,10 +27,13 @@ class WeekLineChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<ChartData> actualData = ref
-        .watch(analysisModelListProvider)
-        .getAnalysisBetweenDates(start: week.first, end: week.last)
-        .averageDaysSentimentToChartData();
+    final dateAnalysisModelList =
+        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+              start: week.first,
+              end: week.last,
+            );
+    final List<ChartData> actualData =
+        dateAnalysisModelList.averageDaysSentimentToChartData();
     final List<ChartData> weekData = initializeWeekData(actualData);
     return SfCartesianChart(
       margin: EdgeInsets.zero,
@@ -94,7 +98,8 @@ class WeekLineChart extends ConsumerWidget {
                 titleString: DateFormat('EEE d MMM yyyy').format(date),
                 enableContentContainer: false,
                 contentWidget: DateDialog(
-                  date: date,
+                  startDate: date.startOfDay(),
+                  endDate: date.endOfDay(),
                 ),
                 actions: [
                   CustomListTile(
