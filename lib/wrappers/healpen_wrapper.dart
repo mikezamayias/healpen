@@ -31,35 +31,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       (InternetConnectionStatus result) async {
         if (result == InternetConnectionStatus.connected) {
           ref.read(isDeviceConnectedProvider.notifier).state = true;
-          AnimatedSnackBar.removeAll();
         } else {
           ref.read(isDeviceConnectedProvider.notifier).state = false;
-          AnimatedSnackBar(
-            animationDuration: standardDuration,
-            animationCurve: standardCurve,
-            duration: 365.days,
-            mobilePositionSettings: const MobilePositionSettings(
-              topOnAppearance: 0,
-              topOnDissapear: 0,
-            ),
-            builder: (BuildContext context) {
-              return SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.only(top: gap),
-                  child: CustomListTile(
-                    responsiveWidth: true,
-                    titleString: 'You are offline',
-                    cornerRadius: radius,
-                    leadingIconData: FontAwesomeIcons.globe,
-                    backgroundColor:
-                        navigatorKey.currentContext!.theme.colorScheme.error,
-                    textColor:
-                        navigatorKey.currentContext!.theme.colorScheme.onError,
-                  ),
-                ),
-              );
-            },
-          ).show(navigatorKey.currentContext!);
         }
         log(
           '$result',
@@ -100,6 +73,36 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   Widget build(BuildContext context) {
+    ref.read(isDeviceConnectedProvider.notifier).addListener((bool state) {
+      if (state) {
+        AnimatedSnackBar.removeAll();
+      } else {
+        AnimatedSnackBar(
+          animationDuration: standardDuration,
+          animationCurve: standardCurve,
+          duration: 365.days,
+          mobilePositionSettings: const MobilePositionSettings(
+            topOnAppearance: 0,
+            topOnDissapear: 0,
+          ),
+          builder: (BuildContext context) {
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(top: gap),
+                child: CustomListTile(
+                  responsiveWidth: true,
+                  titleString: 'You are offline',
+                  cornerRadius: radius,
+                  leadingIconData: FontAwesomeIcons.globe,
+                  backgroundColor: theme.colorScheme.error,
+                  textColor: theme.colorScheme.onError,
+                ),
+              ),
+            );
+          },
+        ).show(navigatorKey.currentContext!);
+      }
+    });
     return HideKeyboard(
       child: MaterialApp(
         title: 'Healpen',
