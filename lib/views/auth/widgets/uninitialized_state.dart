@@ -34,7 +34,7 @@ class UninitializedState extends ConsumerWidget {
             textColor: context.theme.colorScheme.onSurface,
             title: IntrinsicWidth(
               child: TextFormField(
-                autofocus: true,
+                autofocus: false,
                 autocorrect: false,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 keyboardType: TextInputType.emailAddress,
