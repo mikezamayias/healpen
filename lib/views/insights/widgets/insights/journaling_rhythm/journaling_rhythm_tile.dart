@@ -88,21 +88,4 @@ class JournalingRhythmTile extends ConsumerWidget {
       ),
     );
   }
-
-  /// Generates the title for the chart based on the provided [week].
-  ///
-  /// This method calculates the number of weeks between the last week in the
-  /// [weekDates] list and the current date. It returns a string representing
-  /// the title of the chart based on the number of weeks. If the number of
-  /// weeks is 0, it returns 'This week'. If it is 1, it returns 'Last week'.
-  /// Otherwise, it returns '$delta weeks ago', where delta is the number of
-  /// weeks.
-  String chartTitle(DateTime week) {
-    final delta = week.weeksBefore(DateTime.now());
-    return switch (delta) {
-      0 => 'This week',
-      1 => 'Last week',
-      _ => '$delta weeks ago',
-    };
-  }
 }

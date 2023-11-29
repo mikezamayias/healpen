@@ -36,4 +36,13 @@ extension DateTimeExtension on DateTime {
   bool isBetween({required DateTime start, required DateTime end}) {
     return isAfter(start) && isBefore(end);
   }
+
+  String lineChartTitle() {
+    final delta = weeksBefore(DateTime.now());
+    return switch (delta) {
+      0 => 'This week',
+      1 => 'Last week',
+      _ => '$delta weeks ago',
+    };
+  }
 }
