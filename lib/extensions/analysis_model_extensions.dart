@@ -1,7 +1,5 @@
-import 'dart:developer';
-
+import 'package:collection/collection.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:intl/intl.dart';
 
 import '../models/analysis/analysis_model.dart';
 import '../models/analysis/chart_data_model.dart';
@@ -39,59 +37,20 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
     return monthList.toSet();
   }
 
-  /// Generates a set of [DateTime] objects representing the start of each
-  /// week between [lastAnalysisDateTime] and [start].
-  ///
-  /// The generated [DateTime] objects are in reverse order and do not contain
-  /// duplicate values.
-  ///
-  /// Returns:
-  ///   - A [Set] of [DateTime] objects representing the start of each week.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// final startOfWeekList = generateStartOfWeekList();
-  /// print(startOfWeekList); // {2022-01-30, 2022-01-23, 2022-01-16, ...}
-  /// ```
-  Set<DateTime> generateStartOfWeeksFromEndSet() {
-    final start = DateTime.parse(
-      DateFormat('yyyy-MM-dd').format(
-        last.timestamp.timestampToDateTime(),
-      ),
-    );
-    final lastAnalysisDateTime = DateTime.parse(
-      DateFormat('yyyy-MM-dd').format(
-        first.timestamp.timestampToDateTime(),
-      ),
-    );
-    List<DateTime> startOfWeekList = <DateTime>[];
-    for (DateTime date = lastAnalysisDateTime;
-        date.isBefore(start);
-        date = date.add(const Duration(days: 7))) {
-      startOfWeekList.add(date);
-    }
-    log(
-      startOfWeekList.map((e) => DateFormat('yyyy-MM-dd').format(e)).join(', '),
-      name:
-          'AnalysisModelListExtension:generateStartOfWeekList:startOfWeekList',
-    );
-    return startOfWeekList.toSet();
-  }
-
-  Set<DateTime> generateWeekSet() {
-    final tempWeekSet = generateStartOfWeeksFromEndSet();
-    final weekSet = <DateTime>{};
-    for (DateTime week in tempWeekSet) {
-      final start = week.subtract(7.days);
-      final end = week;
-      if (any(
-        (note) =>
-            note.timestamp.timestampToDateTime().isAfter(start) &&
-            note.timestamp.timestampToDateTime().isBefore(end),
-      )) {
-        weekSet.add(week);
-      }
-    }
+  Set<DateTime> getWeeksFromAnalysisModelList() {
+    Set<DateTime> weekSet = <DateTime>[
+      for (DateTime date = last.timestamp.timestampToDateTime();
+          date.isAfter(first.timestamp.timestampToDateTime());
+          date = date.subtract(const Duration(days: 7)))
+        if (any(
+          (note) =>
+              note.timestamp
+                  .timestampToDateTime()
+                  .isAfter(date.subtract(7.days)) &&
+              note.timestamp.timestampToDateTime().isBefore(date),
+        ))
+          date
+    ].sorted((a, b) => a.compareTo(b)).toSet();
     return weekSet;
   }
 
