@@ -10,6 +10,7 @@ import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../../extensions/chart_data_extensions.dart';
 import '../../../../../../extensions/date_time_extensions.dart';
+import '../../../../../../models/analysis/analysis_model.dart';
 import '../../../../../../models/analysis/chart_data_model.dart';
 import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
@@ -29,19 +30,19 @@ class WeekLineChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final start = week;
-    final end = start.subtract(7.days);
-    final dateAnalysisModelList =
+    final DateTime start = week;
+    final DateTime end = start.subtract(7.days);
+    final List<AnalysisModel> dateAnalysisModelList =
         ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
               start: end,
               end: start,
             );
-    List<ChartData> chartData =
-        dateAnalysisModelList.averageDaysSentimentToChartData();
-    chartData = chartData.insertNullValuesBetween(
-      start: end,
-      end: start,
-    );
+    final List<ChartData> chartData = dateAnalysisModelList
+        .averageDaysSentimentToChartData()
+        .insertNullValuesBetween(
+          start: end,
+          end: start,
+        );
     return SfCartesianChart(
       margin: EdgeInsets.zero,
       plotAreaBorderWidth: 0,
