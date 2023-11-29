@@ -30,8 +30,8 @@ class UninitializedState extends ConsumerWidget {
               vertical: gap,
             ),
             leadingIconData: FontAwesomeIcons.solidEnvelope,
-            backgroundColor: context.theme.colorScheme.surfaceVariant,
-            textColor: context.theme.colorScheme.onSurfaceVariant,
+            backgroundColor: context.theme.colorScheme.surface,
+            textColor: context.theme.colorScheme.onSurface,
             title: IntrinsicWidth(
               child: TextFormField(
                 autofocus: true,
@@ -54,27 +54,33 @@ class UninitializedState extends ConsumerWidget {
                 },
               ),
             ),
-            subtitlePadding: EdgeInsets.all(gap),
-            subtitle: const LegalPrompt(),
           ),
-          SizedBox(height: gap),
-          CustomListTile(
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: gap * 2,
-              vertical: gap,
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: gap),
+            child: CustomListTile(
+              backgroundColor: context.theme.colorScheme.surface,
+              title: const LegalPrompt(),
             ),
-            responsiveWidth: true,
-            titleString: 'Send link',
-            leadingIconData: FontAwesomeIcons.solidPaperPlane,
-            onTap: ref.watch(isDeviceConnectedProvider)
-                ? () {
-                    if (formKey.currentState!.validate()) {
-                      ref
-                          .watch(CustomAuthProvider().emailLinkAuthProvider)
-                          .sendLink(emailAddress);
+          ),
+          Center(
+            child: CustomListTile(
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: gap * 2,
+                vertical: gap,
+              ),
+              responsiveWidth: true,
+              titleString: 'Send link',
+              leadingIconData: FontAwesomeIcons.solidPaperPlane,
+              onTap: ref.watch(isDeviceConnectedProvider)
+                  ? () {
+                      if (formKey.currentState!.validate()) {
+                        ref
+                            .watch(CustomAuthProvider().emailLinkAuthProvider)
+                            .sendLink(emailAddress);
+                      }
                     }
-                  }
-                : null,
+                  : null,
+            ),
           ),
         ],
       ),

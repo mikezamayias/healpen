@@ -9,6 +9,7 @@ import '../utils/helper_functions.dart';
 
 class AppBar extends ConsumerWidget {
   final List<String> pathNames;
+  final Color? backgroundColor;
   final bool? automaticallyImplyLeading;
   final VoidCallback? onBackButtonPressed;
 
@@ -17,6 +18,7 @@ class AppBar extends ConsumerWidget {
     required this.pathNames,
     this.automaticallyImplyLeading = false,
     this.onBackButtonPressed,
+    this.backgroundColor,
   });
 
   @override
@@ -106,7 +108,8 @@ class AppBar extends ConsumerWidget {
         decoration: smallNavigationElements
             ? const BoxDecoration()
             : BoxDecoration(
-                color: context.theme.colorScheme.surfaceVariant,
+                color:
+                    backgroundColor ?? context.theme.colorScheme.surfaceVariant,
                 borderRadius: BorderRadius.circular(radius),
               ),
         alignment: Alignment.bottomLeft,

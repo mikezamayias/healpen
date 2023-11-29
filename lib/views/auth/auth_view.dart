@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
@@ -62,7 +63,9 @@ class _AuthViewState extends ConsumerState<AuthView> {
           },
           canPop: true,
           child: BlueprintView(
+            backgroundColor: context.theme.colorScheme.surfaceVariant,
             appBar: AppBar(
+              backgroundColor: context.theme.colorScheme.surface,
               pathNames: [
                 page_controller.PageController().authView.titleGenerator(
                     FirebaseAuth.instance.currentUser?.displayName)
@@ -70,27 +73,19 @@ class _AuthViewState extends ConsumerState<AuthView> {
               automaticallyImplyLeading: true,
               onBackButtonPressed: goBack,
             ),
-            body: Column(
-              children: [
-                const Spacer(flex: 3),
-                switch (state.runtimeType) {
-                  const (Uninitialized) => const UninitializedState(),
-                  const (SendingLink) => const SendingLinkState(),
-                  const (AwaitingDynamicLink) =>
-                    const AwaitingDynamicLinkState(),
-                  const (SignedIn) ||
-                  const (SigningIn) ||
-                  const (UserCreated) ||
-                  const (CredentialLinked) ||
-                  const (CredentialReceived) =>
-                    const SigningInState(),
-                  const (AuthFailed) => AuthFailedState(state: state),
-                  _ => UnknownState(state: state)
-                },
-                const Spacer(flex: 1),
-                const Spacer(flex: 3),
-              ],
-            ),
+            body: switch (state.runtimeType) {
+              const (Uninitialized) => const UninitializedState(),
+              const (SendingLink) => const SendingLinkState(),
+              const (AwaitingDynamicLink) => const AwaitingDynamicLinkState(),
+              const (SignedIn) ||
+              const (SigningIn) ||
+              const (UserCreated) ||
+              const (CredentialLinked) ||
+              const (CredentialReceived) =>
+                const SigningInState(),
+              const (AuthFailed) => AuthFailedState(state: state),
+              _ => UnknownState(state: state)
+            },
           ),
         );
       },
