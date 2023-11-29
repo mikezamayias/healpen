@@ -30,7 +30,7 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
             bottom: 0,
             left: 0,
             right: ref.watch(EmotionalEchoController.isPressedProvider)
-                ? -102.w
+                ? -99.w
                 : 0,
             child: const EmotionalEchoInactiveTile(),
           ),
@@ -41,7 +41,7 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
             bottom: 0,
             left: ref.watch(EmotionalEchoController.isPressedProvider)
                 ? 0
-                : -51.w,
+                : -71.w,
             right: 0,
             child: SizedBox(
               width: 51.w,
@@ -53,7 +53,7 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                   (String label) {
                     int labelIndex = sentimentLabels.indexOf(label);
                     return Text(
-                      label,
+                      '${sentimentValues.elementAt(labelIndex)}, $label',
                       style: (labelIndex == closestIndexSentiment
                               ? context.theme.textTheme.titleLarge
                               : context.theme.textTheme.titleMedium)!
