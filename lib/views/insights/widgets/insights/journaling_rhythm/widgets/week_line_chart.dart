@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +8,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../extensions/analysis_model_extensions.dart';
+import '../../../../../../extensions/chart_data_extensions.dart';
 import '../../../../../../extensions/date_time_extensions.dart';
 import '../../../../../../models/analysis/chart_data_model.dart';
 import '../../../../../../providers/settings_providers.dart';
@@ -23,18 +25,23 @@ class WeekLineChart extends ConsumerWidget {
     super.key,
   });
 
-  final List<DateTime> week;
+  final DateTime week;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final start = week;
+    final end = start.subtract(7.days);
     final dateAnalysisModelList =
         ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
-              start: week.first,
-              end: week.last,
+              start: end,
+              end: start,
             );
-    final List<ChartData> actualData =
+    List<ChartData> chartData =
         dateAnalysisModelList.averageDaysSentimentToChartData();
-    final List<ChartData> weekData = initializeWeekData(actualData);
+    chartData = chartData.insertNullValuesBetween(
+      start: end,
+      end: start,
+    );
     return SfCartesianChart(
       margin: EdgeInsets.zero,
       plotAreaBorderWidth: 0,
@@ -45,7 +52,6 @@ class WeekLineChart extends ConsumerWidget {
         minimum: sentimentValues.min.toDouble(),
         maximum: sentimentValues.max.toDouble(),
         rangePadding: ChartRangePadding.none,
-        interval: 1,
       ),
       primaryXAxis: DateTimeCategoryAxis(
         dateFormat: DateFormat('MMM\nEEE\ndd'),
@@ -66,7 +72,7 @@ class WeekLineChart extends ConsumerWidget {
             width: gap,
             height: gap,
           ),
-          dataSource: weekData,
+          dataSource: chartData,
           xValueMapper: (data, _) => data.x,
           yValueMapper: (data, _) => data.y,
           sortFieldValueMapper: (data, _) => data.x,
@@ -90,7 +96,7 @@ class WeekLineChart extends ConsumerWidget {
           ],
           onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
             final date =
-                weekData.elementAt(pointInteractionDetails.pointIndex!).x;
+                chartData.elementAt(pointInteractionDetails.pointIndex!).x;
             showHealpenDialog(
               context: context,
               doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
@@ -118,21 +124,5 @@ class WeekLineChart extends ConsumerWidget {
         )
       ],
     );
-  }
-
-  /// Initializes the week data for the line chart.
-  ///
-  /// Given a list of [actualData], this method maps each day in the [week] list to the corresponding data in [actualData].
-  /// If there is no data available for a specific day, a [ChartData] object with a null value is created.
-  /// The resulting list of [ChartData] objects is returned.
-  List<ChartData> initializeWeekData(List<ChartData> actualData) {
-    return week.map((DateTime dayInWeek) {
-      return actualData.firstWhere(
-        (ChartData chartData) =>
-            DateFormat('yyyy-MM-dd').format(chartData.x) ==
-            DateFormat('yyyy-MM-dd').format(dayInWeek),
-        orElse: () => ChartData(dayInWeek, null),
-      );
-    }).toList();
   }
 }
