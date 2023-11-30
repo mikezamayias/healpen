@@ -37,7 +37,7 @@ extension DateTimeExtension on DateTime {
     return isAfter(start) && isBefore(end);
   }
 
-  String lineChartTitle() {
+  String toLineChartTitle() {
     final delta = weeksBefore(DateTime.now());
     return switch (delta) {
       0 => 'This week',

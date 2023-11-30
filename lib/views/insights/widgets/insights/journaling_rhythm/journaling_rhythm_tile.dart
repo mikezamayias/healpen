@@ -34,7 +34,7 @@ class JournalingRhythmTile extends ConsumerWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: gap),
-                      child: TextDivider(week.lineChartTitle()),
+                      child: TextDivider(week.toLineChartTitle()),
                     ),
                     Expanded(
                       child: WeekLineChart(week),
