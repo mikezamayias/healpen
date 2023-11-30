@@ -25,6 +25,8 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
           explanationString:
               'Click the link to sign in! Please check your inbox and spam folders.',
           leadingIconData: FontAwesomeIcons.solidEnvelopeOpen,
+          backgroundColor: context.theme.colorScheme.surface,
+          textColor: context.theme.colorScheme.onSurface,
         ),
         SizedBox(height: gap),
         CustomListTile(

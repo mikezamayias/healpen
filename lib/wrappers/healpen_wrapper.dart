@@ -8,7 +8,9 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
+import '../controllers/analysis_view_controller.dart';
 import '../enums/app_theming.dart';
+import '../extensions/analysis_model_extensions.dart';
 import '../providers/settings_providers.dart';
 import '../route_controller.dart';
 import '../utils/constants.dart';
@@ -31,35 +33,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       (InternetConnectionStatus result) async {
         if (result == InternetConnectionStatus.connected) {
           ref.read(isDeviceConnectedProvider.notifier).state = true;
-          AnimatedSnackBar.removeAll();
         } else {
           ref.read(isDeviceConnectedProvider.notifier).state = false;
-          AnimatedSnackBar(
-            animationDuration: standardDuration,
-            animationCurve: standardCurve,
-            duration: 365.days,
-            mobilePositionSettings: const MobilePositionSettings(
-              topOnAppearance: 0,
-              topOnDissapear: 0,
-            ),
-            builder: (BuildContext context) {
-              return SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.only(top: gap),
-                  child: CustomListTile(
-                    responsiveWidth: true,
-                    titleString: 'You are offline',
-                    cornerRadius: radius,
-                    leadingIconData: FontAwesomeIcons.globe,
-                    backgroundColor:
-                        navigatorKey.currentContext!.theme.colorScheme.error,
-                    textColor:
-                        navigatorKey.currentContext!.theme.colorScheme.onError,
-                  ),
-                ),
-              );
-            },
-          ).show(navigatorKey.currentContext!);
         }
         log(
           '$result',
@@ -100,6 +75,36 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
 
   @override
   Widget build(BuildContext context) {
+    ref.read(isDeviceConnectedProvider.notifier).addListener((bool state) {
+      if (state) {
+        AnimatedSnackBar.removeAll();
+      } else {
+        AnimatedSnackBar(
+          animationDuration: standardDuration,
+          animationCurve: standardCurve,
+          duration: 365.days,
+          mobilePositionSettings: const MobilePositionSettings(
+            topOnAppearance: 0,
+            topOnDissapear: 0,
+          ),
+          builder: (BuildContext context) {
+            return SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(top: gap),
+                child: CustomListTile(
+                  responsiveWidth: true,
+                  titleString: 'You are offline',
+                  cornerRadius: radius,
+                  leadingIconData: FontAwesomeIcons.globe,
+                  backgroundColor: theme.colorScheme.error,
+                  textColor: theme.colorScheme.onError,
+                ),
+              ),
+            );
+          },
+        ).show(navigatorKey.currentContext!);
+      }
+    });
     return HideKeyboard(
       child: MaterialApp(
         title: 'Healpen',
@@ -111,7 +116,12 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         ],
         themeMode: themeMode(ref.watch(themeAppearanceProvider)),
         theme: createTheme(
-          ref.watch(themeColorProvider).color,
+          ref.watch(themeColorizeOnSentimentProvider)
+              ? getShapeColorOnSentiment(
+                  theme,
+                  ref.watch(analysisModelListProvider).averageScore(),
+                )
+              : ref.watch(themeColorProvider).color,
           brightness(ref.watch(themeAppearanceProvider)),
         ),
         initialRoute: RouterController.authWrapperRoute.route,

@@ -30,6 +30,10 @@ class PreferencesController {
     'themeAppearance',
     ThemeAppearance.system,
   );
+  static final themeColorizeOnSentiment = PreferenceModel<bool>(
+    'themeColorizeOnSentiment',
+    false,
+  );
   static final writingAutomaticStopwatch = PreferenceModel<bool>(
     'writingAutomaticStopwatch',
     false,
@@ -64,10 +68,11 @@ class PreferencesController {
   );
   static final insightOrder = PreferenceModel<List<String>>(
     'insightOrder',
-    InsightsController()
-        .insightModelList
-        .map((InsightModel element) => element.title)
-        .toList(),
+    List.from(
+      InsightsController()
+          .insightModelList
+          .map((InsightModel element) => element.title),
+    ),
   );
 
   List<({PreferenceModel preferenceModel, StateProvider provider})>
@@ -113,9 +118,6 @@ class PreferencesController {
       preferenceModel: onboardingCompleted,
       provider: OnboardingController.onboardingCompletedProvider
     ),
-    (
-      preferenceModel: insightOrder,
-      provider: insightsControllerProvider
-    )
+    (preferenceModel: insightOrder, provider: insightsControllerProvider)
   ];
 }

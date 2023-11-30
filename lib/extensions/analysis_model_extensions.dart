@@ -1,3 +1,6 @@
+import 'package:collection/collection.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+
 import '../models/analysis/analysis_model.dart';
 import '../models/analysis/chart_data_model.dart';
 import '../services/data_analysis_service.dart';
@@ -32,6 +35,23 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
       monthList.add(DateTime(year, month));
     }
     return monthList.toSet();
+  }
+
+  Set<DateTime> getWeeksFromAnalysisModelList() {
+    Set<DateTime> weekSet = <DateTime>[
+      for (DateTime date = last.timestamp.timestampToDateTime();
+          date.isAfter(first.timestamp.timestampToDateTime());
+          date = date.subtract(const Duration(days: 7)))
+        if (any(
+          (note) =>
+              note.timestamp
+                  .timestampToDateTime()
+                  .isAfter(date.subtract(7.days)) &&
+              note.timestamp.timestampToDateTime().isBefore(date),
+        ))
+          date
+    ].sorted((a, b) => a.compareTo(b)).toSet();
+    return weekSet;
   }
 
   List<AnalysisModel> averageDaysSentiment() {
@@ -88,5 +108,9 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
       (hour) => dataBuilders[hour]?.build(hour) ?? HourlyData.empty(hour),
     );
     return processedData;
+  }
+
+  double averageScore() {
+    return map((e) => e.score).average;
   }
 }

@@ -42,6 +42,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
   @override
   Widget build(BuildContext context) {
     return BlueprintView(
+      backgroundColor: theme.colorScheme.surfaceVariant,
       body: Column(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -93,15 +94,19 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
           ),
           Padding(
             padding: EdgeInsets.all(gap),
-            child: Row(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SmoothPageIndicator(
-                  controller: pageController,
-                  count: OnboardingController().onboardingScreenViews.length,
-                  effect: ExpandingDotsEffect(
-                    dotColor: context.theme.colorScheme.surfaceVariant,
-                    activeDotColor: context.theme.colorScheme.primary,
+                Padding(
+                  padding: EdgeInsets.only(bottom: gap * 2),
+                  child: SmoothPageIndicator(
+                    controller: pageController,
+                    count: OnboardingController().onboardingScreenViews.length,
+                    effect: ExpandingDotsEffect(
+                      dotColor: context.theme.colorScheme.surface,
+                      activeDotColor: context.theme.colorScheme.primary,
+                      dotHeight: gap / 2,
+                    ),
                   ),
                 ),
                 OnboardingButton(

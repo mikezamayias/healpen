@@ -18,10 +18,10 @@ class InsightsTile extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<InsightsTile> createState() => _AnalysisSectionState();
+  ConsumerState<InsightsTile> createState() => _InsightsTileState();
 }
 
-class _AnalysisSectionState extends ConsumerState<InsightsTile> {
+class _InsightsTileState extends ConsumerState<InsightsTile> {
   late PageController pageController;
   double viewPortFraction = 1;
   double pageOffset = 0;

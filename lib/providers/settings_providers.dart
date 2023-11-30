@@ -18,6 +18,13 @@ final themeColorProvider = StateProvider<ThemeColor>(
 /// Whether to reset the stopwatch when the user erases all the text.
 /// When set to false, the stopwatch will continue running until the user saves.
 /// When set to true, the stopwatch will reset when the user erases all the text.
+final themeColorizeOnSentimentProvider = StateProvider<bool>(
+  (ref) => PreferencesController.themeColorizeOnSentiment.value,
+);
+
+/// Whether to reset the stopwatch when the user erases all the text.
+/// When set to false, the stopwatch will continue running until the user saves.
+/// When set to true, the stopwatch will reset when the user erases all the text.
 final writingAutomaticStopwatchProvider = StateProvider<bool>(
   (ref) => PreferencesController.writingAutomaticStopwatch.value,
 );

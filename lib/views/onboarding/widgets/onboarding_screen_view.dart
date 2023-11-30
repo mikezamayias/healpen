@@ -19,7 +19,7 @@ class OnboardingScreenView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: BoxDecoration(
-        color: context.theme.colorScheme.surfaceVariant,
+        color: context.theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(radius),
       ),
       padding: EdgeInsets.all(gap * 2),

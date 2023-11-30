@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../controllers/emotional_echo_controller.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
-import '../../models/note/note_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
+import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
@@ -20,24 +22,16 @@ class NoteView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final args = ModalRoute.of(context)!.settings.arguments as ({
-      NoteModel noteModel,
-      AnalysisModel? analysisModel
+      AnalysisModel analysisModel
     });
-    final NoteModel noteModel = args.noteModel;
-    final AnalysisModel? analysisModel = args.analysisModel;
-    final showAnalysis = !noteModel.isPrivate && analysisModel != null;
-    if (showAnalysis) {
-      ref.watch(emotionalEchoControllerProvider).sentimentScore =
-          analysisModel.score;
-    }
+    final AnalysisModel analysisModel = args.analysisModel;
+    ref.watch(emotionalEchoControllerProvider).sentimentScore =
+        analysisModel.score;
     return BlueprintView(
       appBar: AppBar(
         pathNames: [
           DateFormat('EEE d MMM yyyy').format(
-            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
-          ),
-          DateFormat('HH:mm:ss').format(
-            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+            DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
           ),
         ],
         automaticallyImplyLeading: true,
@@ -50,30 +44,20 @@ class NoteView extends ConsumerWidget {
             runSpacing: gap,
             children: [
               CustomListTile(
+                responsiveWidth: true,
                 useSmallerNavigationSetting:
                     !ref.watch(navigationSmallerNavigationElementsProvider),
                 enableExplanationWrapper:
                     !ref.watch(navigationSmallerNavigationElementsProvider),
-                titleString: 'Content',
-                subtitleString: noteModel.content,
-                selectableText: true,
+                titleString: 'Time',
+                subtitleString: DateFormat('HH:mm:ss').format(
+                  DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
+                ),
                 subtitlePadding:
                     ref.watch(navigationSmallerNavigationElementsProvider)
                         ? EdgeInsets.zero
                         : EdgeInsets.all(gap),
               ),
-              if (showAnalysis)
-                CustomListTile(
-                  useSmallerNavigationSetting:
-                      !ref.watch(navigationSmallerNavigationElementsProvider),
-                  enableExplanationWrapper:
-                      !ref.watch(navigationSmallerNavigationElementsProvider),
-                  titleString: 'Sentiment',
-                  subtitle: SizedBox(
-                    height: 39.h,
-                    child: const EmotionalEchoTile(),
-                  ),
-                ),
               CustomListTile(
                 useSmallerNavigationSetting:
                     !ref.watch(navigationSmallerNavigationElementsProvider),
@@ -81,26 +65,70 @@ class NoteView extends ConsumerWidget {
                     !ref.watch(navigationSmallerNavigationElementsProvider),
                 responsiveWidth: true,
                 titleString: 'Duration',
-                subtitleString: noteModel.duration.writingDurationFormat(),
+                subtitleString: analysisModel.duration.writingDurationFormat(),
                 subtitlePadding:
                     ref.watch(navigationSmallerNavigationElementsProvider)
                         ? EdgeInsets.zero
                         : EdgeInsets.all(gap),
               ),
-              if (showAnalysis)
-                CustomListTile(
-                  responsiveWidth: true,
-                  useSmallerNavigationSetting:
-                      !ref.watch(navigationSmallerNavigationElementsProvider),
-                  enableExplanationWrapper:
-                      !ref.watch(navigationSmallerNavigationElementsProvider),
-                  titleString: 'Word Count',
-                  subtitleString: '${analysisModel.wordCount}',
-                  subtitlePadding:
-                      ref.watch(navigationSmallerNavigationElementsProvider)
-                          ? EdgeInsets.zero
-                          : EdgeInsets.all(gap),
+              CustomListTile(
+                responsiveWidth: true,
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                titleString: 'Word Count',
+                subtitleString: '${analysisModel.wordCount}',
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
+              ),
+              CustomListTile(
+                responsiveWidth: true,
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                titleString: 'Content',
+                subtitleString: analysisModel.content,
+                selectableText: true,
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
+              ),
+              CustomListTile(
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                titleString: 'Sentiment',
+                subtitle: SizedBox(
+                  height: 39.h,
+                  child: const EmotionalEchoTile(),
                 ),
+              ),
+              CustomListTile(
+                responsiveWidth: true,
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                titleString: 'Icon',
+                subtitle: FaIcon(
+                  getSentimentIcon(analysisModel.score),
+                  color: getShapeColorOnSentiment(
+                    context.theme,
+                    analysisModel.score,
+                  ),
+                  size: 10.h,
+                ),
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
+              ),
             ],
           ),
         ),

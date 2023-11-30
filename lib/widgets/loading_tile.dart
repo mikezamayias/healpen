@@ -9,17 +9,22 @@ class LoadingTile extends StatelessWidget {
     super.key,
     required this.durationTitle,
     this.value,
+    this.backgroundColor,
+    this.textColor,
   });
 
   final String durationTitle;
   final double? value;
+  final Color? backgroundColor;
+  final Color? textColor;
 
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap * 2),
-      backgroundColor: context.theme.colorScheme.surfaceVariant,
-      textColor: context.theme.colorScheme.onSurfaceVariant,
+      backgroundColor:
+          backgroundColor ?? context.theme.colorScheme.surfaceVariant,
+      textColor: textColor ?? context.theme.colorScheme.onSurfaceVariant,
       cornerRadius: radius,
       titleString: durationTitle,
       leading: CircularProgressIndicator(value: value),

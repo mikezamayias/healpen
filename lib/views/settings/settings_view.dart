@@ -124,6 +124,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     final enableInformatoryText = ref.watch(navigationShowInfoProvider);
 
     return CustomListTile(
+      responsiveWidth: true,
       useSmallerNavigationSetting: false,
       cornerRadius: radius,
       contentPadding: EdgeInsets.symmetric(

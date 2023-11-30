@@ -5,6 +5,7 @@ import '../../../../extensions/widget_extensions.dart';
 import '../../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
+import 'widgets/colorize_on_sentiment_tile.dart';
 import 'widgets/theme_appearance_tile.dart';
 import 'widgets/theme_color_tile.dart';
 
@@ -16,6 +17,7 @@ class SettingsThemeView extends ConsumerWidget {
     List<Widget> pageWidgets = [
       const ThemeColorTile(),
       const ThemeAppearanceTile(),
+      const ColorizeOnSentimentTile(),
     ].animateWidgetList();
 
     return BlueprintView(
