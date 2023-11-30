@@ -100,14 +100,6 @@ class NoteTile extends ConsumerWidget {
             explanationString: DateFormat('HH:mm').format(
               DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
             ),
-            leading: Padding(
-              padding: EdgeInsets.only(right: gap / 2),
-              child: FaIcon(
-                getSentimentIcon(analysisModel.score),
-                color: textColor,
-                size: gap * 3,
-              ),
-            ),
             title: Text(
               analysisModel.content,
               style: context.theme.textTheme.bodyLarge!.copyWith(
@@ -119,7 +111,7 @@ class NoteTile extends ConsumerWidget {
             onTap: () {
               context.navigator.pushNamed(
                 RouterController.noteViewRoute.route,
-                arguments: (analysisModel: analysisModel,),
+                arguments: (analysisModel: analysisModel),
               );
             },
           ),
