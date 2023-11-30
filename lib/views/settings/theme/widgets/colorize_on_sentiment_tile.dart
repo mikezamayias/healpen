@@ -20,7 +20,7 @@ class ColorizeOnSentimentTile extends ConsumerWidget {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      titleString: 'Colorize elements based on sentiment',
+      titleString: 'Colorize app based on sentiment',
       explanationString: enableInformatoryText
           ? 'Changes the color of the app based on the overall sentiment.'
           : null,
@@ -40,7 +40,6 @@ class ColorizeOnSentimentTile extends ConsumerWidget {
                 '${ref.watch(themeColorizeOnSentimentProvider)}',
                 name: 'SettingsView:UseSentimentColorTile',
               );
-              
             },
           );
         },
