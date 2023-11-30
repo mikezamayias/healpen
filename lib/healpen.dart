@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
+import 'package:preload_page_view/preload_page_view.dart';
 
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/insights_controller.dart';
@@ -25,7 +26,7 @@ class Healpen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final healpenPageController =
-        ref.watch(HealpenController().pageControllerProvider);
+        ref.watch(HealpenController().preloadPageControllerProvider);
     final pages = HealpenController().pages;
     return StreamBuilder(
       stream: FirestorePreferencesController().getPreferences(),
@@ -49,7 +50,8 @@ class Healpen extends ConsumerWidget {
           ),
           child: BlueprintView(
             padBodyHorizontally: false,
-            body: PageView.builder(
+            body: PreloadPageView.builder(
+              preloadPagesCount: pages.length,
               itemCount: pages.length,
               controller: healpenPageController,
               physics: const NeverScrollableScrollPhysics(),
