@@ -194,31 +194,33 @@ jobs:
           releaseNotes: ${{github.event.head_commit.message}}
 
   play_store_distribution:
-    name: Upload to Play Store
-    runs-on: ubuntu-latest
-    needs: [ get_build_info, build ]
-    env:
-      BUILD_DATE: ${{needs.get_build_info.outputs.BUILD_DATE}}
-      BUILD_NAME: ${{needs.get_build_info.outputs.BUILD_NAME}}
-      BUILD_VERSION: ${{needs.get_build_info.outputs.BUILD_VERSION}}
-      BUILD_NUMBER: ${{needs.get_build_info.outputs.BUILD_NUMBER}}
-      BUILD_ATTEMPT: ${{needs.get_build_info.outputs.BUILD_ATTEMPT}}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: "zulu"
-          java-version: "17"
-      - name: Download AAB Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{env.BUILD_NAME}}.aab
-      - name: Upload to Play Store
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: ${{secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON}}
-          packageName: com.healpen.healpen
-          track: internal
-          releaseFiles: ${{env.BUILD_NAME}}.aab
+      name: Upload to Play Store
+      runs-on: ubuntu-latest
+      needs: [ get_build_info, build ]
+      env:
+        BUILD_DATE: ${{needs.get_build_info.outputs.BUILD_DATE}}
+        BUILD_NAME: ${{needs.get_build_info.outputs.BUILD_NAME}}
+        BUILD_VERSION: ${{needs.get_build_info.outputs.BUILD_VERSION}}
+        BUILD_NUMBER: ${{needs.get_build_info.outputs.BUILD_NUMBER}}
+        BUILD_ATTEMPT: ${{needs.get_build_info.outputs.BUILD_ATTEMPT}}
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+        - name: Setup Java
+          uses: actions/setup-java@v3
+          with:
+            distribution: "zulu"
+            java-version: "17"
+        - name: Download AAB Artifact
+          uses: actions/download-artifact@v3
+          with:
+            name: ${{env.BUILD_NAME}}.aab
+        - name: Create service_account.json
+          run: echo '${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}' > service_account.json
+        - name: Deploy App to Play Store
+          uses: r0adkll/upload-google-play@v1
+          with:
+            serviceAccountJson: service_account.json
+            packageName: ${{env.BUILD_NAME}}
+            releaseFile: ${{env.BUILD_NAME}}.aab
+            track: beta
