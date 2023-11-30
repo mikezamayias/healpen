@@ -30,6 +30,10 @@ class PreferencesController {
     'themeAppearance',
     ThemeAppearance.system,
   );
+  static final themeColorizeOnSentiment = PreferenceModel<bool>(
+    'themeColorizeOnSentiment',
+    false,
+  );
   static final writingAutomaticStopwatch = PreferenceModel<bool>(
     'writingAutomaticStopwatch',
     false,
