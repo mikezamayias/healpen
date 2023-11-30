@@ -13,8 +13,6 @@ import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 import '../../../../../../utils/show_healpen_dialog.dart';
-import '../../../../../../widgets/custom_dialog.dart';
-import '../../../../../../widgets/custom_list_tile.dart';
 import '../../../../../history/widgets/calendar_tile/widgets/date_dialog.dart';
 
 class MonthLineChart extends ConsumerWidget {
@@ -87,27 +85,7 @@ class MonthLineChart extends ConsumerWidget {
             showHealpenDialog(
               context: context,
               doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
-              customDialog: CustomDialog(
-                titleString: DateFormat('EEE d MMM yyyy').format(
-                  date,
-                ),
-                enableContentContainer: false,
-                contentWidget: DateDialog(
-                  startDate: date.startOfDay(),
-                  endDate: date.endOfDay(),
-                ),
-                actions: [
-                  CustomListTile(
-                    useSmallerNavigationSetting: false,
-                    responsiveWidth: true,
-                    titleString: 'Close',
-                    cornerRadius: radius - gap,
-                    onTap: () {
-                      Navigator.pop(navigatorKey.currentContext!);
-                    },
-                  )
-                ],
-              ),
+              customDialog: DateDialog(date: date),
             );
           },
         )

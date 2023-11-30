@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../../controllers/analysis_view_controller.dart';
-import '../../../../extensions/date_time_extensions.dart';
 import '../../../../extensions/int_extensions.dart';
 import '../../../../models/analysis/analysis_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/show_healpen_dialog.dart';
-import '../../../../widgets/custom_dialog.dart';
-import '../../../../widgets/custom_list_tile.dart';
 import 'widgets/date_dialog.dart';
 import 'widgets/month_cell_tile.dart';
 
@@ -112,25 +108,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
     showHealpenDialog(
       context: context,
       doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
-      customDialog: CustomDialog(
-        titleString: DateFormat('EEE d MMM yyyy').format(details.date!),
-        enableContentContainer: false,
-        contentWidget: DateDialog(
-          startDate: details.date!.startOfDay(),
-          endDate: details.date!.endOfDay(),
-        ),
-        actions: [
-          CustomListTile(
-            useSmallerNavigationSetting: false,
-            responsiveWidth: true,
-            titleString: 'Close',
-            cornerRadius: radius - gap,
-            onTap: () {
-              Navigator.pop(navigatorKey.currentContext!);
-            },
-          )
-        ],
-      ),
+      customDialog: DateDialog(date: details.date!),
     );
   }
 }

@@ -8,10 +8,11 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../utils/constants.dart';
 import 'custom_list_tile.dart';
 
-class CustomDialog extends ConsumerStatefulWidget {
+class CustomDialog extends ConsumerWidget {
   final String titleString;
   final String? contentString;
   final Widget? contentWidget;
+  final Widget? trailingWidget;
   final Color? backgroundColor;
   final Color? textColor;
   final bool? enableContentContainer;
@@ -22,6 +23,7 @@ class CustomDialog extends ConsumerStatefulWidget {
     required this.titleString,
     this.contentString,
     this.contentWidget,
+    this.trailingWidget,
     this.backgroundColor,
     this.textColor,
     this.enableContentContainer = true,
@@ -33,12 +35,7 @@ class CustomDialog extends ConsumerStatefulWidget {
         );
 
   @override
-  ConsumerState<CustomDialog> createState() => _CustomDialogState();
-}
-
-class _CustomDialogState extends ConsumerState<CustomDialog> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return BackdropFilter(
       filter: ImageFilter.blur(
         sigmaX: gap * 2,
@@ -46,7 +43,7 @@ class _CustomDialogState extends ConsumerState<CustomDialog> {
       ),
       child: AlertDialog(
         insetPadding: EdgeInsets.zero,
-        titlePadding: widget.enableContentContainer!
+        titlePadding: enableContentContainer!
             ? EdgeInsets.all(gap)
             : EdgeInsets.only(
                 left: gap,
@@ -60,61 +57,63 @@ class _CustomDialogState extends ConsumerState<CustomDialog> {
           left: gap,
           right: gap,
           bottom: gap,
-          top: (widget.contentString != null || widget.contentWidget != null) &&
-                  widget.enableContentContainer!
+          top: (contentString != null || contentWidget != null) &&
+                  enableContentContainer!
               ? gap
               : 0,
         ),
         elevation: 0,
-        backgroundColor:
-            widget.backgroundColor ?? context.theme.colorScheme.surface,
+        backgroundColor: backgroundColor ?? context.theme.colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(radius),
         ),
-        title: Text(
-          widget.titleString,
-          style: context.theme.textTheme.headlineSmall!.copyWith(
-            color: widget.textColor ?? context.theme.colorScheme.onSurface,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.start,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              titleString,
+              style: context.theme.textTheme.headlineSmall!.copyWith(
+                color: textColor ?? context.theme.colorScheme.onSurface,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.start,
+            ),
+            if (trailingWidget != null) trailingWidget!,
+          ],
         ),
-        content: widget.contentString != null || widget.contentWidget != null
+        content: contentString != null || contentWidget != null
             ? Container(
                 width: 100.w - 2 * gap,
-                padding: widget.enableContentContainer!
+                padding: enableContentContainer!
                     ? EdgeInsets.symmetric(horizontal: gap)
                     : null,
                 child: Container(
-                  decoration: widget.enableContentContainer!
+                  decoration: enableContentContainer!
                       ? BoxDecoration(
                           color: context.theme.colorScheme.background,
                           borderRadius: BorderRadius.circular(radius - gap),
                         )
                       : null,
-                  padding: widget.enableContentContainer!
-                      ? EdgeInsets.all(gap)
-                      : null,
-                  child: widget.contentString != null &&
-                          widget.contentWidget == null
+                  padding: enableContentContainer! ? EdgeInsets.all(gap) : null,
+                  child: contentString != null && contentWidget == null
                       ? Text(
-                          widget.contentString!,
+                          contentString!,
                           style: context.theme.textTheme.bodyLarge!.copyWith(
                             color: context.theme.colorScheme.onBackground,
                           ),
                           textAlign: TextAlign.start,
                         )
-                      : widget.contentWidget,
+                      : contentWidget,
                 ),
               )
             : null,
-        actions: widget.actions != null && widget.actions!.isNotEmpty
+        actions: actions != null && actions!.isNotEmpty
             ? [
                 // add a sized box with width of gap between
                 // the children
-                for (int i = 0; i < widget.actions!.length; i++) ...[
-                  widget.actions![i],
-                  if (i != widget.actions!.length - 1) SizedBox(width: gap),
+                for (int i = 0; i < actions!.length; i++) ...[
+                  actions![i],
+                  if (i != actions!.length - 1) SizedBox(width: gap),
                 ]
               ]
             : [
