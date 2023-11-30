@@ -222,5 +222,5 @@ jobs:
           with:
             serviceAccountJson: service_account.json
             packageName: ${{env.BUILD_NAME}}
-            releaseFile: ${{env.BUILD_NAME}}.aab
+            releaseFiles: ${{env.BUILD_NAME}}.aab
             track: beta
