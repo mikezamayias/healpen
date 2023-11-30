@@ -14,38 +14,38 @@ class HistoryViewController {
 
   /// Deletes note from writing and analysis collections
   deleteNote({
-    required NoteModel noteModel,
+    required int timestamp,
   }) {
     FirestoreService()
         .writingCollectionReference()
-        .doc(noteModel.timestamp.toString())
+        .doc(timestamp.toString())
         .delete()
         .then(
           (value) => log(
             'Note deleted',
             name:
-                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+                'HistoryViewController().deleteNote(${timestamp.toString()})',
           ),
           onError: (error) => log(
             'Failed to delete note: $error',
             name:
-                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+                'HistoryViewController().deleteNote(${timestamp.toString()})',
           ),
         );
     FirestoreService()
         .analysisCollectionReference()
-        .doc(noteModel.timestamp.toString())
+        .doc(timestamp.toString())
         .delete()
         .then(
           (value) => log(
             'Analysis deleted',
             name:
-                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+                'HistoryViewController().deleteNote(${timestamp.toString()})',
           ),
           onError: (error) => log(
             'Failed to delete analysis: $error',
             name:
-                'HistoryViewController().deleteNote(${noteModel.timestamp.toString()})',
+                'HistoryViewController().deleteNote(${timestamp.toString()})',
           ),
         );
   }
