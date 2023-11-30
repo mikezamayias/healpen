@@ -100,13 +100,21 @@ class NoteTile extends ConsumerWidget {
             explanationString: DateFormat('HH:mm').format(
               DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
             ),
+            leading: Padding(
+              padding: EdgeInsets.only(right: gap / 2),
+              child: FaIcon(
+                getSentimentIcon(analysisModel.score),
+                color: textColor,
+                size: gap * 3,
+              ),
+            ),
             title: Text(
               analysisModel.content,
               style: context.theme.textTheme.bodyLarge!.copyWith(
                 overflow: TextOverflow.ellipsis,
                 color: textColor,
               ),
-              maxLines: 1,
+              maxLines: 3,
             ),
             onTap: () {
               context.navigator.pushNamed(
