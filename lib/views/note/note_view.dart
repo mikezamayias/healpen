@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../controllers/emotional_echo_controller.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
-import '../../models/note/note_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
@@ -20,24 +18,17 @@ class NoteView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final args = ModalRoute.of(context)!.settings.arguments as ({
-      NoteModel noteModel,
-      AnalysisModel? analysisModel
+      AnalysisModel analysisModel
     });
-    final NoteModel noteModel = args.noteModel;
-    final AnalysisModel? analysisModel = args.analysisModel;
-    final showAnalysis = !noteModel.isPrivate && analysisModel != null;
-    if (showAnalysis) {
-      ref.watch(emotionalEchoControllerProvider).sentimentScore =
-          analysisModel.score;
-    }
+    final AnalysisModel analysisModel = args.analysisModel;
     return BlueprintView(
       appBar: AppBar(
         pathNames: [
           DateFormat('EEE d MMM yyyy').format(
-            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+            DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
           ),
           DateFormat('HH:mm:ss').format(
-            DateTime.fromMillisecondsSinceEpoch(noteModel.timestamp),
+            DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
           ),
         ],
         automaticallyImplyLeading: true,
@@ -55,25 +46,24 @@ class NoteView extends ConsumerWidget {
                 enableExplanationWrapper:
                     !ref.watch(navigationSmallerNavigationElementsProvider),
                 titleString: 'Content',
-                subtitleString: noteModel.content,
+                subtitleString: analysisModel.content,
                 selectableText: true,
                 subtitlePadding:
                     ref.watch(navigationSmallerNavigationElementsProvider)
                         ? EdgeInsets.zero
                         : EdgeInsets.all(gap),
               ),
-              if (showAnalysis)
-                CustomListTile(
-                  useSmallerNavigationSetting:
-                      !ref.watch(navigationSmallerNavigationElementsProvider),
-                  enableExplanationWrapper:
-                      !ref.watch(navigationSmallerNavigationElementsProvider),
-                  titleString: 'Sentiment',
-                  subtitle: SizedBox(
-                    height: 39.h,
-                    child: const EmotionalEchoTile(),
-                  ),
+              CustomListTile(
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                titleString: 'Sentiment',
+                subtitle: SizedBox(
+                  height: 39.h,
+                  child: const EmotionalEchoTile(),
                 ),
+              ),
               CustomListTile(
                 useSmallerNavigationSetting:
                     !ref.watch(navigationSmallerNavigationElementsProvider),
@@ -81,26 +71,25 @@ class NoteView extends ConsumerWidget {
                     !ref.watch(navigationSmallerNavigationElementsProvider),
                 responsiveWidth: true,
                 titleString: 'Duration',
-                subtitleString: noteModel.duration.writingDurationFormat(),
+                subtitleString: analysisModel.duration.writingDurationFormat(),
                 subtitlePadding:
                     ref.watch(navigationSmallerNavigationElementsProvider)
                         ? EdgeInsets.zero
                         : EdgeInsets.all(gap),
               ),
-              if (showAnalysis)
-                CustomListTile(
-                  responsiveWidth: true,
-                  useSmallerNavigationSetting:
-                      !ref.watch(navigationSmallerNavigationElementsProvider),
-                  enableExplanationWrapper:
-                      !ref.watch(navigationSmallerNavigationElementsProvider),
-                  titleString: 'Word Count',
-                  subtitleString: '${analysisModel.wordCount}',
-                  subtitlePadding:
-                      ref.watch(navigationSmallerNavigationElementsProvider)
-                          ? EdgeInsets.zero
-                          : EdgeInsets.all(gap),
-                ),
+              CustomListTile(
+                responsiveWidth: true,
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                titleString: 'Word Count',
+                subtitleString: '${analysisModel.wordCount}',
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
+              ),
             ],
           ),
         ),

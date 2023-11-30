@@ -30,7 +30,7 @@ class DateDialog extends ConsumerWidget {
         separatorBuilder: (_, __) => SizedBox(height: gap),
         itemCount: analysisModelList.length,
         itemBuilder: (context, index) => NoteTile(
-          timestamp: analysisModelList[index].timestamp,
+          analysisModel: analysisModelList.elementAt(index),
         ),
       ),
     );
