@@ -109,4 +109,8 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
     );
     return processedData;
   }
+
+  double averageScore() {
+    return map((e) => e.score).average;
+  }
 }
