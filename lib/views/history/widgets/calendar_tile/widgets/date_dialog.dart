@@ -29,7 +29,7 @@ class DateDialog extends ConsumerWidget {
               end: date.endOfDay(),
             );
     final averageDayScore = analysisModelList.averageScore();
-    final textColor = getTextColorOnSentiment(context.theme, averageDayScore);
+    final textColor = getShapeColorOnSentiment(context.theme, averageDayScore);
     final List<Widget> noteTileList = analysisModelList
         .map((e) => NoteTile(
               analysisModel: e,
@@ -51,12 +51,12 @@ class DateDialog extends ConsumerWidget {
     return CustomDialog(
       titleString: DateFormat('EEE d MMM yyyy').format(date),
       trailingWidget: Text(
-        averageDayScore.toStringAsFixed(2),
+        averageDayScore.toStringAsFixed(1),
         style: context.theme.textTheme.headlineSmall!.copyWith(
           color: textColor,
           fontWeight: FontWeight.bold,
         ),
-        textAlign: TextAlign.start,
+        textAlign: TextAlign.end,
       ),
       enableContentContainer: false,
       contentWidget: SingleChildScrollView(
