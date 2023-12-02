@@ -8,10 +8,8 @@ import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../../extensions/int_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
-import '../../../../../../models/note/note_model.dart';
 import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../route_controller.dart';
-import '../../../../../../services/firestore_service.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 
@@ -78,22 +76,12 @@ class BubbleChart extends ConsumerWidget {
             ),
           ],
           onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
-            FirestoreService()
-                .getNoteAndAnalysis(analysisModelList
-                    .elementAt(pointInteractionDetails.pointIndex!)
-                    .timestamp)
-                .then(
-                  (
-                    ({AnalysisModel? analysis, NoteModel note}) data,
-                  ) =>
-                      context.navigator.pushNamed(
-                    RouterController.noteViewRoute.route,
-                    arguments: (
-                      noteModel: data.note,
-                      analysisModel: data.analysis,
-                    ),
-                  ),
-                );
+            final analysisModel = analysisModelList
+                .elementAt(pointInteractionDetails.pointIndex!);
+            context.navigator.pushNamed(
+              RouterController.noteViewRoute.route,
+              arguments: (analysisModel: analysisModel),
+            );
           },
         ),
       ],
