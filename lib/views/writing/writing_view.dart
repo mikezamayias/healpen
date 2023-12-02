@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../controllers/analysis_view_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
 import '../../controllers/writing_controller.dart';
 import '../../providers/settings_providers.dart';
@@ -61,25 +62,21 @@ class WritingView extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               const Expanded(child: WritingTextField()),
-              Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: gap),
-                    child: Row(
-                      children: [
-                        const Expanded(child: StopwatchTile()),
-                        SizedBox(width: gap),
-                        const SaveNoteButton(),
-                      ],
-                    ),
-                  ),
-                  if (ref.watch(writingShowAnalyzeNotesButtonProvider))
-                    Padding(
-                      padding: EdgeInsets.only(top: gap),
-                      child: const AnalyzeNotesTile(),
-                    ),
-                ],
+              Padding(
+                padding: EdgeInsets.only(top: gap),
+                child: Row(
+                  children: [
+                    const Expanded(child: StopwatchTile()),
+                    SizedBox(width: gap),
+                    const SaveNoteButton(),
+                  ],
+                ),
               ),
+              if (ref.watch(analysisModelListProvider).isEmpty)
+                Padding(
+                  padding: EdgeInsets.only(top: gap),
+                  child: const AnalyzeNotesTile(),
+                ),
             ],
           ),
         ),

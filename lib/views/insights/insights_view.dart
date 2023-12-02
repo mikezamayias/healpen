@@ -12,7 +12,6 @@ import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../../widgets/loading_tile.dart';
-import '../../widgets/text_divider.dart';
 import '../blueprint/blueprint_view.dart';
 import '../settings/writing/widgets/analyze_notes_tile.dart';
 import 'widgets/insights_tile.dart';
@@ -44,21 +43,22 @@ class InsightsView extends ConsumerWidget {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const CustomListTile(
+                  CustomListTile(
+                    useSmallerNavigationSetting:
+                        !ref.watch(navigationSmallerNavigationElementsProvider),
+                    enableExplanationWrapper:
+                        !ref.watch(navigationSmallerNavigationElementsProvider),
+                    enableSubtitleWrapper: true,
                     titleString: 'No data found',
-                    subtitleString:
+                    explanationString:
                         'You don\'t have any insights yet. Try writing a few notes '
                         'to get started or tap the \'Update note analysis\' '
                         'button.',
                   ),
-                  // TODO: add a stream builder to check if there are writing entries in the database first and then show the button
-                  ...[
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: gap),
-                      child: const TextDivider('Or'),
-                    ),
-                    const AnalyzeNotesTile(),
-                  ],
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: gap),
+                    child: const AnalyzeNotesTile(),
+                  ),
                 ],
               );
             } else {

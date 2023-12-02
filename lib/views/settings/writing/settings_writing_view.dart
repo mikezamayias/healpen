@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../controllers/analysis_view_controller.dart';
 import '../../../extensions/widget_extensions.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
@@ -16,7 +16,7 @@ class SettingsWritingView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = [
       const EnableAutomaticStopwatchTile(),
-      if (ref.watch(writingShowAnalyzeNotesButtonProvider))
+      if (ref.watch(analysisModelListProvider).isEmpty)
         const AnalyzeNotesTile(),
     ].animateWidgetList();
 
