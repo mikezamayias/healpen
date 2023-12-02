@@ -102,10 +102,9 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
-    final dataToSabe = state;
-    FirestoreService().saveNote(dataToSabe);
+    FirestoreService().saveNote(state);
     FirestoreService()
-        .saveAnalysis(await NoteAnalyzer.createNoteAnalysis(dataToSabe));
+        .saveAnalysis(await NoteAnalyzer().createNoteAnalysis(state));
     resetNote();
     textController.clear();
   }

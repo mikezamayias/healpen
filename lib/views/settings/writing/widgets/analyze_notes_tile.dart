@@ -28,7 +28,7 @@ class AnalyzeNotesTile extends ConsumerWidget {
           ? 'Update the analysis of all your notes.'
           : null,
       onTap: () async {
-        NoteAnalyzer.completed(ref);
+        NoteAnalyzer().analyzeNotes(ref);
         showHealpenDialog(
           context: context,
           doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),

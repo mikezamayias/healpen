@@ -21,12 +21,18 @@ enum AnalysisProgress {
 }
 
 class NoteAnalyzer {
-  /// Singleton constructor
-  static final NoteAnalyzer _instance = NoteAnalyzer._internal();
-  factory NoteAnalyzer() => _instance;
-  NoteAnalyzer._internal();
+  final FirestoreService firestoreService;
+  final CloudNaturalLanguageApi cloudNaturalLanguageApi;
 
-  /// Attributes
+  NoteAnalyzer._internal(this.firestoreService, this.cloudNaturalLanguageApi);
+
+  static final NoteAnalyzer _instance = NoteAnalyzer._internal(
+    FirestoreService(),
+    CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey)),
+  );
+
+  factory NoteAnalyzer() => _instance;
+
   static final analysisProgressProvider = StateProvider<AnalysisProgress>(
     (ref) => AnalysisProgress.removingPreviousAnalysis,
   );
@@ -34,57 +40,32 @@ class NoteAnalyzer {
   static final progressProvider = StateProvider<int>((ref) => 0);
   static final listToAnalyzeLengthProvider = StateProvider<int>((ref) => 0);
 
-  /// Methods
-  static Future<void> removePreviousAnalysis(WidgetRef ref) async {
+  Future<void> removePreviousAnalysis(WidgetRef ref) async {
     final documentsToRemoveAnalysis =
-        await FirestoreService().getWritingDocumentsToRemoveAnalysis();
-    ref.watch(analysisProgressProvider.notifier).state =
-        AnalysisProgress.removingPreviousAnalysis;
-    ref.watch(progressProvider.notifier).state = 0;
-    ref.watch(listToAnalyzeLengthProvider.notifier).state =
-        documentsToRemoveAnalysis.length;
+        await firestoreService.getWritingDocumentsToRemoveAnalysis();
+    _updateProgress(ref, AnalysisProgress.removingPreviousAnalysis,
+        documentsToRemoveAnalysis.length);
     for (DocumentSnapshot<NoteModel> note in documentsToRemoveAnalysis) {
-      log(
-        note.id,
-        name: 'AnalysisViewController:removePreviousAnalysis() - note ID',
-      );
-      log(
-        note.get('content'),
-        name: 'AnalysisViewController:removePreviousAnalysis() - note content',
-      );
-      await FirestoreService().removeAnalysisFromWritingDocument(note);
-      ref.watch(progressProvider.notifier).state++;
+      _logNoteDetails(note);
+      await firestoreService.removeAnalysisFromWritingDocument(note);
+      _incrementProgress(ref);
     }
   }
 
-  static Future<void> analyzeNotes(WidgetRef ref) async {
-    var notesToAnalyze = await FirestoreService().getDocumentsToAnalyze();
-
-    ref.watch(analysisProgressProvider.notifier).state =
-        AnalysisProgress.analyzingNotes;
-    ref.watch(progressProvider.notifier).state = 0;
-    ref.watch(listToAnalyzeLengthProvider.notifier).state =
-        notesToAnalyze.length;
-
+  Future<void> analyzeNotes(WidgetRef ref) async {
+    var notesToAnalyze = await firestoreService.getDocumentsToAnalyze();
+    _updateProgress(
+        ref, AnalysisProgress.analyzingNotes, notesToAnalyze.length);
     for (DocumentSnapshot<NoteModel> noteModel in notesToAnalyze) {
-      log(
-        noteModel.id,
-        name: 'AnalysisViewController:analyzeNotes() - note ID',
-      );
-      log(
-        noteModel.get('content'),
-        name: 'AnalysisViewController:analyzeNotes() - note content',
-      );
-      // await WritingController().analyzeSentiment(noteModel);
-      await FirestoreService().analyzeSentiment(noteModel);
-      ref.watch(progressProvider.notifier).state++;
+      _logNoteDetails(noteModel);
+      await firestoreService.analyzeSentiment(noteModel);
+      _incrementProgress(ref);
     }
   }
 
-  static Future<void> completed(WidgetRef ref) async {
-    await NoteAnalyzer.analyzeNotes(ref);
-    ref.watch(analysisProgressProvider.notifier).state =
-        AnalysisProgress.completed;
+  Future<void> finishAnalysis(WidgetRef ref) async {
+    await analyzeNotes(ref);
+    _updateProgress(ref, AnalysisProgress.completed, 0);
     ref.read(writingShowAnalyzeNotesButtonProvider.notifier).state = false;
     await FirestorePreferencesController().savePreference(
       PreferencesController.writingShowAnalyzeNotesButton
@@ -92,21 +73,19 @@ class NoteAnalyzer {
     );
   }
 
-  static Future<AnalysisModel> createNoteAnalysis(NoteModel noteModel) async {
+  Future<AnalysisModel> createNoteAnalysis(NoteModel noteModel) async {
     AnalyzeSentimentResponse result =
-        await CloudNaturalLanguageApi(clientViaApiKey(Env.googleApisKey))
-            .documents
-            .analyzeSentiment(
-              AnalyzeSentimentRequest.fromJson(
-                {
-                  'document': {
-                    'type': 'PLAIN_TEXT',
-                    'content': noteModel.content,
-                  },
-                  'encodingType': 'UTF32',
-                },
-              ),
-            );
+        await cloudNaturalLanguageApi.documents.analyzeSentiment(
+      AnalyzeSentimentRequest.fromJson(
+        {
+          'document': {
+            'type': 'PLAIN_TEXT',
+            'content': noteModel.content,
+          },
+          'encodingType': 'UTF32',
+        },
+      ),
+    );
     AnalysisModel analysisModel = AnalysisModel(
       timestamp: noteModel.timestamp,
       duration: noteModel.duration,
@@ -128,5 +107,26 @@ class NoteAnalyzer {
       name: 'FirestorService:analyzeSentiment',
     );
     return analysisModel;
+  }
+
+  void _updateProgress(WidgetRef ref, AnalysisProgress progress, int length) {
+    ref.watch(analysisProgressProvider.notifier).state = progress;
+    ref.watch(progressProvider.notifier).state = 0;
+    ref.watch(listToAnalyzeLengthProvider.notifier).state = length;
+  }
+
+  void _incrementProgress(WidgetRef ref) {
+    ref.watch(progressProvider.notifier).state++;
+  }
+
+  void _logNoteDetails(DocumentSnapshot<NoteModel> note) {
+    log(
+      note.id,
+      name: 'AnalysisViewController:removePreviousAnalysis() - note ID',
+    );
+    log(
+      note.get('content'),
+      name: 'AnalysisViewController:removePreviousAnalysis() - note content',
+    );
   }
 }

@@ -227,7 +227,7 @@ class FirestoreService {
       // AnalysisModel analysisModel = AnalysisModel.fromJson(
       //   NoteModel.fromJson(value.data()!).toJson(),
       // );
-      final analysisModel = await NoteAnalyzer.createNoteAnalysis(
+      final analysisModel = await NoteAnalyzer().createNoteAnalysis(
         value.data()!,
       );
       log(
