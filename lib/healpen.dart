@@ -59,16 +59,19 @@ class Healpen extends ConsumerWidget {
                 BuildContext context,
                 AsyncSnapshot<QuerySnapshot<AnalysisModel>> analysisSnapshot,
               ) {
-                if (analysisSnapshot.data != null) {
-                  if (analysisSnapshot.data!.docs.isEmpty) {
-                    ref.watch(analysisModelListProvider).clear();
-                  } else {
-                    ref.watch(analysisModelListProvider).clear();
+                switch (analysisSnapshot.connectionState) {
+                  case ConnectionState.active:
                     for (QueryDocumentSnapshot<AnalysisModel> element
                         in analysisSnapshot.data!.docs) {
+                      log(
+                        '${element.data()}}',
+                        name: 'Healpen:analysisSnapshot',
+                      );
                       ref.watch(analysisModelListProvider).add(element.data());
                     }
-                  }
+                    break;
+                  default:
+                    break;
                 }
                 return BlueprintView(
                   padBodyHorizontally: false,

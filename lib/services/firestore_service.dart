@@ -50,8 +50,37 @@ class FirestoreService {
         .doc(currentUser.uid)
         .collection('notes')
         .withConverter<AnalysisModel>(
-          fromFirestore: (snapshot, _) =>
-              AnalysisModel.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) {
+            log(
+              '${snapshot.data()}',
+              name: 'FirestoreService:analysisCollectionReference()',
+            );
+
+            // Parse the AnalysisModel except the sentences
+            AnalysisModel analysisModel =
+                AnalysisModel.fromJson(snapshot.data()!);
+
+            // Check if the snapshot contains the 'sentences' key and it's not null
+            if (snapshot.data()!.containsKey('sentences') &&
+                snapshot.get('sentences') != null) {
+              // Parse the sentences
+              var sentencesList = snapshot.get('sentences') as List;
+              analysisModel.sentences = sentencesList
+                  .map<SentenceModel>((sentence) =>
+                      SentenceModel.fromJson(sentence as Map<String, dynamic>))
+                  .toList();
+
+              // Logging each sentence (optional)
+              for (SentenceModel sentence in analysisModel.sentences) {
+                log(
+                  '${sentence.toJson()}',
+                  name: 'FirestoreService:analysisCollectionReference()',
+                );
+              }
+            }
+
+            return analysisModel;
+          },
           toFirestore: (analysisModel, _) => analysisModel.toJson(),
         );
   }
@@ -163,12 +192,12 @@ class FirestoreService {
             .update({key: FieldValue.delete()}).then((_) {
           log(
             'Note ${element.id}, removing $key',
-            name: 'FirestorService:analyzeSentiment',
+            name: 'FirestoreService:analyzeSentiment',
           );
         }).catchError((error) {
           log(
             '$error',
-            name: 'FirestorService:analyzeSentiment',
+            name: 'FirestoreService:analyzeSentiment',
           );
         });
       }
@@ -232,19 +261,23 @@ class FirestoreService {
       );
       log(
         '${analysisModel.toJson()}',
-        name: 'FirestorService:analyzeSentiment:analysisModel',
+        name: 'FirestoreService:analyzeSentiment:analysisModel',
+      );
+      log(
+        '$analysisModel',
+        name: 'FirestoreService:analyzeSentiment:analysisModel',
       );
       analysisCollectionReference().doc(note.id).set(analysisModel);
-      for (SentenceModel sentence in analysisModel.sentences) {
-        analysisCollectionReference()
-            .doc(note.id)
-            .collection('sentences')
-            .doc(analysisModel.sentences.indexOf(sentence).toString())
-            .set(sentence.toJson());
-      }
+      // for (SentenceModel sentence in analysisModel.sentences) {
+      //   analysisCollectionReference()
+      //       .doc(note.id)
+      //       .collection('sentences')
+      //       .doc(analysisModel.sentences.indexOf(sentence).toString())
+      //       .set(sentence.toJson());
+      // }
       log(
         'added sentences',
-        name: 'FirestorService:analyzeSentiment:${note.id}',
+        name: 'FirestoreService:analyzeSentiment:${note.id}',
       );
     }).catchError((error) {
       throw error;

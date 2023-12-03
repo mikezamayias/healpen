@@ -93,7 +93,7 @@ class NoteAnalyzer {
       score: result.documentSentiment!.score!,
       magnitude: result.documentSentiment!.magnitude!,
       language: result.language!,
-      sentences: [
+      sentences: <SentenceModel>[
         for (Sentence sentence in result.sentences!)
           SentenceModel(
             content: sentence.text!.content!,
@@ -104,7 +104,7 @@ class NoteAnalyzer {
     );
     log(
       '${analysisModel.toJson()}',
-      name: 'FirestorService:analyzeSentiment',
+      name: 'FirestoreService:analyzeSentiment',
     );
     return analysisModel;
   }
