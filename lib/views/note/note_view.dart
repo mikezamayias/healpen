@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -8,6 +10,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../controllers/emotional_echo_controller.dart';
 import '../../extensions/int_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
+import '../../models/sentence/sentence_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
@@ -27,6 +30,13 @@ class NoteView extends ConsumerWidget {
     final AnalysisModel analysisModel = args.analysisModel;
     ref.watch(emotionalEchoControllerProvider).sentimentScore =
         analysisModel.score;
+    log(
+      analysisModel.sentences.toString(),
+      name: 'NoteView:build.analysisModel.sentences',
+    );
+    for (SentenceModel sentence in analysisModel.sentences) {
+      log(sentence.toString(), name: 'NoteView:build.sentences');
+    }
     return BlueprintView(
       appBar: AppBar(
         pathNames: [
@@ -124,6 +134,19 @@ class NoteView extends ConsumerWidget {
                   ),
                   size: 10.h,
                 ),
+                subtitlePadding:
+                    ref.watch(navigationSmallerNavigationElementsProvider)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.all(gap),
+              ),
+              CustomListTile(
+                responsiveWidth: true,
+                useSmallerNavigationSetting:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                enableExplanationWrapper:
+                    !ref.watch(navigationSmallerNavigationElementsProvider),
+                titleString: 'Sentence Count',
+                subtitleString: '${analysisModel.sentences.length}',
                 subtitlePadding:
                     ref.watch(navigationSmallerNavigationElementsProvider)
                         ? EdgeInsets.zero
