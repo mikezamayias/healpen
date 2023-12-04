@@ -78,7 +78,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
 
   // Utility method to create Appointments
   List<Appointment> _createAppointments(
-    List<AnalysisModel> noteModels,
+    Set<AnalysisModel> noteModels,
     BuildContext context,
   ) {
     return noteModels.map((noteModel) {

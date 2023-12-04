@@ -20,7 +20,7 @@ class BubbleChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<AnalysisModel> analysisModelList =
+    final Set<AnalysisModel> analysisModelList =
         ref.watch(analysisModelListProvider);
     final monthSet = analysisModelList.getMonthsFromAnalysisModelList();
     return SfCartesianChart(
@@ -54,7 +54,7 @@ class BubbleChart extends ConsumerWidget {
       ),
       series: <CartesianSeries>[
         BubbleSeries<AnalysisModel, DateTime>(
-          dataSource: analysisModelList,
+          dataSource: analysisModelList.toList(),
           xValueMapper: (AnalysisModel data, _) =>
               data.timestamp.timestampToDateTime(),
           yValueMapper: (AnalysisModel data, _) => data.duration,

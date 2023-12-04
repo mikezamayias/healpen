@@ -7,7 +7,7 @@ import '../services/data_analysis_service.dart';
 import 'date_time_extensions.dart';
 import 'int_extensions.dart';
 
-extension AnalysisModelListExtension on List<AnalysisModel> {
+extension AnalysisModelListExtension on Set<AnalysisModel> {
   List<ChartData> averageDaysSentimentToChartData() {
     final List<ChartData> result = averageDaysSentiment().toChartData();
     return result;
@@ -54,8 +54,8 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
     return weekSet;
   }
 
-  List<AnalysisModel> averageDaysSentiment() {
-    final List<AnalysisModel> averageDaysSentiment = [];
+  Set<AnalysisModel> averageDaysSentiment() {
+    final Set<AnalysisModel> averageDaysSentiment = {};
     final List<DateTime> days = map(
       (AnalysisModel analysisModel) =>
           analysisModel.timestamp.timestampToDateTime().startOfDay(),
@@ -63,11 +63,11 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
     final List<DateTime> uniqueDays = days.toSet().toList();
     for (int i = 0; i < uniqueDays.length; i++) {
       final DateTime currentDay = uniqueDays.elementAt(i);
-      final List<AnalysisModel> analysisModels = where(
+      final Set<AnalysisModel> analysisModels = where(
         (AnalysisModel analysisModel) =>
             analysisModel.timestamp.timestampToDateTime().startOfDay() ==
             currentDay,
-      ).toList();
+      ).toSet();
       final double averageSentiment = analysisModels
               .map((AnalysisModel analysisModel) => analysisModel.score)
               .reduce((double a, double b) => a + b) /
@@ -82,7 +82,7 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
     return averageDaysSentiment;
   }
 
-  List<AnalysisModel> getAnalysisBetweenDates({
+  Set<AnalysisModel> getAnalysisBetweenDates({
     required DateTime start,
     required DateTime end,
   }) {
@@ -92,7 +92,7 @@ extension AnalysisModelListExtension on List<AnalysisModel> {
                 start: start,
                 end: end,
               ),
-    ).toList();
+    ).toSet();
   }
 
   List<HourlyData> hourlyAnalysis() {
