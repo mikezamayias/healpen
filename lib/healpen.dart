@@ -34,53 +34,40 @@ class Healpen extends ConsumerWidget {
     final pages = HealpenController().pages;
 
     // Move the logic that updates the state of your providers to didChangeDependencies
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateData(ref);
     });
-    return StreamBuilder(
-      stream: FirestorePreferencesController().getPreferences(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<PreferenceModel> currentPreferences = snapshot.data!;
-          if (_havePreferencesChanged(currentPreferences)) {
-            _updatePreferences(ref, currentPreferences);
-            _lastFetchedPreferences = currentPreferences;
-          }
-        }
-
-        return KeyboardDetection(
-          controller: KeyboardDetectionController(
-            onChanged: (KeyboardState keyboardState) => ref
-                .read(WritingController().isKeyboardOpenProvider.notifier)
-                .state = [
-              KeyboardState.visibling,
-              KeyboardState.visible,
-            ].contains(keyboardState),
-          ),
-          child: BlueprintView(
-            padBodyHorizontally: false,
-            body: PreloadPageView.builder(
-              preloadPagesCount: pages.length,
-              itemCount: pages.length,
-              controller: healpenPageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (int value) {
-                _handlePageChange(ref, value);
-              },
-              itemBuilder: (context, index) {
-                final model = HealpenController().models.elementAt(index);
-                log(model.label, name: 'Healpen:PageView.builder:itemBuilder');
-                if ([
-                  PageController().history.label,
-                  PageController().insights.label
-                ].contains(model.label)) {}
-                return pages.elementAt(index);
-              },
-            ),
-            bottomNavigationBar: const HealpenNavigationBar(),
-          ),
-        );
-      },
+    return KeyboardDetection(
+      controller: KeyboardDetectionController(
+        onChanged: (KeyboardState keyboardState) => ref
+            .read(WritingController().isKeyboardOpenProvider.notifier)
+            .state = [
+          KeyboardState.visibling,
+          KeyboardState.visible,
+        ].contains(keyboardState),
+      ),
+      child: BlueprintView(
+        padBodyHorizontally: false,
+        body: PreloadPageView.builder(
+          preloadPagesCount: pages.length,
+          itemCount: pages.length,
+          controller: healpenPageController,
+          physics: const NeverScrollableScrollPhysics(),
+          onPageChanged: (int value) {
+            _handlePageChange(ref, value);
+          },
+          itemBuilder: (context, index) {
+            final model = HealpenController().models.elementAt(index);
+            log(model.label, name: 'Healpen:PageView.builder:itemBuilder');
+            if ([
+              PageController().history.label,
+              PageController().insights.label
+            ].contains(model.label)) {}
+            return pages.elementAt(index);
+          },
+        ),
+        bottomNavigationBar: const HealpenNavigationBar(),
+      ),
     );
   }
 
