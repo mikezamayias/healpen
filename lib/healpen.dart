@@ -32,6 +32,11 @@ class Healpen extends ConsumerWidget {
     final healpenPageController =
         ref.watch(HealpenController().preloadPageControllerProvider);
     final pages = HealpenController().pages;
+
+    // Move the logic that updates the state of your providers to didChangeDependencies
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _updateData(ref);
+    });
     return StreamBuilder(
       stream: FirestorePreferencesController().getPreferences(),
       builder: (context, snapshot) {
@@ -52,52 +57,54 @@ class Healpen extends ConsumerWidget {
               KeyboardState.visible,
             ].contains(keyboardState),
           ),
-          child: StreamBuilder<QuerySnapshot<AnalysisModel>>(
-              stream:
-                  FirestoreService().analysisCollectionReference().snapshots(),
-              builder: (
-                BuildContext context,
-                AsyncSnapshot<QuerySnapshot<AnalysisModel>> analysisSnapshot,
-              ) {
-                switch (analysisSnapshot.connectionState) {
-                  case ConnectionState.active:
-                    for (QueryDocumentSnapshot<AnalysisModel> element
-                        in analysisSnapshot.data!.docs) {
-                      log(
-                        '${element.data()}}',
-                        name: 'Healpen:analysisSnapshot',
-                      );
-                      ref.watch(analysisModelListProvider).add(element.data());
-                    }
-                    break;
-                  default:
-                    break;
-                }
-                return BlueprintView(
-                  padBodyHorizontally: false,
-                  body: PreloadPageView.builder(
-                    preloadPagesCount: pages.length,
-                    itemCount: pages.length,
-                    controller: healpenPageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    onPageChanged: (int value) {
-                      _handlePageChange(ref, value);
-                    },
-                    itemBuilder: (context, index) {
-                      final model = HealpenController().models.elementAt(index);
-                      log(model.label,
-                          name: 'Healpen:PageView.builder:itemBuilder');
-                      if ([
-                        PageController().history.label,
-                        PageController().insights.label
-                      ].contains(model.label)) {}
-                      return pages.elementAt(index);
-                    },
-                  ),
-                  bottomNavigationBar: const HealpenNavigationBar(),
-                );
-              }),
+          child: BlueprintView(
+            padBodyHorizontally: false,
+            body: PreloadPageView.builder(
+              preloadPagesCount: pages.length,
+              itemCount: pages.length,
+              controller: healpenPageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (int value) {
+                _handlePageChange(ref, value);
+              },
+              itemBuilder: (context, index) {
+                final model = HealpenController().models.elementAt(index);
+                log(model.label, name: 'Healpen:PageView.builder:itemBuilder');
+                if ([
+                  PageController().history.label,
+                  PageController().insights.label
+                ].contains(model.label)) {}
+                return pages.elementAt(index);
+              },
+            ),
+            bottomNavigationBar: const HealpenNavigationBar(),
+          ),
         );
+      },
+    );
+  }
+
+  void _updateData(WidgetRef ref) {
+    FirestorePreferencesController()
+        .getPreferences()
+        .listen((List<PreferenceModel> snapshot) {
+      List<PreferenceModel> currentPreferences = snapshot;
+      if (_havePreferencesChanged(currentPreferences)) {
+        _updatePreferences(ref, currentPreferences);
+        _lastFetchedPreferences = currentPreferences;
+      }
+    });
+
+    FirestoreService().analysisCollectionReference().snapshots().listen(
+      (QuerySnapshot<AnalysisModel> analysisSnapshot) {
+        ref
+            .read(analysisModelListProvider.notifier)
+            .addAll(analysisSnapshot.docs
+                .map(
+                  (QueryDocumentSnapshot<AnalysisModel> element) =>
+                      element.data(),
+                )
+                .toSet());
       },
     );
   }
