@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:googleapis/language/v1.dart';
@@ -11,6 +9,7 @@ import '../models/note/note_model.dart';
 import '../models/sentence/sentence_model.dart';
 import '../providers/settings_providers.dart';
 import '../services/firestore_service.dart';
+import '../utils/logger.dart';
 import 'settings/firestore_preferences_controller.dart';
 import 'settings/preferences_controller.dart';
 
@@ -102,9 +101,8 @@ class NoteAnalyzer {
           ),
       ],
     );
-    log(
+    logger.i(
       '${analysisModel.toJson()}',
-      name: 'FirestoreService:analyzeSentiment',
     );
     return analysisModel;
   }
@@ -120,13 +118,11 @@ class NoteAnalyzer {
   }
 
   void _logNoteDetails(DocumentSnapshot<NoteModel> note) {
-    log(
+    logger.i(
       note.id,
-      name: 'AnalysisViewController:removePreviousAnalysis() - note ID',
     );
-    log(
+    logger.i(
       note.get('content'),
-      name: 'AnalysisViewController:removePreviousAnalysis() - note content',
     );
   }
 }

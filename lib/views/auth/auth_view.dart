@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider;
@@ -10,6 +8,7 @@ import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
 import '../../providers/custom_auth_provider.dart';
 import '../../utils/helper_functions.dart';
+import '../../utils/logger.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
 import '../onboarding/onboarding_view.dart';
@@ -49,13 +48,11 @@ class _AuthViewState extends ConsumerState<AuthView> {
         EmailLinkAuthController authController,
         Widget? _,
       ) {
-        log(
+        logger.i(
           '${state.runtimeType}',
-          name: 'AuthView:state',
         );
-        log(
+        logger.i(
           '${FirebaseAuth.instance.currentUser}',
-          name: 'AuthView',
         );
         return PopScope(
           onPopInvoked: (_) {

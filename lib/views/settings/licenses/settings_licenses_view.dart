@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' hide AppBar, Divider, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +8,7 @@ import '../../../models/license_model.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
+import '../../../utils/logger.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/loading_tile.dart';
@@ -68,9 +67,8 @@ class SettingsLicensesView extends ConsumerWidget {
                         : null,
                     titleString: licence.packageName,
                     onTap: () {
-                      log(
+                      logger.i(
                         licence.toString(),
-                        name: 'Licence ${licence.packageName} tapped',
                       );
                       pushWithAnimation(
                         context: context,

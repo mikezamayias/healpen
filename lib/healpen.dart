@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +17,7 @@ import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'services/firestore_service.dart';
 import 'utils/helper_functions.dart';
+import 'utils/logger.dart';
 import 'views/blueprint/blueprint_view.dart';
 import 'widgets/healpen_navigation_bar.dart';
 
@@ -58,7 +57,9 @@ class Healpen extends ConsumerWidget {
           },
           itemBuilder: (context, index) {
             final model = HealpenController().models.elementAt(index);
-            log(model.label, name: 'Healpen:PageView.builder:itemBuilder');
+            logger.i(
+              model.label,
+            );
             if ([
               PageController().history.label,
               PageController().insights.label

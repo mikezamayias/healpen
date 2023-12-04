@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +15,7 @@ import '../../../../models/settings/preference_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../route_controller.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class SignOutTile extends ConsumerStatefulWidget {
@@ -45,12 +44,20 @@ class _SignOutTileState extends ConsumerState<SignOutTile> {
       leadingIconData: FontAwesomeIcons.rightFromBracket,
       textColor: context.theme.colorScheme.onPrimary,
       onTap: () {
-        log('CustomListTile: onTap', name: 'SignOutTile');
-        log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
+        logger.i(
+          'CustomListTile: onTap',
+        );
+        logger.i(
+          '${FirebaseAuth.instance.currentUser}',
+        );
         FirebaseUIAuth.signOut().whenComplete(
           () {
-            log('signOut().complete', name: 'SignOutTile');
-            log('${FirebaseAuth.instance.currentUser}', name: 'SignOutTile');
+            logger.i(
+              'signOut().complete',
+            );
+            logger.i(
+              '${FirebaseAuth.instance.currentUser}',
+            );
             resetState();
             Iterum.revive(context);
             context.navigator.pushNamedAndRemoveUntil(
@@ -84,9 +91,8 @@ class _SignOutTileState extends ConsumerState<SignOutTile> {
         );
         preferenceTuple.preferenceModel.withValue(list);
       }
-      log(
+      logger.i(
         'Updated $key with value: $value',
-        name: 'SignOutTile:resetPreferences',
       );
     }
   }

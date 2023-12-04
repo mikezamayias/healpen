@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -9,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:validated/validated.dart' as validated;
 
 import '../../../../utils/constants.dart';
+import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class EditEmailTile extends ConsumerStatefulWidget {
@@ -62,9 +61,8 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
               leadingIconData: FontAwesomeIcons.solidFloppyDisk,
               onTap: () {
                 if (_formKey.currentState!.validate()) {
-                  log(
+                  logger.i(
                     _emailController.text,
-                    name: '_LoginViewState:build:email',
                   );
                   currentUser
                       .reauthenticateWithCredential(
@@ -77,9 +75,8 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
                         (value) =>
                             currentUser.updateEmail(_emailController.text).then(
                           (_) {
-                            log(
+                            logger.i(
                               '$currentUser',
-                              name: '_LoginViewState:build:updateEmail:then',
                             );
                             return ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -106,9 +103,8 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
                           },
                         ).onError(
                           (error, stackTrace) {
-                            log(
+                            logger.i(
                               '$currentUser',
-                              name: '_LoginViewState:build:updateEmail:onError',
                             );
                             return ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -14,6 +12,7 @@ import '../../models/sentence/sentence_model.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
+import '../../utils/logger.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
@@ -30,12 +29,13 @@ class NoteView extends ConsumerWidget {
     final AnalysisModel analysisModel = args.analysisModel;
     ref.watch(emotionalEchoControllerProvider).sentimentScore =
         analysisModel.score;
-    log(
+    logger.i(
       analysisModel.sentences.toString(),
-      name: 'NoteView:build.analysisModel.sentences',
     );
     for (SentenceModel sentence in analysisModel.sentences) {
-      log(sentence.toString(), name: 'NoteView:build.sentences');
+      logger.i(
+        sentence.toString(),
+      );
     }
     return BlueprintView(
       appBar: AppBar(

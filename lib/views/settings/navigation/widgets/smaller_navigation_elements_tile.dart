@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +5,7 @@ import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/helper_functions.dart';
+import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class SmallerNavigationElementsTile extends ConsumerWidget {
@@ -40,9 +39,8 @@ class SmallerNavigationElementsTile extends ConsumerWidget {
                   ref.watch(navigationSmallerNavigationElementsProvider),
                 ),
               );
-              log(
+              logger.i(
                 '${ref.watch(navigationSmallerNavigationElementsProvider)}',
-                name: 'SmallerNavigationElementsTile',
               );
             },
           );
