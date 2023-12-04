@@ -40,7 +40,7 @@ class BlueprintView extends ConsumerWidget {
       ),
       child: Container(
         color: backgroundColor ??
-            (ref.watch(navigationSmallerNavigationElementsProvider)
+            (smallNavigationElements
                 ? context.theme.colorScheme.surfaceVariant
                 : context.theme.colorScheme.surface),
         child: SafeArea(
@@ -55,7 +55,7 @@ class BlueprintView extends ConsumerWidget {
                 appBar: showAppBarSetting! && appBar != null
                     ? PreferredSize(
                         preferredSize: Size.fromHeight(
-                          smallNavigationElements ? kToolbarHeight : 18.h,
+                          smallNavigationElements ? 12.h : 18.h,
                         ),
                         child: appBar!.animateAppBar(),
                       )
