@@ -49,4 +49,23 @@ class SentenceModel {
       wordCount: wordCount ?? this.wordCount,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SentenceModel &&
+        other.content == content &&
+        other.score == score &&
+        other.magnitude == magnitude &&
+        other.wordCount == wordCount;
+  }
+
+  @override
+  int get hashCode {
+    return content.hashCode ^
+        score.hashCode ^
+        magnitude.hashCode ^
+        wordCount.hashCode;
+  }
 }

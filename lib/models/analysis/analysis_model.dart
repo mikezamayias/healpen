@@ -67,4 +67,31 @@ class AnalysisModel {
       sentences: sentences ?? this.sentences,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is AnalysisModel &&
+        other.timestamp == timestamp &&
+        other.duration == duration &&
+        other.content == content &&
+        other.score == score &&
+        other.magnitude == magnitude &&
+        other.wordCount == wordCount &&
+        other.language == language &&
+        other.sentences == sentences;
+  }
+
+  @override
+  int get hashCode {
+    return timestamp.hashCode ^
+        duration.hashCode ^
+        content.hashCode ^
+        score.hashCode ^
+        magnitude.hashCode ^
+        wordCount.hashCode ^
+        language.hashCode ^
+        sentences.hashCode;
+  }
 }
