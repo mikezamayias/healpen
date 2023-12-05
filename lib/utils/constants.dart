@@ -56,3 +56,12 @@ final sentimentIcons = [
 
 /// A list of sentiment values used in the application.
 final List<double> sentimentValues = [-1, -0.5, 0, 0.5, 1];
+
+/// A map of sentiment values to sentiment labels used in the application.
+final Map<double, String> sentimentValueToLabel = {
+  -1: 'Very Negative',
+  -0.5: 'Slightly Negative',
+  0: 'Neutral',
+  0.5: 'Slightly Positive',
+  1: 'Very Positive',
+};
