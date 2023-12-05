@@ -23,7 +23,7 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
           'assets/rive/emotional_echo.riv',
           fit: BoxFit.contain,
           controllers: [
-            SimpleAnimation('AllCircles'),
+            SimpleAnimation('AllCircles-v2'),
           ],
           onInit: (Artboard artboard) {
             artboard.forEachComponent(
