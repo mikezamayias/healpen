@@ -189,6 +189,11 @@ Color getTextColorOnSentiment(ThemeData theme, dynamic sentiment) {
   )!;
 }
 
+bool scoreIsCloseToValue(double score, double value) {
+  const deviation = 0.1;
+  return (score - value).abs() < deviation;
+}
+
 pushWithAnimation({
   required BuildContext context,
   required Widget widget,

@@ -105,13 +105,18 @@ class EmotionalEchoActiveTile extends ConsumerWidget {
                   children: sentimentLabels.reversed.map(
                     (String label) {
                       int labelIndex = sentimentLabels.indexOf(label);
-                      return Text(
-                        enableInformatoryText
-                            ? '${sentimentValues.elementAt(labelIndex)}, $label'
-                            : label,
-                        style: context.theme.textTheme.titleSmall!.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: getShapeColorOnSentiment(context.theme, label),
+                      return Visibility(
+                        visible: !scoreIsCloseToValue(
+                            sentiment, sentimentValues.elementAt(labelIndex)),
+                        child: Text(
+                          enableInformatoryText
+                              ? '${sentimentValues.elementAt(labelIndex)}, $label'
+                              : label,
+                          style: context.theme.textTheme.titleSmall!.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color:
+                                getShapeColorOnSentiment(context.theme, label),
+                          ),
                         ),
                       );
                     },
