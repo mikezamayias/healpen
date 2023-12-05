@@ -113,7 +113,7 @@ class NoteView extends ConsumerWidget {
                     !ref.watch(navigationSmallerNavigationElementsProvider),
                 enableExplanationWrapper:
                     !ref.watch(navigationSmallerNavigationElementsProvider),
-                titleString: 'Sentiment',
+                titleString: 'Emotional Echo',
                 subtitle: SizedBox(
                   height: 39.h,
                   child: const EmotionalEchoTile(),
