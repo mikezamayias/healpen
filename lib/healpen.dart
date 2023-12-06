@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 
 import 'controllers/analysis_view_controller.dart';
 import 'controllers/healpen/healpen_controller.dart';
@@ -29,7 +28,7 @@ class Healpen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final healpenPageController =
-        ref.watch(HealpenController().preloadPageControllerProvider);
+        ref.watch(HealpenController().pageControllerProvider);
     final pages = HealpenController().pages;
 
     // Move the logic that updates the state of your providers to didChangeDependencies
@@ -47,8 +46,7 @@ class Healpen extends ConsumerWidget {
       ),
       child: BlueprintView(
         padBodyHorizontally: false,
-        body: PreloadPageView.builder(
-          preloadPagesCount: pages.length,
+        body: PageView.builder(
           itemCount: pages.length,
           controller: healpenPageController,
           physics: const NeverScrollableScrollPhysics(),

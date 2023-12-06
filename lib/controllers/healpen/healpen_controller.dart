@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 
 import '../../models/page_model.dart';
 import '../page_controller.dart' as page_controller;
@@ -21,8 +20,8 @@ class HealpenController {
   final List<PageModel> models = page_controller.PageController().pages;
 
   /// Providers
-  final preloadPageControllerProvider = StateProvider<PreloadPageController>(
-    (ref) => PreloadPageController(),
+  final pageControllerProvider = StateProvider<PageController>(
+    (ref) => PageController(),
   );
   final currentPageIndexProvider = StateProvider<int>((ref) => 0);
 

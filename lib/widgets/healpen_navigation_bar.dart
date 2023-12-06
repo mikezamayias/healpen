@@ -64,8 +64,7 @@ class HealpenNavigationBar extends ConsumerWidget {
                     ref.watch(HealpenController().currentPageIndexProvider),
                 onTap: (int index) {
                   goToPage(
-                    ref.watch(
-                        HealpenController().preloadPageControllerProvider),
+                    ref.watch(HealpenController().pageControllerProvider),
                     index,
                   );
                 },

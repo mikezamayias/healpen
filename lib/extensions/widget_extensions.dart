@@ -53,9 +53,4 @@ extension WidgetExtensions on Widget {
         begin: -.3,
         end: 0,
       );
-
-  Widget animateBody() => animate().fade(
-        duration: emphasizedDuration,
-        curve: emphasizedCurve,
-      );
 }

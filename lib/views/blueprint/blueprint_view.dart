@@ -65,7 +65,7 @@ class BlueprintView extends ConsumerWidget {
                     scrollbars: false,
                     overscroll: false,
                   ),
-                  child: body.animateBody(),
+                  child: body,
                 ),
                 bottomNavigationBar: bottomNavigationBar,
               ),
