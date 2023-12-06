@@ -79,6 +79,13 @@ final navigationSmallerNavigationElementsProvider = StateProvider<bool>(
   (ref) => PreferencesController.navigationSmallerNavigationElements.value,
 );
 
+/// Whether to show a simple UI in the app.
+/// When set to true, the app will show a simple UI.
+/// When set to false, the app will show a complex UI.
+final navigationSimpleUIProvider = StateProvider<bool>(
+  (ref) => PreferencesController.navigationSimpleUI.value,
+);
+
 final showAnalyzeButtonProvider = StateProvider<bool>(
   (ref) =>
       ref.watch(writingShowAnalyzeNotesButtonProvider) ||
