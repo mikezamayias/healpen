@@ -28,6 +28,7 @@ class Healpen extends ConsumerWidget {
     final healpenPageController =
         ref.watch(HealpenController().pageControllerProvider);
     final pages = HealpenController().pages;
+    final navigationSimpleUi = ref.watch(navigationSimpleUIProvider);
 
     // Move the logic that updates the state of your providers to didChangeDependencies
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -42,20 +43,26 @@ class Healpen extends ConsumerWidget {
           KeyboardState.visible,
         ].contains(keyboardState),
       ),
-      child: BlueprintView(
-        padBodyHorizontally: false,
-        body: PageView.builder(
-          itemCount: pages.length,
-          controller: healpenPageController,
-          physics: const NeverScrollableScrollPhysics(),
-          onPageChanged: (int value) {
-            _handlePageChange(ref, value);
-          },
-          itemBuilder: (BuildContext context, int index) =>
-              pages.elementAt(index),
-        ),
-        bottomNavigationBar: const HealpenNavigationBar(),
-      ),
+      child: navigationSimpleUi
+          ? const BlueprintView(
+              body: Center(
+                child: Text('Simple UI'),
+              ),
+            )
+          : BlueprintView(
+              padBodyHorizontally: false,
+              body: PageView.builder(
+                itemCount: pages.length,
+                controller: healpenPageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: (int value) {
+                  _handlePageChange(ref, value);
+                },
+                itemBuilder: (BuildContext context, int index) =>
+                    pages.elementAt(index),
+              ),
+              bottomNavigationBar: const HealpenNavigationBar(),
+            ),
     );
   }
 
