@@ -6,7 +6,6 @@ import 'package:keyboard_detection/keyboard_detection.dart';
 import 'controllers/analysis_view_controller.dart';
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/insights_controller.dart';
-import 'controllers/page_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'controllers/writing_controller.dart';
@@ -16,7 +15,6 @@ import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'services/firestore_service.dart';
 import 'utils/helper_functions.dart';
-import 'utils/logger.dart';
 import 'views/blueprint/blueprint_view.dart';
 import 'widgets/healpen_navigation_bar.dart';
 
@@ -53,17 +51,8 @@ class Healpen extends ConsumerWidget {
           onPageChanged: (int value) {
             _handlePageChange(ref, value);
           },
-          itemBuilder: (context, index) {
-            final model = HealpenController().models.elementAt(index);
-            logger.i(
-              model.label,
-            );
-            if ([
-              PageController().history.label,
-              PageController().insights.label
-            ].contains(model.label)) {}
-            return pages.elementAt(index);
-          },
+          itemBuilder: (BuildContext context, int index) =>
+              pages.elementAt(index),
         ),
         bottomNavigationBar: const HealpenNavigationBar(),
       ),
