@@ -16,7 +16,9 @@ import 'providers/settings_providers.dart';
 import 'services/firestore_service.dart';
 import 'utils/helper_functions.dart';
 import 'views/blueprint/blueprint_view.dart';
+import 'views/simple_ui/simple_ui_view.dart';
 import 'widgets/healpen_navigation_bar.dart';
+import 'wrappers/keep_alive_wrapper.dart';
 
 List<PreferenceModel> _lastFetchedPreferences = [];
 
@@ -43,26 +45,24 @@ class Healpen extends ConsumerWidget {
           KeyboardState.visible,
         ].contains(keyboardState),
       ),
-      child: navigationSimpleUi
-          ? const BlueprintView(
-              body: Center(
-                child: Text('Simple UI'),
+      child: KeepAliveWrapper(
+        child: false
+            ? const SimpleUIView()
+            : BlueprintView(
+                padBodyHorizontally: false,
+                body: PageView.builder(
+                  itemCount: pages.length,
+                  controller: healpenPageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (int value) {
+                    _handlePageChange(ref, value);
+                  },
+                  itemBuilder: (BuildContext context, int index) =>
+                      pages.elementAt(index),
+                ),
+                bottomNavigationBar: const HealpenNavigationBar(),
               ),
-            )
-          : BlueprintView(
-              padBodyHorizontally: false,
-              body: PageView.builder(
-                itemCount: pages.length,
-                controller: healpenPageController,
-                physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: (int value) {
-                  _handlePageChange(ref, value);
-                },
-                itemBuilder: (BuildContext context, int index) =>
-                    pages.elementAt(index),
-              ),
-              bottomNavigationBar: const HealpenNavigationBar(),
-            ),
+      ),
     );
   }
 

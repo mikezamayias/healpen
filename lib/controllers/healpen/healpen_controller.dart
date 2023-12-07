@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../models/page_model.dart';
-import '../../wrappers/keep_alive_wrapper.dart';
 import '../page_controller.dart' as page_controller;
 
 class HealpenController {
@@ -16,7 +15,7 @@ class HealpenController {
   /// Members
   final List<Widget> pages = [
     for (PageModel pageModel in page_controller.PageController().pages)
-      KeepAliveWrapper(child: pageModel.widget)
+      pageModel.widget
   ];
   final List<PageModel> models = page_controller.PageController().pages;
 
