@@ -27,22 +27,26 @@ class ShowAppBarTile extends ConsumerWidget {
           : null,
       trailing: Switch(
         value: ref.watch(navigationShowAppBarProvider),
-        onChanged: (value) {
-          vibrate(
-            ref.watch(navigationEnableHapticFeedbackProvider),
-            () async {
-              ref.read(navigationShowAppBarProvider.notifier).state = value;
-              await FirestorePreferencesController.instance.savePreference(
-                PreferencesController.navigationShowAppBar.withValue(
-                  ref.watch(navigationShowAppBarProvider),
-                ),
-              );
-              logger.i(
-                '${ref.watch(navigationShowAppBarProvider)}',
-              );
-            },
-          );
-        },
+        onChanged: ref.watch(navigationSimpleUIProvider)
+            ? null
+            : (value) {
+                vibrate(
+                  ref.watch(navigationEnableHapticFeedbackProvider),
+                  () async {
+                    ref.read(navigationShowAppBarProvider.notifier).state =
+                        value;
+                    await FirestorePreferencesController.instance
+                        .savePreference(
+                      PreferencesController.navigationShowAppBar.withValue(
+                        ref.watch(navigationShowAppBarProvider),
+                      ),
+                    );
+                    logger.i(
+                      '${ref.watch(navigationShowAppBarProvider)}',
+                    );
+                  },
+                );
+              },
       ),
     );
   }

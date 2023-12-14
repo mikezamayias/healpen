@@ -26,25 +26,29 @@ class SmallerNavigationElementsTile extends ConsumerWidget {
           : null,
       trailing: Switch(
         value: ref.watch(navigationSmallerNavigationElementsProvider),
-        onChanged: (value) {
-          vibrate(
-            ref.watch(navigationEnableHapticFeedbackProvider),
-            () async {
-              ref
-                  .read(navigationSmallerNavigationElementsProvider.notifier)
-                  .state = value;
-              await FirestorePreferencesController.instance.savePreference(
-                PreferencesController.navigationSmallerNavigationElements
-                    .withValue(
-                  ref.watch(navigationSmallerNavigationElementsProvider),
-                ),
-              );
-              logger.i(
-                '${ref.watch(navigationSmallerNavigationElementsProvider)}',
-              );
-            },
-          );
-        },
+        onChanged: ref.watch(navigationSimpleUIProvider)
+            ? null
+            : (value) {
+                vibrate(
+                  ref.watch(navigationEnableHapticFeedbackProvider),
+                  () async {
+                    ref
+                        .read(navigationSmallerNavigationElementsProvider
+                            .notifier)
+                        .state = value;
+                    await FirestorePreferencesController.instance
+                        .savePreference(
+                      PreferencesController.navigationSmallerNavigationElements
+                          .withValue(
+                        ref.watch(navigationSmallerNavigationElementsProvider),
+                      ),
+                    );
+                    logger.i(
+                      '${ref.watch(navigationSmallerNavigationElementsProvider)}',
+                    );
+                  },
+                );
+              },
       ),
     );
   }

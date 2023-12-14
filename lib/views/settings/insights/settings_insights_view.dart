@@ -37,5 +37,23 @@ class SettingsInsightsView extends ConsumerWidget {
         ),
       ),
     );
+    return ref.watch(navigationSimpleUIProvider)
+        ? SimpleBlueprintView(
+            simpleUiAppBar: const SimpleAppBar(
+              appBarTitleString: 'Insights',
+            ),
+            body: body,
+          )
+        : BlueprintView(
+            showAppBar: true,
+            appBar: const AppBar(
+              automaticallyImplyLeading: true,
+              pathNames: [
+                'Settings',
+                'Insights',
+              ],
+            ),
+            body: body,
+          );
   }
 }

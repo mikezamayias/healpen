@@ -105,6 +105,24 @@ class SettingsLicensesView extends ConsumerWidget {
         },
       ),
     );
+    return ref.watch(navigationSimpleUIProvider)
+        ? SimpleBlueprintView(
+            simpleUiAppBar: const SimpleAppBar(
+              appBarTitleString: 'Open Source Licenses',
+            ),
+            body: body,
+          )
+        : BlueprintView(
+            appBar: const AppBar(
+              automaticallyImplyLeading: true,
+              pathNames: [
+                'Settings',
+                'About',
+                'Open Source Licenses',
+              ],
+            ),
+            body: body,
+          );
   }
 }
 

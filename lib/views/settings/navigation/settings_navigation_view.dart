@@ -47,5 +47,24 @@ class SettingsNavigationView extends ConsumerWidget {
         ),
       ),
     );
+
+    return ref.watch(navigationSimpleUIProvider)
+        ? SimpleBlueprintView(
+            simpleUiAppBar: const SimpleAppBar(
+              appBarTitleString: 'Navigation',
+            ),
+            body: body,
+          )
+        : BlueprintView(
+            showAppBar: true,
+            appBar: const AppBar(
+              automaticallyImplyLeading: true,
+              pathNames: [
+                'Settings',
+                'Navigation',
+              ],
+            ),
+            body: body,
+          );
   }
 }

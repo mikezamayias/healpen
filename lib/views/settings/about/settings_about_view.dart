@@ -37,5 +37,23 @@ class SettingsAboutView extends ConsumerWidget {
         children: pageWidgets,
       ),
     );
+    return ref.watch(navigationSimpleUIProvider)
+        ? SimpleBlueprintView(
+            simpleUiAppBar: const SimpleAppBar(
+              appBarTitleString: 'About',
+            ),
+            body: body,
+          )
+        : BlueprintView(
+            showAppBar: true,
+            appBar: const AppBar(
+              automaticallyImplyLeading: true,
+              pathNames: [
+                'Settings',
+                'About',
+              ],
+            ),
+            body: body,
+          );
   }
 }

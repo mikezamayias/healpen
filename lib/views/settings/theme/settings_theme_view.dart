@@ -41,5 +41,24 @@ class SettingsThemeView extends ConsumerWidget {
         ),
       ),
     );
+
+    return ref.watch(navigationSimpleUIProvider)
+        ? SimpleBlueprintView(
+            simpleUiAppBar: const SimpleAppBar(
+              appBarTitleString: 'Theme',
+            ),
+            body: body,
+          )
+        : BlueprintView(
+            showAppBar: true,
+            appBar: const AppBar(
+              automaticallyImplyLeading: true,
+              pathNames: [
+                'Settings',
+                'Theme',
+              ],
+            ),
+            body: body,
+          );
   }
 }

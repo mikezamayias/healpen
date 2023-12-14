@@ -41,5 +41,23 @@ class SettingsWritingView extends ConsumerWidget {
         ),
       ),
     );
+    return ref.watch(navigationSimpleUIProvider)
+        ? SimpleBlueprintView(
+            simpleUiAppBar: const SimpleAppBar(
+              appBarTitleString: 'Writing',
+            ),
+            body: body,
+          )
+        : BlueprintView(
+            showAppBar: true,
+            appBar: const AppBar(
+              automaticallyImplyLeading: true,
+              pathNames: [
+                'Settings',
+                'Writing',
+              ],
+            ),
+            body: body,
+          );
   }
 }
