@@ -70,13 +70,13 @@ class MonthCellTile extends ConsumerWidget {
           color: shapeColor,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Gap(gap / 2),
             AnimatedContainer(
               duration: standardDuration,
               curve: standardCurve,
               alignment: Alignment.center,
+              padding: EdgeInsets.only(top: gap / 2),
               child: Text(
                 cellDate.day.toString(),
                 style: context.theme.textTheme.titleMedium!.copyWith(
@@ -94,9 +94,10 @@ class MonthCellTile extends ConsumerWidget {
                 ),
               ),
             ),
-            const Spacer(),
             if (dateAnalysisModelList.isNotEmpty)
-              Center(
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: gap),
                 child: ClipOval(
                   child: Container(
                     color: textColor,
@@ -118,7 +119,6 @@ class MonthCellTile extends ConsumerWidget {
                   ),
                 ),
               ),
-            Gap(gap),
           ],
         ),
       ),
