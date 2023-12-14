@@ -235,3 +235,26 @@ pushWithAnimation({
     context.navigator.push(builder);
   }
 }
+
+pushNamedWithAnimation({
+  required BuildContext context,
+  required String routeName,
+  bool replacement = false,
+  Object? arguments,
+  required VoidCallback? dataCallback,
+}) {
+  if (dataCallback != null) {
+    dataCallback.call();
+  }
+  if (replacement) {
+    context.navigator.pushReplacementNamed(
+      routeName,
+      arguments: arguments,
+    );
+  } else {
+    context.navigator.pushNamed(
+      routeName,
+      arguments: arguments,
+    );
+  }
+}
