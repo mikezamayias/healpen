@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import '../../enums/app_theming.dart';
 import '../../models/settings/preference_model.dart';
 import '../../services/firestore_service.dart';
+import '../../utils/logger.dart';
 
 class FirestorePreferencesController {
   /// Singleton constructor to ensure only one instance of this class exists.
@@ -36,10 +35,8 @@ class FirestorePreferencesController {
     }
 
     // Log the preference being saved for debugging.
-    log(
+    logger.i(
       '$preferenceModel',
-      name: 'FirestorePreferencesController:savePreference() - '
-          'preference to save',
     );
   }
 
@@ -104,9 +101,8 @@ class FirestorePreferencesController {
         }
       } catch (e) {
         // Log any exceptions that occur during conversion.
-        log(
+        logger.i(
           'Error converting value: $e',
-          name: 'FirestorePreferencesController:_convertValue',
         );
         // Here, you could add further error handling depending on your needs.
       }

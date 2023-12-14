@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +5,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class EditNameTile extends ConsumerWidget {
@@ -41,7 +40,9 @@ class EditNameTile extends ConsumerWidget {
               : context.theme.colorScheme.onSurfaceVariant,
         ),
         onSubmitted: (String newDisplayName) async {
-          log(newDisplayName, name: 'newDisplayName');
+          logger.i(
+            newDisplayName,
+          );
           await FirebaseAuth.instance.currentUser?.updateDisplayName(
             newDisplayName,
           );

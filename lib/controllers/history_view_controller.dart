@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
+import '../utils/logger.dart';
 
 class HistoryViewController {
   /// Singleton constructor
@@ -21,15 +20,11 @@ class HistoryViewController {
         .doc(timestamp.toString())
         .delete()
         .then(
-          (value) => log(
+          (value) => logger.i(
             'Note deleted',
-            name:
-                'HistoryViewController().deleteNote(${timestamp.toString()})',
           ),
-          onError: (error) => log(
+          onError: (error) => logger.i(
             'Failed to delete note: $error',
-            name:
-                'HistoryViewController().deleteNote(${timestamp.toString()})',
           ),
         );
     FirestoreService()
@@ -37,15 +32,11 @@ class HistoryViewController {
         .doc(timestamp.toString())
         .delete()
         .then(
-          (value) => log(
+          (value) => logger.i(
             'Analysis deleted',
-            name:
-                'HistoryViewController().deleteNote(${timestamp.toString()})',
           ),
-          onError: (error) => log(
+          onError: (error) => logger.i(
             'Failed to delete analysis: $error',
-            name:
-                'HistoryViewController().deleteNote(${timestamp.toString()})',
           ),
         );
   }

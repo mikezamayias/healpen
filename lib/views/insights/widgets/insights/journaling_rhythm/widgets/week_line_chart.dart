@@ -29,8 +29,8 @@ class WeekLineChart extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final DateTime start = week;
     final DateTime end = start.subtract(7.days);
-    final List<AnalysisModel> dateAnalysisModelList =
-        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+    final Set<AnalysisModel> dateAnalysisModelList =
+        ref.watch(analysisModelSetProvider).getAnalysisBetweenDates(
               start: end,
               end: start,
             );

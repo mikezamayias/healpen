@@ -61,7 +61,7 @@ class HourlyDataBuilder {
   void addAnalysis(AnalysisModel analysis) {
     _totalWritingTime +=
         analysis.wordCount!; // Assuming each word takes about a second to write
-    _totalSentiment += analysis.sentiment!;
+    _totalSentiment += analysis.score;
     _analysisCount++;
   }
 

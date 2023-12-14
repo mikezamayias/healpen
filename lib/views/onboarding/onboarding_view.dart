@@ -134,12 +134,15 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
   }
 
   void goToAuth(BuildContext context, WidgetRef ref) async {
-    ref.read(OnboardingController.onboardingCompletedProvider.notifier).state =
-        true;
     pushWithAnimation(
       context: context,
       widget: page_controller.PageController().authView.widget,
       replacement: true,
+      dataCallback: () {
+        ref
+            .read(OnboardingController.onboardingCompletedProvider.notifier)
+            .state = true;
+      },
     );
   }
 }

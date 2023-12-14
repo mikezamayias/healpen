@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -7,13 +5,13 @@ import '../controllers/note_analyzer.dart';
 import '../models/analysis/analysis_model.dart';
 import '../models/note/note_model.dart';
 import '../models/sentence/sentence_model.dart';
+import '../utils/logger.dart';
 
 class FirestoreService {
   // Singleton Constructor
   FirestoreService._() {
-    log(
+    logger.i(
       'FirestoreService:instance',
-      name: 'FirestoreService',
     );
   }
 
@@ -26,9 +24,8 @@ class FirestoreService {
 
   // Methods
   CollectionReference<NoteModel> writingCollectionReference() {
-    log(
+    logger.i(
       'FirestoreService:writingCollectionReference()',
-      name: 'FirestoreService',
     );
     return FirebaseFirestore.instance
         .collection('writing-temp')
@@ -41,25 +38,50 @@ class FirestoreService {
   }
 
   CollectionReference<AnalysisModel> analysisCollectionReference() {
-    log(
+    logger.i(
       'FirestoreService:analysisCollectionReference()',
-      name: 'FirestoreService',
     );
     return FirebaseFirestore.instance
         .collection('analysis-temp')
         .doc(currentUser.uid)
         .collection('notes')
         .withConverter<AnalysisModel>(
-          fromFirestore: (snapshot, _) =>
-              AnalysisModel.fromJson(snapshot.data()!),
+          fromFirestore: (snapshot, _) {
+            logger.i(
+              '${snapshot.data()}',
+            );
+
+            // Parse the AnalysisModel except the sentences
+            AnalysisModel analysisModel =
+                AnalysisModel.fromJson(snapshot.data()!);
+
+            // Check if the snapshot contains the 'sentences' key and it's not null
+            if (snapshot.data()!.containsKey('sentences') &&
+                snapshot.get('sentences') != null) {
+              // Parse the sentences
+              var sentencesList = snapshot.get('sentences') as List;
+              analysisModel.sentences = sentencesList
+                  .map<SentenceModel>((sentence) =>
+                      SentenceModel.fromJson(sentence as Map<String, dynamic>))
+                  .toList();
+
+              // Logging each sentence (optional)
+              for (SentenceModel sentence in analysisModel.sentences) {
+                logger.i(
+                  '${sentence.toJson()}',
+                );
+              }
+            }
+
+            return analysisModel;
+          },
           toFirestore: (analysisModel, _) => analysisModel.toJson(),
         );
   }
 
   DocumentReference<Map<String, dynamic>> preferencesCollectionReference() {
-    log(
+    logger.i(
       'FirestoreService:preferencesCollectionReference()',
-      name: 'FirestoreService',
     );
     return FirebaseFirestore.instance
         .collection('preferences-temp')
@@ -67,9 +89,8 @@ class FirestoreService {
   }
 
   Future<void> saveNote(NoteModel noteModel) async {
-    log(
+    logger.i(
       '${noteModel.toJson()}',
-      name: 'FirestoreService:saveNote() - note to save',
     );
     await writingCollectionReference()
         .doc('${noteModel.timestamp}')
@@ -77,9 +98,8 @@ class FirestoreService {
   }
 
   Future<void> saveAnalysis(AnalysisModel analysisModel) async {
-    log(
+    logger.i(
       '${analysisModel.toJson()}',
-      name: 'FirestoreService:saveAnalysis() - analysis to save',
     );
     await analysisCollectionReference()
         .doc('${analysisModel.timestamp}')
@@ -90,9 +110,8 @@ class FirestoreService {
     DateTime start,
     DateTime end,
   ) {
-    log(
+    logger.i(
       'FirestoreService:getAnalysisBetweenDates()',
-      name: 'FirestoreService',
     );
     return analysisCollectionReference()
         .where(
@@ -139,9 +158,8 @@ class FirestoreService {
   Future<DocumentSnapshot<AnalysisModel>> getAnalysis(
     int timestamp,
   ) {
-    log(
+    logger.i(
       'FirestoreService:getAnalysis()',
-      name: 'FirestoreService',
     );
     return analysisCollectionReference().doc('$timestamp').get();
   }
@@ -161,14 +179,12 @@ class FirestoreService {
         writingCollectionReference()
             .doc(element.id)
             .update({key: FieldValue.delete()}).then((_) {
-          log(
+          logger.i(
             'Note ${element.id}, removing $key',
-            name: 'FirestorService:analyzeSentiment',
           );
         }).catchError((error) {
-          log(
+          logger.i(
             '$error',
-            name: 'FirestorService:analyzeSentiment',
           );
         });
       }
@@ -216,9 +232,8 @@ class FirestoreService {
   Future<void> analyzeSentiment(
     DocumentSnapshot<NoteModel> note,
   ) async {
-    log(
+    logger.i(
       'FirestoreService:analyzeSentiment()',
-      name: 'FirestoreService',
     );
     writingCollectionReference()
         .doc(note.id)
@@ -227,24 +242,25 @@ class FirestoreService {
       // AnalysisModel analysisModel = AnalysisModel.fromJson(
       //   NoteModel.fromJson(value.data()!).toJson(),
       // );
-      final analysisModel = await NoteAnalyzer.createNoteAnalysis(
+      final analysisModel = await NoteAnalyzer().createNoteAnalysis(
         value.data()!,
       );
-      log(
+      logger.i(
         '${analysisModel.toJson()}',
-        name: 'FirestorService:analyzeSentiment:analysisModel',
+      );
+      logger.i(
+        '$analysisModel',
       );
       analysisCollectionReference().doc(note.id).set(analysisModel);
-      for (SentenceModel sentence in analysisModel.sentences) {
-        analysisCollectionReference()
-            .doc(note.id)
-            .collection('sentences')
-            .doc(analysisModel.sentences.indexOf(sentence).toString())
-            .set(sentence.toJson());
-      }
-      log(
+      // for (SentenceModel sentence in analysisModel.sentences) {
+      //   analysisCollectionReference()
+      //       .doc(note.id)
+      //       .collection('sentences')
+      //       .doc(analysisModel.sentences.indexOf(sentence).toString())
+      //       .set(sentence.toJson());
+      // }
+      logger.i(
         'added sentences',
-        name: 'FirestorService:analyzeSentiment:${note.id}',
       );
     }).catchError((error) {
       throw error;
@@ -254,9 +270,8 @@ class FirestoreService {
   Future<({NoteModel note, AnalysisModel analysis})> getNoteAndAnalysis(
     int timestamp,
   ) async {
-    log(
+    logger.i(
       'FirestoreService:getNoteAndAnalysis()',
-      name: 'FirestoreService',
     );
     final noteEntry = await FirestoreService().getNote(timestamp);
     final analysisEntry = await FirestoreService().getAnalysis(timestamp);

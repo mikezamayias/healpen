@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,6 +5,7 @@ import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/helper_functions.dart';
+import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class BackButtonSettingsTile extends ConsumerWidget {
@@ -27,23 +26,26 @@ class BackButtonSettingsTile extends ConsumerWidget {
           : null,
       trailing: Switch(
         value: ref.watch(navigationShowBackButtonProvider),
-        onChanged: (value) {
-          vibrate(
-            ref.watch(navigationEnableHapticFeedbackProvider),
-            () async {
-              ref.read(navigationShowBackButtonProvider.notifier).state = value;
-              await FirestorePreferencesController.instance.savePreference(
-                PreferencesController.navigationShowBackButton.withValue(
-                  ref.watch(navigationShowBackButtonProvider),
-                ),
-              );
-              log(
-                '${ref.watch(navigationShowBackButtonProvider)}',
-                name: 'SettingsView:ShowAppBarTitle',
-              );
-            },
-          );
-        },
+        onChanged: ref.watch(navigationSimpleUIProvider)
+            ? null
+            : (value) {
+                vibrate(
+                  ref.watch(navigationEnableHapticFeedbackProvider),
+                  () async {
+                    ref.read(navigationShowBackButtonProvider.notifier).state =
+                        value;
+                    await FirestorePreferencesController.instance
+                        .savePreference(
+                      PreferencesController.navigationShowBackButton.withValue(
+                        ref.watch(navigationShowBackButtonProvider),
+                      ),
+                    );
+                    logger.i(
+                      '${ref.watch(navigationShowBackButtonProvider)}',
+                    );
+                  },
+                );
+              },
       ),
     );
   }

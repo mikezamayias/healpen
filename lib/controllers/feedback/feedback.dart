@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -9,6 +8,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+
+import '../../utils/logger.dart';
 
 final feedbackControllerProvider =
     StateNotifierProvider<FeedbackController, FeedbackModel>(
@@ -51,9 +52,8 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
   }
 
   void cleanUp() {
-    log(
+    logger.i(
       'Cleaning up feedback controller.',
-      name: 'FeedbackController:cleanUp',
     );
     bodyTextController.clear();
     _deleteScreenshot(state.screenshotPath);
@@ -64,14 +64,12 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
     final file = File(screenshotPath);
     if (file.existsSync()) {
       file.deleteSync();
-      log(
+      logger.i(
         'Screenshot deleted successfully.',
-        name: 'FeedbackController:_deleteScreenshot',
       );
     } else {
-      log(
+      logger.i(
         'Screenshot does not exist.',
-        name: 'FeedbackController:_deleteScreenshot',
       );
     }
   }
@@ -122,9 +120,8 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
       'Build Signature: ${packageInfo.buildSignature}',
       'Installer Store: ${packageInfo.installerStore}',
     ].join('\n');
-    log(
+    logger.i(
       result,
-      name: 'GitHubAPI:appInfo',
     );
     return result;
   }
@@ -141,9 +138,8 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
         'Board: ${deviceInfo.data['board']}',
         'Is Physical Device: ${deviceInfo.data['isPhysicalDevice']}',
       ].join('\n');
-      log(
+      logger.i(
         result,
-        name: 'GitHubAPI:deviceInfo',
       );
       return result;
     } else {
@@ -154,9 +150,8 @@ class FeedbackController extends StateNotifier<FeedbackModel> {
         'System Version: ${deviceInfo.data['systemVersion']}',
         'Is Physical Device: ${deviceInfo.data['isPhysicalDevice']}',
       ].join('\n');
-      log(
+      logger.i(
         result,
-        name: 'GitHubAPI:deviceInfo',
       );
       return result;
     }

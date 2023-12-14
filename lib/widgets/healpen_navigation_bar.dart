@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -24,10 +22,7 @@ class HealpenNavigationBar extends ConsumerWidget {
         ref.watch(navigationSmallerNavigationElementsProvider);
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(
-          top: gap,
-          bottom: Platform.isIOS ? 0 : gap,
-        ),
+        padding: EdgeInsets.symmetric(vertical: gap),
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
@@ -69,8 +64,7 @@ class HealpenNavigationBar extends ConsumerWidget {
                     ref.watch(HealpenController().currentPageIndexProvider),
                 onTap: (int index) {
                   goToPage(
-                    ref.watch(
-                        HealpenController().preloadPageControllerProvider),
+                    ref.watch(HealpenController().pageControllerProvider),
                     index,
                   );
                 },

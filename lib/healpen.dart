@@ -1,21 +1,23 @@
-import 'dart:developer';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 
+import 'controllers/analysis_view_controller.dart';
 import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/insights_controller.dart';
-import 'controllers/page_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
 import 'controllers/writing_controller.dart';
+import 'models/analysis/analysis_model.dart';
 import 'models/insight_model.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
+import 'services/firestore_service.dart';
+import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'views/blueprint/blueprint_view.dart';
+import 'views/simple/views/simple_home_view.dart';
 import 'widgets/healpen_navigation_bar.dart';
 
 List<PreferenceModel> _lastFetchedPreferences = [];
@@ -26,51 +28,64 @@ class Healpen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final healpenPageController =
-        ref.watch(HealpenController().preloadPageControllerProvider);
+        ref.watch(HealpenController().pageControllerProvider);
     final pages = HealpenController().pages;
-    return StreamBuilder(
-      stream: FirestorePreferencesController().getPreferences(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          List<PreferenceModel> currentPreferences = snapshot.data!;
-          if (_havePreferencesChanged(currentPreferences)) {
-            _updatePreferences(ref, currentPreferences);
-            _lastFetchedPreferences = currentPreferences;
-          }
-        }
+    final navigationSimpleUi = ref.watch(navigationSimpleUIProvider);
 
-        return KeyboardDetection(
-          controller: KeyboardDetectionController(
-            onChanged: (KeyboardState keyboardState) => ref
-                .read(WritingController().isKeyboardOpenProvider.notifier)
-                .state = [
-              KeyboardState.visibling,
-              KeyboardState.visible,
-            ].contains(keyboardState),
-          ),
-          child: BlueprintView(
-            padBodyHorizontally: false,
-            body: PreloadPageView.builder(
-              preloadPagesCount: pages.length,
-              itemCount: pages.length,
-              controller: healpenPageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (int value) {
-                _handlePageChange(ref, value);
-              },
-              itemBuilder: (context, index) {
-                final model = HealpenController().models.elementAt(index);
-                log(model.label, name: 'Healpen:PageView.builder:itemBuilder');
-                if ([
-                  PageController().history.label,
-                  PageController().insights.label
-                ].contains(model.label)) {}
-                return pages.elementAt(index);
-              },
-            ),
-            bottomNavigationBar: const HealpenNavigationBar(),
-          ),
-        );
+    // Move the logic that updates the state of your providers to didChangeDependencies
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateData(ref);
+    });
+    return KeyboardDetection(
+      controller: KeyboardDetectionController(
+        onChanged: (KeyboardState keyboardState) => ref
+            .read(WritingController().isKeyboardOpenProvider.notifier)
+            .state = [
+          KeyboardState.visibling,
+          KeyboardState.visible,
+        ].contains(keyboardState),
+      ),
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        child: navigationSimpleUi
+            ? const SimpleHomeView()
+            : BlueprintView(
+                padBodyHorizontally: false,
+                body: PageView.builder(
+                  itemCount: pages.length,
+                  controller: healpenPageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (int value) {
+                    _handlePageChange(ref, value);
+                  },
+                  itemBuilder: (BuildContext context, int index) =>
+                      pages.elementAt(index),
+                ),
+                bottomNavigationBar: const HealpenNavigationBar(),
+              ),
+      ),
+    );
+  }
+
+  void _updateData(WidgetRef ref) {
+    FirestorePreferencesController()
+        .getPreferences()
+        .listen((List<PreferenceModel> snapshot) {
+      List<PreferenceModel> currentPreferences = snapshot;
+      if (_havePreferencesChanged(currentPreferences)) {
+        _updatePreferences(ref, currentPreferences);
+        _lastFetchedPreferences = currentPreferences;
+      }
+    });
+
+    FirestoreService().analysisCollectionReference().snapshots().listen(
+      (QuerySnapshot<AnalysisModel> analysisSnapshot) {
+        ref.read(analysisModelSetProvider.notifier).addAll(analysisSnapshot.docs
+            .map(
+              (QueryDocumentSnapshot<AnalysisModel> element) => element.data(),
+            )
+            .toSet());
       },
     );
   }

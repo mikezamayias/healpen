@@ -35,7 +35,7 @@ class MonthCellTile extends ConsumerWidget {
         : context.theme.colorScheme.onSurface;
     final DateTime cellDate = cellDetails.date;
     final dateAnalysisModelList =
-        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+        ref.watch(analysisModelSetProvider).getAnalysisBetweenDates(
               start: cellDate.startOfDay(),
               end: cellDate.endOfDay(),
             );
@@ -46,7 +46,7 @@ class MonthCellTile extends ConsumerWidget {
     bool dateAfterTodayCheck = cellDate.isAfter(DateTime.now());
     bool dateBeforeFirstRecordCheck = cellDate.isBefore(
       ref
-          .watch(analysisModelListProvider)
+          .watch(analysisModelSetProvider)
           .first
           .timestamp
           .timestampToDateTime()
@@ -70,13 +70,13 @@ class MonthCellTile extends ConsumerWidget {
           color: shapeColor,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Gap(gap / 2),
             AnimatedContainer(
               duration: standardDuration,
               curve: standardCurve,
               alignment: Alignment.center,
+              padding: EdgeInsets.only(top: gap / 2),
               child: Text(
                 cellDate.day.toString(),
                 style: context.theme.textTheme.titleMedium!.copyWith(
@@ -94,9 +94,10 @@ class MonthCellTile extends ConsumerWidget {
                 ),
               ),
             ),
-            const Spacer(),
             if (dateAnalysisModelList.isNotEmpty)
-              Center(
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(bottom: gap),
                 child: ClipOval(
                   child: Container(
                     color: textColor,
@@ -118,7 +119,6 @@ class MonthCellTile extends ConsumerWidget {
                   ),
                 ),
               ),
-            Gap(gap),
           ],
         ),
       ),

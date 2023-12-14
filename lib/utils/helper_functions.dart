@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:preload_page_view/preload_page_view.dart';
 
 import '../enums/app_theming.dart';
 import '../themes/blueprint_theme.dart';
@@ -91,22 +90,16 @@ void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
   }
 }
 
-void animateToPage(dynamic pageController, int index) {
-  assert(
-    pageController is PreloadPageController || pageController is PageController,
-  );
-  pageController.animateToPage(
+void animateToPage(PageController controller, int index) {
+  controller.animateToPage(
     index,
     duration: standardDuration,
     curve: standardCurve,
   );
 }
 
-void goToPage(dynamic pageController, int index) {
-  assert(
-    pageController is PreloadPageController || pageController is PageController,
-  );
-  pageController.jumpToPage(
+void goToPage(PageController controller, int index) {
+  controller.jumpToPage(
     index,
   );
 }
@@ -189,11 +182,31 @@ Color getTextColorOnSentiment(ThemeData theme, dynamic sentiment) {
   )!;
 }
 
+/// Checks if the given [score] is close to the specified [value] within a certain deviation.
+///
+/// Returns `true` if the absolute difference between [score] and [value] is less than the deviation,
+/// otherwise returns `false`.
+///
+/// Example:
+/// ```dart
+/// double score = 3.5;
+/// double value = 3.6;
+/// bool isClose = scoreIsCloseToValue(score, value); // Returns true
+/// ```
+bool scoreIsCloseToValue(double score, double value) {
+  const deviation = 0.25;
+  return (score - value).abs() < deviation;
+}
+
 pushWithAnimation({
   required BuildContext context,
   required Widget widget,
   bool replacement = false,
+  required VoidCallback? dataCallback,
 }) {
+  if (dataCallback != null) {
+    dataCallback.call();
+  }
   final builder = PageRouteBuilder(
     transitionDuration: emphasizedDuration,
     reverseTransitionDuration: emphasizedDuration,
@@ -231,5 +244,28 @@ pushWithAnimation({
     context.navigator.pushReplacement(builder);
   } else {
     context.navigator.push(builder);
+  }
+}
+
+pushNamedWithAnimation({
+  required BuildContext context,
+  required String routeName,
+  bool replacement = false,
+  Object? arguments,
+  required VoidCallback? dataCallback,
+}) {
+  if (dataCallback != null) {
+    dataCallback.call();
+  }
+  if (replacement) {
+    context.navigator.pushReplacementNamed(
+      routeName,
+      arguments: arguments,
+    );
+  } else {
+    context.navigator.pushNamed(
+      routeName,
+      arguments: arguments,
+    );
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -11,6 +9,7 @@ import '../../../../models/settings/preference_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
+import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
 class ReorderInsightsTile extends ConsumerWidget {
@@ -67,7 +66,9 @@ class ReorderInsightsTile extends ConsumerWidget {
                 .map((InsightModel e) => e.title)
                 .toList(),
           );
-          log(preferenceModel.toString(), name: 'ReorderInsightsTile');
+          logger.i(
+            preferenceModel.toString(),
+          );
           await FirestorePreferencesController()
               .savePreference(preferenceModel);
         },

@@ -24,7 +24,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   Widget build(BuildContext context) {
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
-    final analysisModelList = ref.watch(analysisModelListProvider);
+    final analysisModelList = ref.watch(analysisModelSetProvider);
     final maxDate = DateTime.now();
     final minDate = analysisModelList.first.timestamp.timestampToDateTime();
     return Container(
@@ -78,7 +78,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
 
   // Utility method to create Appointments
   List<Appointment> _createAppointments(
-    List<AnalysisModel> noteModels,
+    Set<AnalysisModel> noteModels,
     BuildContext context,
   ) {
     return noteModels.map((noteModel) {

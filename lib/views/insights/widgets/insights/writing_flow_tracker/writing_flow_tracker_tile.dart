@@ -14,7 +14,7 @@ class WritingFlowTrackerTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(analysisModelListProvider).hourlyAnalysis();
+    final data = ref.watch(analysisModelSetProvider).hourlyAnalysis();
     return Padding(
       padding: ref.watch(navigationSmallerNavigationElementsProvider)
           ? EdgeInsets.zero

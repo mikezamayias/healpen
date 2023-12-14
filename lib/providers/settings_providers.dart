@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../controllers/analysis_view_controller.dart';
 import '../controllers/settings/preferences_controller.dart';
 import '../enums/app_theming.dart';
 
@@ -76,4 +77,17 @@ final navigationShowAppBarProvider = StateProvider<bool>(
 /// When set to false, the app will show larger navigation elements.
 final navigationSmallerNavigationElementsProvider = StateProvider<bool>(
   (ref) => PreferencesController.navigationSmallerNavigationElements.value,
+);
+
+/// Whether to show a simple UI in the app.
+/// When set to true, the app will show a simple UI.
+/// When set to false, the app will show a complex UI.
+final navigationSimpleUIProvider = StateProvider<bool>(
+  (ref) => PreferencesController.navigationSimpleUI.value,
+);
+
+final showAnalyzeButtonProvider = StateProvider<bool>(
+  (ref) =>
+      ref.watch(writingShowAnalyzeNotesButtonProvider) ||
+      ref.watch(analysisModelSetProvider).isEmpty,
 );

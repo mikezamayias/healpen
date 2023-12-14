@@ -5,13 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../../controllers/analysis_view_controller.dart';
+import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../../extensions/int_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
-import '../../../../../../models/note/note_model.dart';
 import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../route_controller.dart';
-import '../../../../../../services/firestore_service.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 
@@ -22,8 +21,8 @@ class BubbleChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<AnalysisModel> analysisModelList =
-        ref.watch(analysisModelListProvider);
+    final Set<AnalysisModel> analysisModelList =
+        ref.watch(analysisModelSetProvider);
     final monthSet = analysisModelList.getMonthsFromAnalysisModelList();
     return SfCartesianChart(
       margin: ref.watch(navigationSmallerNavigationElementsProvider)
@@ -56,7 +55,7 @@ class BubbleChart extends ConsumerWidget {
       ),
       series: <CartesianSeries>[
         BubbleSeries<AnalysisModel, DateTime>(
-          dataSource: analysisModelList,
+          dataSource: analysisModelList.toList(),
           xValueMapper: (AnalysisModel data, _) =>
               data.timestamp.timestampToDateTime(),
           yValueMapper: (AnalysisModel data, _) => data.duration,
@@ -78,22 +77,18 @@ class BubbleChart extends ConsumerWidget {
             ),
           ],
           onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
-            FirestoreService()
-                .getNoteAndAnalysis(analysisModelList
-                    .elementAt(pointInteractionDetails.pointIndex!)
-                    .timestamp)
-                .then(
-                  (
-                    ({AnalysisModel? analysis, NoteModel note}) data,
-                  ) =>
-                      context.navigator.pushNamed(
-                    RouterController.noteViewRoute.route,
-                    arguments: (
-                      noteModel: data.note,
-                      analysisModel: data.analysis,
-                    ),
-                  ),
-                );
+            final analysisModel = analysisModelList
+                .elementAt(pointInteractionDetails.pointIndex!);
+
+            pushNamedWithAnimation(
+              context: context,
+              routeName: RouterController.noteViewRoute.route,
+              arguments: (analysisModel: analysisModel),
+              dataCallback: () {
+                ref.read(EmotionalEchoController.scoreProvider.notifier).state =
+                    analysisModel.score;
+              },
+            );
           },
         ),
       ],

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -15,6 +13,7 @@ import '../providers/settings_providers.dart';
 import '../route_controller.dart';
 import '../utils/constants.dart';
 import '../utils/helper_functions.dart';
+import '../utils/logger.dart';
 import '../widgets/custom_list_tile.dart';
 
 class HealpenWrapper extends ConsumerStatefulWidget {
@@ -36,13 +35,11 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         } else {
           ref.read(isDeviceConnectedProvider.notifier).state = false;
         }
-        log(
+        logger.i(
           '$result',
-          name: 'InternetConnectionChecker',
         );
-        log(
+        logger.i(
           '${ref.read(isDeviceConnectedProvider.notifier).state}',
-          name: 'device is connected',
         );
       },
     );
@@ -58,9 +55,8 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
   @override
   void didChangePlatformBrightness() {
     if (ref.watch(themeAppearanceProvider) == ThemeAppearance.system) {
-      log(
+      logger.i(
         '${mediaQuery.platformBrightness}',
-        name: '_HealpenWrapperState:didChangePlatformBrightness',
       );
       // TODO: figure a way to change the colors of smooth dot indicator on
       //  system appearance change without restarting the app
@@ -119,13 +115,14 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           ref.watch(themeColorizeOnSentimentProvider)
               ? getShapeColorOnSentiment(
                   theme,
-                  ref.watch(analysisModelListProvider).averageScore(),
+                  ref.watch(analysisModelSetProvider).averageScore(),
                 )
               : ref.watch(themeColorProvider).color,
           brightness(ref.watch(themeAppearanceProvider)),
         ),
         initialRoute: RouterController.authWrapperRoute.route,
         routes: RouterController().routes,
+        onGenerateRoute: RouterController().onGenerateRoute,
       ),
     );
   }

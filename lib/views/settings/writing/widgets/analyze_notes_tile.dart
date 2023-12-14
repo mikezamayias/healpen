@@ -16,9 +16,13 @@ class AnalyzeNotesTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final enableInformatoryText = ref.watch(navigationShowInfoProvider);
     return CustomListTile(
-      cornerRadius: ref.watch(HealpenController().currentPageIndexProvider) == 0
-          ? radius - gap
-          : radius,
+      useSmallerNavigationSetting:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
+      enableSubtitleWrapper: true,
+      cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider) ||
+              ref.watch(HealpenController().currentPageIndexProvider) != 0
+          ? radius
+          : radius - gap,
       enableExplanationWrapper:
           ref.watch(HealpenController().currentPageIndexProvider) == 0
               ? false
@@ -28,7 +32,7 @@ class AnalyzeNotesTile extends ConsumerWidget {
           ? 'Update the analysis of all your notes.'
           : null,
       onTap: () async {
-        NoteAnalyzer.completed(ref);
+        NoteAnalyzer().analyzeNotes(ref);
         showHealpenDialog(
           context: context,
           doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),

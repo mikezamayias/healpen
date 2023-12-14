@@ -16,7 +16,7 @@ extension WidgetListExtensions on List<Widget> {
       .fade()
       .scale(begin: const Offset(0, 0))
       .slideX(
-        begin: -10,
+        begin: -radius,
         curve: standardEasing,
         duration: standardDuration,
       );
@@ -52,10 +52,5 @@ extension WidgetExtensions on Widget {
         curve: standardEasing,
         begin: -.3,
         end: 0,
-      );
-
-  Widget animateBody() => animate().fade(
-        duration: emphasizedDuration,
-        curve: emphasizedCurve,
       );
 }

@@ -26,7 +26,7 @@ class MonthLineChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dateAnalysisModelList =
-        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+        ref.watch(analysisModelSetProvider).getAnalysisBetweenDates(
               start: month.startOfMonth(),
               end: month.endOfMonth(),
             );

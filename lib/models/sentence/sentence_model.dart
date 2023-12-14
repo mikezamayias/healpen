@@ -1,7 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../../utils/helper_functions.dart';
-
 part 'sentence_model.g.dart';
 
 @JsonSerializable()
@@ -9,21 +7,18 @@ class SentenceModel {
   String content;
   double score;
   double magnitude;
-  double? sentiment;
   int? wordCount;
 
   SentenceModel({
     this.content = '',
     this.score = 0,
     this.magnitude = 0,
-    double? sentiment,
     int? wordCount,
-  })  : wordCount = content
+  }) : wordCount = content
             .toString()
             .split(RegExp(r'\s+'))
             .where((s) => RegExp(r'[a-zA-Z]').hasMatch(s))
-            .length,
-        sentiment = combinedSentimentValue(magnitude, score);
+            .length;
 
   factory SentenceModel.fromJson(Map<String, dynamic> json) =>
       _$SentenceModelFromJson(json);
@@ -34,7 +29,7 @@ class SentenceModel {
   String toString() {
     return 'SentenceModel('
         'content: $content, score: $score, magnitude: $magnitude, '
-        'sentiment: $sentiment, wordCount: $wordCount'
+        'wordCount: $wordCount'
         ')';
   }
 
@@ -44,7 +39,6 @@ class SentenceModel {
     String? content,
     double? score,
     double? magnitude,
-    double? sentiment,
     String? language,
     List<SentenceModel>? sentences,
   }) {
@@ -52,8 +46,26 @@ class SentenceModel {
       content: content ?? this.content,
       score: score ?? this.score,
       magnitude: magnitude ?? this.magnitude,
-      sentiment: sentiment ?? this.sentiment,
       wordCount: wordCount ?? this.wordCount,
     );
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is SentenceModel &&
+        other.content == content &&
+        other.score == score &&
+        other.magnitude == magnitude &&
+        other.wordCount == wordCount;
+  }
+
+  @override
+  int get hashCode {
+    return content.hashCode ^
+        score.hashCode ^
+        magnitude.hashCode ^
+        wordCount.hashCode;
   }
 }

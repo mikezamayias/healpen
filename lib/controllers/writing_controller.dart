@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +6,7 @@ import 'package:googleapis/language/v1.dart';
 
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
+import '../utils/logger.dart';
 import 'note_analyzer.dart';
 
 int timeWindow = 3;
@@ -81,16 +81,14 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   void _logInput() {
-    log(
+    logger.i(
       '$state',
-      name: '_logInput():state',
     );
   }
 
   Future<void> handleSaveNote() async {
-    log(
+    logger.i(
       'Saved entry: $state',
-      name: 'handleSaveNote()',
     );
     _stopwatch.reset();
     _stopwatch.stop();
@@ -102,10 +100,9 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
-    final dataToSabe = state;
-    FirestoreService().saveNote(dataToSabe);
+    FirestoreService().saveNote(state);
     FirestoreService()
-        .saveAnalysis(await NoteAnalyzer.createNoteAnalysis(dataToSabe));
+        .saveAnalysis(await NoteAnalyzer().createNoteAnalysis(state));
     resetNote();
     textController.clear();
   }
@@ -154,9 +151,8 @@ class WritingController extends StateNotifier<NoteModel> {
   // }
 
   // static Future<void> updateAllUserNotes() async {
-  //   log(
+  //   logger.i(
   //     'Updating all user notes',
-  //     name: 'WritingController:updateAllUserNotes()',
   //   );
   //   QuerySnapshot<Map<String, dynamic>> collection =
   //       await FirestoreService().writingCollectionReference()

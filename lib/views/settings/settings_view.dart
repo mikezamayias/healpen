@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart'
     hide AppBar, ListTile, Feedback, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/page_controller.dart';
@@ -93,22 +94,44 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
               .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         ],
       ),
-      body: ClipRRect(
-        borderRadius: BorderRadius.circular(radius),
-        child: SingleChildScrollView(
-          child: Wrap(
-            spacing: gap,
-            runSpacing: gap,
-            children: [
-              for (({
-                String title,
-                String description,
-                IconData iconData,
-                Widget widget,
-              }) element in pageWidgets)
-                if (element.widget is! Placeholder) _settingButton(element),
-            ],
-          ),
+      body: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        padding: EdgeInsets.all(gap),
+        decoration: ref.watch(navigationSmallerNavigationElementsProvider)
+            ? BoxDecoration(
+                color: context.theme.colorScheme.surface,
+                borderRadius: BorderRadius.all(Radius.circular(radius)),
+              )
+            : BoxDecoration(
+                color: context.theme.colorScheme.surfaceVariant,
+                borderRadius: BorderRadius.all(Radius.circular(radius)),
+              ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(radius - gap),
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: gap,
+                    runSpacing: gap,
+                    children: [
+                      for (({
+                        String title,
+                        String description,
+                        IconData iconData,
+                        Widget widget,
+                      }) element in pageWidgets)
+                        if (element.widget is! Placeholder)
+                          _settingButton(element),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -121,21 +144,24 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         IconData iconData,
         Widget widget,
       }) element) {
-    final enableInformatoryText = ref.watch(navigationShowInfoProvider);
-
     return CustomListTile(
-      responsiveWidth: true,
+      responsiveWidth: !ref.watch(navigationShowInfoProvider),
       useSmallerNavigationSetting: false,
-      cornerRadius: radius,
+      cornerRadius: radius - gap,
       contentPadding: EdgeInsets.symmetric(
         horizontal: 2 * gap,
         vertical: gap,
       ),
       leadingIconData: element.iconData,
       titleString: element.title,
-      explanationString: enableInformatoryText ? element.description : null,
+      explanationString:
+          ref.watch(navigationShowInfoProvider) ? element.description : null,
       onTap: () {
-        pushWithAnimation(context: context, widget: element.widget);
+        pushWithAnimation(
+          context: context,
+          widget: element.widget,
+          dataCallback: null,
+        );
       },
     );
   }

@@ -60,7 +60,7 @@ class DeleteAccountTile extends StatelessWidget {
         // log('$user', name: 'Deleting user');
         // user.delete().onError(
         //   (error, stackTrace) {
-        //     log('$error', name: 'Error deleting user');
+        //     logger.i('$error', name: 'Error deleting user');
         //     showDialog(
         //       context: context,
         //       builder: (BuildContext context) {

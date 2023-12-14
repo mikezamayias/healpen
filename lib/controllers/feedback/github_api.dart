@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:github/github.dart';
 
+import '../../utils/logger.dart';
 import 'feedback.dart';
 
 class GitHubAPI {
@@ -17,9 +16,8 @@ class GitHubAPI {
     String? screenshotUrl,
     List<String> labels,
   ) async {
-    log(
+    logger.i(
       '$screenshotUrl',
-      name: 'GitHubAPI:createIssue:screenshotUrl',
     );
     final github = GitHub(auth: Authentication.withToken(token));
     final repoSlug = RepositorySlug(owner, repo);

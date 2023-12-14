@@ -22,17 +22,17 @@ class OnboardingController {
       description: 'Enhance Your Well-being',
       imagePath: 'assets/images/onboarding/welcome.svg',
     ),
-    // Insights
-    OnboardingModel(
-      title: 'Gain Insights',
-      description: 'Deepen your self-reflection',
-      imagePath: 'assets/images/onboarding/insights.svg',
-    ),
     // Journal
     OnboardingModel(
       title: 'Explore Your Journal',
       description: 'Observe your mood evolve',
       imagePath: 'assets/images/onboarding/journal.svg',
+    ),
+    // Insights
+    OnboardingModel(
+      title: 'Gain Insights',
+      description: 'Deepen your self-reflection',
+      imagePath: 'assets/images/onboarding/insights.svg',
     ),
     // Begin
     OnboardingModel(

@@ -8,6 +8,15 @@ enum AnalysisProgress {
   completed,
 }
 
-final analysisModelListProvider = StateProvider<List<AnalysisModel>>(
-  (ref) => <AnalysisModel>[],
+final analysisModelSetProvider =
+    StateNotifierProvider<AnalysisModelList, Set<AnalysisModel>>(
+  (ref) => AnalysisModelList(),
 );
+
+class AnalysisModelList extends StateNotifier<Set<AnalysisModel>> {
+  AnalysisModelList() : super(<AnalysisModel>{});
+
+  void addAll(Set<AnalysisModel> models) {
+    state = {...state, ...models};
+  }
+}
