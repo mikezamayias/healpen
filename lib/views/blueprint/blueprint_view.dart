@@ -43,32 +43,30 @@ class BlueprintView extends ConsumerWidget {
             (smallNavigationElements
                 ? context.theme.colorScheme.surfaceVariant
                 : context.theme.colorScheme.surface),
-        child: SafeArea(
-          child: GestureDetector(
-            onTap: () => context.focusScope.unfocus(),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: padBodyHorizontally! ? gap : 0,
-              ),
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                appBar: showAppBarSetting! && appBar != null
-                    ? PreferredSize(
-                        preferredSize: Size.fromHeight(
-                          smallNavigationElements ? 12.h : 18.h,
-                        ),
-                        child: appBar!.animateAppBar(),
-                      )
-                    : null,
-                body: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(
-                    scrollbars: false,
-                    overscroll: false,
-                  ),
-                  child: body,
+        child: GestureDetector(
+          onTap: () => context.focusScope.unfocus(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: padBodyHorizontally! ? gap : 0,
+            ),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: showAppBarSetting! && appBar != null
+                  ? PreferredSize(
+                      preferredSize: Size.fromHeight(
+                        smallNavigationElements ? 12.h : 18.h,
+                      ),
+                      child: appBar!.animateAppBar(),
+                    )
+                  : null,
+              body: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(
+                  scrollbars: false,
+                  overscroll: false,
                 ),
-                bottomNavigationBar: bottomNavigationBar,
+                child: body,
               ),
+              bottomNavigationBar: bottomNavigationBar,
             ),
           ),
         ),
