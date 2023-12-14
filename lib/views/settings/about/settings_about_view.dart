@@ -2,8 +2,11 @@ import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../utils/constants.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
+import '../../simple/simple_blueprint_view.dart';
+import '../../simple/widgets/simple_app_bar.dart';
 import 'widgets/author_tile.dart';
 import 'widgets/open_source_licenses_tile.dart';
 import 'widgets/privacy_policy_tile.dart';
@@ -21,21 +24,10 @@ class SettingsAboutView extends ConsumerWidget {
       const PrivacyPolicyTile(),
       const OpenSourceLicensesTile(),
     ];
-
-    return BlueprintView(
-      showAppBar: true,
-      appBar: const AppBar(
-        automaticallyImplyLeading: true,
-        pathNames: [
-          'Settings',
-          'About',
-        ],
-      ),
-      body: Wrap(
-        spacing: gap,
-        runSpacing: gap,
-        children: pageWidgets,
-      ),
+    Widget body = Wrap(
+      spacing: gap,
+      runSpacing: gap,
+      children: pageWidgets,
     );
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(

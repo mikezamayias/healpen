@@ -13,6 +13,8 @@ import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/loading_tile.dart';
 import '../../blueprint/blueprint_view.dart';
+import '../../simple/simple_blueprint_view.dart';
+import '../../simple/widgets/simple_app_bar.dart';
 import 'widgets/license_item_view.dart';
 
 class SettingsLicensesView extends ConsumerWidget {
@@ -20,90 +22,81 @@ class SettingsLicensesView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BlueprintView(
-      appBar: const AppBar(
-        automaticallyImplyLeading: true,
-        pathNames: [
-          'Settings',
-          'About',
-          'Open Source Licenses',
-        ],
-      ),
-      body: CustomLicensePage(
-        builder: (context, licenceData) {
-          if (licenceData.hasData) {
-            List<LicenceModel> licences = [
-              ...licenceData.data!.packages.map(
-                (e) => LicenceModel(
-                  packageName: e,
-                  licenceParagraphs: [
-                    for (int i in licenceData.data!.packageLicenseBindings[e]!)
-                      licenceData.data!.licenses
-                          .elementAt(i)
-                          .paragraphs
-                          .map((e) => e.text)
-                          .join(' ')
-                  ],
-                ),
+    Widget body = CustomLicensePage(
+      builder: (context, licenceData) {
+        if (licenceData.hasData) {
+          List<LicenceModel> licences = [
+            ...licenceData.data!.packages.map(
+              (e) => LicenceModel(
+                packageName: e,
+                licenceParagraphs: [
+                  for (int i in licenceData.data!.packageLicenseBindings[e]!)
+                    licenceData.data!.licenses
+                        .elementAt(i)
+                        .paragraphs
+                        .map((e) => e.text)
+                        .join(' ')
+                ],
               ),
-            ];
-            licences.insert(
-              0,
-              licences.removeAt(licences.indexWhere(
-                (LicenceModel element) => element.packageName == 'healpen',
-              )),
-            );
-            List<Widget> licenceTiles = [
-              ...licences.map(
-                (LicenceModel licence) {
-                  return CustomListTile(
-                    useSmallerNavigationSetting:
-                        !ref.watch(navigationSmallerNavigationElementsProvider),
-                    enableExplanationWrapper:
-                        !ref.watch(navigationSmallerNavigationElementsProvider),
-                    responsiveWidth: true,
-                    leadingIconData: licence.packageName == 'healpen'
-                        ? FontAwesomeIcons.solidHeart
-                        : null,
-                    titleString: licence.packageName,
-                    onTap: () {
-                      logger.i(
-                        licence.toString(),
-                      );
-                      pushWithAnimation(
-                        context: context,
-                        widget: LicenseItemView(licenceModel: licence),
-                      );
-                    },
-                  );
-                },
-              )
-            ].animateLicenses();
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(radius),
-              child: SingleChildScrollView(
-                child: Wrap(
-                  spacing: gap,
-                  runSpacing: gap,
-                  children: licenceTiles,
-                ),
+            ),
+          ];
+          licences.insert(
+            0,
+            licences.removeAt(licences.indexWhere(
+              (LicenceModel element) => element.packageName == 'healpen',
+            )),
+          );
+          List<Widget> licenceTiles = [
+            ...licences.map(
+              (LicenceModel licence) {
+                return CustomListTile(
+                  useSmallerNavigationSetting:
+                      !ref.watch(navigationSmallerNavigationElementsProvider),
+                  enableExplanationWrapper:
+                      !ref.watch(navigationSmallerNavigationElementsProvider),
+                  responsiveWidth: true,
+                  leadingIconData: licence.packageName == 'healpen'
+                      ? FontAwesomeIcons.solidHeart
+                      : null,
+                  titleString: licence.packageName,
+                  onTap: () {
+                    logger.i(
+                      licence.toString(),
+                    );
+                    pushWithAnimation(
+                      context: context,
+                      widget: LicenseItemView(licenceModel: licence),
+                      dataCallback: null,
+                    );
+                  },
+                );
+              },
+            )
+          ].animateLicenses();
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(radius),
+            child: SingleChildScrollView(
+              child: Wrap(
+                spacing: gap,
+                runSpacing: gap,
+                children: licenceTiles,
               ),
-            );
-          } else if (licenceData.hasError) {
-            //   display error
-            return CustomListTile(
-              leadingIconData: Icons.error,
-              titleString: 'Error',
-              subtitleString: licenceData.error.toString(),
-            ).animateSlideInFromLeft();
-          } else {
-            //   display loading
-            return const LoadingTile(
-              durationTitle: 'Loading licences...',
-            ).animateSlideInFromLeft();
-          }
-        },
-      ),
+            ),
+          );
+        } else if (licenceData.hasError) {
+          //   display error
+          return CustomListTile(
+            leadingIconData: Icons.error,
+            titleString: 'Error',
+            subtitleString: licenceData.error.toString(),
+          ).animateSlideInFromLeft();
+        } else {
+          //   display loading
+          return const LoadingTile(
+            durationTitle: 'Loading licences...',
+          ).animateSlideInFromLeft();
+        }
+      },
     );
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(
