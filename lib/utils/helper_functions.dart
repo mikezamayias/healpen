@@ -182,8 +182,19 @@ Color getTextColorOnSentiment(ThemeData theme, dynamic sentiment) {
   )!;
 }
 
+/// Checks if the given [score] is close to the specified [value] within a certain deviation.
+///
+/// Returns `true` if the absolute difference between [score] and [value] is less than the deviation,
+/// otherwise returns `false`.
+///
+/// Example:
+/// ```dart
+/// double score = 3.5;
+/// double value = 3.6;
+/// bool isClose = scoreIsCloseToValue(score, value); // Returns true
+/// ```
 bool scoreIsCloseToValue(double score, double value) {
-  const deviation = 0.1;
+  const deviation = 0.25;
   return (score - value).abs() < deviation;
 }
 
