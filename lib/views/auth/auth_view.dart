@@ -39,6 +39,7 @@ class _AuthViewState extends ConsumerState<AuthView> {
             context: context,
             widget: page_controller.PageController().authWrapper.widget,
             replacement: true,
+            dataCallback: null,
           );
         }
       },
@@ -90,14 +91,17 @@ class _AuthViewState extends ConsumerState<AuthView> {
   }
 
   void goBack() {
-    ref.read(OnboardingController().pageControllerProvider.notifier).state =
-        PageController();
-    ref.read(OnboardingController().currentPageIndexProvider.notifier).state =
-        0;
     pushWithAnimation(
       context: context,
       widget: const OnboardingView(),
       replacement: true,
+      dataCallback: () {
+        ref.read(OnboardingController().pageControllerProvider.notifier).state =
+            PageController();
+        ref
+            .read(OnboardingController().currentPageIndexProvider.notifier)
+            .state = 0;
+      },
     );
   }
 }

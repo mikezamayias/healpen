@@ -25,6 +25,7 @@ class OpenSourceLicensesTile extends ConsumerWidget {
         pushWithAnimation(
           context: context,
           widget: const SettingsLicensesView(),
+          dataCallback: null,
         );
       },
     );

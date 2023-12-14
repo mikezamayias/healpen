@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../../controllers/analysis_view_controller.dart';
+import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../../extensions/int_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
@@ -21,7 +22,7 @@ class BubbleChart extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final Set<AnalysisModel> analysisModelList =
-        ref.watch(analysisModelListProvider);
+        ref.watch(analysisModelSetProvider);
     final monthSet = analysisModelList.getMonthsFromAnalysisModelList();
     return SfCartesianChart(
       margin: ref.watch(navigationSmallerNavigationElementsProvider)
@@ -78,9 +79,15 @@ class BubbleChart extends ConsumerWidget {
           onPointDoubleTap: (ChartPointDetails pointInteractionDetails) {
             final analysisModel = analysisModelList
                 .elementAt(pointInteractionDetails.pointIndex!);
-            context.navigator.pushNamed(
-              RouterController.noteViewRoute.route,
+
+            pushNamedWithAnimation(
+              context: context,
+              routeName: RouterController.noteViewRoute.route,
               arguments: (analysisModel: analysisModel),
+              dataCallback: () {
+                ref.read(EmotionalEchoController.scoreProvider.notifier).state =
+                    analysisModel.score;
+              },
             );
           },
         ),

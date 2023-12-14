@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
+import '../../../controllers/emotional_echo_controller.dart';
 import '../../../controllers/history_view_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
@@ -109,9 +110,15 @@ class NoteTile extends ConsumerWidget {
               maxLines: 3,
             ),
             onTap: () {
-              context.navigator.pushNamed(
-                RouterController.noteViewRoute.route,
+              pushNamedWithAnimation(
+                context: context,
+                routeName: RouterController.noteViewRoute.route,
                 arguments: (analysisModel: analysisModel),
+                dataCallback: () {
+                  ref
+                      .read(EmotionalEchoController.scoreProvider.notifier)
+                      .state = analysisModel.score;
+                },
               );
             },
           ),

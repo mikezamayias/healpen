@@ -157,7 +157,11 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
       explanationString:
           ref.watch(navigationShowInfoProvider) ? element.description : null,
       onTap: () {
-        pushWithAnimation(context: context, widget: element.widget);
+        pushWithAnimation(
+          context: context,
+          widget: element.widget,
+          dataCallback: null,
+        );
       },
     );
   }
