@@ -8,7 +8,7 @@ enum AnalysisProgress {
   completed,
 }
 
-final analysisModelListProvider =
+final analysisModelSetProvider =
     StateNotifierProvider<AnalysisModelList, Set<AnalysisModel>>(
   (ref) => AnalysisModelList(),
 );
