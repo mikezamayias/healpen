@@ -16,7 +16,7 @@ extension WidgetListExtensions on List<Widget> {
       .fade()
       .scale(begin: const Offset(0, 0))
       .slideX(
-        begin: -10,
+        begin: -radius,
         curve: standardEasing,
         duration: standardDuration,
       );
