@@ -14,11 +14,11 @@ import 'models/insight_model.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'services/firestore_service.dart';
+import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'views/blueprint/blueprint_view.dart';
-import 'views/simple_ui/simple_ui_view.dart';
+import 'views/simple/views/simple_home_view.dart';
 import 'widgets/healpen_navigation_bar.dart';
-import 'wrappers/keep_alive_wrapper.dart';
 
 List<PreferenceModel> _lastFetchedPreferences = [];
 
@@ -45,9 +45,11 @@ class Healpen extends ConsumerWidget {
           KeyboardState.visible,
         ].contains(keyboardState),
       ),
-      child: KeepAliveWrapper(
-        child: false
-            ? const SimpleUIView()
+      child: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        child: navigationSimpleUi
+            ? const SimpleHomeView()
             : BlueprintView(
                 padBodyHorizontally: false,
                 body: PageView.builder(
@@ -79,14 +81,11 @@ class Healpen extends ConsumerWidget {
 
     FirestoreService().analysisCollectionReference().snapshots().listen(
       (QuerySnapshot<AnalysisModel> analysisSnapshot) {
-        ref
-            .read(analysisModelListProvider.notifier)
-            .addAll(analysisSnapshot.docs
-                .map(
-                  (QueryDocumentSnapshot<AnalysisModel> element) =>
-                      element.data(),
-                )
-                .toSet());
+        ref.read(analysisModelSetProvider.notifier).addAll(analysisSnapshot.docs
+            .map(
+              (QueryDocumentSnapshot<AnalysisModel> element) => element.data(),
+            )
+            .toSet());
       },
     );
   }
