@@ -89,5 +89,5 @@ final navigationSimpleUIProvider = StateProvider<bool>(
 final showAnalyzeButtonProvider = StateProvider<bool>(
   (ref) =>
       ref.watch(writingShowAnalyzeNotesButtonProvider) ||
-      ref.watch(analysisModelListProvider).isEmpty,
+      ref.watch(analysisModelSetProvider).isEmpty,
 );
