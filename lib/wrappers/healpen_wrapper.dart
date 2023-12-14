@@ -115,13 +115,14 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
           ref.watch(themeColorizeOnSentimentProvider)
               ? getShapeColorOnSentiment(
                   theme,
-                  ref.watch(analysisModelListProvider).averageScore(),
+                  ref.watch(analysisModelSetProvider).averageScore(),
                 )
               : ref.watch(themeColorProvider).color,
           brightness(ref.watch(themeAppearanceProvider)),
         ),
         initialRoute: RouterController.authWrapperRoute.route,
         routes: RouterController().routes,
+        onGenerateRoute: RouterController().onGenerateRoute,
       ),
     );
   }
