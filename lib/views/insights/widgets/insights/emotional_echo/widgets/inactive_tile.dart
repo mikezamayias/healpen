@@ -7,23 +7,14 @@ import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 
-class EmotionalEchoInactiveTile extends ConsumerStatefulWidget {
-  const EmotionalEchoInactiveTile({
-    super.key,
-    this.child,
-  });
-
-  final Widget? child;
+class EmotionalEchoInactiveTile extends ConsumerWidget {
+  const EmotionalEchoInactiveTile({super.key});
 
   @override
-  ConsumerState<EmotionalEchoInactiveTile> createState() =>
-      _EmotionalEchoInactiveTileState();
-}
-
-class _EmotionalEchoInactiveTileState
-    extends ConsumerState<EmotionalEchoInactiveTile> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    double sentiment = ref.watch(EmotionalEchoController.scoreProvider);
+    Color shapeColor = getShapeColorOnSentiment(context.theme, sentiment);
+    Color textColor = getTextColorOnSentiment(context.theme, sentiment);
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
@@ -38,7 +29,7 @@ class _EmotionalEchoInactiveTileState
               (child) {
                 if (child is Shape) {
                   final Shape shape = child;
-                  shape.fills.first.paint.color = backgroundColor.withOpacity(
+                  shape.fills.first.paint.color = shapeColor.withOpacity(
                     shape.fills.first.paint.color.opacity,
                   );
                 }
@@ -48,48 +39,32 @@ class _EmotionalEchoInactiveTileState
         ),
         Align(
           alignment: Alignment.center,
-          child: widget.child ??
-              TweenAnimationBuilder<double>(
-                tween: Tween<double>(
-                  begin: ref.watch(EmotionalEchoController.isPressedProvider)
-                      ? 1
-                      : 0,
-                  end: ref.watch(EmotionalEchoController.isPressedProvider)
-                      ? 0
-                      : 1,
-                ),
-                duration: emphasizedDuration,
-                curve: emphasizedCurve,
-                builder: (BuildContext context, double value, Widget? child) {
-                  return Transform.scale(
-                    scale: value,
-                    child: Opacity(
-                      opacity: value,
-                      child: Text(
-                        getSentimentLabel(score).split(' ').join('\n'),
-                        textAlign: TextAlign.center,
-                        style: context.theme.textTheme.titleLarge!.copyWith(
-                          color: onBackgroundColor,
-                        ),
-                      ),
+          child: TweenAnimationBuilder<double>(
+            tween: Tween<double>(
+              begin:
+                  ref.watch(EmotionalEchoController.isPressedProvider) ? 1 : 0,
+              end: ref.watch(EmotionalEchoController.isPressedProvider) ? 0 : 1,
+            ),
+            duration: emphasizedDuration,
+            curve: emphasizedCurve,
+            builder: (BuildContext context, double value, Widget? child) {
+              return Transform.scale(
+                scale: value,
+                child: Opacity(
+                  opacity: value,
+                  child: Text(
+                    getSentimentLabel(sentiment).split(' ').join('\n'),
+                    textAlign: TextAlign.center,
+                    style: context.theme.textTheme.titleLarge!.copyWith(
+                      color: textColor,
                     ),
-                  );
-                },
-              ),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ],
     );
   }
-
-  double get score => ref.watch(EmotionalEchoController.scoreProvider);
-
-  Color get shapeColor => getShapeColorOnSentiment(context.theme, score);
-
-  Color get textColor => getTextColorOnSentiment(context.theme, score);
-
-  Color get backgroundColor =>
-      context.mediaQuery.platformBrightness.isLight ? shapeColor : textColor;
-
-  Color get onBackgroundColor =>
-      context.mediaQuery.platformBrightness.isLight ? textColor : shapeColor;
 }
