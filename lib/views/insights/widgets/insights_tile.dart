@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
@@ -6,8 +5,6 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
-import '../../../controllers/analysis_view_controller.dart';
-import '../../../controllers/emotional_echo_controller.dart';
 import '../../../controllers/insights_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -43,8 +40,6 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
     final insightsContoller = ref.watch(insightsControllerProvider);
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
-    ref.watch(emotionalEchoControllerProvider).sentimentScore =
-        ref.watch(analysisModelListProvider).map((e) => e.score).average;
     List<Widget> insightWidgets = [];
     insightWidgets = insightsContoller.insightModelList
         .map((e) => smallNavigationElements
