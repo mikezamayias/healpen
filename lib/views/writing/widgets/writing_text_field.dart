@@ -13,10 +13,11 @@ class WritingTextField extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
+    final simpleUi = ref.watch(navigationSimpleUIProvider);
     return AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
-      decoration: smallNavigationElements
+      decoration: smallNavigationElements || simpleUi
           ? BoxDecoration(
               color: context.theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(radius),
@@ -25,7 +26,7 @@ class WritingTextField extends ConsumerWidget {
               color: context.theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(radius - gap),
             ),
-      padding: EdgeInsets.all(gap),
+      padding: simpleUi ? EdgeInsets.zero : EdgeInsets.all(gap),
       child: TextField(
         controller: ref.read(writingControllerProvider.notifier).textController,
         onChanged:
@@ -38,10 +39,12 @@ class WritingTextField extends ConsumerWidget {
           overflow: TextOverflow.visible,
         ),
         decoration: InputDecoration(
-          // TODO: hint text should be affected from previous writing entries
-          hintText: 'Express your feelings and thoughts',
+          hintText: "Write a few words about your day or something that's "
+              'bothering you, aim for about 15 minutes of writing.\n\n'
+              "What's on your mind?",
           hintStyle: context.theme.textTheme.titleLarge!.copyWith(
             overflow: TextOverflow.visible,
+            color: context.theme.colorScheme.onSurface.withOpacity(0.6),
           ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.zero,

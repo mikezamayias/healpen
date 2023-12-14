@@ -72,7 +72,7 @@ class WritingView extends ConsumerWidget {
                   ],
                 ),
               ),
-              if (ref.watch(analysisModelListProvider).isEmpty)
+              if (ref.watch(analysisModelSetProvider).isEmpty)
                 Padding(
                   padding: EdgeInsets.only(top: gap),
                   child: const AnalyzeNotesTile(),

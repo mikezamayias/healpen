@@ -16,7 +16,7 @@ class MoodJourneyTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final monthSet =
-        ref.watch(analysisModelListProvider).getMonthsFromAnalysisModelList();
+        ref.watch(analysisModelSetProvider).getMonthsFromAnalysisModelList();
     return Padding(
       padding: ref.watch(navigationSmallerNavigationElementsProvider)
           ? EdgeInsets.zero

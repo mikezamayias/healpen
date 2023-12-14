@@ -17,7 +17,8 @@ class StopwatchTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
       useSmallerNavigationSetting: false,
-      cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider)
+      cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider) ||
+              ref.watch(navigationSimpleUIProvider)
           ? radius
           : radius - gap,
       backgroundColor: context.theme.colorScheme.surface,

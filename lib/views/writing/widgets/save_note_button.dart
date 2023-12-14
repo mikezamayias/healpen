@@ -20,7 +20,8 @@ class SaveNoteButton extends ConsumerWidget {
     final writingController = ref.watch(writingControllerProvider.notifier);
     return CustomListTile(
       useSmallerNavigationSetting: false,
-      cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider)
+      cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider) ||
+              ref.watch(navigationSimpleUIProvider)
           ? radius
           : radius - gap,
       leadingIconData: FontAwesomeIcons.solidFloppyDisk,

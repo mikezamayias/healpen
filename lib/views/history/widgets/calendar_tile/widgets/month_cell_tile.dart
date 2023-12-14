@@ -35,7 +35,7 @@ class MonthCellTile extends ConsumerWidget {
         : context.theme.colorScheme.onSurface;
     final DateTime cellDate = cellDetails.date;
     final dateAnalysisModelList =
-        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+        ref.watch(analysisModelSetProvider).getAnalysisBetweenDates(
               start: cellDate.startOfDay(),
               end: cellDate.endOfDay(),
             );
@@ -46,7 +46,7 @@ class MonthCellTile extends ConsumerWidget {
     bool dateAfterTodayCheck = cellDate.isAfter(DateTime.now());
     bool dateBeforeFirstRecordCheck = cellDate.isBefore(
       ref
-          .watch(analysisModelListProvider)
+          .watch(analysisModelSetProvider)
           .first
           .timestamp
           .timestampToDateTime()

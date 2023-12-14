@@ -24,7 +24,7 @@ class HistoryView extends ConsumerWidget {
               .titleGenerator(FirebaseAuth.instance.currentUser?.displayName),
         ],
       ),
-      body: (ref.watch(analysisModelListProvider).isEmpty)
+      body: (ref.watch(analysisModelSetProvider).isEmpty)
           ? const NoAnalysisFoundTile()
           : const CalendarTile(),
     );

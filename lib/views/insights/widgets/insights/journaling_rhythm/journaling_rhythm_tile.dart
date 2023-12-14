@@ -15,7 +15,7 @@ class JournalingRhythmTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final analysisModelList = ref.watch(analysisModelListProvider);
+    final analysisModelList = ref.watch(analysisModelSetProvider);
     Set<DateTime> weekSet = analysisModelList.getWeeksFromAnalysisModelList();
     return Padding(
       padding: ref.watch(navigationSmallerNavigationElementsProvider)

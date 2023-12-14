@@ -24,7 +24,7 @@ class DateDialog extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisModelList =
-        ref.watch(analysisModelListProvider).getAnalysisBetweenDates(
+        ref.watch(analysisModelSetProvider).getAnalysisBetweenDates(
               start: date.startOfDay(),
               end: date.endOfDay(),
             );
