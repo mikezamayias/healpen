@@ -191,7 +191,11 @@ pushWithAnimation({
   required BuildContext context,
   required Widget widget,
   bool replacement = false,
+  required VoidCallback? dataCallback,
 }) {
+  if (dataCallback != null) {
+    dataCallback.call();
+  }
   final builder = PageRouteBuilder(
     transitionDuration: emphasizedDuration,
     reverseTransitionDuration: emphasizedDuration,
