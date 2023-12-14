@@ -12,8 +12,7 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double sentiment =
-        ref.watch(emotionalEchoControllerProvider).sentimentScore;
+    double sentiment = ref.watch(EmotionalEchoController.scoreProvider);
     Color shapeColor = getShapeColorOnSentiment(context.theme, sentiment);
     Color textColor = getTextColorOnSentiment(context.theme, sentiment);
     return Stack(
