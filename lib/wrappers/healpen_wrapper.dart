@@ -1,4 +1,5 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -109,6 +110,7 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         debugShowCheckedModeBanner: false,
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
+          FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance)
         ],
         themeMode: themeMode(ref.watch(themeAppearanceProvider)),
         theme: createTheme(
