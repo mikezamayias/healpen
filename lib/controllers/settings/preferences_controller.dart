@@ -18,6 +18,10 @@ class PreferencesController {
   PreferencesController._();
 
   /// Preference models
+  static final accountAnalyticsEnabled = PreferenceModel<bool>(
+    'analyticsEnabled',
+    false,
+  );
   static final shakePrivateNoteInfo = PreferenceModel<bool>(
     'shakePrivateNoteInfo',
     true,
@@ -82,6 +86,10 @@ class PreferencesController {
   List<({PreferenceModel preferenceModel, StateProvider provider})>
       preferences = [
     (
+      preferenceModel: accountAnalyticsEnabled,
+      provider: accountAnalyticsEnabledProvider,
+    ),
+    (
       preferenceModel: shakePrivateNoteInfo,
       provider: shakePrivateNoteInfoProvider
     ),
@@ -126,6 +134,6 @@ class PreferencesController {
     (
       preferenceModel: insightOrder,
       provider: insightsControllerProvider,
-    )
+    ),
   ];
 }

@@ -91,3 +91,10 @@ final showAnalyzeButtonProvider = StateProvider<bool>(
       ref.watch(writingShowAnalyzeNotesButtonProvider) ||
       ref.watch(analysisModelSetProvider).isEmpty,
 );
+
+/// Whether analytics is enabled in the app.
+/// When set to true, analytics will be enabled.
+/// When set to false, analytics will be disabled.
+final accountAnalyticsEnabledProvider = StateProvider<bool>((ref) {
+  return PreferencesController.accountAnalyticsEnabled.value;
+});
