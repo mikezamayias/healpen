@@ -5,7 +5,7 @@ final logger = Logger(
     PrettyPrinter(
       colors: true,
       noBoxingByDefault: false,
-      methodCount: 5,
+      methodCount: 1,
       errorMethodCount: 5,
       lineLength: 80,
       printEmojis: true,
