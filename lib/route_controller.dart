@@ -55,7 +55,7 @@ class RouterController {
         );
   }
 
-  Route? onGenerateRoute(RouteSettings settings) {
+  Route onGenerateRoute(RouteSettings settings) {
     final routeName = settings.name!;
     final builder = PageRouteBuilder(
       settings: settings,

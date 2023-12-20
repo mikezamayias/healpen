@@ -124,7 +124,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         ),
         initialRoute: RouterController.authWrapperRoute.route,
         routes: RouterController().routes,
-        onGenerateRoute: RouterController().onGenerateRoute,
       ),
     );
   }
