@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../models/onboarding/onboarding_model.dart';
@@ -28,10 +27,6 @@ class OnboardingScreenView extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SvgPicture.asset(
-            onboardingScreenModel.imagePath,
-            fit: BoxFit.contain,
-          ),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
