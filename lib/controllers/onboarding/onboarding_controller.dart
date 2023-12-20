@@ -19,23 +19,29 @@ class OnboardingController {
     // Welcome
     OnboardingModel(
       title: 'Welcome to Healpen',
-      description: 'Enhance Your Well-being',
+      description:
+          'Healpen helps you reflect on your thoughts and feelings through expressive writing.',
     ),
-    // Journal
+
+    // Expressive Writing
     OnboardingModel(
-      title: 'Explore Your Journal',
-      description: 'Observe your mood evolve',
+      title: 'Expressive Writing',
+      description:
+          'Expressive writing involves writing about your deepest thoughts and feelings. This can help you gain insight and improve your mental health.',
     ),
+
     // Insights
     OnboardingModel(
       title: 'Gain Insights',
-      description: 'Deepen your self-reflection',
+      description:
+          'Expressive writing can lead to insights about your emotional patterns through advanced analysis of your texts.',
     ),
+
     // Begin
     OnboardingModel(
-      title: 'Begin Your Journey',
-      description: 'Start writing today!',
-    ),
+        title: 'Begin Your Journey',
+        description:
+            'Start writing in Healpen today to begin reflecting on your inner thoughts and emotions.'),
   ];
 
   /// Providers
