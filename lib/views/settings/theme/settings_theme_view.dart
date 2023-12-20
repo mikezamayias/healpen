@@ -36,7 +36,7 @@ class SettingsThemeView extends ConsumerWidget {
 
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(
-            simpleUiAppBar: const SimpleAppBar(
+            simpleAppBar: const SimpleAppBar(
               appBarTitleString: 'Theme',
             ),
             body: body,

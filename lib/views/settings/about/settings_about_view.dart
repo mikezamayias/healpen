@@ -31,7 +31,7 @@ class SettingsAboutView extends ConsumerWidget {
     );
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(
-            simpleUiAppBar: const SimpleAppBar(
+            simpleAppBar: const SimpleAppBar(
               appBarTitleString: 'About',
             ),
             body: body,

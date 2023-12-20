@@ -100,7 +100,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
     );
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(
-            simpleUiAppBar: SimpleAppBar(
+            simpleAppBar: SimpleAppBar(
               appBarTitleString: titleString,
               appBarTrailing: FaIcon(
                 getSentimentIcon(analysisModel.score),

@@ -41,7 +41,7 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
     return Stack(
       children: <Widget>[
         SimpleBlueprintView(
-          simpleUiAppBar: SimpleAppBar(
+          simpleAppBar: SimpleAppBar(
             automaticallyImplyLeading: false,
             appBarPadding: _keyboardAwarePadding(isKeyboardOpen),
             appBarLeading: isKeyboardOpen ? const StopwatchTile() : null,

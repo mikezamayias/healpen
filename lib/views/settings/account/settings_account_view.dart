@@ -48,7 +48,7 @@ class SettingsAccountView extends ConsumerWidget {
     );
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(
-            simpleUiAppBar: const SimpleAppBar(
+            simpleAppBar: const SimpleAppBar(
               appBarTitleString: 'Account',
             ),
             body: body,

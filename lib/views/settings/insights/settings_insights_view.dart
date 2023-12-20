@@ -31,7 +31,7 @@ class SettingsInsightsView extends ConsumerWidget {
     );
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(
-            simpleUiAppBar: const SimpleAppBar(
+            simpleAppBar: const SimpleAppBar(
               appBarTitleString: 'Insights',
             ),
             body: body,

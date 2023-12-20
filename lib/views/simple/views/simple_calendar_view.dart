@@ -11,7 +11,7 @@ class SimpleCalendarView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return const SimpleBlueprintView(
-      simpleUiAppBar: SimpleAppBar(
+      simpleAppBar: SimpleAppBar(
         appBarTitleString: 'Calendar',
       ),
       body: CalendarTile(),

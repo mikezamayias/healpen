@@ -10,7 +10,7 @@ class SimpleInsightsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SimpleBlueprintView(
-      simpleUiAppBar: SimpleAppBar(
+      simpleAppBar: SimpleAppBar(
         appBarTitleString: 'Insights',
       ),
       body: InsightsTile(),

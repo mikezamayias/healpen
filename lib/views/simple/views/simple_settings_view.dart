@@ -77,7 +77,7 @@ class SimpleSettingsView extends StatelessWidget {
       ),
     ];
     return SimpleBlueprintView(
-      simpleUiAppBar: const SimpleAppBar(
+      simpleAppBar: const SimpleAppBar(
         appBarTitleString: 'Settings',
       ),
       body: ClipRRect(
