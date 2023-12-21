@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart' hide AppBar;
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 
 import '../../extensions/int_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
@@ -18,6 +20,8 @@ import '../blueprint/blueprint_view.dart';
 import '../insights/widgets/insights/emotional_echo/emotional_echo_tile.dart';
 import '../simple/simple_blueprint_view.dart';
 import '../simple/widgets/simple_app_bar.dart';
+
+final showEmojiInTrailingProvider = StateProvider<bool>((ref) => true);
 
 class NoteView extends ConsumerStatefulWidget {
   const NoteView({super.key});
@@ -102,13 +106,38 @@ class _NoteViewState extends ConsumerState<NoteView> {
         ? SimpleBlueprintView(
             simpleAppBar: SimpleAppBar(
               appBarTitleString: titleString,
-              appBarTrailing: FaIcon(
-                getSentimentIcon(analysisModel.score),
-                color: getShapeColorOnSentiment(
-                  context.theme,
-                  analysisModel.score,
+              appBarTrailing: SimpleGestureDetector(
+                onVerticalSwipe: (direction) {
+                  if (direction == SwipeDirection.up) {
+                    ref.read(showEmojiInTrailingProvider.notifier).state =
+                        false;
+                  } else if (direction == SwipeDirection.down) {
+                    ref.read(showEmojiInTrailingProvider.notifier).state = true;
+                  }
+                },
+                child: AnimatedCrossFade(
+                  duration: standardDuration,
+                  crossFadeState: ref.watch(showEmojiInTrailingProvider)
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  firstChild: FaIcon(
+                    getSentimentIcon(analysisModel.score),
+                    color: getShapeColorOnSentiment(
+                      context.theme,
+                      analysisModel.score,
+                    ),
+                    size: context.theme.textTheme.displaySmall!.fontSize,
+                  ).animate().slideY(begin: -3).fade(),
+                  secondChild: Text(
+                    analysisModel.score.toStringAsFixed(1),
+                    style: context.theme.textTheme.displaySmall?.copyWith(
+                      color: getShapeColorOnSentiment(
+                        context.theme,
+                        analysisModel.score,
+                      ),
+                    ),
+                  ).animate().slideY(begin: 3).fade(),
                 ),
-                size: context.theme.textTheme.displaySmall!.fontSize,
               ),
             ),
             body: body,
