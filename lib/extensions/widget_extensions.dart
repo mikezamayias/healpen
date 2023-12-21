@@ -26,9 +26,7 @@ extension WidgetListExtensions on List<Widget> {
         ? List<Widget>.generate(
             length * 2 - 1,
             (int index) {
-              return index % 2 == 0
-                  ? elementAt(index ~/ 2)
-                  : SizedBox(width: radius);
+              return index % 2 == 0 ? elementAt(index ~/ 2) : spacer;
             },
           )
         : <Widget>[];
