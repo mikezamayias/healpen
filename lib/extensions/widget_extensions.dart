@@ -20,6 +20,22 @@ extension WidgetListExtensions on List<Widget> {
         curve: standardEasing,
         duration: standardDuration,
       );
+
+  List<Widget> addSpacer(Widget spacer) {
+    final spacedWidgets = length > 0
+        ? List<Widget>.generate(
+            length * 2 - 1,
+            (int index) {
+              return index % 2 == 0
+                  ? elementAt(index ~/ 2)
+                  : SizedBox(width: radius);
+            },
+          )
+        : <Widget>[];
+    spacedWidgets.insert(0, spacer);
+    spacedWidgets.add(spacer);
+    return spacedWidgets;
+  }
 }
 
 extension WidgetExtensions on Widget {
