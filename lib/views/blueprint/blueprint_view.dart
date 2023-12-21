@@ -59,12 +59,17 @@ class BlueprintView extends ConsumerWidget {
                       child: appBar!.animateAppBar(),
                     )
                   : null,
-              body: ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(
-                  scrollbars: false,
-                  overscroll: false,
+              body: SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.only(top: gap),
+                  child: ScrollConfiguration(
+                    behavior: ScrollConfiguration.of(context).copyWith(
+                      scrollbars: false,
+                      overscroll: false,
+                    ),
+                    child: body,
+                  ),
                 ),
-                child: body,
               ),
               bottomNavigationBar: bottomNavigationBar,
             ),
