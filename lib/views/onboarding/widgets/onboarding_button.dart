@@ -4,16 +4,14 @@ import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class OnboardingButton extends StatelessWidget {
-  final Widget? title;
-  final String? titleString;
-  final VoidCallback? onTap;
+  final String titleString;
+  final VoidCallback onTap;
 
   const OnboardingButton({
     super.key,
-    this.title,
-    this.titleString,
-    this.onTap,
-  }) : assert(title != null || titleString != null);
+    required this.titleString,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,6 @@ class OnboardingButton extends StatelessWidget {
             horizontal: gap * 2,
             vertical: gap,
           ),
-          title: title,
           titleString: titleString,
         ),
       ),
