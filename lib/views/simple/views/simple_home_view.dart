@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +8,7 @@ import '../../../controllers/analysis_view_controller.dart';
 import '../../../controllers/emotional_echo_controller.dart';
 import '../../../controllers/writing_controller.dart';
 import '../../../extensions/int_extensions.dart';
+import '../../../extensions/widget_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../route_controller.dart';
 import '../../../utils/constants.dart';
@@ -47,22 +46,7 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
             appBarLeading: isKeyboardOpen ? const StopwatchTile() : null,
             appBarTitleString:
                 isKeyboardOpen ? null : 'How are you feeling today?',
-            appBarTrailing: isKeyboardOpen
-                ? const SaveNoteButton()
-                : IntrinsicHeight(
-                    child: CustomListTile(
-                      responsiveWidth: true,
-                      contentPadding: EdgeInsets.all(radius),
-                      leadingIconData: FontAwesomeIcons.sliders,
-                      onTap: () {
-                        pushWithAnimation(
-                          context: context,
-                          widget: const SimpleSettingsView(),
-                          dataCallback: null,
-                        );
-                      },
-                    ),
-                  ),
+            appBarTrailing: isKeyboardOpen ? const SaveNoteButton() : null,
           ),
           body: const WritingTextField(),
         ),
@@ -78,40 +62,52 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
   Widget _buildHorizontalScrollingRow(analysisModelSet) {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(bottom: radius),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: _buildRowChildren(analysisModelSet),
-          ),
+        padding: EdgeInsets.only(
+          bottom: radius,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: _buildNoteTiles(analysisModelSet)
+                    .take(3)
+                    .toList()
+                    .addSpacer(SizedBox(width: radius)),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                top: radius,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: _buildFixedWidgets(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  List<Widget> _buildRowChildren(Set<AnalysisModel> analysisModelSet) {
-    return [
-      ..._buildNoteTiles(analysisModelSet),
-      ..._buildFixedWidgets(),
+  List<Widget> _buildNoteTiles(Set<AnalysisModel> analysisModelSet) {
+    return <Widget>[
+      ...analysisModelSet
+          .toList()
+          .reversed
+          .map((AnalysisModel e) => _buildNoteListTile(e))
     ];
   }
 
-  List<Widget> _buildNoteTiles(Set<AnalysisModel> analysisModelSet) {
-    return analysisModelSet
-        .toList()
-        .reversed
-        .take(min(3, analysisModelSet.length))
-        .map((AnalysisModel e) => Padding(
-              padding: EdgeInsets.only(left: radius),
-              child: _buildNoteListTile(e),
-            ))
-        .followedBy([Padding(padding: EdgeInsets.only(left: radius))]).toList();
-  }
-
   List<Widget> _buildFixedWidgets() {
-    return [
-      SizedBox(width: radius),
+    return <Widget>[
       _buildCustomListTileButtons(
         'Insights',
         FontAwesomeIcons.lightbulb,
@@ -129,7 +125,6 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
           );
         },
       ),
-      SizedBox(width: radius),
       _buildCustomListTileButtons(
         'Calendar',
         FontAwesomeIcons.calendar,
@@ -141,8 +136,18 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
           );
         },
       ),
-      SizedBox(width: radius),
-    ];
+      _buildCustomListTileButtons(
+        'Settings',
+        FontAwesomeIcons.sliders,
+        () {
+          pushWithAnimation(
+            context: context,
+            widget: const SimpleSettingsView(),
+            dataCallback: null,
+          );
+        },
+      ),
+    ].addSpacer(SizedBox(width: radius));
   }
 
   Widget _buildNoteListTile(AnalysisModel analysisModel) =>
