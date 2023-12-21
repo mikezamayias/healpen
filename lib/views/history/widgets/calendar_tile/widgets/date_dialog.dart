@@ -40,11 +40,11 @@ class DateDialog extends ConsumerWidget {
         )
         .fade(
           duration: standardDuration,
-          curve: standardEasing,
+          curve: standardCurve,
         )
         .slideX(
           duration: standardDuration,
-          curve: standardEasing,
+          curve: standardCurve,
           begin: -0.6,
           end: 0,
         );
