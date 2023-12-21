@@ -14,6 +14,7 @@ import '../../../route_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
+import '../../settings/settings_view.dart';
 import '../../writing/widgets/save_note_button.dart';
 import '../../writing/widgets/stopwatch_tile.dart';
 import '../../writing/widgets/writing_text_field.dart';
@@ -21,7 +22,6 @@ import '../simple_blueprint_view.dart';
 import '../widgets/simple_app_bar.dart';
 import 'simple_calendar_view.dart';
 import 'simple_insights_tile.dart';
-import 'simple_settings_view.dart';
 
 class SimpleHomeView extends ConsumerStatefulWidget {
   const SimpleHomeView({super.key});
@@ -125,7 +125,7 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
         () {
           pushWithAnimation(
             context: context,
-            widget: const SimpleSettingsView(),
+            widget: const SettingsView(),
             dataCallback: null,
           );
         },
