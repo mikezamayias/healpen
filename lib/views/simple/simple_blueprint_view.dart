@@ -25,6 +25,7 @@ class SimpleBlueprintView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final padding = bodyPadding ?? EdgeInsets.all(radius);
     return Material(
+      type: MaterialType.transparency,
       child: AnnotatedRegion<SystemUiOverlayStyle>(
         value: getSystemUIOverlayStyle(
           context.theme,
