@@ -26,61 +26,42 @@ class SimpleAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final padding = appBarPadding ?? EdgeInsets.all(radius);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Flexible(
-          child: SafeArea(
-            bottom: false,
-            child: AnimatedContainer(
-              duration: standardDuration,
-              curve: standardCurve,
-              padding: padding,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  if (automaticallyImplyLeading!)
-                    Padding(
-                      padding: EdgeInsets.only(right: radius),
-                      child: CustomListTile(
-                        responsiveWidth: true,
-                        contentPadding: EdgeInsets.all(radius),
-                        leadingIconData: FontAwesomeIcons.arrowLeft,
-                        onTap: context.navigator.pop,
-                      ),
+    return SafeArea(
+      bottom: false,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                if (automaticallyImplyLeading!)
+                  CustomListTile(
+                    responsiveWidth: true,
+                    contentPadding: EdgeInsets.all(radius),
+                    leadingIconData: FontAwesomeIcons.arrowLeft,
+                    onTap: context.navigator.pop,
+                  ),
+                if (appBarLeading != null)
+                  appBarTrailing == null
+                      ? buildAppBarLeading()
+                      : Flexible(child: buildAppBarLeading()),
+                if (appBarTitleString != null)
+                  Expanded(
+                    child: Text(
+                      appBarTitleString!,
+                      style: context.theme.textTheme.headlineSmall,
+                      softWrap: true,
                     ),
-                  if (appBarLeading != null)
-                    if (appBarTrailing == null)
-                      buildAppBarLeading()
-                    else
-                      Flexible(child: buildAppBarLeading()),
-                  if (appBarTitleString != null)
-                    Expanded(
-                      child: Text(
-                        appBarTitleString!,
-                        style: context.theme.textTheme.headlineSmall,
-                        softWrap: true,
-                      ),
-                    ),
-                  if (appBarTrailing != null)
-                    Padding(
-                      padding: EdgeInsets.only(left: radius),
-                      child: appBarTrailing!,
-                    ),
-                ],
-              ).animateSlideInFromTop(),
+                  ),
+                if (appBarTrailing != null) appBarTrailing!,
+              ].addSpacer(SizedBox(width: radius)),
             ),
           ),
-        ),
-        if (belowRowWidget != null)
-          Flexible(
-            child: Padding(
-              padding: EdgeInsets.only(bottom: padding.vertical / 2),
-              child: belowRowWidget!,
-            ),
-          ).animateSlideInFromRight(),
-      ],
+          if (belowRowWidget != null) belowRowWidget!.animateSlideInFromRight(),
+        ].addSpacer(SizedBox(height: radius)),
+      ),
     );
   }
 
