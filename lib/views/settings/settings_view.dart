@@ -148,10 +148,6 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
       responsiveWidth: !ref.watch(navigationShowInfoProvider),
       useSmallerNavigationSetting: false,
       cornerRadius: radius - gap,
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: 2 * gap,
-        vertical: gap,
-      ),
       leadingIconData: element.iconData,
       titleString: element.title,
       explanationString:
