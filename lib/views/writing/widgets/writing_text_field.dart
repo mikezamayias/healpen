@@ -39,9 +39,9 @@ class WritingTextField extends ConsumerWidget {
           overflow: TextOverflow.visible,
         ),
         decoration: InputDecoration(
-          hintText: "Write a few words about your day or something that's "
-              'bothering you, aim for about 15 minutes of writing.\n\n'
-              "What's on your mind?",
+          hintText:
+              "Write a few words about something that's bothering you.\n\n"
+              'Try to write for about 15 minutes.',
           hintStyle: context.theme.textTheme.titleLarge!.copyWith(
             overflow: TextOverflow.visible,
             color: context.theme.colorScheme.onSurface.withOpacity(0.6),
