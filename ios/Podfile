@@ -2,6 +2,10 @@
 platform_version = '13'
 platform :ios, platform_version
 
+# https://github.com/FirebaseExtended/flutterfire/issues/2751
+# firestore_ios_sdk_frameworks_version = '10.18.0' # '10.7.0' '10.3.0' '9.6.0' '9.4.0' '8.15.0' '8.11.0' '7.4.0'
+# pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => firestore_ios_sdk_frameworks_version
+
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
@@ -29,6 +33,8 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
+  # pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => firestore_ios_sdk_frameworks_version
+
   use_frameworks!
   use_modular_headers!
 
@@ -39,6 +45,16 @@ target 'Runner' do
 end
 
 post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+        # Using the un-qualified names means you can swap in different implementations, for example ccache
+        config.build_settings["CC"] = "clang"
+        config.build_settings["LD"] = "clang"
+        config.build_settings["CXX"] = "clang++"
+        config.build_settings["LDPLUSPLUS"] = "clang++"
+    end
+  end
+
   installer.aggregate_targets.each do |target|
     target.xcconfigs.each do |variant, xcconfig|
       xcconfig_path = target.client_root + target.xcconfig_relative_path(variant)
