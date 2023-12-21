@@ -36,62 +36,45 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
     final analysisModelSet = ref.watch(analysisModelSetProvider);
     final isKeyboardOpen =
         ref.watch(WritingController().isKeyboardOpenProvider);
-
+    final padding = _keyboardAwarePadding(isKeyboardOpen);
     return Stack(
+      alignment: Alignment.bottomCenter,
       children: <Widget>[
         SimpleBlueprintView(
           simpleAppBar: SimpleAppBar(
+            appBarPadding: padding,
             automaticallyImplyLeading: false,
-            appBarPadding: _keyboardAwarePadding(isKeyboardOpen),
             appBarLeading: isKeyboardOpen ? const StopwatchTile() : null,
             appBarTitleString:
                 isKeyboardOpen ? null : 'How are you feeling today?',
             appBarTrailing: isKeyboardOpen ? const SaveNoteButton() : null,
+            belowRowWidget: isKeyboardOpen
+                ? null
+                : SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: _buildNoteTiles(analysisModelSet)
+                          .take(6)
+                          .toList()
+                          .addSpacer(SizedBox(width: radius)),
+                    ),
+                  ),
           ),
           body: const WritingTextField(),
         ),
-        if (!isKeyboardOpen)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _buildHorizontalScrollingRow(analysisModelSet),
-          ),
+        if (!isKeyboardOpen) _buildHorizontalScrollingRow(analysisModelSet),
       ],
     );
   }
 
   Widget _buildHorizontalScrollingRow(analysisModelSet) {
     return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-          bottom: radius,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: _buildNoteTiles(analysisModelSet)
-                    .take(3)
-                    .toList()
-                    .addSpacer(SizedBox(width: radius)),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: radius,
-              ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: _buildFixedWidgets(),
-                ),
-              ),
-            ),
-          ],
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: _buildFixedWidgets().addSpacer(SizedBox(width: radius)),
         ),
       ),
     );
@@ -147,7 +130,7 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
           );
         },
       ),
-    ].addSpacer(SizedBox(width: radius));
+    ];
   }
 
   Widget _buildNoteListTile(AnalysisModel analysisModel) =>
@@ -176,15 +159,17 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
     IconData icon,
     void Function()? onTap,
   ) =>
-      IntrinsicHeight(
-        child: CustomListTile(
-          responsiveWidth: true,
-          leadingIconData: icon,
-          titleString: title,
-          onTap: onTap,
+      CustomListTile(
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: gap * 2,
+          vertical: gap,
         ),
+        responsiveWidth: true,
+        leadingIconData: icon,
+        titleString: title,
+        onTap: onTap,
       );
 
   EdgeInsets _keyboardAwarePadding(bool isKeyboardOpen) =>
-      isKeyboardOpen ? EdgeInsets.all(radius) : EdgeInsets.all(gap * 3);
+      !isKeyboardOpen ? EdgeInsets.all(radius) : EdgeInsets.all(gap);
 }
