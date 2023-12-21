@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:sprung/sprung.dart';
 
 import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../extensions/double_extensions.dart';
@@ -9,6 +12,7 @@ import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 import '../../../../../../utils/logger.dart';
+import '../../../../../../widgets/custom_list_tile.dart';
 import 'inactive_tile.dart';
 
 class EmotionalEchoActiveTile extends ConsumerStatefulWidget {
@@ -28,8 +32,10 @@ class _EmotionalEchoActiveTileState
   Color get background => theme.colorScheme.background;
   double get sentiment =>
       ref.watch(EmotionalEchoController.scoreProvider).withDecimalPlaces(2);
-  bool get isActive => !ref.watch(EmotionalEchoController.isPressedProvider);
+  bool get isActive => ref.watch(EmotionalEchoController.isPressedProvider);
   bool get enableInformatoryText => ref.watch(navigationShowInfoProvider);
+  double get availableHeight => 39.h;
+  double get normalizedSentiment => (sentiment + 1) / 2;
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +84,7 @@ class _EmotionalEchoActiveTileState
                   end: Alignment.centerRight,
                   colors: [
                     background.withOpacity(1.0),
-                    background.withOpacity(0.0),
+                    background.withOpacity(0.6),
                   ],
                   stops: const [0.0, 1.0],
                 ),
@@ -91,13 +97,20 @@ class _EmotionalEchoActiveTileState
           padding: EdgeInsets.all(gap),
           child: Stack(
             children: [
-              currentText(),
               Column(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: sentimentLabels.reversed.map(scaleText).toList(),
               ),
+              if (isActive)
+                currentState()
+                    .animate()
+                    .slideY(
+                      begin: 1,
+                      curve: Sprung.criticallyDamped,
+                    )
+                    .fade(),
             ],
           ),
         ),
@@ -105,32 +118,28 @@ class _EmotionalEchoActiveTileState
     );
   }
 
-  Positioned currentText() {
-    // Get the available height using MediaQuery
-    final double availableHeight = 39.h;
+  Positioned currentState() {
+    const sentimentText = 'State';
 
-    // Example range for sentiment scores
-    const double minSentiment = 0.0;
-    const double maxSentiment = 1.0;
-
-    // Normalize sentiment score to available height
-    final double normalizedSentiment =
-        (sentiment - minSentiment) / (maxSentiment - minSentiment);
-    final double topPosition =
-        normalizedSentiment * availableHeight + sentiment < 0
-            ? titleLargeStyle.fontSize! * 2
-            : -titleLargeStyle.fontSize! / 2;
-
-    // Rest of the method
-    const sentimentText = 'Current Mood';
-    final sentimentColor = getShapeColorOnSentiment(theme, sentiment);
+    final double topPosition = normalizedSentiment * availableHeight +
+        (sentiment < 0
+            ? -titleLargeStyle.fontSize! / 1.2
+            : -titleLargeStyle.fontSize! * 1.8);
 
     return Positioned(
-      left: 0,
-      bottom: topPosition, // Dynamically calculated position
-      child: Text(
-        enableInformatoryText ? '$sentiment, $sentimentText' : sentimentText,
-        style: titleLargeStyle.copyWith(color: sentimentColor),
+      right: 0,
+      bottom: topPosition,
+      child: AnimatedOpacity(
+        duration: standardDuration,
+        curve: standardCurve,
+        opacity: isActive ? 1.0 : 0.0,
+        child: CustomListTile(
+          responsiveWidth: true,
+          leadingIconData: FontAwesomeIcons.arrowLeftLong,
+          titleString: sentimentText,
+          backgroundColor: getShapeColorOnSentiment(theme, sentiment),
+          textColor: getTextColorOnSentiment(theme, sentiment),
+        ),
       ),
     );
   }
@@ -141,7 +150,7 @@ class _EmotionalEchoActiveTileState
     final sentimentColor = getShapeColorOnSentiment(theme, label);
     return Text(
       enableInformatoryText ? '$sentimentValue, $label' : label,
-      style: titleSmallStyle.copyWith(color: sentimentColor),
+      style: titleLargeStyle.copyWith(color: sentimentColor),
     );
   }
 }
