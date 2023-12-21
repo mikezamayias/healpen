@@ -12,6 +12,7 @@ import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
+import '../simple/views/simple_settings_view.dart';
 import 'about/settings_about_view.dart';
 import 'account/settings_account_view.dart';
 import 'insights/settings_insights_view.dart';
@@ -85,56 +86,57 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         iconData: FontAwesomeIcons.circleInfo,
       ),
     ];
-    return BlueprintView(
-      showAppBar: ref.watch(navigationShowAppBarProvider),
-      appBar: AppBar(
-        pathNames: [
-          PageController()
-              .settings
-              .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
-        ],
-      ),
-      body: AnimatedContainer(
-        duration: standardDuration,
-        curve: standardCurve,
-        padding: EdgeInsets.all(gap),
-        decoration: ref.watch(navigationSmallerNavigationElementsProvider)
-            ? BoxDecoration(
-                color: context.theme.colorScheme.surface,
-                borderRadius: BorderRadius.all(Radius.circular(radius)),
-              )
-            : BoxDecoration(
-                color: context.theme.colorScheme.surfaceVariant,
-                borderRadius: BorderRadius.all(Radius.circular(radius)),
-              ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(radius - gap),
-                child: SingleChildScrollView(
-                  child: Wrap(
-                    spacing: gap,
-                    runSpacing: gap,
-                    children: [
-                      for (({
-                        String title,
-                        String description,
-                        IconData iconData,
-                        Widget widget,
-                      }) element in pageWidgets)
-                        if (element.widget is! Placeholder)
-                          _settingButton(element),
-                    ],
+    return ref.watch(navigationSimpleUIProvider)
+        ? const SimpleSettingsView()
+        : BlueprintView(
+            showAppBar: ref.watch(navigationShowAppBarProvider),
+            appBar: AppBar(
+              pathNames: [
+                PageController().settings.titleGenerator(
+                    FirebaseAuth.instance.currentUser?.displayName)
+              ],
+            ),
+            body: AnimatedContainer(
+              duration: standardDuration,
+              curve: standardCurve,
+              padding: EdgeInsets.all(gap),
+              decoration: ref.watch(navigationSmallerNavigationElementsProvider)
+                  ? BoxDecoration(
+                      color: context.theme.colorScheme.surface,
+                      borderRadius: BorderRadius.all(Radius.circular(radius)),
+                    )
+                  : BoxDecoration(
+                      color: context.theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.all(Radius.circular(radius)),
+                    ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(radius - gap),
+                      child: SingleChildScrollView(
+                        child: Wrap(
+                          spacing: gap,
+                          runSpacing: gap,
+                          children: [
+                            for (({
+                              String title,
+                              String description,
+                              IconData iconData,
+                              Widget widget,
+                            }) element in pageWidgets)
+                              if (element.widget is! Placeholder)
+                                _settingButton(element),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   CustomListTile _settingButton(
