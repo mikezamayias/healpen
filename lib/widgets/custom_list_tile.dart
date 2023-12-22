@@ -34,6 +34,8 @@ class CustomListTile extends ConsumerStatefulWidget {
   final double? cornerRadius;
   final EdgeInsetsGeometry? contentPadding;
   final EdgeInsetsGeometry? subtitlePadding;
+  final bool? showShadow;
+  final Color? shadowColor;
 
   const CustomListTile({
     super.key,
@@ -64,6 +66,8 @@ class CustomListTile extends ConsumerStatefulWidget {
     this.cornerRadius,
     this.contentPadding,
     this.subtitlePadding,
+    this.showShadow = false,
+    this.shadowColor,
   });
 
   @override
@@ -120,7 +124,16 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
                 borderRadius: BorderRadius.all(
                   Radius.circular(widget.cornerRadius ?? radius),
                 ),
-              ),
+                boxShadow: widget.showShadow!
+                    ? [
+                        BoxShadow(
+                          color: widget.shadowColor ??
+                              context.theme.colorScheme.shadow,
+                          blurRadius: 6,
+                          offset: const Offset(0, 0),
+                        ),
+                      ]
+                    : null),
         child: widget.responsiveWidth!
             ? IntrinsicWidth(child: listTile)
             : listTile,
