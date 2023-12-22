@@ -52,7 +52,7 @@ class SettingsNavigationView extends ConsumerWidget {
             showAppBar: true,
             appBar: const AppBar(
               automaticallyImplyLeading: true,
-              pathNames: [
+              pathNames: <String>[
                 'Settings',
                 'Navigation',
               ],
