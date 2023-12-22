@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -51,6 +52,7 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
             belowRowWidget: isKeyboardOpen
                 ? null
                 : SingleChildScrollView(
+                    clipBehavior: Clip.none,
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -71,6 +73,7 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
   Widget _buildHorizontalScrollingRow(analysisModelSet) {
     return SafeArea(
       child: SingleChildScrollView(
+        clipBehavior: Clip.none,
         scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -168,6 +171,8 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
         leadingIconData: icon,
         titleString: title,
         onTap: onTap,
+        showShadow: false,
+        shadowColor: theme.colorScheme.primary,
       );
 
   EdgeInsets _keyboardAwarePadding(bool isKeyboardOpen) =>
