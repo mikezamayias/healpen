@@ -12,7 +12,7 @@ class SimpleCalendarView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return const SimpleBlueprintView(
       simpleAppBar: SimpleAppBar(
-        appBarTitleString: 'Calendar',
+        appBarTitleString: 'History',
       ),
       body: CalendarTile(),
     );
