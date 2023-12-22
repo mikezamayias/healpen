@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-Future showHealpenDialog({
+Future<T?> showHealpenDialog<T>({
   required BuildContext context,
-  required bool doVibrate,
   required Widget customDialog,
 }) async {
-  return showDialog(
+  return showDialog<T>(
     context: context,
     useRootNavigator: false,
     barrierDismissible: false,
