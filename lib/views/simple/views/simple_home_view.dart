@@ -14,14 +14,14 @@ import '../../../route_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/custom_list_tile.dart';
+import '../../history/history_view.dart';
+import '../../insights/insights_view.dart';
 import '../../settings/settings_view.dart';
 import '../../writing/widgets/save_note_button.dart';
 import '../../writing/widgets/stopwatch_tile.dart';
 import '../../writing/widgets/writing_text_field.dart';
 import '../simple_blueprint_view.dart';
 import '../widgets/simple_app_bar.dart';
-import 'simple_calendar_view.dart';
-import 'simple_insights_tile.dart';
 
 class SimpleHomeView extends ConsumerStatefulWidget {
   const SimpleHomeView({super.key});
@@ -93,11 +93,11 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
     return <Widget>[
       _buildCustomListTileButtons(
         'Insights',
-        FontAwesomeIcons.lightbulb,
+        FontAwesomeIcons.brain,
         () {
           pushWithAnimation(
             context: context,
-            widget: const SimpleInsightsTile(),
+            widget: const InsightsView(),
             dataCallback: () {
               ref.read(EmotionalEchoController.scoreProvider.notifier).state =
                   ref
@@ -109,12 +109,12 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
         },
       ),
       _buildCustomListTileButtons(
-        'Calendar',
-        FontAwesomeIcons.calendar,
+        'History',
+        FontAwesomeIcons.calendarDays,
         () {
           pushWithAnimation(
             context: context,
-            widget: const SimpleCalendarView(),
+            widget: const HistoryView(),
             dataCallback: null,
           );
         },
