@@ -60,8 +60,12 @@ class BlueprintView extends ConsumerWidget {
                     )
                   : null,
               body: SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.only(top: gap),
+                child: AnimatedPadding(
+                  duration: standardDuration,
+                  curve: standardCurve,
+                  padding: ref.watch(navigationShowAppBarProvider)
+                      ? EdgeInsets.zero
+                      : EdgeInsets.only(top: gap),
                   child: ScrollConfiguration(
                     behavior: ScrollConfiguration.of(context).copyWith(
                       scrollbars: false,
