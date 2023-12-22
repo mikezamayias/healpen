@@ -13,7 +13,7 @@ class SwitchSettingsTile extends ConsumerWidget {
   final String explanationString;
   final StateProvider<bool> stateProvider;
   final PreferenceModel preferenceModel;
-  final VoidCallback? additionalAction;
+  final void Function(bool)? onChanged;
   final bool? checkForSimpleUI;
 
   const SwitchSettingsTile({
@@ -22,7 +22,7 @@ class SwitchSettingsTile extends ConsumerWidget {
     required this.explanationString,
     required this.stateProvider,
     required this.preferenceModel,
-    this.additionalAction,
+    this.onChanged,
     this.checkForSimpleUI = false,
   });
 
@@ -38,26 +38,24 @@ class SwitchSettingsTile extends ConsumerWidget {
           ref.watch(navigationShowInfoProvider) ? explanationString : null,
       trailing: Switch(
         value: ref.watch(stateProvider),
-        onChanged: checkForSimpleUI! && ref.watch(navigationSimpleUIProvider)
-            ? null
-            : (value) {
-                vibrate(
-                  ref.watch(navigationEnableHapticFeedbackProvider),
-                  () async {
-                    ref.read(stateProvider.notifier).state = value;
-                    await FirestorePreferencesController.instance
-                        .savePreference(
-                      preferenceModel.withValue(ref.watch(stateProvider)),
+        onChanged: onChanged ??
+            (checkForSimpleUI! && ref.watch(navigationSimpleUIProvider)
+                ? null
+                : (value) {
+                    vibrate(
+                      ref.watch(navigationEnableHapticFeedbackProvider),
+                      () async {
+                        ref.read(stateProvider.notifier).state = value;
+                        await FirestorePreferencesController.instance
+                            .savePreference(
+                          preferenceModel.withValue(ref.watch(stateProvider)),
+                        );
+                        logger.i(
+                          '${ref.watch(stateProvider)}',
+                        );
+                      },
                     );
-                    logger.i(
-                      '${ref.watch(stateProvider)}',
-                    );
-                    if (additionalAction != null) {
-                      additionalAction!();
-                    }
-                  },
-                );
-              },
+                  }),
       ),
     );
   }
