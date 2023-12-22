@@ -68,7 +68,7 @@ class NoteTile extends ConsumerWidget {
                           onTap: () {
                             HistoryViewController()
                                 .deleteNote(timestamp: analysisModel.timestamp);
-                            Navigator.pop(navigatorKey.currentContext!);
+                            context.navigator.pop();
                           },
                         ),
                         CustomListTile(
@@ -80,7 +80,7 @@ class NoteTile extends ConsumerWidget {
                           responsiveWidth: true,
                           titleString: 'Go back',
                           onTap: () {
-                            Navigator.pop(navigatorKey.currentContext!);
+                            context.navigator.pop();
                           },
                         ),
                       ],

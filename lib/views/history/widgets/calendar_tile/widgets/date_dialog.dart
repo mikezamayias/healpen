@@ -76,7 +76,7 @@ class DateDialog extends ConsumerWidget {
           titleString: 'Close',
           cornerRadius: radius - gap,
           onTap: () {
-            Navigator.pop(navigatorKey.currentContext!);
+            context.navigator.pop();
           },
         )
       ],

@@ -99,14 +99,13 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
               ),
             );
           },
-        ).show(navigatorKey.currentContext!);
+        ).show(context);
       }
     });
     return HideKeyboard(
       child: MaterialApp(
         title: 'Healpen',
         scaffoldMessengerKey: scaffoldMessengerKey,
-        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         navigatorObservers: [
           ClearFocusNavigatorObserver(),
