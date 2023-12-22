@@ -97,7 +97,7 @@ class MonthCellTile extends ConsumerWidget {
             if (dateAnalysisModelList.isNotEmpty)
               Container(
                 alignment: Alignment.center,
-                padding: EdgeInsets.only(bottom: gap),
+                padding: EdgeInsets.only(bottom: gap / 2),
                 child: ClipOval(
                   child: Container(
                     color: textColor,
