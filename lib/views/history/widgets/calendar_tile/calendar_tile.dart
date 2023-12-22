@@ -107,7 +107,6 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   ) {
     showHealpenDialog(
       context: context,
-      doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
       customDialog: DateDialog(date: details.date!),
     );
   }

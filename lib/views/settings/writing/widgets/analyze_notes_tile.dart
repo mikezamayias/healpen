@@ -35,7 +35,6 @@ class AnalyzeNotesTile extends ConsumerWidget {
         NoteAnalyzer().analyzeNotes(ref);
         showHealpenDialog(
           context: context,
-          doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
           customDialog: const AnalyzeNotesDialog(),
         );
       },

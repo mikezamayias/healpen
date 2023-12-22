@@ -38,8 +38,6 @@ class PrivateNoteCheckBox extends ConsumerWidget {
                 if (context.mounted) {
                   showHealpenDialog(
                     context: context,
-                    doVibrate: PreferencesController
-                        .navigationEnableHapticFeedback.value,
                     customDialog: CustomDialog(
                       titleString: 'Private note',
                       contentString:

@@ -11,7 +11,6 @@ import '../../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../../extensions/chart_data_extensions.dart';
 import '../../../../../../models/analysis/analysis_model.dart';
 import '../../../../../../models/analysis/chart_data_model.dart';
-import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 import '../../../../../../utils/show_healpen_dialog.dart';
@@ -97,7 +96,6 @@ class WeekLineChart extends ConsumerWidget {
                 chartData.elementAt(pointInteractionDetails.pointIndex!).x;
             showHealpenDialog(
               context: context,
-              doVibrate: ref.watch(navigationEnableHapticFeedbackProvider),
               customDialog: DateDialog(date: date),
             );
           },

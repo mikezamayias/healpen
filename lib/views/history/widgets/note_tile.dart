@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 
 import '../../../controllers/emotional_echo_controller.dart';
 import '../../../controllers/history_view_controller.dart';
-import '../../../controllers/settings/preferences_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../route_controller.dart';
 import '../../../utils/constants.dart';
@@ -52,8 +51,6 @@ class NoteTile extends ConsumerWidget {
                 onPressed: (context) {
                   showHealpenDialog(
                     context: context,
-                    doVibrate: PreferencesController
-                        .navigationEnableHapticFeedback.value,
                     customDialog: CustomDialog(
                       titleString: 'Delete note?',
                       contentString: 'You cannot undo this action.',
