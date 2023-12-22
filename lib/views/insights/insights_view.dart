@@ -8,6 +8,7 @@ import '../../providers/settings_providers.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/no_analysis_found_tile.dart';
 import '../blueprint/blueprint_view.dart';
+import '../simple/views/simple_insights_tile.dart';
 import 'widgets/insights_tile.dart';
 
 class InsightsView extends ConsumerWidget {
@@ -15,18 +16,19 @@ class InsightsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return BlueprintView(
-      showAppBar: ref.watch(navigationShowAppBarProvider),
-      appBar: AppBar(
-        pathNames: [
-          PageController()
-              .insights
-              .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
-        ],
-      ),
-      body: (ref.watch(analysisModelSetProvider).isEmpty)
-          ? const NoAnalysisFoundTile()
-          : const InsightsTile(),
-    );
+    return ref.watch(navigationSimpleUIProvider)
+        ? const SimpleInsightsTile()
+        : BlueprintView(
+            showAppBar: ref.watch(navigationShowAppBarProvider),
+            appBar: AppBar(
+              pathNames: [
+                PageController().insights.titleGenerator(
+                    FirebaseAuth.instance.currentUser?.displayName)
+              ],
+            ),
+            body: (ref.watch(analysisModelSetProvider).isEmpty)
+                ? const NoAnalysisFoundTile()
+                : const InsightsTile(),
+          );
   }
 }
