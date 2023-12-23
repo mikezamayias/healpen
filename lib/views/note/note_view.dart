@@ -142,7 +142,9 @@ class _NoteViewState extends ConsumerState<NoteView> {
                   ),
                   secondChild: Text(
                     analysisModel.score.toStringAsFixed(1),
-                    style: context.theme.textTheme.displaySmall?.copyWith(
+                    style: context.theme.textTheme.headlineLarge?.copyWith(
+                      fontFamily: GoogleFonts.mPlusRounded1c().fontFamily,
+                      fontWeight: FontWeight.bold,
                       color: getShapeColorOnSentiment(
                         context.theme,
                         analysisModel.score,
