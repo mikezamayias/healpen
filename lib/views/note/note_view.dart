@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart' hide AppBar;
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
+import 'package:sprung/sprung.dart';
 
 import '../../extensions/int_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
@@ -124,6 +125,10 @@ class _NoteViewState extends ConsumerState<NoteView> {
                 },
                 child: AnimatedCrossFade(
                   duration: standardDuration,
+                  reverseDuration: standardDuration,
+                  sizeCurve: Sprung.criticallyDamped,
+                  firstCurve: Sprung.criticallyDamped,
+                  secondCurve: Sprung.criticallyDamped,
                   crossFadeState: ref.watch(showEmojiInTrailingProvider)
                       ? CrossFadeState.showFirst
                       : CrossFadeState.showSecond,
@@ -134,7 +139,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
                       analysisModel.score,
                     ),
                     size: context.theme.textTheme.displaySmall!.fontSize,
-                  ).animate().slideY(begin: -3).fade(),
+                  ),
                   secondChild: Text(
                     analysisModel.score.toStringAsFixed(1),
                     style: context.theme.textTheme.displaySmall?.copyWith(
@@ -143,7 +148,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
                         analysisModel.score,
                       ),
                     ),
-                  ).animate().slideY(begin: 3).fade(),
+                  ),
                 ),
               ),
             ),
