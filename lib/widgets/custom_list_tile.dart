@@ -90,7 +90,17 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
           padding: widget.useSmallerNavigationSetting! &&
                   ref.watch(navigationSmallerNavigationElementsProvider)
               ? EdgeInsets.zero
-              : EdgeInsets.all(padding.vertical / 2),
+              : EdgeInsets.only(
+                  top: widget.subtitle != null || widget.subtitleString != null
+                      ? padding.vertical / 4
+                      : padding.vertical / 2,
+                  left: padding.horizontal / 2,
+                  right: padding.horizontal / 2,
+                  bottom:
+                      widget.subtitle != null || widget.subtitleString != null
+                          ? padding.vertical / 4
+                          : padding.vertical / 2,
+                ),
           child: Row(
             children: [
               _buildLeading(),
