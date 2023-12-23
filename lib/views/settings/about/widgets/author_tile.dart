@@ -6,15 +6,19 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class AuthorTile extends ConsumerWidget {
+class AuthorTile extends ConsumerStatefulWidget {
   const AuthorTile({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<AuthorTile> createState() => _AuthorTileState();
+}
+
+class _AuthorTileState extends ConsumerState<AuthorTile> {
+  @override
+  Widget build(BuildContext context) {
     return CustomListTile(
-      useSmallerNavigationSetting:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
-      enableExplanationWrapper: false,
+      useSmallerNavigationSetting: !useSmallerNavigationElements,
+      enableExplanationWrapper: showInfo,
       titleString: 'Mike Zamayias',
       explanationString: 'Visit the developer\'s personal website.',
       leadingIconData: FontAwesomeIcons.laptopCode,
@@ -26,4 +30,8 @@ class AuthorTile extends ConsumerWidget {
       },
     );
   }
+
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get showInfo => ref.watch(navigationShowInfoProvider);
 }
