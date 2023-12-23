@@ -22,11 +22,11 @@ class SettingsNavigationView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<Widget> pageWidgets = const [
       EnableSimpleUiTile(),
+      SmallerNavigationElementsTile(),
       HapticFeedbackSettingsTile(),
       EnableInfoSettingsTile(),
       ShowAppBarTile(),
       BackButtonSettingsTile(),
-      SmallerNavigationElementsTile(),
     ].animateWidgetList();
 
     Widget body = ClipRRect(
