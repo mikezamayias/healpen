@@ -12,6 +12,7 @@ class AppBar extends ConsumerWidget {
   final Color? backgroundColor;
   final bool? automaticallyImplyLeading;
   final VoidCallback? onBackButtonPressed;
+  final Widget? trailingWidget;
 
   const AppBar({
     super.key,
@@ -19,6 +20,7 @@ class AppBar extends ConsumerWidget {
     this.automaticallyImplyLeading = false,
     this.onBackButtonPressed,
     this.backgroundColor,
+    this.trailingWidget,
   });
 
   @override
@@ -92,7 +94,11 @@ class AppBar extends ConsumerWidget {
                 ),
               ),
               SizedBox(width: gap),
-              Flexible(child: appBarContent),
+              appBarContent,
+              if (trailingWidget != null) ...[
+                const Spacer(),
+                trailingWidget!,
+              ],
             ],
           )
         : appBarContent;
