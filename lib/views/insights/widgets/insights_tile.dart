@@ -67,7 +67,6 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
           dotColor: context.theme.colorScheme.outline,
         ),
       ),
-      padSubtitle: true,
       subtitle: PageView.builder(
         itemCount: insightsContoller.insightModelList.length,
         onPageChanged: (int index) {
