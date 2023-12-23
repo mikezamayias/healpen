@@ -85,7 +85,8 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     return CustomListTile(
       useSmallerNavigationSetting: useSmallerNavigationElements,
       cornerRadius: useSimpleUI ? radius : radius - gap,
-      contentPadding: EdgeInsets.all(useSimpleUI ? radius : gap),
+      contentPadding:
+          useSimpleUI ? EdgeInsets.all(radius) : EdgeInsets.all(gap),
       leadingIconData: settingsItem.iconData,
       titleString: settingsItem.title,
       explanationString: showInformatoryText ? settingsItem.description : null,
