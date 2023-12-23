@@ -84,7 +84,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
   CustomListTile _settingButton(SettingsItem settingsItem) {
     return CustomListTile(
       useSmallerNavigationSetting: useSmallerNavigationElements,
-      cornerRadius: useSimpleUI ? radius : radius - gap,
+      cornerRadius: radius,
       contentPadding:
           useSimpleUI ? EdgeInsets.all(radius) : EdgeInsets.all(gap),
       leadingIconData: settingsItem.iconData,
