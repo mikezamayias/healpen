@@ -16,7 +16,7 @@ class BlueprintView extends ConsumerWidget {
     this.bottomNavigationBar,
     this.backgroundColor,
     this.padBodyHorizontally = true,
-    this.showAppBar,
+    this.showAppBar = true,
     required this.body,
   });
 
