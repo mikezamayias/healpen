@@ -115,7 +115,6 @@ class _NoteViewState extends ConsumerState<NoteView> {
             body: body,
           )
         : BlueprintView(
-            showAppBar: true,
             appBar: AppBar(
               pathNames: [titleString],
               automaticallyImplyLeading: true,

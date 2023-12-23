@@ -37,7 +37,6 @@ class SettingsInsightsView extends ConsumerWidget {
             body: body,
           )
         : BlueprintView(
-            showAppBar: true,
             appBar: const AppBar(
               automaticallyImplyLeading: true,
               pathNames: [
