@@ -19,11 +19,11 @@ class WritingTextField extends ConsumerWidget {
       curve: standardCurve,
       decoration: smallNavigationElements || simpleUi
           ? BoxDecoration(
-              color: context.theme.colorScheme.surface,
+              color: context.theme.colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(radius),
             )
           : BoxDecoration(
-              color: context.theme.colorScheme.surface,
+              color: context.theme.colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(radius - gap),
             ),
       padding: simpleUi ? EdgeInsets.zero : EdgeInsets.all(gap),
@@ -35,7 +35,7 @@ class WritingTextField extends ConsumerWidget {
         expands: true,
         keyboardType: TextInputType.multiline,
         style: context.theme.textTheme.titleLarge!.copyWith(
-          color: context.theme.colorScheme.onSurfaceVariant,
+          color: context.theme.colorScheme.onSurface,
           overflow: TextOverflow.visible,
         ),
         decoration: InputDecoration(
@@ -44,7 +44,7 @@ class WritingTextField extends ConsumerWidget {
               'Try to write for about 15 minutes.',
           hintStyle: context.theme.textTheme.titleLarge!.copyWith(
             overflow: TextOverflow.visible,
-            color: context.theme.colorScheme.onSurface.withOpacity(0.6),
+            color: context.theme.colorScheme.onSurfaceVariant,
           ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.zero,

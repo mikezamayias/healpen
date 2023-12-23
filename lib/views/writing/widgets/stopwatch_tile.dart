@@ -21,12 +21,12 @@ class StopwatchTile extends ConsumerWidget {
               ref.watch(navigationSimpleUIProvider)
           ? radius
           : radius - gap,
-      backgroundColor: context.theme.colorScheme.surface,
-      textColor: context.theme.colorScheme.onSurface,
       titleString: 'Stopwatch',
       trailing: Text(
         ref.watch(writingControllerProvider).duration.writingDurationFormat(),
-        style: context.theme.textTheme.titleLarge,
+        style: context.theme.textTheme.titleLarge!.copyWith(
+          color: context.theme.colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }
