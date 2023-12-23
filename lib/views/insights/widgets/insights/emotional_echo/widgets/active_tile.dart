@@ -119,7 +119,7 @@ class _EmotionalEchoActiveTileState
   }
 
   Positioned currentState() {
-    const sentimentText = 'State';
+    final sentimentText = enableInformatoryText ? '$sentiment, State' : 'State';
 
     final double topPosition = normalizedSentiment * availableHeight +
         (sentiment < 0
