@@ -905,6 +905,8 @@ PODS:
   - PromisesSwift (2.3.1):
     - PromisesObjC (= 2.3.1)
   - RecaptchaInterop (100.0.0)
+  - restart_app (0.0.1):
+    - Flutter
   - rive_common (0.0.1):
     - Flutter
   - url_launcher_ios (0.0.1):
@@ -924,6 +926,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - restart_app (from `.symlinks/plugins/restart_app/ios`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
@@ -987,6 +990,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  restart_app:
+    :path: ".symlinks/plugins/restart_app/ios"
   rive_common:
     :path: ".symlinks/plugins/rive_common/ios"
   url_launcher_ios:
@@ -1036,6 +1041,7 @@ SPEC CHECKSUMS:
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
+  restart_app: 806659942bf932f6ce51c5372f91ce5e81c8c14a
   rive_common: 3a4c254c6e4db7e4b9e05daeb3d1f47ae4f7bf76
   url_launcher_ios: bf5ce03e0e2088bad9cc378ea97fa0ed5b49673b
 
