@@ -15,29 +15,30 @@ import 'widgets/save_note_button.dart';
 import 'widgets/stopwatch_tile.dart';
 import 'widgets/writing_text_field.dart';
 
-class WritingView extends ConsumerWidget {
+class WritingView extends ConsumerStatefulWidget {
   const WritingView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<WritingView> createState() => _WritingViewState();
+}
+
+class _WritingViewState extends ConsumerState<WritingView> {
+  @override
+  Widget build(BuildContext context) {
     WritingController.writingAutomaticStopwatch =
         ref.watch(writingAutomaticStopwatchProvider);
     // WritingController().updateAllUserNotes();
-    final smallerNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
     final pathNames = page_controller.PageController()
         .writing
         .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         .split('\n');
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
     return BlueprintView(
-      showAppBar: ref.watch(navigationShowAppBarProvider),
+      showAppBar: showAppBar,
       appBar: ref.watch(WritingController().isKeyboardOpenProvider)
           ? null
           : AppBar(
               pathNames: [
-                if (smallerNavigationElements)
+                if (useSmallerNavigationElements)
                   pathNames.last
                 else
                   pathNames.join('\n')
@@ -50,14 +51,15 @@ class WritingView extends ConsumerWidget {
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
-          decoration: smallNavigationElements
+          decoration: useSmallerNavigationElements
               ? const BoxDecoration()
               : BoxDecoration(
                   color: context.theme.colorScheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(radius),
                 ),
-          padding:
-              smallNavigationElements ? EdgeInsets.zero : EdgeInsets.all(gap),
+          padding: useSmallerNavigationElements
+              ? EdgeInsets.zero
+              : EdgeInsets.all(gap),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
@@ -83,4 +85,8 @@ class WritingView extends ConsumerWidget {
       ),
     );
   }
+
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get showAppBar => ref.watch(navigationShowAppBarProvider);
 }

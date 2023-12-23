@@ -11,15 +11,20 @@ import '../blueprint/blueprint_view.dart';
 import '../simple/views/simple_calendar_view.dart';
 import 'widgets/calendar_tile/calendar_tile.dart';
 
-class HistoryView extends ConsumerWidget {
+class HistoryView extends ConsumerStatefulWidget {
   const HistoryView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(navigationSimpleUIProvider)
+  ConsumerState<HistoryView> createState() => _HistoryViewState();
+}
+
+class _HistoryViewState extends ConsumerState<HistoryView> {
+  @override
+  Widget build(BuildContext context) {
+    return useSimpleUI
         ? const SimpleCalendarView()
         : BlueprintView(
-            showAppBar: ref.watch(navigationShowAppBarProvider),
+            showAppBar: showAppBar,
             appBar: AppBar(
               pathNames: [
                 PageController().history.titleGenerator(
@@ -31,4 +36,9 @@ class HistoryView extends ConsumerWidget {
                 : const CalendarTile(),
           );
   }
+
+  bool get useSimpleUI => ref.watch(navigationSimpleUIProvider);
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get showAppBar => ref.watch(navigationShowAppBarProvider);
 }

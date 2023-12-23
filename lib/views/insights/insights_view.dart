@@ -11,15 +11,20 @@ import '../blueprint/blueprint_view.dart';
 import '../simple/views/simple_insights_tile.dart';
 import 'widgets/insights_tile.dart';
 
-class InsightsView extends ConsumerWidget {
+class InsightsView extends ConsumerStatefulWidget {
   const InsightsView({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return ref.watch(navigationSimpleUIProvider)
+  ConsumerState<InsightsView> createState() => _InsightsViewState();
+}
+
+class _InsightsViewState extends ConsumerState<InsightsView> {
+  @override
+  Widget build(BuildContext context) {
+    return useSimpleUI
         ? const SimpleInsightsTile()
         : BlueprintView(
-            showAppBar: ref.watch(navigationShowAppBarProvider),
+            showAppBar: showAppBar,
             appBar: AppBar(
               pathNames: [
                 PageController().insights.titleGenerator(
@@ -31,4 +36,9 @@ class InsightsView extends ConsumerWidget {
                 : const InsightsTile(),
           );
   }
+
+  bool get useSimpleUI => ref.watch(navigationSimpleUIProvider);
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get showAppBar => ref.watch(navigationShowAppBarProvider);
 }
