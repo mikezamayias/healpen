@@ -25,10 +25,7 @@ class SaveNoteButton extends ConsumerWidget {
           ? radius
           : radius - gap,
       leadingIconData: FontAwesomeIcons.solidFloppyDisk,
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: 2 * gap,
-        vertical: gap,
-      ),
+      contentPadding: EdgeInsets.all(gap),
       onTap: state.content.isNotEmpty
           ? () {
               CustomSnackBar(
