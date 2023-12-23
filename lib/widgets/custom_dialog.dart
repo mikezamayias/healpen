@@ -90,7 +90,7 @@ class CustomDialog extends ConsumerWidget {
                 child: Container(
                   decoration: enableContentContainer!
                       ? BoxDecoration(
-                          color: context.theme.colorScheme.background,
+                          color: context.theme.colorScheme.surfaceVariant,
                           borderRadius: BorderRadius.circular(radius - gap),
                         )
                       : null,
@@ -99,7 +99,7 @@ class CustomDialog extends ConsumerWidget {
                       ? Text(
                           contentString!,
                           style: context.theme.textTheme.bodyLarge!.copyWith(
-                            color: context.theme.colorScheme.onBackground,
+                            color: context.theme.colorScheme.onSurfaceVariant,
                           ),
                           textAlign: TextAlign.start,
                         )
