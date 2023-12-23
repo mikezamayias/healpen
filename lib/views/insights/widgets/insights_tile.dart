@@ -67,30 +67,33 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
           dotColor: context.theme.colorScheme.outline,
         ),
       ),
-      subtitle: PageView.builder(
-        itemCount: insightsContoller.insightModelList.length,
-        onPageChanged: (int index) {
-          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-            animateToPage(pageController, index);
-          });
-        },
-        controller: pageController,
-        itemBuilder: (BuildContext context, int index) {
-          double scale = 1 - (index - pageOffset).abs();
-          return Transform(
-            transform: Matrix4.identity()
-              ..setEntry(3, 2, 0.01)
-              ..scale(scale, scale),
-            alignment: Alignment.center,
-            child: PhysicalModel(
-              color: context.theme.colorScheme.surface,
-              borderRadius: smallNavigationElements
-                  ? BorderRadius.circular(radius)
-                  : BorderRadius.circular(radius - gap),
-              child: insightWidgets[index],
-            ),
-          );
-        },
+      subtitle: ClipRRect(
+        borderRadius: BorderRadius.circular(radius - gap),
+        child: PageView.builder(
+          itemCount: insightsContoller.insightModelList.length,
+          onPageChanged: (int index) {
+            vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+              animateToPage(pageController, index);
+            });
+          },
+          controller: pageController,
+          itemBuilder: (BuildContext context, int index) {
+            double scale = 1 - (index - pageOffset).abs();
+            return Transform(
+              transform: Matrix4.identity()
+                ..setEntry(3, 2, 0.01)
+                ..scale(scale, scale),
+              alignment: Alignment.center,
+              child: PhysicalModel(
+                color: context.theme.colorScheme.surface,
+                borderRadius: smallNavigationElements
+                    ? BorderRadius.circular(radius)
+                    : BorderRadius.circular(radius - gap),
+                child: insightWidgets[index],
+              ),
+            );
+          },
+        ),
       ),
       explanationString: ref.watch(navigationShowInfoProvider)
           ? insightsContoller.insightModelList
