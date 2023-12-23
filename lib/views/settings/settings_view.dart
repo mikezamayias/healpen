@@ -30,8 +30,8 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
       borderRadius: BorderRadius.circular(radius - gap),
       child: SingleChildScrollView(
         child: Wrap(
-          spacing: gap,
-          runSpacing: gap,
+          spacing: useSimpleUI ? radius : gap,
+          runSpacing: useSimpleUI ? radius : gap,
           children: [
             for (SettingsItem settingsItem in SettingsController.settingsItems)
               if (settingsItem.widget is! Placeholder)
@@ -44,7 +44,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
       duration: standardDuration,
       curve: standardCurve,
       padding: EdgeInsets.all(gap),
-      decoration: ref.watch(navigationSmallerNavigationElementsProvider)
+      decoration: useSmallerNavigationElements
           ? BoxDecoration(
               color: context.theme.colorScheme.surface,
               borderRadius: BorderRadius.all(Radius.circular(radius)),
@@ -62,7 +62,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         ],
       ),
     );
-    return ref.watch(navigationSimpleUIProvider)
+    return useSimpleUI
         ? SimpleBlueprintView(
             simpleAppBar: const SimpleAppBar(
               appBarTitleString: 'Settings',
@@ -70,7 +70,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
             body: body,
           )
         : BlueprintView(
-            showAppBar: ref.watch(navigationShowAppBarProvider),
+            showAppBar: showAppBar,
             appBar: AppBar(
               pathNames: [
                 PageController().settings.titleGenerator(
@@ -83,14 +83,12 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
 
   CustomListTile _settingButton(SettingsItem settingsItem) {
     return CustomListTile(
-      responsiveWidth: !ref.watch(navigationShowInfoProvider),
-      useSmallerNavigationSetting: false,
-      cornerRadius: radius - gap,
+      useSmallerNavigationSetting: useSmallerNavigationElements,
+      cornerRadius: useSimpleUI ? radius : radius - gap,
+      contentPadding: EdgeInsets.all(useSimpleUI ? radius : gap),
       leadingIconData: settingsItem.iconData,
       titleString: settingsItem.title,
-      explanationString: ref.watch(navigationShowInfoProvider)
-          ? settingsItem.description
-          : null,
+      explanationString: showInformatoryText ? settingsItem.description : null,
       onTap: () {
         pushWithAnimation(
           context: context,
@@ -100,4 +98,10 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
       },
     );
   }
+
+  bool get useSimpleUI => ref.watch(navigationSimpleUIProvider);
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get showInformatoryText => ref.watch(navigationShowInfoProvider);
+  bool get showAppBar => ref.watch(navigationShowAppBarProvider);
 }
