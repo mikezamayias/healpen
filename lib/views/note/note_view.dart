@@ -107,13 +107,20 @@ class _NoteViewState extends ConsumerState<NoteView> {
             simpleAppBar: SimpleAppBar(
               appBarTitleString: titleString,
               appBarTrailing: SimpleGestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onVerticalSwipe: (direction) {
-                  if (direction == SwipeDirection.up) {
-                    ref.read(showEmojiInTrailingProvider.notifier).state =
-                        false;
-                  } else if (direction == SwipeDirection.down) {
-                    ref.read(showEmojiInTrailingProvider.notifier).state = true;
-                  }
+                  vibrate(
+                    ref.watch(navigationEnableHapticFeedbackProvider),
+                    () {
+                      if (direction == SwipeDirection.up) {
+                        ref.read(showEmojiInTrailingProvider.notifier).state =
+                            false;
+                      } else if (direction == SwipeDirection.down) {
+                        ref.read(showEmojiInTrailingProvider.notifier).state =
+                            true;
+                      }
+                    },
+                  );
                 },
                 child: AnimatedCrossFade(
                   duration: standardDuration,
