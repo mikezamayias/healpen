@@ -7,19 +7,26 @@ import '../../../../utils/helper_functions.dart';
 import '../../../../widgets/custom_list_tile.dart';
 import '../../licenses/settings_licenses_view.dart';
 
-class OpenSourceLicensesTile extends ConsumerWidget {
+class OpenSourceLicensesTile extends ConsumerStatefulWidget {
   const OpenSourceLicensesTile({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OpenSourceLicensesTile> createState() =>
+      _OpenSourceLicensesTileState();
+}
+
+class _OpenSourceLicensesTileState
+    extends ConsumerState<OpenSourceLicensesTile> {
+  @override
+  Widget build(BuildContext context) {
     return CustomListTile(
-      useSmallerNavigationSetting:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
-      enableExplanationWrapper: false,
+      useSmallerNavigationSetting: !useSmallerNavigationElements,
       titleString: 'Open Source Licenses',
-      explanationString: 'View the licenses of the open source packages used.',
+      explanationString: showInfo
+          ? 'View the licenses of the open source packages used.'
+          : null,
       leadingIconData: FontAwesomeIcons.code,
       onTap: () {
         pushWithAnimation(
@@ -30,4 +37,8 @@ class OpenSourceLicensesTile extends ConsumerWidget {
       },
     );
   }
+
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get showInfo => ref.watch(navigationShowInfoProvider);
 }

@@ -6,17 +6,21 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class PrivacyPolicyTile extends ConsumerWidget {
+class PrivacyPolicyTile extends ConsumerStatefulWidget {
   const PrivacyPolicyTile({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PrivacyPolicyTile> createState() => _PrivacyPolicyTileState();
+}
+
+class _PrivacyPolicyTileState extends ConsumerState<PrivacyPolicyTile> {
+  @override
+  Widget build(BuildContext context) {
     return CustomListTile(
-      useSmallerNavigationSetting:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
-      enableExplanationWrapper: false,
+      useSmallerNavigationSetting: !useSmallerNavigationElements,
       titleString: 'Privacy Policy',
-      explanationString: 'View the privacy policy for this app.',
+      explanationString:
+          showInfo ? 'View the privacy policy for this app.' : null,
       leadingIconData: FontAwesomeIcons.userShield,
       onTap: () {
         launchUrl(
@@ -29,4 +33,8 @@ class PrivacyPolicyTile extends ConsumerWidget {
       },
     );
   }
+
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get showInfo => ref.watch(navigationShowInfoProvider);
 }

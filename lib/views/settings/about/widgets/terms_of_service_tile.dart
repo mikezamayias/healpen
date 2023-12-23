@@ -6,17 +6,21 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class TermsOfServiceTile extends ConsumerWidget {
+class TermsOfServiceTile extends ConsumerStatefulWidget {
   const TermsOfServiceTile({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TermsOfServiceTile> createState() => _TermsOfServiceTileState();
+}
+
+class _TermsOfServiceTileState extends ConsumerState<TermsOfServiceTile> {
+  @override
+  Widget build(BuildContext context) {
     return CustomListTile(
-      useSmallerNavigationSetting:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
-      enableExplanationWrapper: false,
+      useSmallerNavigationSetting: !useSmallerNavigationElements,
       titleString: 'Terms and Conditions',
-      explanationString: 'View the terms and conditions for this app.',
+      explanationString:
+          showInfo ? 'View the terms and conditions for this app.' : null,
       leadingIconData: FontAwesomeIcons.fileContract,
       onTap: () {
         launchUrl(
@@ -29,4 +33,8 @@ class TermsOfServiceTile extends ConsumerWidget {
       },
     );
   }
+
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get showInfo => ref.watch(navigationShowInfoProvider);
 }

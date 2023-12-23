@@ -18,9 +18,9 @@ class _AuthorTileState extends ConsumerState<AuthorTile> {
   Widget build(BuildContext context) {
     return CustomListTile(
       useSmallerNavigationSetting: !useSmallerNavigationElements,
-      enableExplanationWrapper: showInfo,
       titleString: 'Mike Zamayias',
-      explanationString: 'Visit the developer\'s personal website.',
+      explanationString:
+          showInfo ? 'Visit the developer\'s personal website.' : null,
       leadingIconData: FontAwesomeIcons.laptopCode,
       onTap: () {
         launchUrl(
