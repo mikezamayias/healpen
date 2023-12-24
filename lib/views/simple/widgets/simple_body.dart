@@ -6,11 +6,13 @@ import '../../../utils/constants.dart';
 class SimpleBody extends StatelessWidget {
   const SimpleBody({
     super.key,
-    required this.padding,
     required this.body,
+    this.padding,
+    this.padBody = true,
   });
 
-  final EdgeInsets padding;
+  final bool? padBody;
+  final EdgeInsets? padding;
   final Widget body;
 
   @override
@@ -19,11 +21,13 @@ class SimpleBody extends StatelessWidget {
       duration: standardDuration,
       curve: standardCurve,
       alignment: Alignment.topCenter,
-      padding: EdgeInsets.only(
-        left: radius * 2 - padding.left,
-        right: radius * 2 - padding.right,
-        top: radius * 2 - padding.top,
-      ),
+      padding: !padBody!
+          ? EdgeInsets.zero
+          : EdgeInsets.only(
+              left: radius * 2 - padding!.left,
+              right: radius * 2 - padding!.right,
+              top: radius * 2 - padding!.top,
+            ),
       decoration: BoxDecoration(
         color: context.theme.colorScheme.surface,
         borderRadius: BorderRadius.only(
