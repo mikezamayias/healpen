@@ -26,16 +26,15 @@ class SimpleBlueprintView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final padding = bodyPadding ?? EdgeInsets.all(radius);
-    return Material(
-      type: MaterialType.transparency,
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: getSystemUIOverlayStyle(
-          context.theme,
-          ref.watch(themeAppearanceProvider),
-        ),
-        child: GestureDetector(
-          onTap: () => context.focusScope.unfocus(),
-          child: Container(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: getSystemUIOverlayStyle(
+        context.theme,
+        ref.watch(themeAppearanceProvider),
+      ),
+      child: GestureDetector(
+        onTap: () => context.focusScope.unfocus(),
+        child: Scaffold(
+          body: Container(
             color: context.theme.colorScheme.primaryContainer,
             child: Column(
               children: <Widget>[

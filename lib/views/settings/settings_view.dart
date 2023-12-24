@@ -26,46 +26,62 @@ class SettingsView extends ConsumerStatefulWidget {
 class _SettingsViewState extends ConsumerState<SettingsView> {
   @override
   Widget build(BuildContext context) {
-    Widget body = ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
+    return _useSimpleUI ? _buildSimpleView() : _buildRegularView();
+  }
+
+  Widget _buildSimpleView() {
+    return SimpleBlueprintView(
+      simpleAppBar: const SimpleAppBar(appBarTitleString: 'Settings'),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildRegularView() {
+    return BlueprintView(
+      showAppBar: _showAppBar,
+      appBar: AppBar(
+        pathNames: [
+          PageController()
+              .settings
+              .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
+        ],
+      ),
+      body: _buildBodyWrapper(),
+    );
+  }
+
+  Widget _buildBody() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(_dynamicRadius),
       child: SingleChildScrollView(
         child: Wrap(
-          spacing: useSimpleUI ? radius : gap,
-          runSpacing: useSimpleUI ? radius : gap,
-          children: [
-            for (SettingsItem settingsItem in SettingsController.settingsItems)
-              if (settingsItem.widget is! Placeholder)
-                _settingButton(settingsItem),
-          ],
+          spacing: _dynamicSpacing,
+          runSpacing: _dynamicSpacing,
+          children: SettingsController.settingsItems
+              .where((item) => item.widget is! Placeholder)
+              .map(_settingButton)
+              .toList(),
         ),
       ),
     );
-    Widget regularBody = Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: body,
-        ),
-      ],
+  }
+
+  Widget _buildBodyWrapper() {
+    return AnimatedContainer(
+      duration: standardDuration,
+      curve: standardCurve,
+      decoration: BoxDecoration(
+        color: !_useSimpleUI
+            ? theme.colorScheme.surfaceVariant
+            : theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(_dynamicRadius),
+      ),
+      padding: EdgeInsets.all(_dynamicPadding),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [Expanded(child: _buildBody())],
+      ),
     );
-    return useSimpleUI
-        ? SimpleBlueprintView(
-            simpleAppBar: const SimpleAppBar(
-              appBarTitleString: 'Settings',
-            ),
-            body: body,
-          )
-        : BlueprintView(
-            showAppBar: showAppBar,
-            backgroundColor: theme.colorScheme.surface,
-            appBar: AppBar(
-              pathNames: [
-                PageController().settings.titleGenerator(
-                    FirebaseAuth.instance.currentUser?.displayName)
-              ],
-            ),
-            body: regularBody,
-          );
   }
 
   CustomListTile _settingButton(SettingsItem settingsItem) {
@@ -74,10 +90,11 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
           !ref.watch(navigationSmallerNavigationElementsProvider),
       enableExplanationWrapper:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      cornerRadius: radius,
+      cornerRadius:
+          _useSimpleUI == _useSmallerNavigationElements ? radius - gap : radius,
       leadingIconData: settingsItem.iconData,
       titleString: settingsItem.title,
-      explanationString: showInformatoryText ? settingsItem.description : null,
+      explanationString: _showInformatoryText ? settingsItem.description : null,
       onTap: () {
         pushWithAnimation(
           context: context,
@@ -88,12 +105,20 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     );
   }
 
-  bool get useSimpleUI => ref.watch(navigationSimpleUIProvider);
+  double get _dynamicRadius =>
+      _useSimpleUI == _useSmallerNavigationElements ? radius - gap : radius;
 
-  bool get useSmallerNavigationElements =>
+  double get _dynamicSpacing => _useSimpleUI ? radius : gap;
+
+  double get _dynamicPadding =>
+      _useSimpleUI == _useSmallerNavigationElements ? radius - gap : radius;
+
+  bool get _useSimpleUI => ref.watch(navigationSimpleUIProvider);
+
+  bool get _useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
 
-  bool get showInformatoryText => ref.watch(navigationShowInfoProvider);
+  bool get _showInformatoryText => ref.watch(navigationShowInfoProvider);
 
-  bool get showAppBar => ref.watch(navigationShowAppBarProvider);
+  bool get _showAppBar => ref.watch(navigationShowAppBarProvider);
 }

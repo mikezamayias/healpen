@@ -8,20 +8,26 @@ import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
-class StopwatchTile extends ConsumerWidget {
+class StopwatchTile extends ConsumerStatefulWidget {
   const StopwatchTile({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<StopwatchTile> createState() => _StopwatchTileState();
+}
+
+class _StopwatchTileState extends ConsumerState<StopwatchTile> {
+  @override
+  Widget build(BuildContext context) {
     return CustomListTile(
       useSmallerNavigationSetting: false,
-      cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider) ||
-              ref.watch(navigationSimpleUIProvider)
-          ? radius
-          : radius - gap,
+      cornerRadius:
+          useSmallerNavigationElements || useSimpleUI ? radius : radius - gap,
       titleString: 'Stopwatch',
+      backgroundColor: useSmallerNavigationElements || useSimpleUI
+          ? context.theme.colorScheme.surfaceVariant
+          : context.theme.colorScheme.surface,
       trailing: Text(
         ref.watch(writingControllerProvider).duration.writingDurationFormat(),
         style: context.theme.textTheme.titleLarge!.copyWith(
@@ -30,4 +36,9 @@ class StopwatchTile extends ConsumerWidget {
       ),
     );
   }
+
+  bool get useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+
+  bool get useSimpleUI => ref.watch(navigationSimpleUIProvider);
 }

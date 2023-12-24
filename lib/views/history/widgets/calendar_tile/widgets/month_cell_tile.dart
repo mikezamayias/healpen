@@ -15,7 +15,7 @@ import '../../../../../providers/settings_providers.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/helper_functions.dart';
 
-class MonthCellTile extends ConsumerWidget {
+class MonthCellTile extends ConsumerStatefulWidget {
   final MonthCellDetails cellDetails;
 
   const MonthCellTile({
@@ -24,16 +24,19 @@ class MonthCellTile extends ConsumerWidget {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
-    Color shapeColor = smallNavigationElements
+  ConsumerState<MonthCellTile> createState() => _MonthCellTileState();
+}
+
+class _MonthCellTileState extends ConsumerState<MonthCellTile> {
+  @override
+  Widget build(BuildContext context) {
+    Color shapeColor = !smallNavigationElements
         ? context.theme.colorScheme.surfaceVariant
         : context.theme.colorScheme.surface;
-    Color textColor = smallNavigationElements
+    Color textColor = !smallNavigationElements
         ? context.theme.colorScheme.onSurfaceVariant
         : context.theme.colorScheme.onSurface;
-    final DateTime cellDate = cellDetails.date;
+    final DateTime cellDate = widget.cellDetails.date;
     final dateAnalysisModelList =
         ref.watch(analysisModelSetProvider).getAnalysisBetweenDates(
               start: cellDate.startOfDay(),
@@ -42,7 +45,7 @@ class MonthCellTile extends ConsumerWidget {
     bool todayCheck = DateFormat('yyyy-MM-dd').format(cellDate) ==
         DateFormat('yyyy-MM-dd').format(DateTime.now());
     bool currentMonthCheck =
-        cellDate.month == cellDetails.visibleDates[15].month;
+        cellDate.month == widget.cellDetails.visibleDates[15].month;
     bool dateAfterTodayCheck = cellDate.isAfter(DateTime.now());
     bool dateBeforeFirstRecordCheck = cellDate.isBefore(
       ref
@@ -95,28 +98,49 @@ class MonthCellTile extends ConsumerWidget {
               ),
             ),
             if (dateAnalysisModelList.isNotEmpty)
-              Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.only(bottom: gap),
-                child: ClipOval(
-                  child: Container(
-                    color: textColor,
-                    width: context.theme.textTheme.headlineSmall!.fontSize!,
-                    height: context.theme.textTheme.headlineSmall!.fontSize!,
-                    alignment: Alignment.center,
-                    child: Text(
-                      '${dateAnalysisModelList.length}',
-                      textAlign: TextAlign.center,
-                      style: context.theme.textTheme.titleSmall!.copyWith(
-                        color: shapeColor,
-                        fontWeight: FontWeight.bold,
-                        textBaseline: TextBaseline.alphabetic,
-                      ),
-                    ).animate().fade(
-                          duration: standardDuration,
-                          curve: standardCurve,
+              Tooltip(
+                message: 'Number of entries for this day',
+                child: AnimatedContainer(
+                  duration: standardDuration,
+                  curve: standardCurve,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(bottom: gap),
+                  child: !smallNavigationElements
+                      ? Text(
+                          '${dateAnalysisModelList.length}',
+                          textAlign: TextAlign.center,
+                          style: context.theme.textTheme.titleSmall!.copyWith(
+                            color: textColor,
+                            fontWeight: FontWeight.bold,
+                            textBaseline: TextBaseline.alphabetic,
+                          ),
+                        ).animate().fade(
+                            duration: standardDuration,
+                            curve: standardCurve,
+                          )
+                      : ClipOval(
+                          child: Container(
+                            color: textColor,
+                            width: context
+                                .theme.textTheme.headlineSmall!.fontSize!,
+                            height: context
+                                .theme.textTheme.headlineSmall!.fontSize!,
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${dateAnalysisModelList.length}',
+                              textAlign: TextAlign.center,
+                              style:
+                                  context.theme.textTheme.titleSmall!.copyWith(
+                                color: shapeColor,
+                                fontWeight: FontWeight.bold,
+                                textBaseline: TextBaseline.alphabetic,
+                              ),
+                            ).animate().fade(
+                                  duration: standardDuration,
+                                  curve: standardCurve,
+                                ),
+                          ),
                         ),
-                  ),
                 ),
               ),
           ],
@@ -124,4 +148,7 @@ class MonthCellTile extends ConsumerWidget {
       ),
     );
   }
+
+  bool get smallNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
 }

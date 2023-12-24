@@ -29,7 +29,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
     final minDate = analysisModelList.first.timestamp.timestampToDateTime();
     return Container(
       decoration: BoxDecoration(
-        color: smallNavigationElements
+        color: !smallNavigationElements
             ? theme.colorScheme.surface
             : theme.colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(radius),

@@ -6,16 +6,18 @@ import '../../../controllers/writing_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 
-class WritingTextField extends ConsumerWidget {
+class WritingTextField extends ConsumerStatefulWidget {
   const WritingTextField({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final smallNavigationElements =
-        ref.watch(navigationSmallerNavigationElementsProvider);
-    final simpleUi = ref.watch(navigationSimpleUIProvider);
-    final borderRadius = smallNavigationElements ? radius : radius - gap;
-    final color = simpleUi
+  ConsumerState<WritingTextField> createState() => _WritingTextFieldState();
+}
+
+class _WritingTextFieldState extends ConsumerState<WritingTextField> {
+  @override
+  Widget build(BuildContext context) {
+    final borderRadius = useSmallNavigationElements ? radius : radius - gap;
+    final color = useSimpleUi || useSmallNavigationElements
         ? context.theme.colorScheme.surfaceVariant
         : context.theme.colorScheme.surface;
     return Container(
@@ -51,4 +53,9 @@ class WritingTextField extends ConsumerWidget {
       ),
     );
   }
+
+  bool get useSmallNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+
+  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
 }
