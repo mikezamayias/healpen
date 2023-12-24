@@ -12,12 +12,14 @@ import 'widgets/simple_body.dart';
 class SimpleBlueprintView extends ConsumerWidget {
   final SimpleAppBar simpleAppBar;
   final EdgeInsets? bodyPadding;
+  final bool? padBody;
   final Widget body;
 
   const SimpleBlueprintView({
     super.key,
     required this.simpleAppBar,
     this.bodyPadding,
+    this.padBody = true,
     required this.body,
   });
 
@@ -40,6 +42,7 @@ class SimpleBlueprintView extends ConsumerWidget {
                 simpleAppBar,
                 Expanded(
                   child: SimpleBody(
+                    padBody: padBody,
                     padding: padding,
                     body: body,
                   ),
