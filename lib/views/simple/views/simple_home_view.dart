@@ -38,46 +38,57 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
     final isKeyboardOpen =
         ref.watch(WritingController().isKeyboardOpenProvider);
     final padding = _keyboardAwarePadding(isKeyboardOpen);
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: <Widget>[
-        SimpleBlueprintView(
-          simpleAppBar: SimpleAppBar(
-            appBarPadding: padding,
-            automaticallyImplyLeading: false,
-            appBarLeading: isKeyboardOpen ? const StopwatchTile() : null,
-            appBarTitleString:
-                isKeyboardOpen ? null : 'How are you feeling today?',
-            appBarTrailing: isKeyboardOpen ? const SaveNoteButton() : null,
-            belowRowWidget: isKeyboardOpen
-                ? null
-                : SingleChildScrollView(
-                    clipBehavior: Clip.none,
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: _buildNoteTiles(analysisModelSet)
-                          .take(6)
-                          .toList()
-                          .addSpacer(SizedBox(width: radius)),
-                    ),
-                  ),
+    return SimpleBlueprintView(
+      simpleAppBar: SimpleAppBar(
+        appBarPadding: padding,
+        automaticallyImplyLeading: false,
+        appBarLeading: isKeyboardOpen ? const StopwatchTile() : null,
+        appBarTitleString: isKeyboardOpen ? null : 'How are you feeling today?',
+        appBarTrailing: isKeyboardOpen ? const SaveNoteButton() : null,
+        belowRowWidget: isKeyboardOpen
+            ? null
+            : SingleChildScrollView(
+                clipBehavior: Clip.none,
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: _buildNoteTiles(analysisModelSet)
+                      .take(6)
+                      .toList()
+                      .addSpacer(SizedBox(width: radius)),
+                ),
+              ),
+      ),
+      padBody: false,
+      bodyPadding: null,
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: AnimatedPadding(
+              duration: standardDuration,
+              curve: standardCurve,
+              padding: EdgeInsets.all(radius),
+              child: const WritingTextField(),
+            ),
           ),
-          body: const WritingTextField(),
-        ),
-        if (!isKeyboardOpen) _buildHorizontalScrollingRow(analysisModelSet),
-      ],
+          if (!isKeyboardOpen) _buildHorizontalScrollingRow(analysisModelSet),
+        ],
+      ),
     );
   }
 
   Widget _buildHorizontalScrollingRow(analysisModelSet) {
     return SafeArea(
-      child: SingleChildScrollView(
-        clipBehavior: Clip.none,
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: _buildFixedWidgets().addSpacer(SizedBox(width: radius)),
+      top: false,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: gap),
+        child: SingleChildScrollView(
+          clipBehavior: Clip.none,
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: _buildFixedWidgets().addSpacer(SizedBox(width: radius)),
+          ),
         ),
       ),
     );
