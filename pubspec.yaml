@@ -78,11 +78,10 @@ flutter:
   uses-material-design: true
 
 flutter_launcher_icons:
-  android: true
-  image_path_android: "assets/icon/icon-2x-android.png"
-  min_sdk_android: 29
+  android: "launcher_icon"
   ios: true
-  image_path_ios: "assets/icon/icon-2x-ios.png"
+  image_path: "assets/icon/icon-2x.png"
+  min_sdk_android: 29
   remove_alpha_ios: true
   web:
     generate: false
