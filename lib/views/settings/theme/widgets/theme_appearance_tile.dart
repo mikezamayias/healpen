@@ -24,7 +24,6 @@ class ThemeAppearanceTile extends ConsumerWidget {
       titleString: 'Appearance',
       explanationString:
           enableInformatoryText ? 'Changes the appearance of the app.' : null,
-      enableSubtitleWrapper: false,
       subtitle: SegmentedButton<ThemeAppearance>(
         showSelectedIcon: false,
         segments: <ButtonSegment<ThemeAppearance>>[

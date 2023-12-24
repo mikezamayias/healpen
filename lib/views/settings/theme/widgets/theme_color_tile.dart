@@ -23,7 +23,6 @@ class ThemeColorTile extends ConsumerWidget {
       titleString: 'Color',
       explanationString:
           enableInformatoryText ? 'Changes the color of the app.' : null,
-      enableSubtitleWrapper: false,
       subtitle: SegmentedButton<ThemeColor>(
         showSelectedIcon: false,
         segments: <ButtonSegment<ThemeColor>>[
