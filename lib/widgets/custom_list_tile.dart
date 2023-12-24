@@ -169,7 +169,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   Widget get subtitle => AnimatedPadding(
         duration: standardDuration,
         curve: standardCurve,
-        padding: widget.padSubtitle! ? padding : EdgeInsets.zero,
+        padding: widget.padSubtitle! ? subtitlePadding : EdgeInsets.zero,
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
@@ -184,34 +184,41 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
         ),
       );
 
-  Widget get explanation => AnimatedPadding(
-        duration: standardDuration,
-        curve: standardCurve,
-        padding:
-            useSmallerNavigationElements && !widget.enableExplanationWrapper!
-                ? EdgeInsets.zero
-                : padding,
-        child: AnimatedContainer(
-          duration: standardDuration,
-          curve: standardCurve,
-          padding:
-              useSmallerNavigationElements && !widget.enableExplanationWrapper!
-                  ? explanationPadding.copyWith(top: 0)
-                  : padding,
-          decoration: explanationDecoration,
-          child: SelectableText(
-            widget.explanationString!,
-            onTap: widget.onTap,
-            maxLines: widget.maxExplanationStringLines,
-            enableInteractiveSelection: widget.selectableText!,
-            style: theme.textTheme.titleMedium!.copyWith(
-              color: widget.enableExplanationWrapper!
-                  ? theme.colorScheme.onSurface
-                  : textColor,
-            ),
-          ),
+  Widget get explanation {
+    Widget explanationContainer = AnimatedContainer(
+      duration: standardDuration,
+      curve: standardCurve,
+      padding: useSmallerNavigationElements && !widget.enableExplanationWrapper!
+          ? explanationPadding
+          : padding,
+      decoration: explanationDecoration,
+      child: SelectableText(
+        widget.explanationString!,
+        onTap: widget.onTap,
+        maxLines: widget.maxExplanationStringLines,
+        enableInteractiveSelection: widget.selectableText!,
+        style: theme.textTheme.titleMedium!.copyWith(
+          color: widget.enableExplanationWrapper!
+              ? theme.colorScheme.onSurface
+              : textColor,
         ),
-      );
+      ),
+    );
+    return AnimatedContainer(
+      duration: standardDuration,
+      curve: standardCurve,
+      child: widget.padExplanation!
+          ? AnimatedPadding(
+              duration: standardDuration,
+              curve: standardCurve,
+              padding: !widget.enableExplanationWrapper!
+                  ? EdgeInsets.zero
+                  : explanationPadding,
+              child: explanationContainer,
+            )
+          : explanationContainer,
+    );
+  }
 
   BoxDecoration get containerDecoration => BoxDecoration(
         color: backgroundColor,
@@ -289,4 +296,10 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
 
   EdgeInsets get explanationPadding =>
       widget.padExplanation! ? padding : EdgeInsets.zero;
+
+  EdgeInsets get subtitlePadding => widget.padSubtitle!
+      ? hasExplanation
+          ? padding.copyWith(bottom: 0)
+          : padding
+      : EdgeInsets.zero;
 }
