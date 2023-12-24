@@ -66,17 +66,9 @@ class _NoteViewState extends ConsumerState<NoteView> {
             ),
             CustomListTile(
               responsiveWidth: false,
-              useSmallerNavigationSetting:
-                  !ref.watch(navigationSmallerNavigationElementsProvider),
-              enableExplanationWrapper:
-                  !ref.watch(navigationSmallerNavigationElementsProvider),
               titleString: 'Content',
               subtitleString: analysisModel.content,
               selectableText: true,
-              subtitlePadding:
-                  ref.watch(navigationSmallerNavigationElementsProvider)
-                      ? EdgeInsets.zero
-                      : EdgeInsets.all(gap),
             ),
             CustomListTile(
               useSmallerNavigationSetting:
@@ -131,8 +123,6 @@ class _NoteViewState extends ConsumerState<NoteView> {
     return CustomListTile(
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      enableExplanationWrapper:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
       titleString: fieldName,
       trailing: fieldValue is Widget
           ? fieldValue
@@ -140,9 +130,6 @@ class _NoteViewState extends ConsumerState<NoteView> {
               fieldValue,
               style: context.theme.textTheme.titleLarge,
             ),
-      subtitlePadding: ref.watch(navigationSmallerNavigationElementsProvider)
-          ? EdgeInsets.zero
-          : EdgeInsets.all(gap),
     );
   }
 }
