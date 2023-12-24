@@ -66,15 +66,12 @@ class _NoteViewState extends ConsumerState<NoteView> {
             ),
             CustomListTile(
               responsiveWidth: false,
-              titleString: 'Content',
-              subtitleString: analysisModel.content,
               selectableText: true,
+              titleString: 'Content',
+              enableExplanationWrapper: true,
+              explanationString: analysisModel.content,
             ),
             CustomListTile(
-              useSmallerNavigationSetting:
-                  !ref.watch(navigationSmallerNavigationElementsProvider),
-              enableExplanationWrapper:
-                  !ref.watch(navigationSmallerNavigationElementsProvider),
               titleString: 'Emotional Echo',
               subtitle: SizedBox(
                 height: 39.h,
