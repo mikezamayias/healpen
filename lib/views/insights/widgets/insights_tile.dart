@@ -37,11 +37,11 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
 
   @override
   Widget build(BuildContext context) {
-    final insightsContoller = ref.watch(insightsControllerProvider);
+    final insightsController = ref.watch(insightsControllerProvider);
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
     List<Widget> insightWidgets = [];
-    insightWidgets = insightsContoller.insightModelList
+    insightWidgets = insightsController.insightModelList
         .map((e) => smallNavigationElements
             ? Padding(
                 padding: EdgeInsets.only(top: gap),
@@ -52,14 +52,12 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
     return CustomListTile(
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      // enableExplanationWrapper:
-      //     !ref.watch(navigationSmallerNavigationElementsProvider),
-      titleString: insightsContoller.insightModelList
+      titleString: insightsController.insightModelList
           .elementAt(pageOffset.round())
           .title,
       trailing: SmoothPageIndicator(
         controller: pageController,
-        count: insightsContoller.insightModelList.length,
+        count: insightsController.insightModelList.length,
         effect: ExpandingDotsEffect(
           dotHeight: gap,
           dotWidth: gap,
@@ -70,7 +68,7 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
       subtitle: ClipRRect(
         borderRadius: BorderRadius.circular(radius - gap),
         child: PageView.builder(
-          itemCount: insightsContoller.insightModelList.length,
+          itemCount: insightsController.insightModelList.length,
           onPageChanged: (int index) {
             vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
               animateToPage(pageController, index);
@@ -96,7 +94,7 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
         ),
       ),
       explanationString: ref.watch(navigationShowInfoProvider)
-          ? insightsContoller.insightModelList
+          ? insightsController.insightModelList
               .elementAt(pageOffset.round())
               .explanation
           : null,
