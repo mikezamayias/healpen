@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import '../../../controllers/emotional_echo_controller.dart';
 import '../../../controllers/history_view_controller.dart';
 import '../../../models/analysis/analysis_model.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../route_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
@@ -95,6 +96,8 @@ class NoteTile extends ConsumerWidget {
             textColor: textColor,
             backgroundColor: shapeColor,
             cornerRadius: radius - gap,
+            padExplanation:
+                true == ref.watch(navigationSmallerNavigationElementsProvider),
             explanationString: DateFormat('HH:mm').format(
               DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
             ),

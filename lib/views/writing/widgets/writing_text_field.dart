@@ -14,19 +14,16 @@ class WritingTextField extends ConsumerWidget {
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
     final simpleUi = ref.watch(navigationSimpleUIProvider);
-    return AnimatedContainer(
-      duration: standardDuration,
-      curve: standardCurve,
-      decoration: smallNavigationElements || simpleUi
-          ? BoxDecoration(
-              color: context.theme.colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(radius),
-            )
-          : BoxDecoration(
-              color: context.theme.colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(radius - gap),
-            ),
-      padding: simpleUi ? EdgeInsets.zero : EdgeInsets.all(gap),
+    final borderRadius = smallNavigationElements ? radius : radius - gap;
+    final color = simpleUi
+        ? context.theme.colorScheme.surfaceVariant
+        : context.theme.colorScheme.surface;
+    return Container(
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      padding: EdgeInsets.all(gap),
       child: TextField(
         controller: ref.read(writingControllerProvider.notifier).textController,
         onChanged:
