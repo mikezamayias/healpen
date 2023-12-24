@@ -183,9 +183,7 @@ class FirestoreService {
             'Note ${element.id}, removing $key',
           );
         }).catchError((error) {
-          logger.i(
-            '$error',
-          );
+          logger.e('$error');
         });
       }
     }
@@ -263,6 +261,7 @@ class FirestoreService {
         'added sentences',
       );
     }).catchError((error) {
+      logger.e('$error');
       throw error;
     });
   }

@@ -101,9 +101,7 @@ class FirestorePreferencesController {
         }
       } catch (e) {
         // Log any exceptions that occur during conversion.
-        logger.i(
-          'Error converting value: $e',
-        );
+        logger.e('$e');
         // Here, you could add further error handling depending on your needs.
       }
     }
