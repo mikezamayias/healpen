@@ -46,13 +46,15 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
               .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         ],
       ),
-      body: _buildBodyWrapper(),
+      body: Column(
+        children: <Widget>[Expanded(child: _buildBodyWrapper())],
+      ),
     );
   }
 
   Widget _buildBody() {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(_dynamicRadius),
+      borderRadius: BorderRadius.circular(_dynamicRadius - gap),
       child: SingleChildScrollView(
         child: Wrap(
           spacing: _dynamicSpacing,
@@ -70,26 +72,26 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     return AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
-      decoration: BoxDecoration(
-        color: !_useSimpleUI
-            ? theme.colorScheme.surfaceVariant
-            : theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(_dynamicRadius),
-      ),
-      padding: EdgeInsets.all(_dynamicPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [Expanded(child: _buildBody())],
-      ),
+      decoration: _useSimpleUI || _useSmallerNavigationElements
+          ? BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(_dynamicRadius),
+            )
+          : BoxDecoration(
+              color: theme.colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(_dynamicRadius),
+            ),
+      padding: _useSimpleUI || _useSmallerNavigationElements
+          ? EdgeInsets.zero
+          : EdgeInsets.all(_dynamicPadding),
+      child: _buildBody(),
     );
   }
 
   CustomListTile _settingButton(SettingsItem settingsItem) {
     return CustomListTile(
-      useSmallerNavigationSetting:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
-      enableExplanationWrapper:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
+      useSmallerNavigationSetting: !_useSmallerNavigationElements,
+      enableExplanationWrapper: !_useSmallerNavigationElements && _useSimpleUI,
       cornerRadius:
           _useSimpleUI == _useSmallerNavigationElements ? radius - gap : radius,
       leadingIconData: settingsItem.iconData,
@@ -106,7 +108,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
   }
 
   double get _dynamicRadius =>
-      _useSimpleUI == _useSmallerNavigationElements ? radius - gap : radius;
+      _useSimpleUI || _useSmallerNavigationElements ? radius - gap : radius;
 
   double get _dynamicSpacing => _useSimpleUI ? radius : gap;
 
