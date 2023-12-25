@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../models/settings/settings_item.dart';
+import '../../models/settings/settings_item_model.dart';
 import '../../views/settings/about/settings_about_view.dart';
 import '../../views/settings/account/settings_account_view.dart';
 import '../../views/settings/insights/settings_insights_view.dart';
@@ -11,58 +11,60 @@ import '../../views/settings/writing/settings_writing_view.dart';
 
 class SettingsController {
   static final SettingsController _instance = SettingsController._internal();
+
   factory SettingsController() => _instance;
+
   SettingsController._internal();
 
-  static final theme = SettingsItem(
+  static final theme = SettingsItemModel.withWidget(
     title: 'Theme',
     description: 'Change the look of the app.',
-    iconData: FontAwesomeIcons.swatchbook,
+    leadingIconData: FontAwesomeIcons.swatchbook,
     widget: const SettingsThemeView(),
   );
-  static final navigation = SettingsItem(
+  static final navigation = SettingsItemModel.withWidget(
     title: 'Navigation',
     description: 'Change the way you navigate the app.',
-    iconData: FontAwesomeIcons.route,
+    leadingIconData: FontAwesomeIcons.route,
     widget: const SettingsNavigationView(),
   );
-  static final account = SettingsItem(
+  static final account = SettingsItemModel.withWidget(
     title: 'Account',
     description: 'Change your account settings.',
-    iconData: FontAwesomeIcons.userLarge,
+    leadingIconData: FontAwesomeIcons.userLarge,
     widget: const SettingsAccountView(),
   );
-  static final writing = SettingsItem(
+  static final writing = SettingsItemModel.withWidget(
     title: 'Writing',
     description: 'Change the way you write.',
-    iconData: FontAwesomeIcons.pencil,
+    leadingIconData: FontAwesomeIcons.pencil,
     widget: const SettingsWritingView(),
   );
-  static final insights = SettingsItem(
+  static final insights = SettingsItemModel.withWidget(
     title: 'Insights',
     description: 'Change the way you see your data.',
-    iconData: FontAwesomeIcons.brain,
+    leadingIconData: FontAwesomeIcons.brain,
     widget: const SettingsInsightsView(),
   );
-  static final dataAndPrivacy = SettingsItem(
+  static final dataAndPrivacy = SettingsItemModel.withWidget(
     title: 'Data & Privacy',
     description: 'Learn more about your data.',
-    iconData: FontAwesomeIcons.scroll,
+    leadingIconData: FontAwesomeIcons.scroll,
     widget: const Placeholder(),
   );
-  static final helpAndSupport = SettingsItem(
+  static final helpAndSupport = SettingsItemModel.withWidget(
     title: 'Help & Support',
     description: 'Get help with the app.',
-    iconData: FontAwesomeIcons.solidMessage,
+    leadingIconData: FontAwesomeIcons.solidMessage,
     widget: const Placeholder(),
   );
-  static final about = SettingsItem(
+  static final about = SettingsItemModel.withWidget(
     title: 'About',
     description: 'Learn more about the app.',
-    iconData: FontAwesomeIcons.circleInfo,
+    leadingIconData: FontAwesomeIcons.circleInfo,
     widget: const SettingsAboutView(),
   );
-  static final List<SettingsItem> settingsItems = [
+  static final List<SettingsItemModel> settingsItems = [
     theme,
     navigation,
     account,
