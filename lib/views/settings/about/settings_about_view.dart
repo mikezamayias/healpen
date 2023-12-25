@@ -4,10 +4,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../utils/constants.dart';
+import '../../../models/settings/settings_item_model.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/app_bar.dart';
-import '../../../widgets/custom_list_tile.dart';
 import '../../blueprint/blueprint_view.dart';
 import '../../simple/simple_blueprint_view.dart';
 import '../../simple/widgets/simple_app_bar.dart';
@@ -24,8 +24,8 @@ class SettingsAboutView extends ConsumerStatefulWidget {
 class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
   @override
   Widget build(BuildContext context) {
-    final aboutTileModels = <AboutTileModel>[
-      AboutTileModel(
+    final aboutTileModels = <SettingsItemModel>[
+      SettingsItemModel(
         title: 'Mike Zamayias',
         description: 'Visit the developer\'s personal website.',
         onTap: () {
@@ -36,7 +36,7 @@ class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
         },
         leadingIconData: FontAwesomeIcons.laptopCode,
       ),
-      AboutTileModel(
+      SettingsItemModel(
         title: 'Terms and Conditions',
         description: 'View the terms and conditions for this app.',
         onTap: () {
@@ -50,7 +50,7 @@ class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
         },
         leadingIconData: FontAwesomeIcons.fileContract,
       ),
-      AboutTileModel(
+      SettingsItemModel(
         title: 'Privacy Policy',
         description: 'View the privacy policy for this app.',
         onTap: () {
@@ -64,7 +64,7 @@ class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
         },
         leadingIconData: FontAwesomeIcons.userShield,
       ),
-      AboutTileModel(
+      SettingsItemModel(
         title: 'Open Source Licenses',
         description: 'View the licenses of the open source packages used.',
         onTap: () {
@@ -97,27 +97,13 @@ class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
           );
   }
 
-  bool get _useSmallerNavigationElements =>
-      ref.watch(navigationSmallerNavigationElementsProvider);
-
-  bool get _showInfo => ref.watch(navigationShowInfoProvider);
-
-  Widget _buildBody(List<AboutTileModel> models) {
+  Widget _buildBody(List<SettingsItemModel> models) {
     return Wrap(
       spacing: gap,
       runSpacing: gap,
-      children: models.map(_buildTile).toList(),
-    );
-  }
-
-  Widget _buildTile(AboutTileModel tileModel) {
-    return CustomListTile(
-      useSmallerNavigationSetting: !_useSmallerNavigationElements,
-      enableExplanationWrapper: !_useSmallerNavigationElements,
-      titleString: tileModel.title,
-      explanationString: _showInfo ? tileModel.description : null,
-      onTap: tileModel.onTap,
-      leadingIconData: tileModel.leadingIconData,
+      children: models
+          .map((element) => SettingsItemTile(settingsItemModel: element))
+          .toList(),
     );
   }
 }

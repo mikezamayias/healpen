@@ -6,15 +6,13 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/page_controller.dart';
 import '../../controllers/settings/settings_controller.dart';
-import '../../models/settings/settings_item.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
-import '../../utils/helper_functions.dart';
 import '../../widgets/app_bar.dart';
-import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import '../simple/simple_blueprint_view.dart';
 import '../simple/widgets/simple_app_bar.dart';
+import 'widgets/settings_item_tile.dart';
 
 class SettingsView extends ConsumerStatefulWidget {
   const SettingsView({super.key});
@@ -60,8 +58,8 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
           spacing: _dynamicSpacing,
           runSpacing: _dynamicSpacing,
           children: SettingsController.settingsItems
-              .where((item) => item.widget is! Placeholder)
-              .map(_settingButton)
+              .where((element) => element.widget! is! Placeholder)
+              .map((element) => SettingsItemTile(settingsItemModel: element))
               .toList(),
         ),
       ),
@@ -88,25 +86,6 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     );
   }
 
-  CustomListTile _settingButton(SettingsItem settingsItem) {
-    return CustomListTile(
-      useSmallerNavigationSetting: !_useSmallerNavigationElements,
-      enableExplanationWrapper: !_useSmallerNavigationElements && _useSimpleUI,
-      cornerRadius:
-          _useSimpleUI == _useSmallerNavigationElements ? radius - gap : radius,
-      leadingIconData: settingsItem.iconData,
-      titleString: settingsItem.title,
-      explanationString: _showInformatoryText ? settingsItem.description : null,
-      onTap: () {
-        pushWithAnimation(
-          context: context,
-          widget: settingsItem.widget,
-          dataCallback: null,
-        );
-      },
-    );
-  }
-
   double get _dynamicRadius =>
       _useSimpleUI || _useSmallerNavigationElements ? radius - gap : radius;
 
@@ -119,8 +98,6 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
 
   bool get _useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
-
-  bool get _showInformatoryText => ref.watch(navigationShowInfoProvider);
 
   bool get _showAppBar => ref.watch(navigationShowAppBarProvider);
 }
