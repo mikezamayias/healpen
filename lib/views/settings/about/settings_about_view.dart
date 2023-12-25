@@ -12,20 +12,7 @@ import '../../blueprint/blueprint_view.dart';
 import '../../simple/simple_blueprint_view.dart';
 import '../../simple/widgets/simple_app_bar.dart';
 import '../licenses/settings_licenses_view.dart';
-
-class AboutTileModel {
-  AboutTileModel({
-    required this.title,
-    required this.description,
-    required this.onTap,
-    required this.leadingIconData,
-  });
-
-  final String title;
-  final String description;
-  final void Function()? onTap;
-  final IconData leadingIconData;
-}
+import '../widgets/settings_item_tile.dart';
 
 class SettingsAboutView extends ConsumerStatefulWidget {
   const SettingsAboutView({super.key});
