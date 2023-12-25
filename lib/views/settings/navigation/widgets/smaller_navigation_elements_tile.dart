@@ -17,7 +17,6 @@ class SmallerNavigationElementsTile extends ConsumerWidget {
       stateProvider: navigationSmallerNavigationElementsProvider,
       preferenceModel:
           PreferencesController.navigationSmallerNavigationElements,
-      checkForSimpleUI: true,
     );
   }
 }
