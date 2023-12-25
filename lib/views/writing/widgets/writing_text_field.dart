@@ -16,7 +16,8 @@ class WritingTextField extends ConsumerStatefulWidget {
 class _WritingTextFieldState extends ConsumerState<WritingTextField> {
   @override
   Widget build(BuildContext context) {
-    final borderRadius = useSmallNavigationElements ? radius : radius - gap;
+    final borderRadius =
+        useSimpleUi || useSmallNavigationElements ? radius : radius - gap;
     final color = useSimpleUi || useSmallNavigationElements
         ? context.theme.colorScheme.surfaceVariant
         : context.theme.colorScheme.surface;
