@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 import '../models/analysis/chart_data_model.dart';
 
 extension ChartDataExtensions on List<ChartData> {
-  /// Inserts null values in the [chartData] list for dates after [start] and
+  /// Inserts null values in the chart data list for dates after [start] and
   /// before [end].
   /// This is done to ensure that the line chart displays a continuous line
   ///
-  /// The [chartData] list is modified in-place.
+  /// The chart data list is modified in-place.
   ///
   /// Parameters:
   /// - [start]: The start date from which to insert null values.

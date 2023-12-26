@@ -108,11 +108,12 @@ void goToPage(PageController controller, int index) {
 /// The magnitude is normalized to a value between 0 and 1, and then multiplied by the score and 5.
 /// The result is returned as a double with 2 decimal places.
 ///
-/// [magnitude] The magnitude of the sentiment.
-/// [score] The score of the sentiment.
+/// **[magnitude]** The magnitude of the sentiment.
+/// **[score]** The score of the sentiment.
 ///
 /// Returns
-/// [clippedResult] The combined sentiment value as a double with 2 decimal places.
+///
+/// **clippedResult**: The combined sentiment value as a double with 2 decimal places.
 double combinedSentimentValue(double magnitude, double score) {
   // log('$score', name: 'SentenceModel:score');
   // log('$magnitude', name: 'SentenceModel:magnitude');
@@ -198,7 +199,7 @@ bool scoreIsCloseToValue(double score, double value) {
   return (score - value).abs() < deviation;
 }
 
-pushWithAnimation({
+void pushWithAnimation({
   required BuildContext context,
   required Widget widget,
   bool replacement = false,
@@ -247,7 +248,7 @@ pushWithAnimation({
   }
 }
 
-pushNamedWithAnimation({
+void pushNamedWithAnimation({
   required BuildContext context,
   required String routeName,
   bool replacement = false,

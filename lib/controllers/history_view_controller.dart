@@ -12,7 +12,7 @@ class HistoryViewController {
   HistoryViewController._internal();
 
   /// Deletes note from writing and analysis collections
-  deleteNote({
+  void deleteNote({
     required int timestamp,
   }) {
     FirestoreService()

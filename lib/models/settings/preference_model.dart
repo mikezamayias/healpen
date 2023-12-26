@@ -9,7 +9,7 @@ class PreferenceModel<T> {
     return 'PreferenceModel{key: $key, value: $value}';
   }
 
-  withValue(T value) {
+  PreferenceModel<T> withValue(T value) {
     return PreferenceModel(key, value);
   }
 }

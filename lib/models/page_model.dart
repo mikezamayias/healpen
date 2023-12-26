@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Page, LicensePage;
+import 'package:flutter/material.dart' hide LicensePage, Page;
 
 typedef TitleGenerator = String Function(String? userName);
 

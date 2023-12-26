@@ -67,7 +67,7 @@ class OnboardingController {
   OnboardingModel currentOnboardingScreenModel(int currentIndex) =>
       onboardingScreenModels[currentIndex];
 
-  _onboardingScreenView(int index) => OnboardingScreenView(
+  OnboardingScreenView _onboardingScreenView(int index) => OnboardingScreenView(
         onboardingScreenModel: onboardingScreenModels[index],
       );
 }

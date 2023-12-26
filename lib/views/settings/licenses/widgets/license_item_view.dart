@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide PageController, AppBar;
+import 'package:flutter/material.dart' hide AppBar, PageController;
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 

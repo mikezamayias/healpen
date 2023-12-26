@@ -121,7 +121,6 @@ class SettingsLicensesView extends ConsumerWidget {
 
 /// A page that shows licenses for software used by the application.
 ///
-/// To show a [CustomLicensePage], use [showCustomLicensePage].
 /// The licenses shown on the [CustomLicensePage] are those returned by the
 /// [LicenseRegistry] API, which can be used to add more licenses to the list.
 class CustomLicensePage extends StatefulWidget {
