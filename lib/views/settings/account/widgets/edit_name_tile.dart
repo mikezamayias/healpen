@@ -2,52 +2,115 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../../extensions/widget_extensions.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
-class EditNameTile extends ConsumerWidget {
+class EditNameTile extends ConsumerStatefulWidget {
+  static final nameProvider = StateProvider<String>((ref) => '');
+  static final textEditingControllerProvider =
+      Provider<TextEditingController>((ref) => TextEditingController());
+
   const EditNameTile({
     super.key,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final displayName = FirebaseAuth.instance.currentUser?.displayName;
-    final textController = TextEditingController(
-      text: displayName,
-    );
+  ConsumerState<EditNameTile> createState() => _EditNameTileState();
+}
+
+class _EditNameTileState extends ConsumerState<EditNameTile> {
+  @override
+  Widget build(BuildContext context) {
     return CustomListTile(
-      useSmallerNavigationSetting:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
-      enableExplanationWrapper:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
+      useSmallerNavigationSetting: !_useSmallerNavigationElements,
+      enableExplanationWrapper: !_useSmallerNavigationElements,
       titleString: 'How should you be called?',
-      subtitle: TextField(
-        controller: textController,
-        decoration: InputDecoration(
-          contentPadding: ref.watch(navigationSmallerNavigationElementsProvider)
-              ? EdgeInsets.zero
-              : EdgeInsets.symmetric(horizontal: gap),
-          hintText: displayName ?? 'How should you be called?',
-          hintStyle: context.theme.textTheme.titleLarge,
-        ),
-        style: context.theme.textTheme.titleLarge!.copyWith(
-          color: ref.watch(navigationSmallerNavigationElementsProvider)
-              ? context.theme.colorScheme.onSurface
-              : context.theme.colorScheme.onSurfaceVariant,
-        ),
-        onSubmitted: (String newDisplayName) async {
-          logger.i(
-            newDisplayName,
-          );
-          await FirebaseAuth.instance.currentUser?.updateDisplayName(
-            newDisplayName,
-          );
-        },
-      ),
+      subtitle: StreamBuilder<String?>(
+          stream: FirebaseAuth.instance
+              .userChanges()
+              .map((event) => event?.displayName),
+          builder: (context, snapshot) {
+            textController.text = snapshot.data ?? '';
+            return Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    enableSuggestions: false,
+                    controller: textController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(horizontal: gap),
+                      hintText: snapshot.data,
+                      hintStyle: context.theme.textTheme.titleLarge,
+                    ),
+                    style: context.theme.textTheme.titleLarge!.copyWith(
+                      color: _useSmallerNavigationElements
+                          ? context.theme.colorScheme.onSurface
+                          : context.theme.colorScheme.onSurfaceVariant,
+                    ),
+                    onChanged: handleSubmitted,
+                  ),
+                ),
+                ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: textController,
+                  builder: (context, value, child) {
+                    return IconButton(
+                      color: context.theme.colorScheme.primary,
+                      icon: const FaIcon(
+                        FontAwesomeIcons.check,
+                      ),
+                      onPressed: canUpdateName(value.text, snapshot.data)
+                          ? handlePressed
+                          : null,
+                    ).animateSlideInFromBottom();
+                  },
+                ),
+              ],
+            );
+          }),
     );
   }
+
+  void handleSubmitted(String value) {
+    ref.read(EditNameTile.nameProvider.notifier).state = value.trim();
+    logger.i(ref.read(EditNameTile.nameProvider));
+  }
+
+  bool canUpdateName(String newName, String? currentName) {
+    return newName != currentName && newName.isNotEmpty;
+  }
+
+  Future<void> handlePressed() async {
+    try {
+      logger.i(ref.read(EditNameTile.nameProvider));
+      await FirebaseAuth.instance.currentUser!
+          .updateDisplayName(ref.read(EditNameTile.nameProvider));
+      if (!mounted) return;
+      FocusScope.of(context).unfocus();
+      textController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Display name updated')),
+      );
+    } on FirebaseException catch (e) {
+      logger.e('Failed to update display name: ${e.message}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update display name: ${e.message}')),
+      );
+    } catch (e) {
+      logger.e('An unexpected error occurred: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('An unexpected error occurred')),
+      );
+    }
+  }
+
+  bool get _useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
+
+  TextEditingController get textController =>
+      ref.watch(EditNameTile.textEditingControllerProvider);
 }
