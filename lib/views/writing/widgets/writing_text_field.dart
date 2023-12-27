@@ -7,6 +7,7 @@ import '../../../extensions/widget_extensions.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import 'bare_text_field.dart';
+import 'stopwatch_tile.dart';
 import 'writing_actions_button.dart';
 
 class WritingTextField extends ConsumerStatefulWidget {
@@ -33,28 +34,24 @@ class _WritingTextFieldState extends ConsumerState<WritingTextField> {
             ? BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(borderRadius * 2),
-                  topRight: Radius.circular(borderRadius * 2),
+                  topLeft: Radius.circular(radius),
+                  topRight: Radius.circular(radius),
                 ),
               )
             : BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
-        padding: isKeyboardOpen && useSimpleUi
-            ? EdgeInsets.all(borderRadius)
-            : EdgeInsets.all(gap),
+        padding: EdgeInsets.all(gap),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            if (isKeyboardOpen)
-              const WritingActionsButton().animateSlideInFromTop(),
             const Expanded(child: BareTextField()),
-            // if (isKeyboardOpen)
-            //   const StopwatchTile().animateSlideInFromBottom(),
+            const StopwatchTile().animateSlideInFromBottom(),
+            const WritingActionsButton().animateSlideInFromTop(),
           ].addSpacer(
             SizedBox(height: gap),
-            spacerAtEnd: true,
+            spacerAtEnd: false,
             spacerAtStart: false,
           ),
         ),
