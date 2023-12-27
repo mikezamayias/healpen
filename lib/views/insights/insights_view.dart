@@ -21,7 +21,7 @@ class InsightsView extends ConsumerStatefulWidget {
 class _InsightsViewState extends ConsumerState<InsightsView> {
   @override
   Widget build(BuildContext context) {
-    return useSimpleUI
+    return useSimpleUi
         ? const SimpleInsightsTile()
         : BlueprintView(
             showAppBar: showAppBar,
@@ -37,7 +37,7 @@ class _InsightsViewState extends ConsumerState<InsightsView> {
           );
   }
 
-  bool get useSimpleUI => ref.watch(navigationSimpleUIProvider);
+  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
   bool get showAppBar => ref.watch(navigationShowAppBarProvider);

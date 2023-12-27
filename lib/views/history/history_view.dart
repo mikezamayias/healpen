@@ -21,7 +21,7 @@ class HistoryView extends ConsumerStatefulWidget {
 class _HistoryViewState extends ConsumerState<HistoryView> {
   @override
   Widget build(BuildContext context) {
-    return useSimpleUI
+    return useSimpleUi
         ? const SimpleCalendarView()
         : BlueprintView(
             showAppBar: showAppBar,
@@ -37,7 +37,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
           );
   }
 
-  bool get useSimpleUI => ref.watch(navigationSimpleUIProvider);
+  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
   bool get showAppBar => ref.watch(navigationShowAppBarProvider);

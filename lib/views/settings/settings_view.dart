@@ -24,7 +24,7 @@ class SettingsView extends ConsumerStatefulWidget {
 class _SettingsViewState extends ConsumerState<SettingsView> {
   @override
   Widget build(BuildContext context) {
-    return _useSimpleUI ? _buildSimpleView() : _buildRegularView();
+    return _useSimpleUi ? _buildSimpleView() : _buildRegularView();
   }
 
   Widget _buildSimpleView() {
@@ -70,7 +70,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
     return AnimatedContainer(
       duration: standardDuration,
       curve: standardCurve,
-      decoration: _useSimpleUI || _useSmallerNavigationElements
+      decoration: _useSimpleUi || _useSmallerNavigationElements
           ? BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(_dynamicRadius),
@@ -79,7 +79,7 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
               color: theme.colorScheme.surfaceVariant,
               borderRadius: BorderRadius.circular(_dynamicRadius),
             ),
-      padding: _useSimpleUI || _useSmallerNavigationElements
+      padding: _useSimpleUi || _useSmallerNavigationElements
           ? EdgeInsets.zero
           : EdgeInsets.all(_dynamicPadding),
       child: _buildBody(),
@@ -87,14 +87,14 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
   }
 
   double get _dynamicRadius =>
-      _useSimpleUI || _useSmallerNavigationElements ? radius - gap : radius;
+      _useSimpleUi || _useSmallerNavigationElements ? radius - gap : radius;
 
-  double get _dynamicSpacing => _useSimpleUI ? radius : gap;
+  double get _dynamicSpacing => _useSimpleUi ? radius : gap;
 
   double get _dynamicPadding =>
-      _useSimpleUI == _useSmallerNavigationElements ? radius - gap : radius;
+      _useSimpleUi == _useSmallerNavigationElements ? radius - gap : radius;
 
-  bool get _useSimpleUI => ref.watch(navigationSimpleUIProvider);
+  bool get _useSimpleUi => ref.watch(navigationSimpleUIProvider);
 
   bool get _useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);

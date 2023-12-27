@@ -30,7 +30,7 @@ class NoteView extends ConsumerStatefulWidget {
 class _NoteViewState extends ConsumerState<NoteView> {
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
-  bool get useSimpleUI => ref.watch(navigationSimpleUIProvider);
+  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ({
@@ -47,7 +47,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
     }
     Widget body = ClipRRect(
       borderRadius: BorderRadius.circular(
-        useSimpleUI || useSmallerNavigationElements ? radius : gap,
+        useSimpleUi || useSmallerNavigationElements ? radius : gap,
       ),
       child: SingleChildScrollView(
         child: Wrap(
