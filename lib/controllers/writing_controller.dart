@@ -111,6 +111,15 @@ class WritingController extends StateNotifier<NoteModel> {
     state = NoteModel();
   }
 
+  void resetController() {
+    _stopwatch.reset();
+    _stopwatch.stop();
+    _timer?.cancel();
+    _delayTimer?.cancel();
+    resetNote();
+    textController.clear();
+  }
+
   void updatePrivate(bool bool) {
     state = state.copyWith(isPrivate: bool);
   }
