@@ -5,26 +5,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../controllers/writing_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
-import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/custom_snack_bar.dart';
+import 'action_button.dart';
 
 class SaveNoteButton extends ConsumerWidget {
-  const SaveNoteButton({
-    super.key,
-  });
-
+  const SaveNoteButton({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
     final writingController = ref.watch(writingControllerProvider.notifier);
-    return CustomListTile(
-      useSmallerNavigationSetting: false,
-      cornerRadius: ref.watch(navigationSmallerNavigationElementsProvider) ||
-              ref.watch(navigationSimpleUIProvider)
-          ? radius
-          : radius - gap,
+    return ActionButton(
       leadingIconData: FontAwesomeIcons.solidFloppyDisk,
-      contentPadding: EdgeInsets.all(gap),
+      condition: state.content.isNotEmpty,
       onTap: () {
         CustomSnackBar(
           SnackBarConfig(
@@ -51,9 +43,6 @@ class SaveNoteButton extends ConsumerWidget {
           ),
         ).showSnackBar(context);
       },
-      isDisabled: state.content.isEmpty,
-      responsiveWidth: true,
-      titleString: 'Save',
     );
   }
 }

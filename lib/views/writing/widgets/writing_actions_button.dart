@@ -3,24 +3,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/writing_controller.dart';
-import '../../../extensions/int_extensions.dart';
+import '../../../extensions/widget_extensions.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
+import 'hide_keyboard_button.dart';
+import 'reset_note_button.dart';
+import 'save_note_button.dart';
 
-class StopwatchTile extends ConsumerStatefulWidget {
-  const StopwatchTile({
-    super.key,
-  });
+class WritingActionsButton extends ConsumerStatefulWidget {
+  const WritingActionsButton({super.key});
 
   @override
-  ConsumerState<StopwatchTile> createState() => _StopwatchTileState();
+  ConsumerState<WritingActionsButton> createState() =>
+      _WritingActionsButtonState();
 }
 
-class _StopwatchTileState extends ConsumerState<StopwatchTile> {
+class _WritingActionsButtonState extends ConsumerState<WritingActionsButton> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
+      responsiveWidth: !useSimpleUi,
       useSmallerNavigationSetting: false,
       backgroundColor: useSmallerNavigationElements ^ !useSimpleUi
           ? context.theme.colorScheme.surfaceVariant
@@ -29,16 +32,24 @@ class _StopwatchTileState extends ConsumerState<StopwatchTile> {
           ? context.theme.colorScheme.onSurface
           : context.theme.colorScheme.onSurfaceVariant,
       cornerRadius: radius - gap,
-      titleString: 'Stopwatch',
-      trailing: Text(
-        ref.watch(writingControllerProvider).duration.writingDurationFormat(),
-        style: context.theme.textTheme.titleLarge!.copyWith(
-          color: context.theme.colorScheme.onSurfaceVariant,
+      titleString: 'Actions',
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: const <Widget>[
+          SaveNoteButton(),
+          ResetNoteButton(),
+          HideKeyboardButton(),
+        ].addSpacer(
+          SizedBox(width: _dynamicStopwatchAndSaveGap),
+          spacerAtEnd: false,
+          spacerAtStart: false,
         ),
       ),
-      responsiveWidth: !useSimpleUi,
     );
   }
+
+  double get _dynamicStopwatchAndSaveGap =>
+      !isKeyboardOpen && useSimpleUi ? gap : radius;
 
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);

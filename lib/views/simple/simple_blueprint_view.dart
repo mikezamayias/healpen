@@ -13,6 +13,7 @@ class SimpleBlueprintView extends ConsumerWidget {
   final SimpleAppBar simpleAppBar;
   final EdgeInsets? bodyPadding;
   final bool? padBody;
+  final bool? showAppBar;
   final Widget body;
 
   const SimpleBlueprintView({
@@ -20,6 +21,7 @@ class SimpleBlueprintView extends ConsumerWidget {
     required this.simpleAppBar,
     this.bodyPadding,
     this.padBody = true,
+    this.showAppBar = true,
     required this.body,
   });
 
@@ -38,12 +40,24 @@ class SimpleBlueprintView extends ConsumerWidget {
             color: context.theme.colorScheme.primaryContainer,
             child: Column(
               children: <Widget>[
-                simpleAppBar,
+                // if (simpleAppBar != null) simpleAppBar!.animateAppBar(),
+                AnimatedCrossFade(
+                  duration: standardDuration,
+                  firstCurve: standardCurve,
+                  secondCurve: standardCurve,
+                  sizeCurve: standardCurve,
+                  crossFadeState: showAppBar!
+                      ? CrossFadeState.showFirst
+                      : CrossFadeState.showSecond,
+                  firstChild: simpleAppBar,
+                  secondChild: const SizedBox.shrink(),
+                ),
                 Expanded(
                   child: SimpleBody(
                     padBody: padBody,
                     padding: padding,
                     body: body,
+                    isAppBarVisible: showAppBar!,
                   ),
                 ),
               ],

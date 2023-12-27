@@ -11,6 +11,7 @@ import '../../../controllers/writing_controller.dart';
 import '../../../extensions/int_extensions.dart';
 import '../../../extensions/widget_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../route_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
@@ -18,8 +19,6 @@ import '../../../widgets/custom_list_tile.dart';
 import '../../history/history_view.dart';
 import '../../insights/insights_view.dart';
 import '../../settings/settings_view.dart';
-import '../../writing/widgets/save_note_button.dart';
-import '../../writing/widgets/stopwatch_tile.dart';
 import '../../writing/widgets/writing_text_field.dart';
 import '../simple_blueprint_view.dart';
 import '../widgets/simple_app_bar.dart';
@@ -35,16 +34,12 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
   @override
   Widget build(BuildContext context) {
     final analysisModelSet = ref.watch(analysisModelSetProvider);
-    final isKeyboardOpen =
-        ref.watch(WritingController().isKeyboardOpenProvider);
-    final padding = _keyboardAwarePadding(isKeyboardOpen);
     return SimpleBlueprintView(
+      showAppBar: !isKeyboardOpen,
       simpleAppBar: SimpleAppBar(
-        appBarPadding: padding,
+        appBarPadding: _keyboardAwareAppBarPadding,
         automaticallyImplyLeading: false,
-        appBarLeading: isKeyboardOpen ? const StopwatchTile() : null,
         appBarTitleString: isKeyboardOpen ? null : 'How are you feeling today?',
-        appBarTrailing: isKeyboardOpen ? const SaveNoteButton() : null,
         belowRowWidget: isKeyboardOpen
             ? null
             : SingleChildScrollView(
@@ -67,7 +62,8 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
             child: AnimatedPadding(
               duration: standardDuration,
               curve: standardCurve,
-              padding: EdgeInsets.all(radius),
+              padding:
+                  isKeyboardOpen ? EdgeInsets.zero : EdgeInsets.all(radius),
               child: const WritingTextField(),
             ),
           ),
@@ -87,7 +83,9 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
           scrollDirection: Axis.horizontal,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: _buildFixedWidgets().addSpacer(SizedBox(width: radius)),
+            children: _buildFixedWidgets().addSpacer(
+              SizedBox(width: radius),
+            ),
           ),
         ),
       ),
@@ -186,6 +184,11 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
         shadowColor: theme.colorScheme.primary,
       );
 
-  EdgeInsets _keyboardAwarePadding(bool isKeyboardOpen) =>
+  EdgeInsets get _keyboardAwareAppBarPadding =>
       !isKeyboardOpen ? EdgeInsets.all(radius) : EdgeInsets.all(gap);
+
+  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
+
+  bool get isKeyboardOpen =>
+      ref.watch(WritingController().isKeyboardOpenProvider);
 }
