@@ -59,7 +59,7 @@ class SimpleAppBar extends StatelessWidget {
               ].addSpacer(SizedBox(width: radius)),
             ),
           ),
-          if (belowRowWidget != null) belowRowWidget!.animateSlideInFromRight(),
+          if (belowRowWidget != null) belowRowWidget!,
         ].addSpacer(SizedBox(height: radius)),
       ),
     );
