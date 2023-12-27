@@ -21,19 +21,21 @@ extension WidgetListExtensions on List<Widget> {
         duration: standardDuration,
       );
 
-  List<Widget> addSpacer(Widget spacer) {
+  List<Widget> addSpacer(
+    Widget spacer, {
+    bool? spacerAtStart = true,
+    bool? spacerAtEnd = true,
+  }) {
     final spacedWidgets = length > 0
         ? List<Widget>.generate(
             length * 2 - 1,
             (int index) {
-              return index % 2 == 0
-                  ? elementAt(index ~/ 2)
-                  : spacer;
+              return index % 2 == 0 ? elementAt(index ~/ 2) : spacer;
             },
           )
         : <Widget>[];
-    spacedWidgets.insert(0, spacer);
-    spacedWidgets.add(spacer);
+    if (spacerAtStart!) spacedWidgets.insert(0, spacer);
+    if (spacerAtEnd!) spacedWidgets.add(spacer);
     return spacedWidgets;
   }
 }
