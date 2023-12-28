@@ -67,21 +67,12 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
   }
 
   Widget _buildBodyWrapper() {
-    return AnimatedContainer(
-      duration: standardDuration,
-      curve: standardCurve,
-      decoration: _useSimpleUi || _useSmallerNavigationElements
-          ? BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(_dynamicRadius),
-            )
-          : BoxDecoration(
-              color: theme.colorScheme.surfaceVariant,
-              borderRadius: BorderRadius.circular(_dynamicRadius),
-            ),
-      padding: _useSimpleUi || _useSmallerNavigationElements
-          ? EdgeInsets.zero
-          : EdgeInsets.all(_dynamicPadding),
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      padding: EdgeInsets.all(gap),
       child: _buildBody(),
     );
   }
@@ -90,9 +81,6 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
       _useSimpleUi || _useSmallerNavigationElements ? radius - gap : radius;
 
   double get _dynamicSpacing => _useSimpleUi ? radius : gap;
-
-  double get _dynamicPadding =>
-      _useSimpleUi == _useSmallerNavigationElements ? radius - gap : radius;
 
   bool get _useSimpleUi => ref.watch(navigationSimpleUIProvider);
 

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../models/settings/settings_item_model.dart';
 import '../../../providers/settings_providers.dart';
+import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class SettingsItemTile extends ConsumerStatefulWidget {
@@ -18,6 +19,7 @@ class _SettingsItemTileState extends ConsumerState<SettingsItemTile> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
+      cornerRadius: _useSimpleUi ? radius : gap,
       useSmallerNavigationSetting: !_useSmallerNavigationElements,
       enableExplanationWrapper: !_useSmallerNavigationElements,
       titleString: tileModel.title,
@@ -31,6 +33,8 @@ class _SettingsItemTileState extends ConsumerState<SettingsItemTile> {
 
   bool get _useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
+
+  bool get _useSimpleUi => ref.watch(navigationSimpleUIProvider);
 
   bool get _showInfo => ref.watch(navigationShowInfoProvider);
 }
