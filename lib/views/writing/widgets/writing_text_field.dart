@@ -47,8 +47,10 @@ class _WritingTextFieldState extends ConsumerState<WritingTextField> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Expanded(child: BareTextField()),
-            const StopwatchTile().animateSlideInFromBottom(),
-            const WritingActionsButton().animateSlideInFromTop(),
+            if (useSimpleUi) ...[
+              const StopwatchTile().animateSlideInFromBottom(),
+              const WritingActionsButton().animateSlideInFromTop(),
+            ],
           ].addSpacer(
             SizedBox(height: gap),
             spacerAtEnd: false,

@@ -23,15 +23,18 @@ class _WritingActionsButtonState extends ConsumerState<WritingActionsButton> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      responsiveWidth: !useSimpleUi,
       useSmallerNavigationSetting: false,
-      backgroundColor: !useSimpleUi
+      backgroundColor: !useSimpleUi ^ !useSmallerNavigationElements
           ? context.theme.colorScheme.surfaceVariant
           : context.theme.colorScheme.surface,
       textColor: !useSimpleUi
           ? context.theme.colorScheme.onSurface
           : context.theme.colorScheme.onSurfaceVariant,
-      cornerRadius: radius - gap,
+      cornerRadius: useSimpleUi
+          ? radius - gap
+          : useSmallerNavigationElements
+              ? radius
+              : gap,
       titleString: 'Actions',
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

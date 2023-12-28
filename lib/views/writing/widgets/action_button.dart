@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../../../providers/settings_providers.dart';
 import '../../../widgets/custom_list_tile.dart';
 
-class ActionButton extends StatelessWidget {
+class ActionButton extends ConsumerWidget {
   final String? titleString;
   final IconData leadingIconData;
   final bool condition;
@@ -20,7 +22,8 @@ class ActionButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final useSimpleUi = ref.watch(navigationSimpleUIProvider);
     return CustomListTile(
       responsiveWidth: true,
       useSmallerNavigationSetting: false,
@@ -28,7 +31,9 @@ class ActionButton extends StatelessWidget {
       leadingIconData: leadingIconData,
       cornerRadius: 0,
       contentPadding: EdgeInsets.zero,
-      backgroundColor: context.theme.colorScheme.surface,
+      backgroundColor: !useSimpleUi
+          ? context.theme.colorScheme.surfaceVariant
+          : context.theme.colorScheme.surface,
       textColor: condition
           ? activeColor ?? context.theme.colorScheme.primary
           : context.theme.colorScheme.outline,
