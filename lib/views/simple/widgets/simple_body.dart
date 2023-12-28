@@ -30,13 +30,7 @@ class _SimpleBodyState extends ConsumerState<SimpleBody> {
       duration: standardDuration,
       curve: standardCurve,
       alignment: Alignment.topCenter,
-      padding: !padBody
-          ? EdgeInsets.zero
-          : EdgeInsets.only(
-              left: radius - padding.left,
-              right: radius - padding.right,
-              top: radius - padding.top,
-            ),
+      padding: padBody ? bodyPadding : EdgeInsets.zero,
       decoration: BoxDecoration(
         color: context.theme.colorScheme.surface,
         borderRadius: BorderRadius.only(
@@ -55,7 +49,12 @@ class _SimpleBodyState extends ConsumerState<SimpleBody> {
   EdgeInsets get padding => widget.padding!;
   Widget get body => widget.body;
   bool get isAppBarVisible => widget.isAppBarVisible;
-
   bool get isKeyboardOpen =>
       ref.watch(WritingController().isKeyboardOpenProvider);
+
+  EdgeInsets get bodyPadding => EdgeInsets.only(
+        left:  padding.left,
+        right:  padding.right,
+        top:  padding.top,
+      );
 }

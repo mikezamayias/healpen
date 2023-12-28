@@ -55,7 +55,6 @@ class _SimpleUIViewState extends ConsumerState<SimpleHomeView> {
               ),
       ),
       padBody: false,
-      bodyPadding: null,
       body: Column(
         children: <Widget>[
           Expanded(
