@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,66 +25,12 @@ class SettingsAboutView extends ConsumerStatefulWidget {
 class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
   @override
   Widget build(BuildContext context) {
-    final aboutTileModels = <SettingsItemModel>[
-      SettingsItemModel(
-        title: 'Mike Zamayias',
-        description: 'Visit the developer\'s personal website.',
-        onTap: () {
-          launchUrl(
-            Uri.https('mikezamayias.com'),
-            mode: LaunchMode.externalApplication,
-          );
-        },
-        leadingIconData: FontAwesomeIcons.laptopCode,
-      ),
-      SettingsItemModel(
-        title: 'Terms and Conditions',
-        description: 'View the terms and conditions for this app.',
-        onTap: () {
-          launchUrl(
-            Uri.https(
-              'iubenda.com',
-              'terms-and-conditions/29795832',
-            ),
-            mode: LaunchMode.externalApplication,
-          );
-        },
-        leadingIconData: FontAwesomeIcons.fileContract,
-      ),
-      SettingsItemModel(
-        title: 'Privacy Policy',
-        description: 'View the privacy policy for this app.',
-        onTap: () {
-          launchUrl(
-            Uri.https(
-              'iubenda.com',
-              'privacy-policy/29795832',
-            ),
-            mode: LaunchMode.externalApplication,
-          );
-        },
-        leadingIconData: FontAwesomeIcons.userShield,
-      ),
-      SettingsItemModel(
-        title: 'Open Source Licenses',
-        description: 'View the licenses of the open source packages used.',
-        onTap: () {
-          pushWithAnimation(
-            context: context,
-            widget: const SettingsLicensesView(),
-            dataCallback: null,
-          );
-        },
-        leadingIconData: FontAwesomeIcons.code,
-      ),
-    ];
-
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(
             simpleAppBar: const SimpleAppBar(
               appBarTitleString: 'About',
             ),
-            body: _buildBody(aboutTileModels),
+            body: _buildBody(),
           )
         : BlueprintView(
             appBar: const AppBar(
@@ -93,17 +40,84 @@ class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
                 'About',
               ],
             ),
-            body: _buildBody(aboutTileModels),
+            body: Column(
+              children: <Widget>[Expanded(child: _buildBodyWrapper())],
+            ),
           );
   }
 
-  Widget _buildBody(List<SettingsItemModel> models) {
+  Widget _buildBody() {
     return Wrap(
       spacing: gap,
       runSpacing: gap,
-      children: models
+      children: aboutTileModels
           .map((element) => SettingsItemTile(settingsItemModel: element))
           .toList(),
     );
   }
+
+  Widget _buildBodyWrapper() {
+    return Container(
+      decoration: BoxDecoration(
+        color: context.theme.colorScheme.surfaceVariant,
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      padding: EdgeInsets.all(gap),
+      child: _buildBody(),
+    );
+  }
+
+  List<SettingsItemModel> get aboutTileModels => <SettingsItemModel>[
+        SettingsItemModel(
+          title: 'Mike Zamayias',
+          description: 'Visit the developer\'s personal website.',
+          onTap: () {
+            launchUrl(
+              Uri.https('mikezamayias.com'),
+              mode: LaunchMode.externalApplication,
+            );
+          },
+          leadingIconData: FontAwesomeIcons.laptopCode,
+        ),
+        SettingsItemModel(
+          title: 'Terms and Conditions',
+          description: 'View the terms and conditions for this app.',
+          onTap: () {
+            launchUrl(
+              Uri.https(
+                'iubenda.com',
+                'terms-and-conditions/29795832',
+              ),
+              mode: LaunchMode.externalApplication,
+            );
+          },
+          leadingIconData: FontAwesomeIcons.fileContract,
+        ),
+        SettingsItemModel(
+          title: 'Privacy Policy',
+          description: 'View the privacy policy for this app.',
+          onTap: () {
+            launchUrl(
+              Uri.https(
+                'iubenda.com',
+                'privacy-policy/29795832',
+              ),
+              mode: LaunchMode.externalApplication,
+            );
+          },
+          leadingIconData: FontAwesomeIcons.userShield,
+        ),
+        SettingsItemModel(
+          title: 'Open Source Licenses',
+          description: 'View the licenses of the open source packages used.',
+          onTap: () {
+            pushWithAnimation(
+              context: context,
+              widget: const SettingsLicensesView(),
+              dataCallback: null,
+            );
+          },
+          leadingIconData: FontAwesomeIcons.code,
+        ),
+      ];
 }

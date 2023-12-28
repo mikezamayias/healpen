@@ -21,7 +21,8 @@ class _SettingsItemTileState extends ConsumerState<SettingsItemTile> {
     return CustomListTile(
       cornerRadius: _useSimpleUi ? radius : gap,
       useSmallerNavigationSetting: !_useSmallerNavigationElements,
-      enableExplanationWrapper: !_useSmallerNavigationElements,
+      enableExplanationWrapper:
+          !_useSmallerNavigationElements ^ (tileModel.onTap != null),
       titleString: tileModel.title,
       explanationString: _showInfo ? tileModel.description : null,
       onTap: () => tileModel.onTap?.call(context),
