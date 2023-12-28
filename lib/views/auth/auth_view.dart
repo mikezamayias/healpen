@@ -32,8 +32,6 @@ class _AuthViewState extends ConsumerState<AuthView> {
     return AuthFlowBuilder<EmailLinkAuthController>(
       provider: ref.read(CustomAuthProvider().emailLinkAuthProvider),
       listener: (oldState, newState, ctrl) {
-        // TODO: check if the following implementation is correct
-        // documentation mentions only the SignedIn check
         if (newState is SignedIn) {
           pushWithAnimation(
             context: context,

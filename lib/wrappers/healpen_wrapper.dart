@@ -59,14 +59,10 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
       logger.i(
         '${mediaQuery.platformBrightness}',
       );
-      // TODO: figure a way to change the colors of smooth dot indicator on
-      //  system appearance change without restarting the app
-      setState(() {
-        getSystemUIOverlayStyle(
-          theme,
-          ref.watch(themeAppearanceProvider),
-        );
-      });
+      getSystemUIOverlayStyle(
+        theme,
+        ref.watch(themeAppearanceProvider),
+      );
     }
   }
 
