@@ -22,14 +22,15 @@ class CalendarTile extends ConsumerStatefulWidget {
 class _CalendarTileState extends ConsumerState<CalendarTile> {
   @override
   Widget build(BuildContext context) {
-    final smallNavigationElements =
+    final useSmallerNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
+    final useSimpleUi = ref.watch(navigationSimpleUIProvider);
     final analysisModelList = ref.watch(analysisModelSetProvider);
     final maxDate = DateTime.now();
     final minDate = analysisModelList.first.timestamp.timestampToDateTime();
     return Container(
       decoration: BoxDecoration(
-        color: !smallNavigationElements
+        color: useSimpleUi
             ? theme.colorScheme.surface
             : theme.colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(radius),
@@ -48,7 +49,7 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
         viewNavigationMode: ViewNavigationMode.snap,
         headerStyle: CalendarHeaderStyle(
           textStyle: context.theme.textTheme.titleLarge!.copyWith(
-            color: smallNavigationElements
+            color: useSmallerNavigationElements
                 ? context.theme.colorScheme.onSurfaceVariant
                 : context.theme.colorScheme.onSurface,
           ),

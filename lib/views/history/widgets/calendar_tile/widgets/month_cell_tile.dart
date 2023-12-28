@@ -30,10 +30,10 @@ class MonthCellTile extends ConsumerStatefulWidget {
 class _MonthCellTileState extends ConsumerState<MonthCellTile> {
   @override
   Widget build(BuildContext context) {
-    Color shapeColor = !smallNavigationElements
+    Color shapeColor = useSimpleUi
         ? context.theme.colorScheme.surfaceVariant
         : context.theme.colorScheme.surface;
-    Color textColor = !smallNavigationElements
+    Color textColor = useSimpleUi
         ? context.theme.colorScheme.onSurfaceVariant
         : context.theme.colorScheme.onSurface;
     final DateTime cellDate = widget.cellDetails.date;
@@ -105,7 +105,7 @@ class _MonthCellTileState extends ConsumerState<MonthCellTile> {
                   curve: standardCurve,
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(bottom: gap),
-                  child: !smallNavigationElements
+                  child: !useSmallerNavigationElements
                       ? Text(
                           '${dateAnalysisModelList.length}',
                           textAlign: TextAlign.center,
@@ -149,6 +149,7 @@ class _MonthCellTileState extends ConsumerState<MonthCellTile> {
     );
   }
 
-  bool get smallNavigationElements =>
+  bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
+  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
 }
