@@ -82,6 +82,22 @@ jobs:
           else
             sed -i "s/^version:.*/version: $new_version+${{env.BUILD_NUMBER}}/" pubspec.yaml
           fi
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+      - name: Cache Flutter installation
+        uses: actions/cache@v2
+        with:
+          path: ~/sdks/flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/flutter/bin/flutter') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
       - name: Build .env file
         run: |
           echo "OPEN_AI_API_KEY=${{secrets.OPEN_AI_API_KEY}}" >> .env
