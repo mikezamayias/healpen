@@ -98,6 +98,8 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
               .elementAt(pageOffset.round())
               .explanation
           : null,
+      enableExplanationWrapper:
+          !ref.watch(navigationSmallerNavigationElementsProvider),
       maxExplanationStringLines: 3,
     );
   }
