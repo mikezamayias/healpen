@@ -25,10 +25,10 @@ class _WritingActionsButtonState extends ConsumerState<WritingActionsButton> {
     return CustomListTile(
       responsiveWidth: !useSimpleUi,
       useSmallerNavigationSetting: false,
-      backgroundColor: useSmallerNavigationElements ^ !useSimpleUi
+      backgroundColor: !useSimpleUi
           ? context.theme.colorScheme.surfaceVariant
           : context.theme.colorScheme.surface,
-      textColor: useSmallerNavigationElements ^ !useSimpleUi
+      textColor: !useSimpleUi
           ? context.theme.colorScheme.onSurface
           : context.theme.colorScheme.onSurfaceVariant,
       cornerRadius: radius - gap,
