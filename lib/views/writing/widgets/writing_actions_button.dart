@@ -23,6 +23,8 @@ class _WritingActionsButtonState extends ConsumerState<WritingActionsButton> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
+      contentPadding:
+          !useSimpleUi ^ !useSmallerNavigationElements ? null : EdgeInsets.zero,
       useSmallerNavigationSetting: false,
       backgroundColor: !useSimpleUi ^ !useSmallerNavigationElements
           ? context.theme.colorScheme.surfaceVariant

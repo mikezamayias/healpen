@@ -1,20 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart' hide AppBar, ListTile, PageController;
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../../controllers/analysis_view_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
 import '../../controllers/writing_controller.dart';
-import '../../extensions/widget_extensions.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
-import '../settings/writing/widgets/analyze_notes_tile.dart';
-import 'widgets/stopwatch_tile.dart';
-import 'widgets/writing_actions_button.dart';
 import 'widgets/writing_text_field.dart';
 
 class WritingView extends ConsumerStatefulWidget {
@@ -46,43 +40,24 @@ class _WritingViewState extends ConsumerState<WritingView> {
                   pathNames.join('\n')
               ],
             ),
-      body: Padding(
-        padding: ref.watch(WritingController().isKeyboardOpenProvider)
-            ? EdgeInsets.only(bottom: gap)
-            : EdgeInsets.zero,
+      body: AnimatedContainer(
+        duration: standardDuration,
+        curve: standardCurve,
+        padding:
+            isKeyboardOpen ? EdgeInsets.only(top: gap) : EdgeInsets.zero,
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
-          decoration: useSmallerNavigationElements
+          decoration: useSmallerNavigationElements || isKeyboardOpen
               ? const BoxDecoration()
               : BoxDecoration(
                   color: context.theme.colorScheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(radius),
                 ),
-          padding: useSmallerNavigationElements
+          padding: useSmallerNavigationElements || isKeyboardOpen
               ? EdgeInsets.zero
               : EdgeInsets.all(gap),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              if (!useSimpleUi)
-                const WritingActionsButton().animateSlideInFromTop(),
-              const Expanded(child: WritingTextField())
-                  .animate()
-                  .fade(curve: standardCurve, duration: standardDuration),
-              if (!useSimpleUi)
-                const StopwatchTile().animateSlideInFromBottom(),
-              if (ref.watch(analysisModelSetProvider).isEmpty)
-                Padding(
-                  padding: EdgeInsets.only(top: gap),
-                  child: const AnalyzeNotesTile(),
-                ),
-            ].addSpacer(
-              SizedBox(height: gap),
-              spacerAtEnd: false,
-              spacerAtStart: false,
-            ),
-          ),
+          child: const WritingTextField(),
         ),
       ),
     );
@@ -92,4 +67,6 @@ class _WritingViewState extends ConsumerState<WritingView> {
       ref.watch(navigationSmallerNavigationElementsProvider);
   bool get showAppBar => ref.watch(navigationShowAppBarProvider);
   bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
+  bool get isKeyboardOpen =>
+      ref.watch(WritingController().isKeyboardOpenProvider);
 }

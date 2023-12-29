@@ -42,19 +42,17 @@ class _WritingTextFieldState extends ConsumerState<WritingTextField> {
                 color: color,
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
-        padding: EdgeInsets.all(gap),
+        padding: isKeyboardOpen ? EdgeInsets.zero : EdgeInsets.all(gap),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            const WritingActionsButton(),
+            const StopwatchTile(),
             const Expanded(child: BareTextField()),
-            if (useSimpleUi) ...[
-              const StopwatchTile().animateSlideInFromBottom(),
-              const WritingActionsButton().animateSlideInFromTop(),
-            ],
           ].addSpacer(
             SizedBox(height: gap),
-            spacerAtEnd: false,
-            spacerAtStart: false,
+            spacerAtEnd: isKeyboardOpen,
+            spacerAtStart: isKeyboardOpen,
           ),
         ),
       ),

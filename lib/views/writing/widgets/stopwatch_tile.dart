@@ -22,6 +22,8 @@ class _StopwatchTileState extends ConsumerState<StopwatchTile> {
   Widget build(BuildContext context) {
     return CustomListTile(
       useSmallerNavigationSetting: false,
+      contentPadding:
+          !useSimpleUi ^ !useSmallerNavigationElements ? null : EdgeInsets.zero,
       backgroundColor: !useSimpleUi ^ !useSmallerNavigationElements
           ? context.theme.colorScheme.surfaceVariant
           : context.theme.colorScheme.surface,
