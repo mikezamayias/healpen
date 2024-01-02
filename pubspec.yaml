@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   animated_snack_bar: ^0.4.0
+  auto_animated: ^3.2.0
   cloud_firestore: ^4.8.1
   collection: ^1.17.1
   cupertino_icons: ^1.0.5
@@ -21,6 +22,7 @@ dependencies:
   firebase_pagination: ^3.0.1
   firebase_storage: ^11.2.6
   firebase_ui_auth: ^1.5.0
+  fl_chart: ^0.66.0
   flutter:
     sdk: flutter
   flutter_animate: ^4.1.1+1
@@ -35,6 +37,7 @@ dependencies:
   google_fonts: ^6.1.0
   googleapis: ^12.0.0
   googleapis_auth: ^1.4.1
+  graphic: ^2.2.1
   http: ^1.1.0
   internet_connection_checker: ^1.0.0+1
   intl: ^0.18.1
