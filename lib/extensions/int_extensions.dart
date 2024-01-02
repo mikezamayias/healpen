@@ -1,3 +1,5 @@
+import 'date_time_extensions.dart';
+
 extension IntExtension on int {
   String writingDurationFormat() {
     final hours = this ~/ 3600;
@@ -11,19 +13,19 @@ extension IntExtension on int {
     return '$hoursStr$minutesStr:$secondsStr';
   }
 
-  String timestampFormat() {
-    final DateTime date = DateTime.fromMillisecondsSinceEpoch(this);
-    final String year = date.year.toString();
-    final String month = date.month.toString().padLeft(2, '0');
-    final String day = date.day.toString().padLeft(2, '0');
-    final String hour = date.hour.toString().padLeft(2, '0');
-    final String minute = date.minute.toString().padLeft(2, '0');
-    final String second = date.second.toString().padLeft(2, '0');
-
-    return '$year-$month-$day, $hour:$minute:$second';
-  }
-
   DateTime timestampToDateTime() {
     return DateTime.fromMillisecondsSinceEpoch(this);
+  }
+
+  String timestampToEEEEMMMdHHMM() {
+    return timestampToDateTime().toEEEEMMMdHHMM();
+  }
+
+  String timestampToEEEEMMMd() {
+    return timestampToDateTime().toEEEEMMMd();
+  }
+
+  String timestampToHHMM() {
+    return timestampToDateTime().toHHMM();
   }
 }

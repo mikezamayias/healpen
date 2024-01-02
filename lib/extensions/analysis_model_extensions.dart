@@ -110,7 +110,6 @@ extension AnalysisModelListExtension on Set<AnalysisModel> {
     return processedData;
   }
 
-  double averageScore() {
-    return map((e) => e.score).average;
-  }
+  double averageScore() =>
+      isEmpty ? 0.0 : map((AnalysisModel element) => element.score).average;
 }

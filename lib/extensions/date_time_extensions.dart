@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 extension DateTimeExtension on DateTime {
   DateTime startOfMonth() {
     DateTime res = DateTime(year, month, 1);
@@ -44,5 +46,25 @@ extension DateTimeExtension on DateTime {
       1 => 'Last week',
       _ => '$delta weeks ago',
     };
+  }
+
+  bool isStartOfMonth() {
+    return isSameDate(DateTime(year, month, 1));
+  }
+
+  bool isSameDate(DateTime other) {
+    return year == other.year && month == other.month && day == other.day;
+  }
+
+  String toEEEEMMMd() {
+    return DateFormat('EEEE, MMM d').format(this);
+  }
+
+  String toHHMM() {
+    return DateFormat('HH:MM').format(this);
+  }
+
+  String toEEEEMMMdHHMM() {
+    return '${toEEEEMMMd()} ${toHHMM()}';
   }
 }
