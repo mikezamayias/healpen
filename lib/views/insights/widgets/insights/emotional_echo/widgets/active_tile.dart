@@ -55,10 +55,7 @@ class _EmotionalEchoActiveTileState
       bottom: 0,
       right: isActive ? -99.w : 0,
       left: 0,
-      child: Padding(
-        padding: EdgeInsets.all(radius),
-        child: const EmotionalEchoInactiveTile(),
-      ),
+      child: const EmotionalEchoInactiveTile(),
     );
   }
 
@@ -78,7 +75,6 @@ class _EmotionalEchoActiveTileState
         curve: standardCurve,
         decoration: isActive
             ? BoxDecoration(
-                borderRadius: BorderRadius.circular(radius),
                 gradient: LinearGradient(
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
@@ -89,30 +85,25 @@ class _EmotionalEchoActiveTileState
                   stops: const [0.0, 1.0],
                 ),
               )
-            : BoxDecoration(
-                borderRadius: BorderRadius.circular(radius),
-              ),
+            : const BoxDecoration(),
         width: 51.w,
-        child: Padding(
-          padding: EdgeInsets.all(gap),
-          child: Stack(
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: sentimentLabels.reversed.map(scaleText).toList(),
-              ),
-              if (isActive)
-                currentState()
-                    .animate()
-                    .slideY(
-                      begin: 1,
-                      curve: Sprung.criticallyDamped,
-                    )
-                    .fade(),
-            ],
-          ),
+        child: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: sentimentLabels.reversed.map(scaleText).toList(),
+            ),
+            if (isActive)
+              currentState()
+                  .animate()
+                  .slideY(
+                    begin: 1,
+                    curve: Sprung.criticallyDamped,
+                  )
+                  .fade(),
+          ],
         ),
       ),
     );
