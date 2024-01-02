@@ -31,47 +31,48 @@ class _EditNameTileState extends ConsumerState<EditNameTile> {
       enableExplanationWrapper: !_useSmallerNavigationElements,
       titleString: 'How should you be called?',
       subtitle: StreamBuilder<String?>(
-          stream: FirebaseAuth.instance
-              .userChanges()
-              .map((event) => event?.displayName),
-          builder: (context, snapshot) {
-            textController.text = snapshot.data ?? '';
-            return Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    enableSuggestions: false,
-                    controller: textController,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(horizontal: gap),
-                      hintText: snapshot.data,
-                      hintStyle: context.theme.textTheme.titleLarge,
-                    ),
-                    style: context.theme.textTheme.titleLarge!.copyWith(
-                      color: _useSmallerNavigationElements
-                          ? context.theme.colorScheme.onSurface
-                          : context.theme.colorScheme.onSurfaceVariant,
-                    ),
-                    onChanged: handleSubmitted,
+        stream: FirebaseAuth.instance
+            .userChanges()
+            .map((event) => event?.displayName),
+        builder: (context, snapshot) {
+          textController.text = snapshot.data ?? '';
+          return Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  enableSuggestions: false,
+                  controller: textController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.symmetric(horizontal: gap),
+                    hintText: snapshot.data,
+                    hintStyle: context.theme.textTheme.titleLarge,
                   ),
+                  style: context.theme.textTheme.titleLarge!.copyWith(
+                    color: _useSmallerNavigationElements
+                        ? context.theme.colorScheme.onSurface
+                        : context.theme.colorScheme.onSurfaceVariant,
+                  ),
+                  onChanged: handleSubmitted,
                 ),
-                ValueListenableBuilder<TextEditingValue>(
-                  valueListenable: textController,
-                  builder: (context, value, child) {
-                    return IconButton(
-                      color: context.theme.colorScheme.primary,
-                      icon: const FaIcon(
-                        FontAwesomeIcons.check,
-                      ),
-                      onPressed: canUpdateName(value.text, snapshot.data)
-                          ? handlePressed
-                          : null,
-                    ).animateSlideInFromBottom();
-                  },
-                ),
-              ],
-            );
-          }),
+              ),
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: textController,
+                builder: (context, value, child) {
+                  return IconButton(
+                    color: context.theme.colorScheme.primary,
+                    icon: const FaIcon(
+                      FontAwesomeIcons.check,
+                    ),
+                    onPressed: canUpdateName(value.text, snapshot.data)
+                        ? handlePressed
+                        : null,
+                  ).animateSlideInFromBottom();
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
