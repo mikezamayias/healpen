@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -7,7 +6,6 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../extensions/widget_extensions.dart';
 import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
-import '../../utils/helper_functions.dart';
 
 class BlueprintView extends ConsumerWidget {
   const BlueprintView({
@@ -33,41 +31,32 @@ class BlueprintView extends ConsumerWidget {
         showAppBar ?? ref.watch(navigationShowAppBarProvider);
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: getSystemUIOverlayStyle(
-        context.theme,
-        ref.watch(themeAppearanceProvider),
-      ),
-      child: Container(
-        color: backgroundColor ?? context.theme.colorScheme.surface,
-        child: GestureDetector(
-          onTap: () => context.focusScope.unfocus(),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: padBodyHorizontally! ? gap : 0,
-            ),
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: showAppBarSetting! && appBar != null
-                  ? PreferredSize(
-                      preferredSize: Size.fromHeight(
-                        smallNavigationElements ? 12.h : 18.h,
-                      ),
-                      child: appBar!.animateAppBar(),
-                    )
-                  : null,
-              body: SafeArea(
-                child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(
-                    scrollbars: false,
-                    overscroll: false,
+    return Container(
+      color: backgroundColor ?? context.theme.colorScheme.surface,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: padBodyHorizontally! ? gap : 0,
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: showAppBarSetting! && appBar != null
+              ? PreferredSize(
+                  preferredSize: Size.fromHeight(
+                    smallNavigationElements ? 12.h : 18.h,
                   ),
-                  child: body,
-                ),
+                  child: appBar!.animateAppBar(),
+                )
+              : null,
+          body: SafeArea(
+            child: ScrollConfiguration(
+              behavior: ScrollConfiguration.of(context).copyWith(
+                scrollbars: false,
+                overscroll: false,
               ),
-              bottomNavigationBar: bottomNavigationBar,
+              child: body,
             ),
           ),
+          bottomNavigationBar: bottomNavigationBar,
         ),
       ),
     );

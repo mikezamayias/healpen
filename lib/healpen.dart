@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart' hide PageController;
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
 
 import 'controllers/analysis_view_controller.dart';
-import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/insights_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
@@ -14,23 +15,25 @@ import 'models/insight_model.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'services/firestore_service.dart';
-import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
-import 'views/blueprint/blueprint_view.dart';
-import 'views/simple/views/simple_home_view.dart';
-import 'widgets/healpen_navigation_bar.dart';
+import 'views/modern/modern_view.dart';
 
 List<PreferenceModel> _lastFetchedPreferences = [];
 
-class Healpen extends ConsumerWidget {
+class Healpen extends ConsumerStatefulWidget {
   const Healpen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final healpenPageController =
-        ref.watch(HealpenController().pageControllerProvider);
-    final pages = HealpenController().pages;
-    final navigationSimpleUi = ref.watch(navigationSimpleUIProvider);
+  ConsumerState<Healpen> createState() => _HealpenState();
+}
+
+class _HealpenState extends ConsumerState<Healpen> {
+  @override
+  Widget build(BuildContext context) {
+    // final healpenPageController =
+    //     ref.watch(HealpenController().pageControllerProvider);
+    // final pages = HealpenController().pages;
+    // final navigationSimpleUi = ref.watch(navigationSimpleUIProvider);
 
     // Move the logic that updates the state of your providers to didChangeDependencies
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -45,25 +48,15 @@ class Healpen extends ConsumerWidget {
           KeyboardState.visible,
         ].contains(keyboardState),
       ),
-      child: AnimatedContainer(
-        duration: standardDuration,
-        curve: standardCurve,
-        child: navigationSimpleUi
-            ? const SimpleHomeView()
-            : BlueprintView(
-                padBodyHorizontally: false,
-                body: PageView.builder(
-                  itemCount: pages.length,
-                  controller: healpenPageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (int value) {
-                    _handlePageChange(ref, value);
-                  },
-                  itemBuilder: (BuildContext context, int index) =>
-                      pages.elementAt(index),
-                ),
-                bottomNavigationBar: const HealpenNavigationBar(),
-              ),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: getSystemUIOverlayStyle(
+          context.theme,
+          ref.watch(themeAppearanceProvider),
+        ),
+        child: GestureDetector(
+          onTap: () => context.focusScope.unfocus(),
+          child: const ModernView(),
+        ),
       ),
     );
   }
@@ -126,13 +119,13 @@ class Healpen extends ConsumerWidget {
     });
   }
 
-  void _handlePageChange(WidgetRef ref, int value) {
-    // Moved this logic to a separate function
-    vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-      ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
-          value;
-    });
-  }
+  // void _handlePageChange(WidgetRef ref, int value) {
+  //   // Moved this logic to a separate function
+  //   vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+  //     ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
+  //         value;
+  //   });
+  // }
 
   bool _havePreferencesChanged(List<PreferenceModel> newPreferences) {
     if (newPreferences.length != _lastFetchedPreferences.length) {
