@@ -8,7 +8,12 @@ import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 
 class EmotionalEchoInactiveTile extends ConsumerWidget {
-  const EmotionalEchoInactiveTile({super.key});
+  const EmotionalEchoInactiveTile({
+    super.key,
+    this.child,
+  });
+
+  final Widget? child;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,30 +44,34 @@ class EmotionalEchoInactiveTile extends ConsumerWidget {
         ),
         Align(
           alignment: Alignment.center,
-          child: TweenAnimationBuilder<double>(
-            tween: Tween<double>(
-              begin:
-                  ref.watch(EmotionalEchoController.isPressedProvider) ? 1 : 0,
-              end: ref.watch(EmotionalEchoController.isPressedProvider) ? 0 : 1,
-            ),
-            duration: emphasizedDuration,
-            curve: emphasizedCurve,
-            builder: (BuildContext context, double value, Widget? child) {
-              return Transform.scale(
-                scale: value,
-                child: Opacity(
-                  opacity: value,
-                  child: Text(
-                    getSentimentLabel(sentiment).split(' ').join('\n'),
-                    textAlign: TextAlign.center,
-                    style: context.theme.textTheme.titleLarge!.copyWith(
-                      color: textColor,
-                    ),
-                  ),
+          child: child ??
+              TweenAnimationBuilder<double>(
+                tween: Tween<double>(
+                  begin: ref.watch(EmotionalEchoController.isPressedProvider)
+                      ? 1
+                      : 0,
+                  end: ref.watch(EmotionalEchoController.isPressedProvider)
+                      ? 0
+                      : 1,
                 ),
-              );
-            },
-          ),
+                duration: emphasizedDuration,
+                curve: emphasizedCurve,
+                builder: (BuildContext context, double value, Widget? child) {
+                  return Transform.scale(
+                    scale: value,
+                    child: Opacity(
+                      opacity: value,
+                      child: Text(
+                        getSentimentLabel(sentiment).split(' ').join('\n'),
+                        textAlign: TextAlign.center,
+                        style: context.theme.textTheme.titleLarge!.copyWith(
+                          color: textColor,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
         ),
       ],
     );
