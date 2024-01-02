@@ -23,8 +23,8 @@ class CustomListTile extends ConsumerStatefulWidget {
       enableExplanationWrapper,
       showShadow,
       isDisabled;
-  final Color? backgroundColor, textColor, shadowColor;
-  final double? cornerRadius;
+  final Color? backgroundColor, textColor, shadowColor, surfaceTintColor;
+  final double? cornerRadius, elevation;
   final EdgeInsets? contentPadding, subtitlePadding;
 
   const CustomListTile({
@@ -44,6 +44,7 @@ class CustomListTile extends ConsumerStatefulWidget {
     this.leadingOnTap,
     this.backgroundColor,
     this.textColor,
+    this.surfaceTintColor,
     this.selectableText = false,
     this.responsiveWidth = false,
     this.showcaseLeadingIcon = false,
@@ -55,11 +56,15 @@ class CustomListTile extends ConsumerStatefulWidget {
     this.padExplanation = true,
     this.useSmallerNavigationSetting = true,
     this.cornerRadius,
+    this.elevation,
     this.contentPadding,
     this.subtitlePadding,
     this.showShadow = false,
     this.shadowColor,
-  });
+  }) : assert(
+          surfaceTintColor == null || elevation != null,
+          'If surfaceTintColor is set, elevation must be set too.',
+        );
 
   @override
   ConsumerState<CustomListTile> createState() => _CustomListTileState();
@@ -126,13 +131,26 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
         ],
       );
 
-  Color get backgroundColor =>
-      widget.backgroundColor ??
-      (widget.onTap != null
-          ? widget.isDisabled!
-              ? theme.colorScheme.outline
-              : theme.colorScheme.primary
-          : theme.colorScheme.surfaceVariant);
+  double? get elevation => widget.elevation;
+
+  Color? get surfaceTintColor => widget.surfaceTintColor;
+
+  Color get backgroundColor {
+    Color tempBackgroundColor = widget.backgroundColor ??
+        (widget.onTap != null
+            ? widget.isDisabled!
+                ? theme.colorScheme.outline
+                : theme.colorScheme.primary
+            : theme.colorScheme.surfaceVariant);
+    return switch (surfaceTintColor == null) {
+      true => tempBackgroundColor,
+      false => ElevationOverlay.applySurfaceTint(
+          tempBackgroundColor,
+          surfaceTintColor,
+          elevation!,
+        ),
+    };
+  }
 
   Color get textColor =>
       widget.textColor ??
@@ -225,12 +243,17 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
         borderRadius: BorderRadius.all(
           Radius.circular(widget.cornerRadius ?? radius),
         ),
-        boxShadow: widget.showShadow!
+        boxShadow: widget.showShadow! || widget.elevation != null
             ? [
                 BoxShadow(
-                  color: widget.shadowColor ?? theme.colorScheme.shadow,
-                  blurRadius: 6,
-                  offset: const Offset(0, 0),
+                  color: ElevationOverlay.applySurfaceTint(
+                    context.theme.colorScheme.shadow,
+                    widget.shadowColor ?? theme.colorScheme.surface,
+                    widget.elevation ?? radius,
+                  ).withOpacity(0.2),
+                  blurStyle: BlurStyle.outer,
+                  blurRadius: (widget.elevation ?? radius),
+                  spreadRadius: (widget.elevation ?? radius) / 2,
                 )
               ]
             : null,
