@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 
 import '../../../controllers/emotional_echo_controller.dart';
 import '../../../controllers/history_view_controller.dart';
+import '../../../extensions/int_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../route_controller.dart';
@@ -98,9 +98,7 @@ class NoteTile extends ConsumerWidget {
             cornerRadius: radius - gap,
             padExplanation:
                 true == ref.watch(navigationSmallerNavigationElementsProvider),
-            explanationString: DateFormat('HH:mm').format(
-              DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
-            ),
+            explanationString: analysisModel.timestamp.timestampToHHMM(),
             title: Text(
               analysisModel.content,
               style: context.theme.textTheme.bodyLarge!.copyWith(

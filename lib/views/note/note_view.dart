@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../extensions/int_extensions.dart';
@@ -56,9 +55,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
           children: [
             buildCustomListTile(
               'Time',
-              DateFormat('HH:mm:ss').format(
-                DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
-              ),
+              analysisModel.timestamp.timestampToHHMM(),
             ),
             buildCustomListTile(
               'Duration',
@@ -90,9 +87,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
         ),
       ),
     );
-    final titleString = DateFormat('EEE d MMM yyyy').format(
-      DateTime.fromMillisecondsSinceEpoch(analysisModel.timestamp),
-    );
+    final titleString = analysisModel.timestamp.timestampToEEEEMMMd();
     return ref.watch(navigationSimpleUIProvider)
         ? SimpleBlueprintView(
             simpleAppBar: SimpleAppBar(

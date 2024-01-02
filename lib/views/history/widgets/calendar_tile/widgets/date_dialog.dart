@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../extensions/analysis_model_extensions.dart';
@@ -49,7 +48,7 @@ class DateDialog extends ConsumerWidget {
           end: 0,
         );
     return CustomDialog(
-      titleString: DateFormat('EEE d MMM yyyy').format(date),
+      titleString: date.toEEEEMMMdHHMM(),
       trailingWidget: Text(
         averageDayScore.toStringAsFixed(1),
         style: context.theme.textTheme.headlineSmall!.copyWith(
