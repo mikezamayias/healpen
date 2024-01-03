@@ -25,41 +25,6 @@ class _ModernViewState extends ConsumerState<ModernView> {
 
   @override
   Widget build(BuildContext context) {
-    // return SafeArea(
-    //   bottom: false,
-    //   child: CustomScrollView(
-    //     slivers: <Widget>[
-    //       SliverSafeArea(
-    //         sliver: SliverPersistentHeader(
-    //           pinned: true,
-    //           delegate: AppBarHeader(),
-    //         ),
-    //       ),
-    //       SliverSafeArea(
-    //         sliver: SliverPersistentHeader(
-    //           pinned: true,
-    //           delegate: SentimentChartHeader(),
-    //         ),
-    //       ),
-    //       SliverSafeArea(
-    //         sliver: SliverList.separated(
-    //           itemCount: ref.read(analysisModelSetProvider).length,
-    //           itemBuilder: (context, index) => Padding(
-    //             padding: EdgeInsets.symmetric(horizontal: gap),
-    //             child: EntryTile(
-    //               analysisModel: ref
-    //                   .read(analysisModelSetProvider)
-    //                   .toList()
-    //                   .reversed
-    //                   .elementAt(index),
-    //             ),
-    //           ),
-    //           separatorBuilder: (_, __) => SizedBox(height: gap),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
     final shapeColor = getShapeColorOnSentiment(
       context.theme,
       ref.watch(analysisModelSetProvider).averageScore(),
