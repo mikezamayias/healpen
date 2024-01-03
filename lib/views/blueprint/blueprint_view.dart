@@ -40,7 +40,7 @@ class BlueprintView extends ConsumerWidget {
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: showAppBarSetting! && appBar != null
+          appBar: showAppBarSetting && appBar != null
               ? PreferredSize(
                   preferredSize: Size.fromHeight(
                     smallNavigationElements ? 12.h : 18.h,
