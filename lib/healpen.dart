@@ -6,6 +6,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:keyboard_detection/keyboard_detection.dart';
 
 import 'controllers/analysis_view_controller.dart';
+import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/insights_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
@@ -16,7 +17,8 @@ import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'services/firestore_service.dart';
 import 'utils/helper_functions.dart';
-import 'views/modern/modern_view.dart';
+import 'views/blueprint/blueprint_view.dart';
+import 'widgets/healpen_navigation_bar.dart';
 
 List<PreferenceModel> _lastFetchedPreferences = [];
 
@@ -30,10 +32,9 @@ class Healpen extends ConsumerStatefulWidget {
 class _HealpenState extends ConsumerState<Healpen> {
   @override
   Widget build(BuildContext context) {
-    // final healpenPageController =
-    //     ref.watch(HealpenController().pageControllerProvider);
-    // final pages = HealpenController().pages;
-    // final navigationSimpleUi = ref.watch(navigationSimpleUIProvider);
+    final healpenPageController =
+        ref.watch(HealpenController().pageControllerProvider);
+    final pages = HealpenController().pages;
 
     // Move the logic that updates the state of your providers to didChangeDependencies
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -55,7 +56,20 @@ class _HealpenState extends ConsumerState<Healpen> {
         ),
         child: GestureDetector(
           onTap: () => context.focusScope.unfocus(),
-          child: const ModernView(),
+          child: BlueprintView(
+            padBodyHorizontally: false,
+            body: PageView.builder(
+              itemCount: pages.length,
+              controller: healpenPageController,
+              physics: const NeverScrollableScrollPhysics(),
+              onPageChanged: (int value) {
+                _handlePageChange(ref, value);
+              },
+              itemBuilder: (BuildContext context, int index) =>
+                  pages.elementAt(index),
+            ),
+            bottomNavigationBar: const HealpenNavigationBar(),
+          ),
         ),
       ),
     );
@@ -119,13 +133,13 @@ class _HealpenState extends ConsumerState<Healpen> {
     });
   }
 
-  // void _handlePageChange(WidgetRef ref, int value) {
-  //   // Moved this logic to a separate function
-  //   vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
-  //     ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
-  //         value;
-  //   });
-  // }
+  void _handlePageChange(WidgetRef ref, int value) {
+    // Moved this logic to a separate function
+    vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+      ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
+          value;
+    });
+  }
 
   bool _havePreferencesChanged(List<PreferenceModel> newPreferences) {
     if (newPreferences.length != _lastFetchedPreferences.length) {

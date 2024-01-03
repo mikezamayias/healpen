@@ -20,9 +20,8 @@ class WritingTextField extends ConsumerStatefulWidget {
 class _WritingTextFieldState extends ConsumerState<WritingTextField> {
   @override
   Widget build(BuildContext context) {
-    final borderRadius =
-        useSimpleUi || useSmallNavigationElements ? radius : radius - gap;
-    final color = useSimpleUi || useSmallNavigationElements
+    final borderRadius = useSmallNavigationElements ? radius : radius - gap;
+    final color = useSmallNavigationElements
         ? context.theme.colorScheme.surfaceVariant
         : context.theme.colorScheme.surface;
     return SafeArea(
@@ -30,7 +29,7 @@ class _WritingTextFieldState extends ConsumerState<WritingTextField> {
       child: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
-        decoration: isKeyboardOpen && useSimpleUi
+        decoration: isKeyboardOpen
             ? BoxDecoration(
                 color: color,
                 borderRadius: BorderRadius.only(
@@ -61,8 +60,6 @@ class _WritingTextFieldState extends ConsumerState<WritingTextField> {
 
   bool get useSmallNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
-
-  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
 
   bool get isKeyboardOpen =>
       ref.watch(WritingController().isKeyboardOpenProvider);

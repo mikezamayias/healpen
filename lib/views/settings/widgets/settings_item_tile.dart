@@ -19,7 +19,7 @@ class _SettingsItemTileState extends ConsumerState<SettingsItemTile> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      cornerRadius: _useSimpleUi ? radius : gap,
+      cornerRadius: gap,
       useSmallerNavigationSetting: !_useSmallerNavigationElements,
       enableExplanationWrapper:
           !_useSmallerNavigationElements ^ (tileModel.onTap != null),
@@ -34,8 +34,6 @@ class _SettingsItemTileState extends ConsumerState<SettingsItemTile> {
 
   bool get _useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
-
-  bool get _useSimpleUi => ref.watch(navigationSimpleUIProvider);
 
   bool get _showInfo => ref.watch(navigationShowInfoProvider);
 }

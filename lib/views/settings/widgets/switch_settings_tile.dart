@@ -14,7 +14,6 @@ class SwitchSettingsTile extends ConsumerWidget {
   final StateProvider<bool> stateProvider;
   final PreferenceModel preferenceModel;
   final void Function(bool)? onChanged;
-  final bool? checkForSimpleUI;
 
   const SwitchSettingsTile({
     super.key,
@@ -23,7 +22,6 @@ class SwitchSettingsTile extends ConsumerWidget {
     required this.stateProvider,
     required this.preferenceModel,
     this.onChanged,
-    this.checkForSimpleUI = false,
   });
 
   @override
@@ -39,23 +37,20 @@ class SwitchSettingsTile extends ConsumerWidget {
       trailing: Switch(
         value: ref.watch(stateProvider),
         onChanged: onChanged ??
-            (checkForSimpleUI! && ref.watch(navigationSimpleUIProvider)
-                ? null
-                : (value) {
-                    vibrate(
-                      ref.watch(navigationEnableHapticFeedbackProvider),
-                      () async {
-                        ref.read(stateProvider.notifier).state = value;
-                        await FirestorePreferencesController.instance
-                            .savePreference(
-                          preferenceModel.withValue(ref.watch(stateProvider)),
-                        );
-                        logger.i(
-                          '${ref.watch(stateProvider)}',
-                        );
-                      },
-                    );
-                  }),
+            (value) {
+              vibrate(
+                ref.watch(navigationEnableHapticFeedbackProvider),
+                () async {
+                  ref.read(stateProvider.notifier).state = value;
+                  await FirestorePreferencesController.instance.savePreference(
+                    preferenceModel.withValue(ref.watch(stateProvider)),
+                  );
+                  logger.i(
+                    '${ref.watch(stateProvider)}',
+                  );
+                },
+              );
+            },
       ),
     );
   }

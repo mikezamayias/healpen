@@ -22,19 +22,9 @@ class _StopwatchTileState extends ConsumerState<StopwatchTile> {
   Widget build(BuildContext context) {
     return CustomListTile(
       useSmallerNavigationSetting: false,
-      contentPadding:
-          !useSimpleUi ^ !useSmallerNavigationElements ? null : EdgeInsets.zero,
-      backgroundColor: !useSimpleUi ^ !useSmallerNavigationElements
-          ? context.theme.colorScheme.surfaceVariant
-          : context.theme.colorScheme.surface,
-      textColor: !useSimpleUi
-          ? context.theme.colorScheme.onSurface
-          : context.theme.colorScheme.onSurfaceVariant,
-      cornerRadius: useSimpleUi
-          ? radius - gap
-          : useSmallerNavigationElements
-              ? radius
-              : gap,
+      backgroundColor: context.theme.colorScheme.surface,
+      textColor: context.theme.colorScheme.onSurface,
+      cornerRadius: useSmallerNavigationElements ? radius : gap,
       titleString: 'Stopwatch',
       trailing: Text(
         ref.watch(writingControllerProvider).duration.writingDurationFormat(),
@@ -47,8 +37,6 @@ class _StopwatchTileState extends ConsumerState<StopwatchTile> {
 
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
-
-  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
 
   bool get isKeyboardOpen =>
       ref.watch(WritingController().isKeyboardOpenProvider);

@@ -3,11 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../extensions/widget_extensions.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
-import '../../simple/simple_blueprint_view.dart';
-import '../../simple/widgets/simple_app_bar.dart';
 import 'widgets/colorize_on_sentiment_tile.dart';
 import 'widgets/theme_appearance_tile.dart';
 import 'widgets/theme_color_tile.dart';
@@ -34,22 +31,15 @@ class SettingsThemeView extends ConsumerWidget {
       ),
     );
 
-    return ref.watch(navigationSimpleUIProvider)
-        ? SimpleBlueprintView(
-            simpleAppBar: const SimpleAppBar(
-              appBarTitleString: 'Theme',
-            ),
-            body: body,
-          )
-        : BlueprintView(
-            appBar: const AppBar(
-              automaticallyImplyLeading: true,
-              pathNames: [
-                'Settings',
-                'Theme',
-              ],
-            ),
-            body: body,
-          );
+    return BlueprintView(
+      appBar: const AppBar(
+        automaticallyImplyLeading: true,
+        pathNames: [
+          'Settings',
+          'Theme',
+        ],
+      ),
+      body: body,
+    );
   }
 }

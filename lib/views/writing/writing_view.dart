@@ -43,8 +43,7 @@ class _WritingViewState extends ConsumerState<WritingView> {
       body: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
-        padding:
-            isKeyboardOpen ? EdgeInsets.only(top: gap) : EdgeInsets.zero,
+        padding: isKeyboardOpen ? EdgeInsets.only(top: gap) : EdgeInsets.zero,
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
@@ -66,7 +65,6 @@ class _WritingViewState extends ConsumerState<WritingView> {
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
   bool get showAppBar => ref.watch(navigationShowAppBarProvider);
-  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
   bool get isKeyboardOpen =>
       ref.watch(WritingController().isKeyboardOpenProvider);
 }

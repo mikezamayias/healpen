@@ -16,7 +16,6 @@ class BackButtonSettingsTile extends ConsumerWidget {
           'it simpler to return to previous pages.',
       stateProvider: navigationShowBackButtonProvider,
       preferenceModel: PreferencesController.navigationShowBackButton,
-      checkForSimpleUI: true,
     );
   }
 }

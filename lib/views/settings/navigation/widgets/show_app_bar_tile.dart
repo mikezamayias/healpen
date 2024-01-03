@@ -18,7 +18,6 @@ class ShowAppBarTile extends ConsumerWidget {
           'will create more space for additional information.',
       stateProvider: navigationShowAppBarProvider,
       preferenceModel: PreferencesController.navigationShowAppBar,
-      checkForSimpleUI: true,
     );
   }
 }

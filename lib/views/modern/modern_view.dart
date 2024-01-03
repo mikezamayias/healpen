@@ -9,7 +9,7 @@ import '../../extensions/analysis_model_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
-import '../simple/views/simple_insights_tile.dart';
+import '../../utils/logger.dart';
 import 'widgets/add_entry_button.dart';
 import 'widgets/entry_tile.dart';
 import 'widgets/modern_app_bar.dart';
@@ -48,11 +48,7 @@ class _ModernViewState extends ConsumerState<ModernView> {
                   ModernAppBarAction(
                     iconData: FontAwesomeIcons.brain,
                     onTap: () {
-                      pushWithAnimation(
-                        context: context,
-                        widget: const SimpleInsightsTile(),
-                        dataCallback: null,
-                      );
+                      logger.i('Brain tapped');
                     },
                   ),
                 ],

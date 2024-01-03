@@ -13,8 +13,6 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/custom_list_tile.dart';
 import '../blueprint/blueprint_view.dart';
 import '../insights/widgets/insights/emotional_echo/emotional_echo_tile.dart';
-import '../simple/simple_blueprint_view.dart';
-import '../simple/widgets/simple_app_bar.dart';
 import 'widgets/sentiment_trailing.dart';
 
 final showEmojiInTrailingProvider = StateProvider<bool>((ref) => true);
@@ -29,7 +27,7 @@ class NoteView extends ConsumerStatefulWidget {
 class _NoteViewState extends ConsumerState<NoteView> {
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
-  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ({
@@ -46,7 +44,7 @@ class _NoteViewState extends ConsumerState<NoteView> {
     }
     Widget body = ClipRRect(
       borderRadius: BorderRadius.circular(
-        useSimpleUi || useSmallerNavigationElements ? radius : gap,
+        useSmallerNavigationElements ? radius : gap,
       ),
       child: SingleChildScrollView(
         child: Wrap(
@@ -88,26 +86,16 @@ class _NoteViewState extends ConsumerState<NoteView> {
       ),
     );
     final titleString = analysisModel.timestamp.timestampToEEEEMMMd();
-    return ref.watch(navigationSimpleUIProvider)
-        ? SimpleBlueprintView(
-            simpleAppBar: SimpleAppBar(
-              appBarTitleString: titleString,
-              appBarTrailing: SentimentTrailing(
-                score: analysisModel.score,
-              ),
-            ),
-            body: body,
-          )
-        : BlueprintView(
-            appBar: AppBar(
-              pathNames: [titleString],
-              automaticallyImplyLeading: true,
-              trailingWidget: SentimentTrailing(
-                score: analysisModel.score,
-              ),
-            ),
-            body: body,
-          );
+    return BlueprintView(
+      appBar: AppBar(
+        pathNames: [titleString],
+        automaticallyImplyLeading: true,
+        trailingWidget: SentimentTrailing(
+          score: analysisModel.score,
+        ),
+      ),
+      body: body,
+    );
   }
 
   Widget buildCustomListTile(String fieldName, dynamic fieldValue) {

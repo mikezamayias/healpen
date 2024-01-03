@@ -10,8 +10,6 @@ import '../../providers/settings_providers.dart';
 import '../../utils/constants.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
-import '../simple/simple_blueprint_view.dart';
-import '../simple/widgets/simple_app_bar.dart';
 import 'widgets/settings_item_tile.dart';
 
 class SettingsView extends ConsumerStatefulWidget {
@@ -24,14 +22,7 @@ class SettingsView extends ConsumerStatefulWidget {
 class _SettingsViewState extends ConsumerState<SettingsView> {
   @override
   Widget build(BuildContext context) {
-    return _useSimpleUi ? _buildSimpleView() : _buildRegularView();
-  }
-
-  Widget _buildSimpleView() {
-    return SimpleBlueprintView(
-      simpleAppBar: const SimpleAppBar(appBarTitleString: 'Settings'),
-      body: _buildBody(),
-    );
+    return _buildRegularView();
   }
 
   Widget _buildRegularView() {
@@ -78,11 +69,9 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
   }
 
   double get _dynamicRadius =>
-      _useSimpleUi || _useSmallerNavigationElements ? radius - gap : radius;
+      _useSmallerNavigationElements ? radius - gap : radius;
 
-  double get _dynamicSpacing => _useSimpleUi ? radius : gap;
-
-  bool get _useSimpleUi => ref.watch(navigationSimpleUIProvider);
+  double get _dynamicSpacing => gap;
 
   bool get _useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);

@@ -13,8 +13,6 @@ import '../../../widgets/app_bar.dart';
 import '../../../widgets/custom_list_tile.dart';
 import '../../../widgets/loading_tile.dart';
 import '../../blueprint/blueprint_view.dart';
-import '../../simple/simple_blueprint_view.dart';
-import '../../simple/widgets/simple_app_bar.dart';
 import 'widgets/license_item_view.dart';
 
 class SettingsLicensesView extends ConsumerWidget {
@@ -98,24 +96,17 @@ class SettingsLicensesView extends ConsumerWidget {
         }
       },
     );
-    return ref.watch(navigationSimpleUIProvider)
-        ? SimpleBlueprintView(
-            simpleAppBar: const SimpleAppBar(
-              appBarTitleString: 'Open Source Licenses',
-            ),
-            body: body,
-          )
-        : BlueprintView(
-            appBar: const AppBar(
-              automaticallyImplyLeading: true,
-              pathNames: [
-                'Settings',
-                'About',
-                'Open Source Licenses',
-              ],
-            ),
-            body: body,
-          );
+    return BlueprintView(
+      appBar: const AppBar(
+        automaticallyImplyLeading: true,
+        pathNames: [
+          'Settings',
+          'About',
+          'Open Source Licenses',
+        ],
+      ),
+      body: body,
+    );
   }
 }
 

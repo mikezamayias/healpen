@@ -8,7 +8,6 @@ import '../../providers/settings_providers.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/no_analysis_found_tile.dart';
 import '../blueprint/blueprint_view.dart';
-import '../simple/views/simple_calendar_view.dart';
 import 'widgets/calendar_tile/calendar_tile.dart';
 
 class HistoryView extends ConsumerStatefulWidget {
@@ -21,24 +20,23 @@ class HistoryView extends ConsumerStatefulWidget {
 class _HistoryViewState extends ConsumerState<HistoryView> {
   @override
   Widget build(BuildContext context) {
-    return useSimpleUi
-        ? const SimpleCalendarView()
-        : BlueprintView(
-            showAppBar: showAppBar,
-            appBar: AppBar(
-              pathNames: [
-                PageController().history.titleGenerator(
-                    FirebaseAuth.instance.currentUser?.displayName),
-              ],
-            ),
-            body: (ref.watch(analysisModelSetProvider).isEmpty)
-                ? const NoAnalysisFoundTile()
-                : const CalendarTile(),
-          );
+    return BlueprintView(
+      showAppBar: showAppBar,
+      appBar: AppBar(
+        pathNames: [
+          PageController()
+              .history
+              .titleGenerator(FirebaseAuth.instance.currentUser?.displayName),
+        ],
+      ),
+      body: (ref.watch(analysisModelSetProvider).isEmpty)
+          ? const NoAnalysisFoundTile()
+          : const CalendarTile(),
+    );
   }
 
-  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
+
   bool get showAppBar => ref.watch(navigationShowAppBarProvider);
 }

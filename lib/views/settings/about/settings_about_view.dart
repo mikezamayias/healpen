@@ -6,12 +6,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../models/settings/settings_item_model.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
-import '../../simple/simple_blueprint_view.dart';
-import '../../simple/widgets/simple_app_bar.dart';
 import '../licenses/settings_licenses_view.dart';
 import '../widgets/settings_item_tile.dart';
 
@@ -25,25 +22,18 @@ class SettingsAboutView extends ConsumerStatefulWidget {
 class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
   @override
   Widget build(BuildContext context) {
-    return ref.watch(navigationSimpleUIProvider)
-        ? SimpleBlueprintView(
-            simpleAppBar: const SimpleAppBar(
-              appBarTitleString: 'About',
-            ),
-            body: _buildBody(),
-          )
-        : BlueprintView(
-            appBar: const AppBar(
-              automaticallyImplyLeading: true,
-              pathNames: [
-                'Settings',
-                'About',
-              ],
-            ),
-            body: Column(
-              children: <Widget>[Expanded(child: _buildBodyWrapper())],
-            ),
-          );
+    return BlueprintView(
+      appBar: const AppBar(
+        automaticallyImplyLeading: true,
+        pathNames: [
+          'Settings',
+          'About',
+        ],
+      ),
+      body: Column(
+        children: <Widget>[Expanded(child: _buildBodyWrapper())],
+      ),
+    );
   }
 
   Widget _buildBody() {

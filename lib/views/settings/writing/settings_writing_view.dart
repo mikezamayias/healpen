@@ -3,12 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../controllers/analysis_view_controller.dart';
 import '../../../extensions/widget_extensions.dart';
-import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
-import '../../simple/simple_blueprint_view.dart';
-import '../../simple/widgets/simple_app_bar.dart';
 import 'widgets/analyze_notes_tile.dart';
 import 'widgets/enable_automatic_stopwatch_tile.dart';
 
@@ -32,22 +29,15 @@ class SettingsWritingView extends ConsumerWidget {
         ),
       ),
     );
-    return ref.watch(navigationSimpleUIProvider)
-        ? SimpleBlueprintView(
-            simpleAppBar: const SimpleAppBar(
-              appBarTitleString: 'Writing',
-            ),
-            body: body,
-          )
-        : BlueprintView(
-            appBar: const AppBar(
-              automaticallyImplyLeading: true,
-              pathNames: [
-                'Settings',
-                'Writing',
-              ],
-            ),
-            body: body,
-          );
+    return BlueprintView(
+      appBar: const AppBar(
+        automaticallyImplyLeading: true,
+        pathNames: [
+          'Settings',
+          'Writing',
+        ],
+      ),
+      body: body,
+    );
   }
 }

@@ -62,10 +62,6 @@ class PreferencesController {
     'navigationShowAppBar',
     true,
   );
-  static final navigationSimpleUI = PreferenceModel<bool>(
-    'navigationSimpleUI',
-    true,
-  );
   static final navigationSmallerNavigationElements = PreferenceModel<bool>(
     'navigationSmallerNavigationElements',
     false,
@@ -118,7 +114,6 @@ class PreferencesController {
       preferenceModel: navigationSmallerNavigationElements,
       provider: navigationSmallerNavigationElementsProvider
     ),
-    (preferenceModel: navigationSimpleUI, provider: navigationSimpleUIProvider),
     (
       preferenceModel: themeColor,
       provider: themeColorProvider,

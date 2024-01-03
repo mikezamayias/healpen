@@ -30,12 +30,8 @@ class MonthCellTile extends ConsumerStatefulWidget {
 class _MonthCellTileState extends ConsumerState<MonthCellTile> {
   @override
   Widget build(BuildContext context) {
-    Color shapeColor = useSimpleUi
-        ? context.theme.colorScheme.surfaceVariant
-        : context.theme.colorScheme.surface;
-    Color textColor = useSimpleUi
-        ? context.theme.colorScheme.onSurfaceVariant
-        : context.theme.colorScheme.onSurface;
+    Color shapeColor = context.theme.colorScheme.surface;
+    Color textColor = context.theme.colorScheme.onSurface;
     final DateTime cellDate = widget.cellDetails.date;
     final dateAnalysisModelList =
         ref.watch(analysisModelSetProvider).getAnalysisBetweenDates(
@@ -151,5 +147,4 @@ class _MonthCellTileState extends ConsumerState<MonthCellTile> {
 
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
-  bool get useSimpleUi => ref.watch(navigationSimpleUIProvider);
 }

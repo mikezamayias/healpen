@@ -24,15 +24,12 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   Widget build(BuildContext context) {
     final useSmallerNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
-    final useSimpleUi = ref.watch(navigationSimpleUIProvider);
     final analysisModelList = ref.watch(analysisModelSetProvider);
     final maxDate = DateTime.now();
     final minDate = analysisModelList.first.timestamp.timestampToDateTime();
     return Container(
       decoration: BoxDecoration(
-        color: useSimpleUi
-            ? theme.colorScheme.surface
-            : theme.colorScheme.surfaceVariant,
+        color: theme.colorScheme.surfaceVariant,
         borderRadius: BorderRadius.circular(radius),
       ),
       padding: EdgeInsets.all(gap / 2),
