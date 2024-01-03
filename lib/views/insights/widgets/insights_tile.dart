@@ -41,17 +41,10 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
     List<Widget> insightWidgets = [];
-    insightWidgets = insightsController.insightModelList
-        .map((e) => smallNavigationElements
-            ? Padding(
-                padding: EdgeInsets.only(top: gap),
-                child: e.widget,
-              )
-            : e.widget)
-        .toList();
+    insightWidgets =
+        insightsController.insightModelList.map((e) => e.widget).toList();
     return CustomListTile(
-      useSmallerNavigationSetting:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
+      useSmallerNavigationSetting: !smallNavigationElements,
       titleString: insightsController.insightModelList
           .elementAt(pageOffset.round())
           .title,
@@ -98,8 +91,7 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
               .elementAt(pageOffset.round())
               .explanation
           : null,
-      enableExplanationWrapper:
-          !ref.watch(navigationSmallerNavigationElementsProvider),
+      enableExplanationWrapper: !smallNavigationElements,
       maxExplanationStringLines: 3,
     );
   }
