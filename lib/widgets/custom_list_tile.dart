@@ -145,10 +145,9 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
             : theme.colorScheme.surfaceVariant);
     return switch (surfaceTintColor == null) {
       true => tempBackgroundColor,
-      false => ElevationOverlay.applySurfaceTint(
-          tempBackgroundColor,
-          surfaceTintColor,
-          elevation!,
+      false => tempBackgroundColor.applySurfaceTint(
+          surfaceTintColor: surfaceTintColor!,
+          elevation: elevation,
         ),
     };
   }
