@@ -2,14 +2,18 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../controllers/analysis_view_controller.dart';
 import '../../extensions/analysis_model_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
+import '../simple/views/simple_insights_tile.dart';
 import 'widgets/add_entry_button.dart';
 import 'widgets/entry_tile.dart';
+import 'widgets/modern_app_bar.dart';
+import 'widgets/modern_app_bar_action.dart';
 
 class ModernView extends ConsumerStatefulWidget {
   const ModernView({super.key});
@@ -37,26 +41,18 @@ class _ModernViewState extends ConsumerState<ModernView> {
                 backgroundColor: backgroundColor,
                 pinned: true,
                 centerTitle: false,
-                flexibleSpace: Container(
-                  padding: EdgeInsets.only(
-                    left: radius,
-                    right: radius,
-                    bottom: radius / 2,
-                  ),
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    'Healpen',
-                    style: context.theme.textTheme.headlineLarge!.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: onBackgroundColor,
-                    ),
-                  ),
+                flexibleSpace: ModernAppBar(
+                  onBackgroundColor: onBackgroundColor,
                 ),
                 actions: [
-                  IconButton(
-                    icon: const Icon(Icons.settings),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/settings');
+                  ModernAppBarAction(
+                    iconData: FontAwesomeIcons.brain,
+                    onTap: () {
+                      pushWithAnimation(
+                        context: context,
+                        widget: const SimpleInsightsTile(),
+                        dataCallback: null,
+                      );
                     },
                   ),
                 ],
