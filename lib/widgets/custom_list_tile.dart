@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../extensions/color_extensions.dart';
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
 
@@ -131,7 +132,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
         ],
       );
 
-  double? get elevation => widget.elevation;
+  double get elevation => widget.elevation ?? radius;
 
   Color? get surfaceTintColor => widget.surfaceTintColor;
 
@@ -246,11 +247,11 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
         boxShadow: widget.showShadow! || widget.elevation != null
             ? [
                 BoxShadow(
-                  color: ElevationOverlay.applySurfaceTint(
-                    context.theme.colorScheme.shadow,
-                    widget.shadowColor ?? theme.colorScheme.surface,
-                    widget.elevation ?? radius,
-                  ).withOpacity(0.2),
+                  color: (widget.shadowColor ?? theme.colorScheme.surface)
+                      .applySurfaceTint(
+                    surfaceTintColor: surfaceTintColor!,
+                    elevation: elevation * 2,
+                  ),
                   blurStyle: BlurStyle.outer,
                   blurRadius: (widget.elevation ?? radius),
                   spreadRadius: (widget.elevation ?? radius) / 2,

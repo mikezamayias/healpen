@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/analysis_view_controller.dart';
 import '../../extensions/analysis_model_extensions.dart';
+import '../../extensions/color_extensions.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 import 'widgets/add_entry_button.dart';
@@ -41,41 +41,25 @@ class _ModernViewState extends ConsumerState<ModernView> {
                 automaticallyImplyLeading: false,
                 leadingWidth: 0,
                 surfaceTintColor: shapeColor,
-                backgroundColor: context.theme.colorScheme.background,
+                backgroundColor:
+                    context.theme.colorScheme.background.applySurfaceTint(
+                  surfaceTintColor: shapeColor,
+                  elevation: radius,
+                ),
                 pinned: true,
                 centerTitle: false,
                 flexibleSpace: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: shapeColor,
-                        width: gap / 2,
-                      ),
-                    ),
+                  padding: EdgeInsets.only(
+                    left: radius,
+                    right: radius,
+                    bottom: radius / 2,
                   ),
-                  child: ClipRect(
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(
-                        sigmaX: gap * 2,
-                        sigmaY: gap * 2,
-                      ),
-                      blendMode: BlendMode.srcATop,
-                      child: Container(
-                        padding: EdgeInsets.only(
-                          left: radius,
-                          right: radius,
-                          bottom: radius / 2,
-                        ),
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          'Healpen',
-                          style:
-                              context.theme.textTheme.headlineLarge!.copyWith(
-                            fontWeight: FontWeight.w700,
-                            color: context.theme.colorScheme.onBackground,
-                          ),
-                        ),
-                      ),
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'Healpen',
+                    style: context.theme.textTheme.headlineLarge!.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: context.theme.colorScheme.onBackground,
                     ),
                   ),
                 ),
