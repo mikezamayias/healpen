@@ -27,14 +27,21 @@ class _EmotionalEchoActiveTileState
     extends ConsumerState<EmotionalEchoActiveTile> {
   TextStyle get titleLargeStyle =>
       textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w600);
+
   TextStyle get titleSmallStyle =>
       textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w600);
+
   Color get background => theme.colorScheme.background;
+
   double get sentiment =>
       ref.watch(EmotionalEchoController.scoreProvider).withDecimalPlaces(2);
+
   bool get isActive => ref.watch(EmotionalEchoController.isPressedProvider);
+
   bool get enableInformatoryText => ref.watch(navigationShowInfoProvider);
+
   double get availableHeight => 39.h;
+
   double get normalizedSentiment => (sentiment + 1) / 2;
 
   @override
@@ -55,7 +62,14 @@ class _EmotionalEchoActiveTileState
       bottom: 0,
       right: isActive ? -99.w : 0,
       left: 0,
-      child: const EmotionalEchoInactiveTile(),
+      child: AnimatedPadding(
+        duration: standardDuration,
+        curve: standardCurve,
+        padding: isActive
+            ? EdgeInsets.symmetric(vertical: gap)
+            : EdgeInsets.all(gap),
+        child: const EmotionalEchoInactiveTile(),
+      ),
     );
   }
 
@@ -87,23 +101,26 @@ class _EmotionalEchoActiveTileState
               )
             : const BoxDecoration(),
         width: 51.w,
-        child: Stack(
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: sentimentLabels.reversed.map(scaleText).toList(),
-            ),
-            if (isActive)
-              currentState()
-                  .animate()
-                  .slideY(
-                    begin: 1,
-                    curve: Sprung.criticallyDamped,
-                  )
-                  .fade(),
-          ],
+        child: Padding(
+          padding: EdgeInsets.all(gap),
+          child: Stack(
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: sentimentLabels.reversed.map(scaleText).toList(),
+              ),
+              if (isActive)
+                currentState()
+                    .animate()
+                    .slideY(
+                      begin: 1,
+                      curve: Sprung.criticallyDamped,
+                    )
+                    .fade(),
+            ],
+          ),
         ),
       ),
     );
