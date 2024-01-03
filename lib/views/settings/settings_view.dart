@@ -22,10 +22,6 @@ class SettingsView extends ConsumerStatefulWidget {
 class _SettingsViewState extends ConsumerState<SettingsView> {
   @override
   Widget build(BuildContext context) {
-    return _buildRegularView();
-  }
-
-  Widget _buildRegularView() {
     return BlueprintView(
       showAppBar: _showAppBar,
       appBar: AppBar(
@@ -36,40 +32,42 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
         ],
       ),
       body: Column(
-        children: <Widget>[Expanded(child: _buildBodyWrapper())],
+        children: <Widget>[
+          Expanded(
+            child: AnimatedContainer(
+              duration: standardDuration,
+              curve: standardCurve,
+              decoration: _useSmallerNavigationElements
+                  ? const BoxDecoration()
+                  : BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(radius),
+                    ),
+              padding: _useSmallerNavigationElements
+                  ? EdgeInsets.zero
+                  : EdgeInsets.all(gap),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(_dynamicRadius),
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: _dynamicSpacing,
+                    runSpacing: _dynamicSpacing,
+                    children: SettingsController.settingsItems
+                        .where((element) => element.widget! is! Placeholder)
+                        .map((element) =>
+                            SettingsItemTile(settingsItemModel: element))
+                        .toList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildBody() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(_dynamicRadius - gap),
-      child: SingleChildScrollView(
-        child: Wrap(
-          spacing: _dynamicSpacing,
-          runSpacing: _dynamicSpacing,
-          children: SettingsController.settingsItems
-              .where((element) => element.widget! is! Placeholder)
-              .map((element) => SettingsItemTile(settingsItemModel: element))
-              .toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBodyWrapper() {
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      padding: EdgeInsets.all(gap),
-      child: _buildBody(),
-    );
-  }
-
-  double get _dynamicRadius =>
-      _useSmallerNavigationElements ? radius - gap : radius;
+  double get _dynamicRadius => _useSmallerNavigationElements ? radius : gap;
 
   double get _dynamicSpacing => gap;
 

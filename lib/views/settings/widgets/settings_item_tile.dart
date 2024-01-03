@@ -19,7 +19,7 @@ class _SettingsItemTileState extends ConsumerState<SettingsItemTile> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      cornerRadius: gap,
+      cornerRadius: _useSmallerNavigationElements ? radius : gap,
       useSmallerNavigationSetting: !_useSmallerNavigationElements,
       enableExplanationWrapper:
           !_useSmallerNavigationElements ^ (tileModel.onTap != null),
