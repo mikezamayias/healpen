@@ -26,7 +26,7 @@ class SettingsItemModel {
   final String title;
   final String description;
   final IconData leadingIconData;
-  final Function? onTap;
+  final Function(BuildContext context)? onTap;
 
   final Widget? widget;
 }

@@ -25,7 +25,9 @@ class _SettingsItemTileState extends ConsumerState<SettingsItemTile> {
           !_useSmallerNavigationElements ^ (tileModel.onTap != null),
       titleString: tileModel.title,
       explanationString: _showInfo ? tileModel.description : null,
-      onTap: () => tileModel.onTap?.call(context),
+      onTap: () {
+        tileModel.onTap!(context);
+      },
       leadingIconData: tileModel.leadingIconData,
     );
   }

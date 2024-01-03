@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../utils/constants.dart';
 import '../../../models/settings/settings_item_model.dart';
+import '../../../providers/settings_providers.dart';
 import '../../../utils/helper_functions.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
@@ -22,6 +23,60 @@ class SettingsAboutView extends ConsumerStatefulWidget {
 class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
   @override
   Widget build(BuildContext context) {
+    final aboutTileModels = <SettingsItemModel>[
+      SettingsItemModel(
+        title: 'Mike Zamayias',
+        description: 'Visit the developer\'s personal website.',
+        onTap: (context) {
+          launchUrl(
+            Uri.https('mikezamayias.com'),
+            mode: LaunchMode.externalApplication,
+          );
+        },
+        leadingIconData: FontAwesomeIcons.laptopCode,
+      ),
+      SettingsItemModel(
+        title: 'Terms and Conditions',
+        description: 'View the terms and conditions for this app.',
+        onTap: (context) {
+          launchUrl(
+            Uri.https(
+              'iubenda.com',
+              'terms-and-conditions/29795832',
+            ),
+            mode: LaunchMode.inAppWebView,
+          );
+        },
+        leadingIconData: FontAwesomeIcons.fileContract,
+      ),
+      SettingsItemModel(
+        title: 'Privacy Policy',
+        description: 'View the privacy policy for this app.',
+        onTap: (context) {
+          launchUrl(
+            Uri.https(
+              'iubenda.com',
+              'privacy-policy/29795832',
+            ),
+            mode: LaunchMode.inAppWebView,
+          );
+        },
+        leadingIconData: FontAwesomeIcons.userShield,
+      ),
+      SettingsItemModel(
+        title: 'Open Source Licenses',
+        description: 'View the licenses of the open source packages used.',
+        onTap: (context) {
+          pushWithAnimation(
+            context: context,
+            widget: const SettingsLicensesView(),
+            dataCallback: null,
+          );
+        },
+        leadingIconData: FontAwesomeIcons.code,
+      ),
+    ];
+
     return BlueprintView(
       appBar: const AppBar(
         automaticallyImplyLeading: true,
@@ -31,83 +86,42 @@ class _SettingsAboutViewState extends ConsumerState<SettingsAboutView> {
         ],
       ),
       body: Column(
-        children: <Widget>[Expanded(child: _buildBodyWrapper())],
+        children: <Widget>[
+          Expanded(
+            child: AnimatedContainer(
+              duration: standardDuration,
+              curve: standardCurve,
+              decoration: _useSmallerNavigationElements
+                  ? const BoxDecoration()
+                  : BoxDecoration(
+                      color: theme.colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(radius),
+                    ),
+              padding: _useSmallerNavigationElements
+                  ? EdgeInsets.zero
+                  : EdgeInsets.all(gap),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(_dynamicRadius),
+                child: SingleChildScrollView(
+                  child: Wrap(
+                    spacing: gap,
+                    runSpacing: gap,
+                    children: aboutTileModels
+                        .map((element) =>
+                            SettingsItemTile(settingsItemModel: element))
+                        .toList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildBody() {
-    return Wrap(
-      spacing: gap,
-      runSpacing: gap,
-      children: aboutTileModels
-          .map((element) => SettingsItemTile(settingsItemModel: element))
-          .toList(),
-    );
-  }
+  double get _dynamicRadius => _useSmallerNavigationElements ? radius : gap;
 
-  Widget _buildBodyWrapper() {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.theme.colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      padding: EdgeInsets.all(gap),
-      child: _buildBody(),
-    );
-  }
-
-  List<SettingsItemModel> get aboutTileModels => <SettingsItemModel>[
-        SettingsItemModel(
-          title: 'Mike Zamayias',
-          description: 'Visit the developer\'s personal website.',
-          onTap: () {
-            launchUrl(
-              Uri.https('mikezamayias.com'),
-              mode: LaunchMode.externalApplication,
-            );
-          },
-          leadingIconData: FontAwesomeIcons.laptopCode,
-        ),
-        SettingsItemModel(
-          title: 'Terms and Conditions',
-          description: 'View the terms and conditions for this app.',
-          onTap: () {
-            launchUrl(
-              Uri.https(
-                'iubenda.com',
-                'terms-and-conditions/29795832',
-              ),
-              mode: LaunchMode.externalApplication,
-            );
-          },
-          leadingIconData: FontAwesomeIcons.fileContract,
-        ),
-        SettingsItemModel(
-          title: 'Privacy Policy',
-          description: 'View the privacy policy for this app.',
-          onTap: () {
-            launchUrl(
-              Uri.https(
-                'iubenda.com',
-                'privacy-policy/29795832',
-              ),
-              mode: LaunchMode.externalApplication,
-            );
-          },
-          leadingIconData: FontAwesomeIcons.userShield,
-        ),
-        SettingsItemModel(
-          title: 'Open Source Licenses',
-          description: 'View the licenses of the open source packages used.',
-          onTap: () {
-            pushWithAnimation(
-              context: context,
-              widget: const SettingsLicensesView(),
-              dataCallback: null,
-            );
-          },
-          leadingIconData: FontAwesomeIcons.code,
-        ),
-      ];
+  bool get _useSmallerNavigationElements =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
 }

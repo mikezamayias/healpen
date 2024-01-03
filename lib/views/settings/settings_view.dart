@@ -50,8 +50,8 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
                 borderRadius: BorderRadius.circular(_dynamicRadius),
                 child: SingleChildScrollView(
                   child: Wrap(
-                    spacing: _dynamicSpacing,
-                    runSpacing: _dynamicSpacing,
+                    spacing: gap,
+                    runSpacing: gap,
                     children: SettingsController.settingsItems
                         .where((element) => element.widget! is! Placeholder)
                         .map((element) =>
@@ -68,8 +68,6 @@ class _SettingsViewState extends ConsumerState<SettingsView> {
   }
 
   double get _dynamicRadius => _useSmallerNavigationElements ? radius : gap;
-
-  double get _dynamicSpacing => gap;
 
   bool get _useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
