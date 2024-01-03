@@ -4,6 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../extensions/int_extensions.dart';
+import '../../extensions/widget_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
 import '../../models/sentence/sentence_model.dart';
 import '../../providers/settings_providers.dart';
@@ -47,17 +48,27 @@ class _NoteViewState extends ConsumerState<NoteView> {
         useSmallerNavigationElements ? radius : gap,
       ),
       child: SingleChildScrollView(
-        child: Wrap(
-          spacing: gap,
-          runSpacing: gap,
-          children: [
-            buildCustomListTile(
-              'Time',
-              analysisModel.timestamp.timestampToHHMM(),
-            ),
-            buildCustomListTile(
-              'Duration',
-              analysisModel.duration.writingDurationFormat(),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: buildCustomListTile(
+                    'Time',
+                    analysisModel.timestamp.timestampToHHMM(),
+                  ),
+                ),
+                Expanded(
+                  child: buildCustomListTile(
+                    'Duration',
+                    analysisModel.duration.writingDurationFormat(),
+                  ),
+                ),
+              ].addSpacer(
+                SizedBox(width: gap),
+                spacerAtEnd: false,
+                spacerAtStart: false,
+              ),
             ),
             CustomListTile(
               responsiveWidth: false,
@@ -73,15 +84,31 @@ class _NoteViewState extends ConsumerState<NoteView> {
                 child: const EmotionalEchoTile(),
               ),
             ),
-            buildCustomListTile(
-              'Sentence Count',
-              '${analysisModel.sentences.length}',
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: buildCustomListTile(
+                    'Sentence Count',
+                    '${analysisModel.sentences.length}',
+                  ),
+                ),
+                Expanded(
+                  child: buildCustomListTile(
+                    'Word Count',
+                    '${analysisModel.wordCount}',
+                  ),
+                ),
+              ].addSpacer(
+                SizedBox(width: gap),
+                spacerAtEnd: false,
+                spacerAtStart: false,
+              ),
             ),
-            buildCustomListTile(
-              'Word Count',
-              '${analysisModel.wordCount}',
-            ),
-          ],
+          ].addSpacer(
+            SizedBox(height: gap),
+            spacerAtEnd: false,
+            spacerAtStart: false,
+          ),
         ),
       ),
     );
@@ -98,18 +125,24 @@ class _NoteViewState extends ConsumerState<NoteView> {
     );
   }
 
-  Widget buildCustomListTile(String fieldName, dynamic fieldValue) {
-    assert(fieldValue is String || fieldValue is Widget);
+  Widget buildCustomListTile(String fieldName, String fieldValue) {
     return CustomListTile(
+      responsiveWidth: true,
       useSmallerNavigationSetting:
           !ref.watch(navigationSmallerNavigationElementsProvider),
-      titleString: fieldName,
-      trailing: fieldValue is Widget
-          ? fieldValue
-          : Text(
-              fieldValue,
-              style: context.theme.textTheme.titleLarge,
-            ),
+      title: Text(
+        fieldName,
+        style: context.theme.textTheme.titleLarge!.copyWith(
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      subtitle: Padding(
+        padding: EdgeInsets.all(gap),
+        child: Text(
+          fieldValue,
+          style: context.theme.textTheme.titleLarge,
+        ),
+      ),
     );
   }
 }
