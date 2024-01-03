@@ -32,6 +32,7 @@ class BlueprintView extends ConsumerWidget {
     final smallNavigationElements =
         ref.watch(navigationSmallerNavigationElementsProvider);
     return Container(
+      padding: showAppBarSetting! ? EdgeInsets.zero : EdgeInsets.only(top: gap),
       color: backgroundColor ?? context.theme.colorScheme.surface,
       child: Padding(
         padding: EdgeInsets.symmetric(
