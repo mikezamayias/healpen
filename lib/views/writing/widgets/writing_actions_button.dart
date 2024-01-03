@@ -41,6 +41,7 @@ class _WritingActionsButtonState extends ConsumerState<WritingActionsButton> {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: const <Widget>[
+          // TODO: add confirmation dialog for reset and save
           SaveNoteButton(),
           ResetNoteButton(),
           HideKeyboardButton(),
