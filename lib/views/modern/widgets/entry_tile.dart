@@ -38,10 +38,7 @@ class _EntryTileState extends State<EntryTile> {
           color: onBackgroundColor,
         ),
       ),
-      shadowColor: onBackgroundColor,
       backgroundColor: backgroundColor,
-      surfaceTintColor: shapeColor,
-      elevation: gap,
       subtitle: Padding(
         padding: EdgeInsets.all(gap),
         child: Text(

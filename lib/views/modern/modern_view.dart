@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +5,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../controllers/analysis_view_controller.dart';
 import '../../extensions/analysis_model_extensions.dart';
-import '../../extensions/color_extensions.dart';
+import '../../models/analysis/analysis_model.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 import 'widgets/add_entry_button.dart';
@@ -25,10 +23,6 @@ class _ModernViewState extends ConsumerState<ModernView> {
 
   @override
   Widget build(BuildContext context) {
-    final shapeColor = getShapeColorOnSentiment(
-      context.theme,
-      ref.watch(analysisModelSetProvider).averageScore(),
-    );
     return Scaffold(
       backgroundColor: context.theme.colorScheme.background,
       extendBodyBehindAppBar: true,
@@ -40,12 +34,7 @@ class _ModernViewState extends ConsumerState<ModernView> {
               SliverAppBar.large(
                 automaticallyImplyLeading: false,
                 leadingWidth: 0,
-                surfaceTintColor: shapeColor,
-                backgroundColor:
-                    context.theme.colorScheme.background.applySurfaceTint(
-                  surfaceTintColor: shapeColor,
-                  elevation: radius,
-                ),
+                backgroundColor: backgroundColor,
                 pinned: true,
                 centerTitle: false,
                 flexibleSpace: Container(
@@ -59,10 +48,18 @@ class _ModernViewState extends ConsumerState<ModernView> {
                     'Healpen',
                     style: context.theme.textTheme.headlineLarge!.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: context.theme.colorScheme.onBackground,
+                      color: onBackgroundColor,
                     ),
                   ),
                 ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/settings');
+                    },
+                  ),
+                ],
               ),
               SliverSafeArea(
                 top: false,
@@ -112,7 +109,22 @@ class _ModernViewState extends ConsumerState<ModernView> {
     );
   }
 
-  bool useWhiteForeground(Color color) {
-    return 1.05 / (color.computeLuminance() + 0.05) > sqrt(1.05 * 0.05);
-  }
+  Set<AnalysisModel> get analysisModelSet =>
+      ref.watch(analysisModelSetProvider);
+
+  Color get shapeColor => getShapeColorOnSentiment(
+        context.theme,
+        analysisModelSet.averageScore(),
+      );
+
+  Color get textColor => getTextColorOnSentiment(
+        context.theme,
+        analysisModelSet.averageScore(),
+      );
+
+  Color get backgroundColor =>
+      context.mediaQuery.platformBrightness.isLight ? shapeColor : textColor;
+
+  Color get onBackgroundColor =>
+      context.mediaQuery.platformBrightness.isLight ? textColor : shapeColor;
 }
