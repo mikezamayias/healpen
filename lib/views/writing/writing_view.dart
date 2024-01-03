@@ -43,7 +43,9 @@ class _WritingViewState extends ConsumerState<WritingView> {
       body: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
-        padding: isKeyboardOpen ? EdgeInsets.only(top: gap) : EdgeInsets.zero,
+        padding: isKeyboardOpen
+            ? EdgeInsets.symmetric(vertical: gap)
+            : EdgeInsets.zero,
         child: AnimatedContainer(
           duration: standardDuration,
           curve: standardCurve,
@@ -53,9 +55,7 @@ class _WritingViewState extends ConsumerState<WritingView> {
                   color: context.theme.colorScheme.surfaceVariant,
                   borderRadius: BorderRadius.circular(radius),
                 ),
-          padding: useSmallerNavigationElements || isKeyboardOpen
-              ? EdgeInsets.zero
-              : EdgeInsets.all(gap),
+          padding: EdgeInsets.zero,
           child: const WritingTextField(),
         ),
       ),
@@ -64,7 +64,9 @@ class _WritingViewState extends ConsumerState<WritingView> {
 
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
+
   bool get showAppBar => ref.watch(navigationShowAppBarProvider);
+
   bool get isKeyboardOpen =>
       ref.watch(WritingController().isKeyboardOpenProvider);
 }

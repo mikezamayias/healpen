@@ -20,10 +20,13 @@ class WritingTextField extends ConsumerStatefulWidget {
 class _WritingTextFieldState extends ConsumerState<WritingTextField> {
   @override
   Widget build(BuildContext context) {
-    final borderRadius = useSmallNavigationElements ? radius : radius - gap;
-    final color = useSmallNavigationElements
+    final borderRadius = !isKeyboardOpen ? radius : gap;
+    final color = !isKeyboardOpen && !useSmallNavigationElements
         ? context.theme.colorScheme.surfaceVariant
         : context.theme.colorScheme.surface;
+    final padding = !isKeyboardOpen && !useSmallNavigationElements
+        ? EdgeInsets.all(gap)
+        : EdgeInsets.zero;
     return SafeArea(
       top: isKeyboardOpen,
       child: AnimatedContainer(
@@ -41,17 +44,26 @@ class _WritingTextFieldState extends ConsumerState<WritingTextField> {
                 color: color,
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
-        padding: isKeyboardOpen ? EdgeInsets.zero : EdgeInsets.all(gap),
+        padding: padding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const WritingActionsButton(),
-            const StopwatchTile(),
             const Expanded(child: BareTextField()),
+            if (!useSmallNavigationElements)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(radius),
+                child: Divider(
+                  height: gap / 2,
+                  color: context.theme.colorScheme.surfaceVariant,
+                  thickness: gap / 2,
+                ),
+              ),
+            const StopwatchTile(),
+            const WritingActionsButton(),
           ].addSpacer(
             SizedBox(height: gap),
-            spacerAtEnd: isKeyboardOpen,
-            spacerAtStart: isKeyboardOpen,
+            spacerAtEnd: false,
+            spacerAtStart: false,
           ),
         ),
       ),

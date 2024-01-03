@@ -23,10 +23,20 @@ class _WritingActionsButtonState extends ConsumerState<WritingActionsButton> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
-      useSmallerNavigationSetting: false,
-      backgroundColor: context.theme.colorScheme.surface,
-      textColor: context.theme.colorScheme.onSurface,
-      cornerRadius: useSmallerNavigationElements ? radius : gap,
+      backgroundColor: useSmallerNavigationSetting
+          ? context.theme.colorScheme.surfaceVariant
+          : context.theme.colorScheme.surface,
+      textColor: useSmallerNavigationSetting
+          ? context.theme.colorScheme.onSurfaceVariant
+          : context.theme.colorScheme.onSurface,
+      contentPadding: useSmallerNavigationSetting
+          ? isKeyboardOpen
+              ? EdgeInsets.all(gap)
+              : null
+          : !isKeyboardOpen
+              ? EdgeInsets.all(gap)
+              : EdgeInsets.zero,
+      cornerRadius: useSmallerNavigationSetting ? radius : gap,
       titleString: 'Actions',
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
@@ -45,9 +55,9 @@ class _WritingActionsButtonState extends ConsumerState<WritingActionsButton> {
 
   double get _dynamicStopwatchAndSaveGap => !isKeyboardOpen ? gap : radius;
 
-  bool get useSmallerNavigationElements =>
-      ref.watch(navigationSmallerNavigationElementsProvider);
-
   bool get isKeyboardOpen =>
       ref.watch(WritingController().isKeyboardOpenProvider);
+
+  bool get useSmallerNavigationSetting =>
+      ref.watch(navigationSmallerNavigationElementsProvider);
 }
