@@ -76,7 +76,8 @@ class _SignOutTileState extends ConsumerState<SignOutTile> {
         false;
     for (({
       PreferenceModel preferenceModel,
-      StateProvider provider
+      StateProvider provider,
+      bool log,
     }) preferenceTuple in PreferencesController().preferences) {
       var key = preferenceTuple.preferenceModel.key;
       var value = preferenceTuple.preferenceModel.value;

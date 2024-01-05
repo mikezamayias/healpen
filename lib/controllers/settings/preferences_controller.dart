@@ -79,56 +79,72 @@ class PreferencesController {
     ),
   );
 
-  List<({PreferenceModel preferenceModel, StateProvider provider})>
+  List<({PreferenceModel preferenceModel, StateProvider provider, bool log})>
       preferences = [
     (
       preferenceModel: accountAnalyticsEnabled,
       provider: accountAnalyticsEnabledProvider,
+      log: false,
     ),
     (
       preferenceModel: shakePrivateNoteInfo,
-      provider: shakePrivateNoteInfoProvider
+      provider: shakePrivateNoteInfoProvider,
+      log: false,
     ),
     (
       preferenceModel: writingShowAnalyzeNotesButton,
-      provider: writingShowAnalyzeNotesButtonProvider
+      provider: writingShowAnalyzeNotesButtonProvider,
+      log: false,
     ),
     (
       preferenceModel: writingAutomaticStopwatch,
-      provider: writingAutomaticStopwatchProvider
+      provider: writingAutomaticStopwatchProvider,
+      log: false,
     ),
     (
       preferenceModel: navigationShowAppBar,
-      provider: navigationShowAppBarProvider
+      provider: navigationShowAppBarProvider,
+      log: false,
     ),
     (
       preferenceModel: navigationShowBackButton,
-      provider: navigationShowBackButtonProvider
+      provider: navigationShowBackButtonProvider,
+      log: false,
     ),
-    (preferenceModel: navigationShowInfo, provider: navigationShowInfoProvider),
+    (
+      preferenceModel: navigationShowInfo,
+      provider: navigationShowInfoProvider,
+      log: false,
+    ),
     (
       preferenceModel: navigationEnableHapticFeedback,
-      provider: navigationEnableHapticFeedbackProvider
+      provider: navigationEnableHapticFeedbackProvider,
+      log: true,
     ),
     (
       preferenceModel: navigationSmallerNavigationElements,
-      provider: navigationSmallerNavigationElementsProvider
+      provider: navigationSmallerNavigationElementsProvider,
+      log: false,
     ),
     (
       preferenceModel: themeColor,
       provider: themeColorProvider,
+      log: false,
     ),
     (
       preferenceModel: themeAppearance,
       provider: themeAppearanceProvider,
+      log: false,
     ),
     (
       preferenceModel: onboardingCompleted,
       provider: OnboardingController.onboardingCompletedProvider,
+      log: false,
     ),
     (
       preferenceModel: insightOrder,
       provider: insightsControllerProvider,
+      log: false,
     ),
   ];
 }
