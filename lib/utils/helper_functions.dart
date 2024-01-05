@@ -82,7 +82,7 @@ ThemeMode themeMode(ThemeAppearance themeAppearance) {
 
 void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
   if (!reduceHapticFeedback) {
-    HapticFeedback.lightImpact().whenComplete(() {
+    HapticFeedback.mediumImpact().whenComplete(() {
       callback();
     });
   } else {
