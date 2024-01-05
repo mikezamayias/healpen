@@ -15,9 +15,10 @@ class ResetNoteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
     final writingController = ref.watch(writingControllerProvider.notifier);
-    return ActionButton(
-      leadingIconData: FontAwesomeIcons.solidTrashCan,
+    return ActionButton.withIcon(
+      iconData: FontAwesomeIcons.solidTrashCan,
       condition: state.content.isNotEmpty,
+      titleString: 'Clear note',
       activeColor: context.theme.colorScheme.error,
       onTap: () {
         writingController.resetController();

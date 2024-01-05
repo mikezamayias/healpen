@@ -4,50 +4,23 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/writing_controller.dart';
 import '../../../extensions/int_extensions.dart';
-import '../../../providers/settings_providers.dart';
-import '../../../utils/constants.dart';
-import '../../../widgets/custom_list_tile.dart';
+import 'action_button.dart';
 
-class StopwatchTile extends ConsumerStatefulWidget {
+class StopwatchTile extends ConsumerWidget {
   const StopwatchTile({
     super.key,
   });
 
   @override
-  ConsumerState<StopwatchTile> createState() => _StopwatchTileState();
-}
-
-class _StopwatchTileState extends ConsumerState<StopwatchTile> {
-  @override
-  Widget build(BuildContext context) {
-    return CustomListTile(
-      backgroundColor: useSmallerNavigationSetting
-          ? context.theme.colorScheme.surfaceVariant
-          : context.theme.colorScheme.surface,
-      textColor: useSmallerNavigationSetting
-          ? context.theme.colorScheme.onSurfaceVariant
-          : context.theme.colorScheme.onSurface,
-      contentPadding: useSmallerNavigationSetting
-          ? isKeyboardOpen
-              ? EdgeInsets.all(gap)
-              : null
-          : !isKeyboardOpen
-              ? EdgeInsets.all(gap)
-              : EdgeInsets.zero,
-      cornerRadius: useSmallerNavigationSetting ? radius : gap,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ActionButton.withWidget(
       titleString: 'Stopwatch',
-      trailing: Text(
+      child: Text(
         ref.watch(writingControllerProvider).duration.writingDurationFormat(),
         style: context.theme.textTheme.titleLarge!.copyWith(
-          color: context.theme.colorScheme.onSurfaceVariant,
+          color: context.theme.colorScheme.onPrimary,
         ),
       ),
     );
   }
-
-  bool get isKeyboardOpen =>
-      ref.watch(WritingController().isKeyboardOpenProvider);
-
-  bool get useSmallerNavigationSetting =>
-      ref.watch(navigationSmallerNavigationElementsProvider);
 }

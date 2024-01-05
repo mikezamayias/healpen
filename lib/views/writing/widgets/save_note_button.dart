@@ -14,8 +14,9 @@ class SaveNoteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
     final writingController = ref.watch(writingControllerProvider.notifier);
-    return ActionButton(
-      leadingIconData: FontAwesomeIcons.solidFloppyDisk,
+    return ActionButton.withIcon(
+      titleString: 'Save note',
+      iconData: FontAwesomeIcons.solidFloppyDisk,
       condition: state.content.isNotEmpty,
       onTap: () {
         CustomSnackBar(
@@ -36,9 +37,6 @@ class SaveNoteButton extends ConsumerWidget {
                 onTap: scaffoldMessengerKey.currentState!.removeCurrentSnackBar,
               ),
             ],
-            // actionAfterSnackBar1: () {
-            //   return Future.delayed(1.minutes);
-            // },
             actionAfterSnackBar1: writingController.handleSaveNote,
           ),
         ).showSnackBar(context);
