@@ -48,7 +48,7 @@ class DateDialog extends ConsumerWidget {
           end: 0,
         );
     return CustomDialog(
-      titleString: date.toEEEEMMMdHHMM(),
+      titleString: date.toEEEEMMMd(),
       trailingWidget: Text(
         averageDayScore.toStringAsFixed(1),
         style: context.theme.textTheme.headlineSmall!.copyWith(
