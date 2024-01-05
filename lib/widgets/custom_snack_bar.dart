@@ -36,7 +36,6 @@ class CustomSnackBar {
 }
 
 class SnackBarConfig {
-  final bool vibrate;
   final bool smallNavigationElements;
   final String titleString1;
   final IconData leadingIconData1;
@@ -50,7 +49,6 @@ class SnackBarConfig {
   final IconData? leadingIconData2;
 
   SnackBarConfig({
-    required this.vibrate,
     required this.smallNavigationElements,
     required this.titleString1,
     required this.leadingIconData1,
@@ -89,52 +87,52 @@ class SnackBarConfig {
         trailingWidgets,
   ]) {
     return SnackBar(
-      // this parameter can be conditionally used to keep a specific margin for
-      // the snackbar
-      padding: EdgeInsets.zero,
-      duration: 3.seconds,
+      margin:
+          scaffoldMessengerKey.currentContext!.mediaQuery.viewInsets.bottom == 0
+              ? EdgeInsets.zero
+              : EdgeInsets.only(
+                  bottom: gap,
+                  right: gap,
+                  left: gap,
+                ),
+      padding:
+          scaffoldMessengerKey.currentContext!.mediaQuery.viewInsets.bottom == 0
+              ? EdgeInsets.zero
+              : EdgeInsets.zero,
+      duration: 4.seconds,
       content: Builder(
         builder: (BuildContext context) {
-          return AnimatedContainer(
-            duration: standardDuration,
-            curve: standardCurve,
-            padding:
-                smallNavigationElements ? EdgeInsets.all(gap) : EdgeInsets.zero,
-            child: CustomListTile(
-              useSmallerNavigationSetting: false,
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: gap,
-                vertical: smallNavigationElements ? 0 : gap,
-              ),
-              backgroundColor: context.theme.colorScheme.secondary,
-              textColor: context.theme.colorScheme.onSecondary,
-              titleString: titleString,
-              leadingIconData: leadingIconData,
-              trailing: trailingWidgets != null
-                  ? Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        for (final e in trailingWidgets)
-                          CustomListTile(
-                            useSmallerNavigationSetting: false,
-                            contentPadding: EdgeInsets.symmetric(
-                              horizontal: gap,
-                              vertical: gap,
-                            ),
-                            cornerRadius: radius - gap,
-                            responsiveWidth: true,
-                            backgroundColor:
-                                context.theme.colorScheme.primaryContainer,
-                            textColor:
-                                context.theme.colorScheme.onPrimaryContainer,
-                            onTap: e.onTap,
-                            titleString: e.titleString,
-                            leadingIconData: e.iconData,
+          return CustomListTile(
+            useSmallerNavigationSetting: false,
+            contentPadding: EdgeInsets.all(gap),
+            backgroundColor: context.theme.colorScheme.secondary,
+            textColor: context.theme.colorScheme.onSecondary,
+            titleString: titleString,
+            leadingIconData: leadingIconData,
+            trailing: trailingWidgets != null
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      for (final e in trailingWidgets)
+                        CustomListTile(
+                          useSmallerNavigationSetting: false,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: gap,
+                            vertical: gap,
                           ),
-                      ],
-                    )
-                  : null,
-            ),
+                          cornerRadius: radius - gap,
+                          responsiveWidth: true,
+                          backgroundColor:
+                              context.theme.colorScheme.primaryContainer,
+                          textColor:
+                              context.theme.colorScheme.onPrimaryContainer,
+                          onTap: e.onTap,
+                          titleString: e.titleString,
+                          leadingIconData: e.iconData,
+                        ),
+                    ],
+                  )
+                : null,
           );
         },
       ),

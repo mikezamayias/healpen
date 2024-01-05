@@ -45,7 +45,7 @@ ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
         backgroundColor: colorScheme.secondary,
         actionBackgroundColor: colorScheme.onSecondary,
         actionTextColor: colorScheme.primary,
-        insetPadding: EdgeInsets.zero,
+        insetPadding: EdgeInsets.symmetric(horizontal: gap),
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         linearMinHeight: 6 * unit,

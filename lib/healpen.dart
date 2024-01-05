@@ -17,6 +17,7 @@ import 'models/insight_model.dart';
 import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'services/firestore_service.dart';
+import 'utils/constants.dart';
 import 'utils/helper_functions.dart';
 import 'utils/logger.dart';
 import 'views/blueprint/blueprint_view.dart';
@@ -152,6 +153,7 @@ class _HealpenState extends ConsumerState<Healpen> {
       ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
           value;
     });
+    scaffoldMessengerKey.currentState!.clearSnackBars();
   }
 
   bool _havePreferencesChanged(List<PreferenceModel> newPreferences) {
