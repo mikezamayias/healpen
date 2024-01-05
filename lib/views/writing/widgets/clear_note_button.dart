@@ -15,7 +15,7 @@ class ClearNoteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
     final writingController = ref.watch(writingControllerProvider.notifier);
-    return ActionButton.withIcon(
+    return WritingActionButton.withIcon(
       iconData: FontAwesomeIcons.solidTrashCan,
       condition: state.content.isNotEmpty || (state.duration != 0),
       titleString: 'Clear note',

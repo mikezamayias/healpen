@@ -6,7 +6,7 @@ import '../../../controllers/writing_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_snack_bar.dart';
-import 'action_button.dart';
+import 'writing_action_button.dart';
 
 class SaveNoteButton extends ConsumerWidget {
   const SaveNoteButton({super.key});
@@ -14,7 +14,7 @@ class SaveNoteButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(writingControllerProvider);
     final writingController = ref.watch(writingControllerProvider.notifier);
-    return ActionButton.withIcon(
+    return WritingActionButton.withIcon(
       titleString: 'Save note',
       iconData: FontAwesomeIcons.solidFloppyDisk,
       condition: state.content.isNotEmpty,

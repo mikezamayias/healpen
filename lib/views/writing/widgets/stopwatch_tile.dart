@@ -4,7 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/writing_controller.dart';
 import '../../../extensions/int_extensions.dart';
-import 'action_button.dart';
+import 'writing_action_button.dart';
 
 class StopwatchTile extends ConsumerWidget {
   const StopwatchTile({
@@ -13,7 +13,7 @@ class StopwatchTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ActionButton.withWidget(
+    return WritingActionButton.withWidget(
       titleString: 'Stopwatch',
       child: Text(
         ref.watch(writingControllerProvider).duration.writingDurationFormat(),

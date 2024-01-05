@@ -7,7 +7,7 @@ import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
-class ActionButton extends ConsumerWidget {
+class WritingActionButton extends ConsumerWidget {
   final String? titleString;
   final IconData? iconData;
   final Widget? child;
@@ -15,7 +15,7 @@ class ActionButton extends ConsumerWidget {
   final void Function()? onTap;
   final Color? activeColor;
 
-  const ActionButton.withIcon({
+  const WritingActionButton.withIcon({
     super.key,
     required this.titleString,
     required this.iconData,
@@ -24,7 +24,7 @@ class ActionButton extends ConsumerWidget {
     this.activeColor,
   }) : child = null;
 
-  const ActionButton.withWidget({
+  const WritingActionButton.withWidget({
     super.key,
     required this.titleString,
     required this.child,
