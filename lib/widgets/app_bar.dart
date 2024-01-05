@@ -54,8 +54,9 @@ class AppBar extends ConsumerWidget {
                               : context.theme.colorScheme.onSurfaceVariant,
                         )
                       : context.theme.textTheme.headlineSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
                           color: smallNavigationElements
-                              ? context.theme.colorScheme.secondary
+                              ? context.theme.colorScheme.primary
                               : context.theme.colorScheme.onSurfaceVariant,
                         ),
                   softWrap: true,
