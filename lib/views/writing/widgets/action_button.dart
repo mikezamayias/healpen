@@ -58,7 +58,7 @@ class ActionButton extends ConsumerWidget {
       textColor: condition != null && condition!
           ? context.theme.colorScheme.onPrimary
           : context.theme.colorScheme.onPrimary,
-      onTap: onTap,
+      onTap: condition != null && condition! ? onTap : null,
     );
   }
 }
