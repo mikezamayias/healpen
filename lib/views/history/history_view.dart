@@ -29,7 +29,7 @@ class _HistoryViewState extends ConsumerState<HistoryView> {
               .titleGenerator(FirebaseAuth.instance.currentUser?.displayName),
         ],
       ),
-      body: (ref.watch(analysisModelSetProvider).isEmpty)
+      body: ref.watch(analysisModelSetProvider).isEmpty
           ? const NoAnalysisFoundTile()
           : const CalendarTile(),
     );

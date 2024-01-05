@@ -29,7 +29,7 @@ class _InsightsViewState extends ConsumerState<InsightsView> {
               .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)
         ],
       ),
-      body: (ref.watch(analysisModelSetProvider).isEmpty)
+      body: ref.watch(analysisModelSetProvider).isEmpty
           ? const NoAnalysisFoundTile()
           : const InsightsTile(),
     );
