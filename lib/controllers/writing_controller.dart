@@ -9,6 +9,14 @@ import '../services/firestore_service.dart';
 import '../utils/logger.dart';
 import 'note_analyzer.dart';
 
+/// The [WritingController] class is responsible for managing the state and
+/// logic related to writing notes. It extends the [StateNotifier] class and
+/// provides a singleton instance for efficient usage.
+///
+/// The [WritingController] class includes methods for handling text changes,
+/// starting and pausing a timer, logging input, saving notes, resetting the
+/// note and controller, updating privacy settings, and updating sentiment
+/// analysis.
 int timeWindow = 3;
 
 final writingControllerProvider =
