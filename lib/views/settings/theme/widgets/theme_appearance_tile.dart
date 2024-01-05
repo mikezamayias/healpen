@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
+import '../../../../controllers/vibrate_controller.dart';
 import '../../../../enums/app_theming.dart';
 import '../../../../extensions/string_extensions.dart';
 import '../../../../providers/settings_providers.dart';
-import '../../../../utils/helper_functions.dart';
 import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -35,7 +35,7 @@ class ThemeAppearanceTile extends ConsumerWidget {
         ],
         selected: {ref.watch(themeAppearanceProvider)},
         onSelectionChanged: (Set<ThemeAppearance> newSelection) {
-          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () async {
+          VibrateController().run(() async {
             ref.watch(themeAppearanceProvider.notifier).state =
                 newSelection.first;
             logger.i(

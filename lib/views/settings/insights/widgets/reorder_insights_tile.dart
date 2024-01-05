@@ -4,11 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../controllers/insights_controller.dart';
 import '../../../../controllers/settings/firestore_preferences_controller.dart';
+import '../../../../controllers/vibrate_controller.dart';
 import '../../../../models/insight_model.dart';
 import '../../../../models/settings/preference_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
-import '../../../../utils/helper_functions.dart';
 import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -57,7 +57,7 @@ class ReorderInsightsTile extends ConsumerWidget {
         },
         itemCount: insightsController.insightModelList.length,
         onReorder: (int oldIndex, int newIndex) async {
-          vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+          VibrateController().run(() {
             insightsController.reorderInsights(oldIndex, newIndex);
           });
           var preferenceModel = PreferenceModel<List<String>>(

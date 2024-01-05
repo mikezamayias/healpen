@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../controllers/vibrate_controller.dart';
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
 
 class AppBar extends ConsumerWidget {
   final List<String> pathNames;
@@ -80,8 +80,7 @@ class AppBar extends ConsumerWidget {
                   enableFeedback: true,
                   iconSize: context.theme.textTheme.titleLarge!.fontSize,
                   onPressed: () {
-                    vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
-                        () {
+                    VibrateController().run(() {
                       if (onBackButtonPressed != null) {
                         onBackButtonPressed!();
                       } else {

@@ -3,10 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../controllers/vibrate_controller.dart';
 import '../extensions/color_extensions.dart';
 import '../providers/settings_providers.dart';
 import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
 
 class CustomListTile extends ConsumerStatefulWidget {
   final String? titleString, explanationString, subtitleString;
@@ -82,10 +82,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
       behavior: HitTestBehavior.opaque,
       onTap: widget.isDisabled!
           ? () {}
-          : () => vibrate(
-                ref.watch(navigationEnableHapticFeedbackProvider),
-                widget.onTap!,
-              ),
+          : () => VibrateController().run(widget.onTap!),
       child: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
@@ -169,10 +166,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   Widget get leading => Padding(
         padding: leadingPadding,
         child: GestureDetector(
-          onTap: () => vibrate(
-            ref.watch(navigationEnableHapticFeedbackProvider),
-            widget.leadingOnTap!,
-          ),
+          onTap: () => VibrateController().run(widget.leadingOnTap!),
           child: widget.leading ?? _buildIcon(widget.leadingIconData!),
         ),
       );
@@ -188,10 +182,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   Widget get trailing => Padding(
         padding: trailingPadding,
         child: GestureDetector(
-          onTap: () => vibrate(
-            ref.watch(navigationEnableHapticFeedbackProvider),
-            widget.trailingOnTap!,
-          ),
+          onTap: () => VibrateController().run(widget.trailingOnTap!),
           child: widget.trailing ?? _buildIcon(widget.trailingIconData!),
         ),
       );

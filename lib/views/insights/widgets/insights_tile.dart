@@ -6,6 +6,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/helper_functions.dart';
 import '../../../controllers/insights_controller.dart';
+import '../../../controllers/vibrate_controller.dart';
 import '../../../extensions/widget_extensions.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -65,8 +66,7 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
               child: PageView.builder(
                 itemCount: insightsController.insightModelList.length,
                 onPageChanged: (int index) {
-                  vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
-                      () {
+                  VibrateController().run(() {
                     animateToPage(pageController, index);
                   });
                 },
@@ -127,8 +127,7 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
                 child: PageView.builder(
                   itemCount: insightsController.insightModelList.length,
                   onPageChanged: (int index) {
-                    vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
-                        () {
+                    VibrateController().run(() {
                       animateToPage(pageController, index);
                     });
                   },

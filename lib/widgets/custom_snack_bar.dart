@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
+import '../controllers/vibrate_controller.dart';
 import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
 import 'custom_list_tile.dart';
 
 class CustomSnackBar {
@@ -14,7 +14,7 @@ class CustomSnackBar {
   Future<void> showSnackBar(BuildContext context) async {
     final snackBar1 = _snackBarConfig.createSnackBar1();
     final snackBar2 = _snackBarConfig.createSnackBar2();
-    vibrate(_snackBarConfig.vibrate, () async {
+    VibrateController().run(() async {
       final SnackBarClosedReason snackBar1ClosedReasonFuture =
           await scaffoldMessengerKey.currentState!
               .showSnackBar(snackBar1)
@@ -25,7 +25,7 @@ class CustomSnackBar {
           await _snackBarConfig.actionAfterSnackBar1!();
 
           if (snackBar2 != null) {
-            vibrate(_snackBarConfig.vibrate, () {
+            VibrateController().run(() {
               scaffoldMessengerKey.currentState!.showSnackBar(snackBar2);
             });
           }

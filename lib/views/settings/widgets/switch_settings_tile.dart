@@ -6,9 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/settings/firestore_preferences_controller.dart';
+import '../../../controllers/vibrate_controller.dart';
 import '../../../models/settings/preference_model.dart';
 import '../../../providers/settings_providers.dart';
-import '../../../utils/helper_functions.dart';
 import '../../../utils/logger.dart';
 import '../../../widgets/custom_list_tile.dart';
 
@@ -43,8 +43,7 @@ class SwitchSettingsTile extends ConsumerWidget {
               value: ref.watch(stateProvider),
               onChanged: onChanged ??
                   (bool value) {
-                    vibrate(
-                      ref.watch(navigationEnableHapticFeedbackProvider),
+                    VibrateController().run(
                       () async {
                         ref.read(stateProvider.notifier).state = value;
                         await FirestorePreferencesController.instance
@@ -64,8 +63,7 @@ class SwitchSettingsTile extends ConsumerWidget {
               value: ref.watch(stateProvider),
               onChanged: onChanged ??
                   (bool value) {
-                    vibrate(
-                      ref.watch(navigationEnableHapticFeedbackProvider),
+                    VibrateController().run(
                       () async {
                         ref.read(stateProvider.notifier).state = value;
                         await FirestorePreferencesController.instance

@@ -80,16 +80,6 @@ ThemeMode themeMode(ThemeAppearance themeAppearance) {
   };
 }
 
-void vibrate(bool reduceHapticFeedback, VoidCallback callback) {
-  if (!reduceHapticFeedback) {
-    HapticFeedback.mediumImpact().whenComplete(() {
-      callback();
-    });
-  } else {
-    callback();
-  }
-}
-
 void animateToPage(PageController controller, int index) {
   controller.animateToPage(
     index,

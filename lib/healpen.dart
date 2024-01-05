@@ -10,6 +10,7 @@ import 'controllers/healpen/healpen_controller.dart';
 import 'controllers/insights_controller.dart';
 import 'controllers/settings/firestore_preferences_controller.dart';
 import 'controllers/settings/preferences_controller.dart';
+import 'controllers/vibrate_controller.dart';
 import 'controllers/writing_controller.dart';
 import 'models/analysis/analysis_model.dart';
 import 'models/insight_model.dart';
@@ -147,7 +148,7 @@ class _HealpenState extends ConsumerState<Healpen> {
 
   void _handlePageChange(WidgetRef ref, int value) {
     // Moved this logic to a separate function
-    vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+    VibrateController().run(() {
       ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
           value;
     });

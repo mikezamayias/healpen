@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_gesture_detector/simple_gesture_detector.dart';
 import 'package:sprung/sprung.dart';
 
-import '../../../providers/settings_providers.dart';
+import '../../../controllers/vibrate_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../note_view.dart';
@@ -24,8 +24,7 @@ class SentimentTrailing extends ConsumerWidget {
     return SimpleGestureDetector(
       behavior: HitTestBehavior.opaque,
       onVerticalSwipe: (direction) {
-        vibrate(
-          ref.watch(navigationEnableHapticFeedbackProvider),
+        VibrateController().run(
           () {
             if (direction == SwipeDirection.up) {
               ref.read(showEmojiInTrailingProvider.notifier).state = false;

@@ -5,10 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../controllers/settings/preferences_controller.dart';
+import '../../../controllers/vibrate_controller.dart';
 import '../../../controllers/writing_controller.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -28,8 +28,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           : FontAwesomeIcons.lock,
       leadingOnTap: ref.watch(shakePrivateNoteInfoProvider)
           ? () {
-              vibrate(ref.watch(navigationEnableHapticFeedbackProvider),
-                  () async {
+              VibrateController().run(() async {
                 ref.watch(shakePrivateNoteInfoProvider.notifier).state = false;
                 await FirestorePreferencesController().savePreference(
                   PreferencesController.shakePrivateNoteInfo
@@ -78,7 +77,7 @@ class PrivateNoteCheckBox extends ConsumerWidget {
           ? FontAwesomeIcons.solidSquareCheck
           : FontAwesomeIcons.square,
       trailingOnTap: () {
-        vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+        VibrateController().run(() {
           ref
               .watch(writingControllerProvider.notifier)
               .updatePrivate(!ref.watch(writingControllerProvider).isPrivate);

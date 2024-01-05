@@ -9,7 +9,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
-import '../../providers/settings_providers.dart';
+import '../../controllers/vibrate_controller.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
 import '../blueprint/blueprint_view.dart';
@@ -56,7 +56,7 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
               physics: const ClampingScrollPhysics(),
               itemCount: OnboardingController().onboardingScreenViews.length,
               onPageChanged: (int index) {
-                vibrate(ref.watch(navigationEnableHapticFeedbackProvider), () {
+                VibrateController().run(() {
                   animateToPage(pageController, index);
                   ref
                       .read(OnboardingController()
