@@ -7,7 +7,7 @@ import 'theme_components/text_theme_data.dart';
 
 ThemeData blueprintTheme(ColorScheme colorScheme) => ThemeData(
       useMaterial3: true,
-      fontFamily: GoogleFonts.manrope().fontFamily,
+      fontFamily: GoogleFonts.notoSans().fontFamily,
       colorScheme: colorScheme,
       textTheme: textThemeData,
       // cardColor: colorScheme.primary,
