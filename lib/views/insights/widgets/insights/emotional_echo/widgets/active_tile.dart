@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:sprung/sprung.dart';
 
 import '../../../../../../controllers/emotional_echo_controller.dart';
 import '../../../../../../extensions/double_extensions.dart';
@@ -12,7 +9,6 @@ import '../../../../../../providers/settings_providers.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 import '../../../../../../utils/logger.dart';
-import '../../../../../../widgets/custom_list_tile.dart';
 import 'inactive_tile.dart';
 
 class EmotionalEchoActiveTile extends ConsumerStatefulWidget {
@@ -103,50 +99,12 @@ class _EmotionalEchoActiveTileState
         width: 51.w,
         child: Padding(
           padding: EdgeInsets.all(gap),
-          child: Stack(
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: sentimentLabels.reversed.map(scaleText).toList(),
-              ),
-              if (isActive)
-                currentState()
-                    .animate()
-                    .slideY(
-                      begin: 1,
-                      curve: Sprung.criticallyDamped,
-                    )
-                    .fade(),
-            ],
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: sentimentLabels.reversed.map(scaleText).toList(),
           ),
-        ),
-      ),
-    );
-  }
-
-  Positioned currentState() {
-    final sentimentText = enableInformatoryText ? '$sentiment, State' : 'State';
-
-    final double topPosition = normalizedSentiment * availableHeight +
-        (sentiment < 0
-            ? -titleLargeStyle.fontSize! / 1.2
-            : -titleLargeStyle.fontSize! * 1.8);
-
-    return Positioned(
-      right: 0,
-      bottom: topPosition,
-      child: AnimatedOpacity(
-        duration: standardDuration,
-        curve: standardCurve,
-        opacity: isActive ? 1.0 : 0.0,
-        child: CustomListTile(
-          responsiveWidth: true,
-          leadingIconData: FontAwesomeIcons.arrowLeftLong,
-          titleString: sentimentText,
-          backgroundColor: getShapeColorOnSentiment(theme, sentiment),
-          textColor: getTextColorOnSentiment(theme, sentiment),
         ),
       ),
     );
