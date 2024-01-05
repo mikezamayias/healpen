@@ -45,11 +45,8 @@ class WritingActionButton extends ConsumerWidget {
       titleString: titleString,
       trailing: child,
       trailingIconData: iconData,
-      cornerRadius: isKeyboardOpen
-          ? gap
-          : smallNavigationElements
-              ? radius
-              : radius - gap,
+      cornerRadius:
+          isKeyboardOpen || smallNavigationElements ? radius : radius - gap,
       contentPadding:
           smallNavigationElements ? EdgeInsets.all(radius - gap) : null,
       backgroundColor: condition != null && condition!
