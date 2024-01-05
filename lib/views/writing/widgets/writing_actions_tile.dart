@@ -5,7 +5,7 @@ import '../../../controllers/writing_controller.dart';
 import '../../../extensions/widget_extensions.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
-import 'reset_note_button.dart';
+import 'clear_note_button.dart';
 import 'save_note_button.dart';
 
 class WritingActionsTile extends ConsumerStatefulWidget {
@@ -23,7 +23,7 @@ class _WritingActionsButtonState extends ConsumerState<WritingActionsTile> {
       mainAxisSize: MainAxisSize.min,
       children: const <Widget>[
         // TODO: add confirmation dialog for reset and save
-        Expanded(child: ResetNoteButton()),
+        Expanded(child: ClearNoteButton()),
         Expanded(child: SaveNoteButton()),
         // HideKeyboardButton(),
       ].addSpacer(

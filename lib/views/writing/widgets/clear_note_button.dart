@@ -6,8 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../controllers/writing_controller.dart';
 import 'action_button.dart';
 
-class ResetNoteButton extends ConsumerWidget {
-  const ResetNoteButton({
+class ClearNoteButton extends ConsumerWidget {
+  const ClearNoteButton({
     super.key,
   });
 
@@ -17,7 +17,7 @@ class ResetNoteButton extends ConsumerWidget {
     final writingController = ref.watch(writingControllerProvider.notifier);
     return ActionButton.withIcon(
       iconData: FontAwesomeIcons.solidTrashCan,
-      condition: state.content.isNotEmpty,
+      condition: state.content.isNotEmpty || (state.duration != 0),
       titleString: 'Clear note',
       activeColor: context.theme.colorScheme.error,
       onTap: () {
