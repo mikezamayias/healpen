@@ -21,7 +21,6 @@ class SaveNoteButton extends ConsumerWidget {
       onTap: () {
         CustomSnackBar(
           SnackBarConfig(
-            vibrate: ref.watch(navigationEnableHapticFeedbackProvider),
             smallNavigationElements:
                 ref.watch(navigationSmallerNavigationElementsProvider),
             titleString1: 'Saving note...',
