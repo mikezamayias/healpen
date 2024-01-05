@@ -92,7 +92,7 @@ class SnackBarConfig {
       // this parameter can be conditionally used to keep a specific margin for
       // the snackbar
       padding: EdgeInsets.zero,
-      duration: 1.minutes,
+      duration: 3.seconds,
       content: Builder(
         builder: (BuildContext context) {
           return AnimatedContainer(
