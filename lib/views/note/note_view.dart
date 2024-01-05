@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../controllers/analysis_view_controller.dart';
+import '../../controllers/emotional_echo_controller.dart';
+import '../../extensions/analysis_model_extensions.dart';
 import '../../extensions/int_extensions.dart';
 import '../../extensions/widget_extensions.dart';
 import '../../models/analysis/analysis_model.dart';
@@ -118,6 +121,11 @@ class _NoteViewState extends ConsumerState<NoteView> {
         trailingWidget: SentimentTrailing(
           score: analysisModel.score,
         ),
+        onBackButtonPressed: () {
+          context.navigator.pop();
+          ref.read(EmotionalEchoController.scoreProvider.notifier).state =
+              ref.watch(analysisModelSetProvider).averageScore();
+        },
       ),
       body: body,
     );
