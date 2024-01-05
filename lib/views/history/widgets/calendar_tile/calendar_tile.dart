@@ -28,11 +28,13 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
     final maxDate = DateTime.now();
     final minDate = analysisModelList.first.timestamp.timestampToDateTime();
     return Container(
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      padding: EdgeInsets.all(gap / 2),
+      decoration: useSmallerNavigationElements
+          ? null
+          : BoxDecoration(
+              color: theme.colorScheme.surfaceVariant,
+              borderRadius: BorderRadius.circular(radius),
+            ),
+      padding: useSmallerNavigationElements ? null : EdgeInsets.all(gap / 2),
       child: SfCalendar(
         showCurrentTimeIndicator: false,
         showTodayButton: false,
