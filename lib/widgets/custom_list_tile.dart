@@ -80,8 +80,8 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: widget.isDisabled!
-          ? () {}
+      onTap: widget.isDisabled! || widget.onTap == null
+          ? null
           : () => VibrateController().run(widget.onTap!),
       child: AnimatedContainer(
         duration: standardDuration,
@@ -166,7 +166,9 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   Widget get leading => Padding(
         padding: leadingPadding,
         child: GestureDetector(
-          onTap: () => VibrateController().run(widget.leadingOnTap!),
+          onTap: widget.leadingOnTap == null
+              ? null
+              : () => VibrateController().run(widget.leadingOnTap!),
           child: widget.leading ?? _buildIcon(widget.leadingIconData!),
         ),
       );
@@ -182,7 +184,9 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   Widget get trailing => Padding(
         padding: trailingPadding,
         child: GestureDetector(
-          onTap: () => VibrateController().run(widget.trailingOnTap!),
+          onTap: widget.trailingOnTap == null
+              ? null
+              : () => VibrateController().run(widget.trailingOnTap!),
           child: widget.trailing ?? _buildIcon(widget.trailingIconData!),
         ),
       );
