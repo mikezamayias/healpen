@@ -26,12 +26,15 @@ class SaveSettingsToCloudTile extends StatelessWidget {
         for (({
           PreferenceModel preferenceModel,
           StateProvider provider,
+          bool log,
         }) preferencePattern in PreferencesController().preferences) {
-          logger.i(
-            '${preferencePattern.preferenceModel.key}: '
-            '${preferencePattern.preferenceModel.value} '
-            '(${preferencePattern.preferenceModel.value.runtimeType})',
-          );
+          if (preferencePattern.log) {
+            logger.i(
+              '${preferencePattern.preferenceModel.key}: '
+              '${preferencePattern.preferenceModel.value} '
+              '(${preferencePattern.preferenceModel.value.runtimeType})',
+            );
+          }
           FirestorePreferencesController()
               .savePreference(preferencePattern.preferenceModel)
               .then(
