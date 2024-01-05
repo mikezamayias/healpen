@@ -22,6 +22,7 @@ class BareTextField extends ConsumerWidget {
         color: context.theme.colorScheme.onSurface,
         overflow: TextOverflow.visible,
       ),
+      autocorrect: true,
       decoration: InputDecoration(
         hintText: "Write a few words about something that's bothering you.\n\n"
             'Try to write for about 15 minutes.',
