@@ -32,12 +32,6 @@ class _HealpenWrapperState extends ConsumerState<HealpenWrapper>
         } else {
           ref.read(isDeviceConnectedProvider.notifier).state = false;
         }
-        logger.i(
-          '$result',
-        );
-        logger.i(
-          '${ref.read(isDeviceConnectedProvider.notifier).state}',
-        );
       },
     );
     super.initState();

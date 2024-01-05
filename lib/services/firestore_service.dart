@@ -9,11 +9,7 @@ import '../utils/logger.dart';
 
 class FirestoreService {
   // Singleton Constructor
-  FirestoreService._() {
-    logger.i(
-      'FirestoreService:instance',
-    );
-  }
+  FirestoreService._();
 
   static final instance = FirestoreService._();
 
@@ -24,9 +20,6 @@ class FirestoreService {
 
   // Methods
   CollectionReference<NoteModel> writingCollectionReference() {
-    logger.i(
-      'FirestoreService:writingCollectionReference()',
-    );
     return FirebaseFirestore.instance
         .collection('writing-temp')
         .doc(currentUser.uid)
@@ -38,19 +31,12 @@ class FirestoreService {
   }
 
   CollectionReference<AnalysisModel> analysisCollectionReference() {
-    logger.i(
-      'FirestoreService:analysisCollectionReference()',
-    );
     return FirebaseFirestore.instance
         .collection('analysis-temp')
         .doc(currentUser.uid)
         .collection('notes')
         .withConverter<AnalysisModel>(
           fromFirestore: (snapshot, _) {
-            logger.i(
-              '${snapshot.data()}',
-            );
-
             // Parse the AnalysisModel except the sentences
             AnalysisModel analysisModel =
                 AnalysisModel.fromJson(snapshot.data()!);
@@ -64,13 +50,6 @@ class FirestoreService {
                   .map<SentenceModel>((sentence) =>
                       SentenceModel.fromJson(sentence as Map<String, dynamic>))
                   .toList();
-
-              // Logging each sentence (optional)
-              for (SentenceModel sentence in analysisModel.sentences) {
-                logger.i(
-                  '${sentence.toJson()}',
-                );
-              }
             }
 
             return analysisModel;
@@ -80,27 +59,18 @@ class FirestoreService {
   }
 
   DocumentReference<Map<String, dynamic>> preferencesCollectionReference() {
-    logger.i(
-      'FirestoreService:preferencesCollectionReference()',
-    );
     return FirebaseFirestore.instance
         .collection('preferences-temp')
         .doc(currentUser.uid);
   }
 
   Future<void> saveNote(NoteModel noteModel) async {
-    logger.i(
-      '${noteModel.toJson()}',
-    );
     await writingCollectionReference()
         .doc('${noteModel.timestamp}')
         .set(noteModel);
   }
 
   Future<void> saveAnalysis(AnalysisModel analysisModel) async {
-    logger.i(
-      '${analysisModel.toJson()}',
-    );
     await analysisCollectionReference()
         .doc('${analysisModel.timestamp}')
         .set(analysisModel);
@@ -110,9 +80,6 @@ class FirestoreService {
     DateTime start,
     DateTime end,
   ) {
-    logger.i(
-      'FirestoreService:getAnalysisBetweenDates()',
-    );
     return analysisCollectionReference()
         .where(
           'timestamp',
@@ -158,9 +125,6 @@ class FirestoreService {
   Future<DocumentSnapshot<AnalysisModel>> getAnalysis(
     int timestamp,
   ) {
-    logger.i(
-      'FirestoreService:getAnalysis()',
-    );
     return analysisCollectionReference().doc('$timestamp').get();
   }
 
@@ -178,13 +142,11 @@ class FirestoreService {
       if (element.data()!.toJson().toString().contains(key)) {
         writingCollectionReference()
             .doc(element.id)
-            .update({key: FieldValue.delete()}).then((_) {
-          logger.i(
-            'Note ${element.id}, removing $key',
-          );
-        }).catchError((error) {
-          logger.e('$error');
-        });
+            .update({key: FieldValue.delete()})
+            .then((_) {})
+            .catchError((error) {
+              logger.e('$error');
+            });
       }
     }
   }
@@ -230,9 +192,6 @@ class FirestoreService {
   Future<void> analyzeSentiment(
     DocumentSnapshot<NoteModel> note,
   ) async {
-    logger.i(
-      'FirestoreService:analyzeSentiment()',
-    );
     writingCollectionReference()
         .doc(note.id)
         .get()
@@ -243,12 +202,6 @@ class FirestoreService {
       final analysisModel = await NoteAnalyzer().createNoteAnalysis(
         value.data()!,
       );
-      logger.i(
-        '${analysisModel.toJson()}',
-      );
-      logger.i(
-        '$analysisModel',
-      );
       analysisCollectionReference().doc(note.id).set(analysisModel);
       // for (SentenceModel sentence in analysisModel.sentences) {
       //   analysisCollectionReference()
@@ -257,9 +210,6 @@ class FirestoreService {
       //       .doc(analysisModel.sentences.indexOf(sentence).toString())
       //       .set(sentence.toJson());
       // }
-      logger.i(
-        'added sentences',
-      );
     }).catchError((error) {
       logger.e('$error');
       throw error;
@@ -269,9 +219,6 @@ class FirestoreService {
   Future<({NoteModel note, AnalysisModel analysis})> getNoteAndAnalysis(
     int timestamp,
   ) async {
-    logger.i(
-      'FirestoreService:getNoteAndAnalysis()',
-    );
     final noteEntry = await FirestoreService().getNote(timestamp);
     final analysisEntry = await FirestoreService().getAnalysis(timestamp);
     return (
