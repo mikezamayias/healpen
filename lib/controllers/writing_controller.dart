@@ -95,9 +95,7 @@ class WritingController extends StateNotifier<NoteModel> {
   }
 
   Future<void> handleSaveNote() async {
-    logger.i(
-      'Saved entry: $state',
-    );
+    logger.i('WritingController.handleSaveNote()');
     _stopwatch.reset();
     _stopwatch.stop();
     // await _sentimentAnalysis();
@@ -108,11 +106,13 @@ class WritingController extends StateNotifier<NoteModel> {
     state = state.copyWith(
       timestamp: DateTime.now().millisecondsSinceEpoch,
     );
+    final analysis = await NoteAnalyzer().createNoteAnalysis(state);
+    FirestoreService().saveAnalysis(analysis);
     FirestoreService().saveNote(state);
-    FirestoreService()
-        .saveAnalysis(await NoteAnalyzer().createNoteAnalysis(state));
-    resetNote();
-    textController.clear();
+    resetController();
+    logger.i(
+      'Saved entry: $state',
+    );
   }
 
   void resetNote() {
