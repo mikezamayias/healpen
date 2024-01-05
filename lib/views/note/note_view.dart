@@ -92,11 +92,9 @@ class _NoteViewState extends ConsumerState<NoteView> {
                     '${analysisModel.sentences.length}',
                   ),
                 ),
-                Expanded(
-                  child: buildCustomListTile(
-                    'Word Count',
-                    '${analysisModel.wordCount}',
-                  ),
+                buildCustomListTile(
+                  'Word Count',
+                  '${analysisModel.wordCount}',
                 ),
               ].addSpacer(
                 SizedBox(width: gap),
