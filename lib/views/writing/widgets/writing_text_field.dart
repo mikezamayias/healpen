@@ -8,18 +8,17 @@ import '../../../providers/settings_providers.dart';
 import '../../../utils/constants.dart';
 import 'bare_text_field.dart';
 import 'stopwatch_tile.dart';
-import 'writing_actions_button.dart';
+import 'writing_actions_tile.dart';
 
-class WritingTextField extends ConsumerStatefulWidget {
+class WritingTextField extends ConsumerWidget {
   const WritingTextField({super.key});
 
   @override
-  ConsumerState<WritingTextField> createState() => _WritingTextFieldState();
-}
-
-class _WritingTextFieldState extends ConsumerState<WritingTextField> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final useSmallNavigationElements =
+        ref.watch(navigationSmallerNavigationElementsProvider);
+    final isKeyboardOpen =
+        ref.watch(WritingController().isKeyboardOpenProvider);
     final borderRadius = !isKeyboardOpen ? radius : gap;
     final color = !isKeyboardOpen && !useSmallNavigationElements
         ? context.theme.colorScheme.surfaceVariant
@@ -49,17 +48,8 @@ class _WritingTextFieldState extends ConsumerState<WritingTextField> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             const Expanded(child: BareTextField()),
-            if (!useSmallNavigationElements)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(radius),
-                child: Divider(
-                  height: gap / 2,
-                  color: context.theme.colorScheme.surfaceVariant,
-                  thickness: gap / 2,
-                ),
-              ),
             const StopwatchTile(),
-            const WritingActionsButton(),
+            const WritingActionsTile(),
           ].addSpacer(
             SizedBox(height: gap),
             spacerAtEnd: false,
@@ -69,10 +59,4 @@ class _WritingTextFieldState extends ConsumerState<WritingTextField> {
       ),
     );
   }
-
-  bool get useSmallNavigationElements =>
-      ref.watch(navigationSmallerNavigationElementsProvider);
-
-  bool get isKeyboardOpen =>
-      ref.watch(WritingController().isKeyboardOpenProvider);
 }
