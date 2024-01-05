@@ -17,6 +17,7 @@ import 'models/settings/preference_model.dart';
 import 'providers/settings_providers.dart';
 import 'services/firestore_service.dart';
 import 'utils/helper_functions.dart';
+import 'utils/logger.dart';
 import 'views/blueprint/blueprint_view.dart';
 import 'widgets/healpen_navigation_bar.dart';
 
@@ -78,10 +79,10 @@ class _HealpenState extends ConsumerState<Healpen> {
   void _updateData(WidgetRef ref) {
     FirestorePreferencesController()
         .getPreferences()
-        .listen((List<PreferenceModel> snapshot) {
+        .listen((List<PreferenceModel> snapshot) async {
       List<PreferenceModel> currentPreferences = snapshot;
       if (_havePreferencesChanged(currentPreferences)) {
-        _updatePreferences(ref, currentPreferences);
+        await _updatePreferences(ref, currentPreferences);
         _lastFetchedPreferences = currentPreferences;
       }
     });
@@ -97,40 +98,51 @@ class _HealpenState extends ConsumerState<Healpen> {
     );
   }
 
-  void _updatePreferences(
+  Future<void> _updatePreferences(
     WidgetRef ref,
     List<PreferenceModel> fetchedPreferences,
-  ) {
-    Future.microtask(() {
-      Map<String, dynamic> fetchedPreferenceMap = {
-        for (PreferenceModel p in fetchedPreferences) p.key: p.value
-      };
+  ) async {
+    await Future.microtask(
+      () {
+        Map<String, dynamic> fetchedPreferenceMap = {
+          for (PreferenceModel p in fetchedPreferences) p.key: p.value
+        };
 
-      for (({
-        PreferenceModel preferenceModel,
-        StateProvider provider
-      }) preferenceTuple in PreferencesController().preferences) {
-        String key = preferenceTuple.preferenceModel.key;
-        if (fetchedPreferenceMap.containsKey(key)) {
-          if (key == PreferencesController.insightOrder.key) {
-            List<String> fetchedInsightOrder =
-                List.from(fetchedPreferenceMap[key]);
-            List<InsightModel> insightModelList =
-                ref.read(insightsControllerProvider).insightModelList;
-            List<InsightModel> updatedInsightModelList =
-                fetchedInsightOrder.map((String title) {
-              return insightModelList
-                  .firstWhere((element) => element.title == title);
-            }).toList();
-            ref.read(preferenceTuple.provider.notifier).state.insightModelList =
-                updatedInsightModelList;
-          } else {
-            ref.read(preferenceTuple.provider.notifier).state =
-                fetchedPreferenceMap[key];
+        for (({
+          PreferenceModel preferenceModel,
+          StateProvider provider,
+          bool log,
+        }) preferenceTuple in PreferencesController().preferences) {
+          if (preferenceTuple.log) {
+            logger.i(
+              'Updating ${preferenceTuple.preferenceModel.key} to ${fetchedPreferenceMap[preferenceTuple.preferenceModel.key]}',
+            );
+            logger.i('Current value: ${ref.watch(preferenceTuple.provider)}');
+          }
+          String key = preferenceTuple.preferenceModel.key;
+          if (fetchedPreferenceMap.containsKey(key)) {
+            if (key == PreferencesController.insightOrder.key) {
+              List<String> fetchedInsightOrder =
+                  List.from(fetchedPreferenceMap[key]);
+              List<InsightModel> insightModelList =
+                  ref.read(insightsControllerProvider).insightModelList;
+              List<InsightModel> updatedInsightModelList =
+                  fetchedInsightOrder.map((String title) {
+                return insightModelList
+                    .firstWhere((element) => element.title == title);
+              }).toList();
+              ref
+                  .read(preferenceTuple.provider.notifier)
+                  .state
+                  .insightModelList = updatedInsightModelList;
+            } else {
+              ref.read(preferenceTuple.provider.notifier).state =
+                  fetchedPreferenceMap[key];
+            }
           }
         }
-      }
-    });
+      },
+    );
   }
 
   void _handlePageChange(WidgetRef ref, int value) {
