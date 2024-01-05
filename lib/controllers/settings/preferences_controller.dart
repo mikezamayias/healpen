@@ -119,7 +119,7 @@ class PreferencesController {
     (
       preferenceModel: navigationEnableHapticFeedback,
       provider: navigationEnableHapticFeedbackProvider,
-      log: true,
+      log: false,
     ),
     (
       preferenceModel: navigationSmallerNavigationElements,
