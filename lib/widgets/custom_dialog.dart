@@ -107,6 +107,7 @@ class CustomDialog extends ConsumerWidget {
                 ),
               )
             : null,
+        actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: actions != null && actions!.isNotEmpty
             ? [
                 // add a sized box with width of gap between

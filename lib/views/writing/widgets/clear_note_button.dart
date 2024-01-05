@@ -19,7 +19,8 @@ class ClearNoteButton extends ConsumerWidget {
       iconData: FontAwesomeIcons.solidTrashCan,
       condition: state.content.isNotEmpty || (state.duration != 0),
       titleString: 'Clear note',
-      activeColor: context.theme.colorScheme.error,
+      backgroundColor: context.theme.colorScheme.error,
+      foregroundColor: context.theme.colorScheme.onError,
       onTap: () {
         writingController.resetController();
         hideKeyboard(context);

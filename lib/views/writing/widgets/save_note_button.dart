@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
@@ -18,6 +19,8 @@ class SaveNoteButton extends ConsumerWidget {
       titleString: 'Save note',
       iconData: FontAwesomeIcons.solidFloppyDisk,
       condition: state.content.isNotEmpty,
+      backgroundColor: context.theme.colorScheme.primary,
+      foregroundColor: context.theme.colorScheme.onPrimary,
       onTap: () {
         CustomSnackBar(
           SnackBarConfig(
