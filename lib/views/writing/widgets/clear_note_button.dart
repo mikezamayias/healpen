@@ -4,7 +4,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
-import 'action_button.dart';
+import 'writing_action_button.dart';
 
 class ClearNoteButton extends ConsumerWidget {
   const ClearNoteButton({
