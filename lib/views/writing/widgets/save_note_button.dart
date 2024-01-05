@@ -4,9 +4,8 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/writing_controller.dart';
-import '../../../providers/settings_providers.dart';
-import '../../../utils/constants.dart';
-import '../../../widgets/custom_snack_bar.dart';
+import '../../../extensions/context_extensions.dart';
+import '../../../utils/logger.dart';
 import 'writing_action_button.dart';
 
 class SaveNoteButton extends ConsumerWidget {
@@ -22,26 +21,21 @@ class SaveNoteButton extends ConsumerWidget {
       backgroundColor: context.theme.colorScheme.primary,
       foregroundColor: context.theme.colorScheme.onPrimary,
       onTap: () {
-        CustomSnackBar(
-          SnackBarConfig(
-            smallNavigationElements:
-                ref.watch(navigationSmallerNavigationElementsProvider),
-            titleString1: 'Saving note...',
-            leadingIconData1: FontAwesomeIcons.solidFloppyDisk,
-            trailingWidgets1: <({
-              IconData? iconData,
-              String? titleString,
-              void Function()? onTap,
-            })>[
-              (
-                iconData: FontAwesomeIcons.xmark,
-                titleString: 'Cancel',
-                onTap: scaffoldMessengerKey.currentState!.removeCurrentSnackBar,
-              ),
-            ],
-            actionAfterSnackBar1: writingController.handleSaveNote,
-          ),
-        ).showSnackBar(context);
+        writingController.handleSaveNote().then(
+          (_) {
+            context.showSuccessSnackBar(
+              message: 'Note saved',
+            );
+          },
+        ).catchError(
+          (error) {
+            logger.e(error);
+            context.showErrorSnackBar(
+              message: 'Error while saving note',
+              explanation: error.toString(),
+            );
+          },
+        );
       },
     );
   }
