@@ -6,6 +6,7 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import '../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../extensions/date_time_extensions.dart';
+import '../../../../../extensions/double_extensions.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/helper_functions.dart';
 import '../../../../../widgets/custom_dialog.dart';
@@ -27,16 +28,12 @@ class DateDialog extends ConsumerWidget {
               start: date.startOfDay(),
               end: date.endOfDay(),
             );
-    final averageDayScore = analysisModelList.averageScore();
-    final textColor = getShapeColorOnSentiment(context.theme, averageDayScore);
+    final dayAverageScore = analysisModelList.averageScore();
+    final textColor = getShapeColorOnSentiment(context.theme, dayAverageScore);
     final List<Widget> noteTileList = analysisModelList
-        .map((e) => NoteTile(
-              analysisModel: e,
-            ))
+        .map((e) => NoteTile(analysisModel: e))
         .toList()
-        .animate(
-          interval: slightlyShortStandardDuration,
-        )
+        .animate(interval: slightlyShortStandardDuration)
         .fade(
           duration: standardDuration,
           curve: standardCurve,
@@ -47,25 +44,25 @@ class DateDialog extends ConsumerWidget {
           begin: -0.6,
           end: 0,
         );
+    final dialogTitle =
+        '${date.toEEEEMMMd()} - ${sentimentLabels.elementAt(getClosestSentimentIndex(dayAverageScore.withDecimalPlaces(2)))}';
     return CustomDialog(
-      titleString: date.toEEEEMMMd(),
-      trailingWidget: Text(
-        averageDayScore.toStringAsFixed(1),
-        style: context.theme.textTheme.headlineSmall!.copyWith(
-          color: textColor,
-          fontWeight: FontWeight.bold,
-        ),
-        textAlign: TextAlign.end,
-      ),
+      titleString: dialogTitle,
       enableContentContainer: false,
-      contentWidget: SingleChildScrollView(
-        child: ListView.separated(
-          padding: EdgeInsets.all(gap),
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          separatorBuilder: (_, __) => SizedBox(height: gap),
-          itemCount: noteTileList.length,
-          itemBuilder: (context, index) => noteTileList.elementAt(index),
+      contentWidget: ClipRRect(
+        borderRadius: BorderRadius.circular(radius - gap),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: gap),
+          child: SingleChildScrollView(
+            child: ListView.separated(
+              padding: EdgeInsets.symmetric(horizontal: gap),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (_, __) => SizedBox(height: gap),
+              itemCount: noteTileList.length,
+              itemBuilder: (context, index) => noteTileList.elementAt(index),
+            ),
+          ),
         ),
       ),
       actions: [
