@@ -6,12 +6,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../controllers/emotional_echo_controller.dart';
 import '../../../controllers/history_view_controller.dart';
+import '../../../extensions/context_extensions.dart';
 import '../../../extensions/int_extensions.dart';
 import '../../../models/analysis/analysis_model.dart';
 import '../../../providers/settings_providers.dart';
 import '../../../route_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
+import '../../../utils/logger.dart';
 import '../../../utils/show_healpen_dialog.dart';
 import '../../../widgets/custom_dialog.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -50,43 +52,55 @@ class NoteTile extends ConsumerWidget {
                 padding: EdgeInsets.all(gap),
                 spacing: gap,
                 onPressed: (context) {
-                  showHealpenDialog(
+                  final backgroundColor = context.theme.colorScheme.error;
+                  final foregroundColor = context.theme.colorScheme.onError;
+                  showHealpenDialog<bool>(
                     context: context,
                     customDialog: CustomDialog(
-                      titleString: 'Delete note?',
-                      contentString: 'You cannot undo this action.',
-                      actions: [
+                      titleString: 'Are you sure?',
+                      contentString: 'This action cannot be undone.',
+                      textColor: backgroundColor,
+                      actions: <CustomListTile>[
                         CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: gap * 2,
-                            vertical: gap,
-                          ),
-                          cornerRadius: radius - gap,
                           responsiveWidth: true,
-                          titleString: 'Delete',
-                          backgroundColor: context.theme.colorScheme.error,
-                          textColor: context.theme.colorScheme.onError,
+                          titleString: 'Delete note',
+                          textColor: foregroundColor,
+                          backgroundColor: backgroundColor,
+                          cornerRadius: radius - gap,
                           onTap: () {
-                            HistoryViewController()
-                                .deleteNote(timestamp: analysisModel.timestamp);
-                            context.navigator.pop();
+                            context.navigator.pop(true);
                           },
                         ),
                         CustomListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: gap * 2,
-                            vertical: gap,
-                          ),
-                          cornerRadius: radius - gap,
                           responsiveWidth: true,
-                          titleString: 'Go back',
+                          titleString: 'Cancel',
+                          cornerRadius: radius - gap,
                           onTap: () {
-                            context.navigator.pop();
+                            context.navigator.pop(false);
                           },
                         ),
                       ],
                     ),
-                  );
+                  ).then((bool? value) {
+                    logger.i(
+                      'Delete note dialog result: $value',
+                    );
+                    if (value != null && value) {
+                      HistoryViewController()
+                          .deleteNote(timestamp: analysisModel.timestamp)
+                          .then((_) {
+                        context.showSuccessSnackBar(
+                          message: 'Note deleted',
+                        );
+                      }).catchError((error) {
+                        logger.e(error);
+                        context.showErrorSnackBar(
+                          message: 'Error while deleting note',
+                          explanation: error.toString(),
+                        );
+                      });
+                    }
+                  });
                 },
               ),
             ],
