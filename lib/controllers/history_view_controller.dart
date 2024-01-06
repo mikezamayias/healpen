@@ -1,6 +1,5 @@
 import '../models/note/note_model.dart';
 import '../services/firestore_service.dart';
-import '../utils/logger.dart';
 
 class HistoryViewController {
   /// Singleton constructor
@@ -12,33 +11,15 @@ class HistoryViewController {
   HistoryViewController._internal();
 
   /// Deletes note from writing and analysis collections
-  void deleteNote({
-    required int timestamp,
-  }) {
-    FirestoreService()
+  Future<void> deleteNote({required int timestamp}) async {
+    await FirestoreService()
         .writingCollectionReference()
         .doc(timestamp.toString())
-        .delete()
-        .then(
-          (value) => logger.i(
-            'Note deleted',
-          ),
-          onError: (error) => logger.i(
-            'Failed to delete note: $error',
-          ),
-        );
-    FirestoreService()
+        .delete();
+    await FirestoreService()
         .analysisCollectionReference()
         .doc(timestamp.toString())
-        .delete()
-        .then(
-          (value) => logger.i(
-            'Analysis deleted',
-          ),
-          onError: (error) => logger.i(
-            'Failed to delete analysis: $error',
-          ),
-        );
+        .delete();
   }
 
   Future<void> noteToggleFavorite({
