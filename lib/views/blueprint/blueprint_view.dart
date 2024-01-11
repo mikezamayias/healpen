@@ -14,6 +14,7 @@ class BlueprintView extends ConsumerWidget {
     this.bottomNavigationBar,
     this.backgroundColor,
     this.padBodyHorizontally = true,
+    this.bottomSafeArea = true,
     this.showAppBar = true,
     required this.body,
   });
@@ -24,6 +25,7 @@ class BlueprintView extends ConsumerWidget {
   final Color? backgroundColor;
   final bool? padBodyHorizontally;
   final bool? showAppBar;
+  final bool? bottomSafeArea;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,6 +51,7 @@ class BlueprintView extends ConsumerWidget {
                 )
               : null,
           body: SafeArea(
+            bottom: bottomSafeArea!,
             child: ScrollConfiguration(
               behavior: ScrollConfiguration.of(context).copyWith(
                 scrollbars: false,
