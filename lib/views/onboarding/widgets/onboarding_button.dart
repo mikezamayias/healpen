@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
@@ -28,7 +29,13 @@ class OnboardingButton extends StatelessWidget {
             horizontal: gap * 2,
             vertical: gap,
           ),
-          titleString: titleString,
+          title: Text(
+            titleString,
+            style: context.theme.textTheme.titleLarge!.copyWith(
+              color: context.theme.colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ),
     );

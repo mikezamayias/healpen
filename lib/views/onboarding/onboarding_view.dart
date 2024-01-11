@@ -1,19 +1,10 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart' hide SlideEffect;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
-import '../../controllers/vibrate_controller.dart';
-import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
-import '../blueprint/blueprint_view.dart';
-import 'widgets/onboarding_button.dart';
+import 'views/welcome_view.dart';
 
 class OnboardingView extends ConsumerStatefulWidget {
   const OnboardingView({super.key});
@@ -24,7 +15,7 @@ class OnboardingView extends ConsumerStatefulWidget {
 
 class _OnboardingViewState extends ConsumerState<OnboardingView> {
   late PageController pageController;
-  double viewPortFraction = 0.87;
+  double viewPortFraction = 1;
   double pageOffset = 0;
 
   @override
@@ -41,96 +32,47 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlueprintView(
-      backgroundColor: theme.colorScheme.surfaceVariant,
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 66.h,
-            child: PageView.builder(
-              clipBehavior: Clip.none,
-              controller: pageController,
-              physics: const ClampingScrollPhysics(),
-              itemCount: OnboardingController().onboardingScreenViews.length,
-              onPageChanged: (int index) {
-                VibrateController().run(() {
-                  animateToPage(pageController, index);
-                  ref
-                      .read(OnboardingController()
-                          .currentPageIndexProvider
-                          .notifier)
-                      .state = index;
-                });
-              },
-              itemBuilder: (context, index) {
-                double scale = max(viewPortFraction,
-                    (1 - (pageOffset - index).abs()) + viewPortFraction);
-                double angle = (pageOffset - index).abs();
-                if (angle > 0.5) {
-                  angle = 1 - angle;
-                }
-                return AnimatedContainer(
-                  duration: standardDuration,
-                  curve: standardCurve,
-                  margin: EdgeInsets.symmetric(
-                    vertical: gap * scale,
-                    horizontal: gap,
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: 100 - scale * 50,
-                  ),
-                  transform: Matrix4.identity()
-                    ..setEntry(3, 2, 0.001)
-                    ..rotateY(angle),
-                  alignment: Alignment.center,
-                  child:
-                      OnboardingController().currentOnboardingScreenView(index),
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(gap),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: gap * 2),
-                  child: SmoothPageIndicator(
-                    controller: pageController,
-                    count: OnboardingController().onboardingScreenViews.length,
-                    effect: ExpandingDotsEffect(
-                      dotColor: context.theme.colorScheme.surface,
-                      activeDotColor: context.theme.colorScheme.primary,
-                      dotHeight: gap / 2,
-                    ),
-                  ),
-                ),
-                OnboardingButton(
-                  titleString: 'Start Writing Now',
-                  onTap: () => goToAuth(context, ref),
-                ),
-              ],
-            )
-                .animate()
-                .fade(
-                  begin: -1,
-                  duration: standardDuration,
-                  curve: standardCurve,
-                )
-                .slideY(
-                  begin: 1,
-                  end: 0,
-                  duration: standardDuration,
-                  curve: standardCurve,
-                ),
-          ),
-        ],
-      ),
-    );
+    //   return BlueprintView(
+    //     body: PageView.builder(
+    //       clipBehavior: Clip.none,
+    //       controller: pageController,
+    //       physics: const NeverScrollableScrollPhysics(),
+    //       itemCount: OnboardingController().onboardingScreenViews.length,
+    //       onPageChanged: (int index) {
+    //         VibrateController().run(() {
+    //           animateToPage(pageController, index);
+    //           ref
+    //               .read(OnboardingController().currentPageIndexProvider.notifier)
+    //               .state = index;
+    //         });
+    //       },
+    //       itemBuilder: (context, index) {
+    //         double scale = max(viewPortFraction,
+    //             (1 - (pageOffset - index).abs()) + viewPortFraction);
+    //         double angle = (pageOffset - index).abs();
+    //         if (angle > 0.5) {
+    //           angle = 1 - angle;
+    //         }
+    //         return AnimatedContainer(
+    //           duration: standardDuration,
+    //           curve: standardCurve,
+    //           margin: EdgeInsets.symmetric(
+    //             vertical: gap * scale,
+    //             horizontal: gap,
+    //           ),
+    //           padding: EdgeInsets.symmetric(
+    //             vertical: 100 - scale * 50,
+    //           ),
+    //           transform: Matrix4.identity()
+    //             ..setEntry(3, 2, 0.001)
+    //             ..rotateY(angle),
+    //           alignment: Alignment.center,
+    //           child: OnboardingController().currentOnboardingScreenView(index),
+    //         );
+    //       },
+    //     ),
+    //   );
+    return const OnboardingWelcomeView();
   }
 
   void goToAuth(BuildContext context, WidgetRef ref) async {

@@ -1,73 +1,93 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../controllers/onboarding/onboarding_controller.dart';
+import '../../../extensions/widget_extensions.dart';
 import '../../../models/onboarding/onboarding_model.dart';
 import '../../../utils/constants.dart';
+import '../../blueprint/blueprint_view.dart';
+import 'onboarding_button.dart';
 
 class OnboardingScreenView extends ConsumerWidget {
+  final OnboardingModel onboardingScreenModel;
   const OnboardingScreenView({
     super.key,
     required this.onboardingScreenModel,
   });
 
-  final OnboardingModel onboardingScreenModel;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      decoration: BoxDecoration(
-        color: context.theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(radius),
-      ),
-      padding: EdgeInsets.all(gap * 2),
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              AnimatedOpacity(
-                duration: standardDuration,
-                curve: standardCurve,
-                opacity: onboardingScreenModel ==
-                        OnboardingController().currentOnboardingScreenModel(
-                            ref.watch(OnboardingController()
-                                .currentPageIndexProvider))
-                    ? 1
-                    : 0,
-                child: Text(
-                  onboardingScreenModel.title,
-                  textAlign: TextAlign.start,
-                  style: context.theme.textTheme.headlineSmall!.copyWith(
-                    color: context.theme.colorScheme.secondary,
-                    fontWeight: FontWeight.bold,
+    return BlueprintView(
+      padBodyHorizontally: false,
+      body: Padding(
+        padding: EdgeInsets.all(radius),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: 30.w,
+                    width: 30.w,
+                    alignment: Alignment.bottomLeft,
+                    child: onboardingScreenModel.hero,
                   ),
+                  Text(
+                    onboardingScreenModel.title,
+                    textAlign: TextAlign.start,
+                    style: context.theme.textTheme.headlineMedium!.copyWith(
+                      color: context.theme.colorScheme.secondary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                      .animate(delay: longEmphasizedDuration)
+                      .fade(
+                        duration: emphasizedDuration,
+                        curve: emphasizedCurve,
+                      )
+                      .slideY(
+                        duration: emphasizedDuration,
+                        curve: emphasizedCurve,
+                        begin: -0.5,
+                        end: 0,
+                      ),
+                  Text(
+                    onboardingScreenModel.description,
+                    textAlign: TextAlign.start,
+                    style: context.theme.textTheme.bodyLarge,
+                  )
+                      .animate(delay: slightlyLongEmphasizedDuration * 2)
+                      .fade(
+                        duration: emphasizedDuration,
+                        curve: emphasizedCurve,
+                      )
+                      .slideY(
+                        duration: emphasizedDuration,
+                        curve: emphasizedCurve,
+                        begin: -0.1,
+                        end: 0,
+                      ),
+                ].addSpacer(
+                  SizedBox(height: radius),
+                  spacerAtEnd: false,
+                  spacerAtStart: false,
                 ),
               ),
-              AnimatedOpacity(
-                duration: standardDuration,
-                curve: standardCurve,
-                opacity: onboardingScreenModel ==
-                        OnboardingController().currentOnboardingScreenModel(
-                            ref.watch(OnboardingController()
-                                .currentPageIndexProvider))
-                    ? 1
-                    : 0,
-                child: Text(
-                  onboardingScreenModel.description,
-                  textAlign: TextAlign.start,
-                  style: context.theme.textTheme.bodyLarge,
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+            OnboardingButton(
+              titleString: onboardingScreenModel.actionText,
+              onTap: onboardingScreenModel.actionCallback,
+            )
+          ],
+        ),
       ),
     );
   }
