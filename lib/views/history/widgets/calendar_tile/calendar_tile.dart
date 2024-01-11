@@ -4,12 +4,13 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../../../controllers/analysis_view_controller.dart';
+import '../../../../controllers/date_view_controller.dart';
 import '../../../../extensions/int_extensions.dart';
 import '../../../../models/analysis/analysis_model.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
-import '../../../../utils/show_healpen_dialog.dart';
-import 'widgets/date_dialog.dart';
+import '../../../../utils/helper_functions.dart';
+import '../../../date/date_view.dart';
 import 'widgets/month_cell_tile.dart';
 
 class CalendarTile extends ConsumerStatefulWidget {
@@ -95,20 +96,16 @@ class _CalendarTileState extends ConsumerState<CalendarTile> {
   // Utility method to handle onTap
   void _onTap(CalendarTapDetails details) {
     if (details.appointments != null && details.appointments!.isNotEmpty) {
-      _showCustomDialog(details, context, ref);
+      DateViewController.initializeOnDate(
+        ref,
+        details.date!,
+      );
+      pushWithAnimation(
+        context: context,
+        widget: DateView(details.date!),
+        dataCallback: null,
+      );
     }
-  }
-
-  // Utility method to show Custom Dialog
-  void _showCustomDialog(
-    CalendarTapDetails details,
-    BuildContext context,
-    WidgetRef ref,
-  ) {
-    showHealpenDialog(
-      context: context,
-      customDialog: DateDialog(date: details.date!),
-    );
   }
 }
 
