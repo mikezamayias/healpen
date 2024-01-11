@@ -69,34 +69,37 @@ class AppBar extends ConsumerWidget {
     );
 
     final appBar = showBackButton && automaticallyImplyLeading!
-        ? Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: IconButton.filled(
-                  padding: EdgeInsets.zero,
-                  enableFeedback: true,
-                  iconSize: context.theme.textTheme.titleLarge!.fontSize,
-                  onPressed: () {
-                    VibrateController().run(() {
-                      if (onBackButtonPressed != null) {
-                        onBackButtonPressed!();
-                      } else {
-                        context.navigator.pop();
-                      }
-                    });
-                  },
-                  color: context.theme.colorScheme.onPrimary,
-                  icon: const FaIcon(FontAwesomeIcons.chevronLeft),
-                ),
+        ? Stack(
+            alignment: Alignment.topRight,
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: IconButton.filled(
+                      padding: EdgeInsets.zero,
+                      enableFeedback: true,
+                      iconSize: context.theme.textTheme.titleLarge!.fontSize,
+                      onPressed: () {
+                        VibrateController().run(() {
+                          if (onBackButtonPressed != null) {
+                            onBackButtonPressed!();
+                          }
+                          context.navigator.pop();
+                        });
+                      },
+                      color: context.theme.colorScheme.onPrimary,
+                      icon: const FaIcon(FontAwesomeIcons.chevronLeft),
+                    ),
+                  ),
+                  SizedBox(width: gap),
+                  appBarContent,
+                ],
               ),
-              SizedBox(width: gap),
-              appBarContent,
               if (trailingWidget != null) ...[
-                const Spacer(),
                 trailingWidget!,
               ],
             ],
