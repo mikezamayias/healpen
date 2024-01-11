@@ -15,33 +15,52 @@ class OnboardingController {
 
   /// Members
   static bool onboardingCompleted = false;
+
+  /// Welcome to Healpen Screen
+  static final welcomeScreen = OnboardingModel.builder().copyWith(
+    title: 'Welcome to Healpen',
+    description:
+        'Welcome to Healpen, your personal space for expressive writing and self-discovery. Begin your journey towards better mental health and deeper self-awareness.',
+    actionText: 'Next',
+  );
+
+  /// Expressive Writing Screen
+  static final expressiveWritingScreen = OnboardingModel.builder().copyWith(
+    title: 'Expressive Writing',
+    description:
+        'Healpen harnesses the power of expressive writing. Pour your thoughts and feelings into words, and embark on a path to self-healing and emotional clarity.',
+    actionText: 'Continue',
+  );
+
+  /// Personalized Insights Screen
+  static final personalizedInsightsScreen = OnboardingModel.builder().copyWith(
+    title: 'Personalized Insights',
+    description:
+        'Discover yourself through our advanced sentiment analysis. Healpen provides personalized insights into your emotional patterns, helping you understand your inner world better.',
+    actionText: 'Learn More',
+  );
+
+  /// Privacy and Safety Screen
+  static final privacyAndSafetyScreen = OnboardingModel.builder().copyWith(
+    title: 'Privacy and Safety',
+    description:
+        'Your privacy is our priority. Your entries are securely stored, and our sentiment analysis is done with utmost confidentiality. Feel safe to express yourself freely.',
+    actionText: 'Acknowledge',
+  );
+
+  /// Begin Your Journey Screen
+  static final beginYourJourneyScreen = OnboardingModel.builder().copyWith(
+    title: 'Begin Your Journey',
+    description:
+        'You\'re all set! Start your journey with Healpen today. Reflect, write, and grow as you explore the landscape of your emotions and thoughts.',
+    actionText: 'Start Writing',
+  );
   final List<OnboardingModel> onboardingScreenModels = [
-    // Welcome
-    OnboardingModel(
-      title: 'Welcome to Healpen',
-      description:
-          'Healpen helps you reflect on your thoughts and feelings through expressive writing.',
-    ),
-
-    // Expressive Writing
-    OnboardingModel(
-      title: 'Expressive Writing',
-      description:
-          'Expressive writing involves writing about your deepest thoughts and feelings. This can help you gain insight and improve your mental health.',
-    ),
-
-    // Insights
-    OnboardingModel(
-      title: 'Gain Insights',
-      description:
-          'Expressive writing can lead to insights about your emotional patterns through advanced analysis of your texts.',
-    ),
-
-    // Begin
-    OnboardingModel(
-        title: 'Begin Your Journey',
-        description:
-            'Start writing in Healpen today to begin reflecting on your inner thoughts and emotions.'),
+    welcomeScreen,
+    expressiveWritingScreen,
+    personalizedInsightsScreen,
+    privacyAndSafetyScreen,
+    beginYourJourneyScreen,
   ];
 
   /// Providers
