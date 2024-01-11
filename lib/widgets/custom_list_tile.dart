@@ -78,25 +78,45 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   bool get useSmallerNavigationElements =>
       ref.watch(navigationSmallerNavigationElementsProvider);
 
+  bool isTapped = false;
+
+  // isTapped set to false when  button is pressed
+  void _onPointerDown(PointerDownEvent event) {
+    setState(() {
+      isTapped = true;
+    });
+  }
+
+//button pressed is true when button is released
+  void _onPointerUp(PointerUpEvent event) {
+    setState(() {
+      isTapped = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: widget.isDisabled! || widget.onTap == null
-          ? null
-          : () => VibrateController().run(widget.onTap!),
-      onLongPress: widget.isDisabled! || widget.onLongPress == null
-          ? null
-          : () => VibrateController().run(widget.onLongPress!),
-      child: AnimatedContainer(
-        duration: standardDuration,
-        curve: standardCurve,
-        decoration: containerDecoration,
-        child: widget.responsiveWidth!
-            ? IntrinsicWidth(
-                child: listTile,
-              )
-            : listTile,
+    return Listener(
+      onPointerDown: _onPointerDown,
+      onPointerUp: _onPointerUp,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.isDisabled! || widget.onTap == null
+            ? null
+            : () => VibrateController().run(widget.onTap!),
+        onLongPress: widget.isDisabled! || widget.onLongPress == null
+            ? null
+            : () => VibrateController().run(widget.onLongPress!),
+        child: AnimatedContainer(
+          duration: standardDuration,
+          curve: standardCurve,
+          decoration: containerDecoration,
+          child: widget.responsiveWidth!
+              ? IntrinsicWidth(
+                  child: listTile,
+                )
+              : listTile,
+        ),
       ),
     );
   }
@@ -127,6 +147,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
             duration: standardDuration,
             curve: standardCurve,
             padding: firstRowPadding,
+            decoration: containerDecoration,
             child: Row(
               children: <Widget>[
                 if (hasLeading) leading,
@@ -251,16 +272,22 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   }
 
   BoxDecoration get containerDecoration => BoxDecoration(
-        color: backgroundColor,
+        color: isTapped
+            ? backgroundColor.applySurfaceTint(
+                surfaceTintColor: theme.colorScheme.surfaceVariant,
+                elevation: elevation * 4,
+              )
+            : backgroundColor,
         borderRadius: BorderRadius.all(
           Radius.circular(widget.cornerRadius ?? radius),
         ),
-        boxShadow: widget.showShadow! || widget.elevation != null
+        boxShadow: (widget.showShadow! || widget.elevation != null) || isTapped
             ? [
                 BoxShadow(
                   color: (widget.shadowColor ?? theme.colorScheme.surface)
                       .applySurfaceTint(
-                    surfaceTintColor: surfaceTintColor!,
+                    surfaceTintColor:
+                        surfaceTintColor ?? theme.colorScheme.surfaceVariant,
                     elevation: elevation * 2,
                   ),
                   blurStyle: BlurStyle.outer,
