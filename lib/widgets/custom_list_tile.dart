@@ -13,7 +13,7 @@ class CustomListTile extends ConsumerStatefulWidget {
   final int? maxExplanationStringLines;
   final Widget? title, subtitle, leading, trailing;
   final IconData? leadingIconData, trailingIconData;
-  final GestureTapCallback? onTap, trailingOnTap, leadingOnTap;
+  final GestureTapCallback? onTap, onLongPress, trailingOnTap, leadingOnTap;
   final bool? selectableText,
       responsiveWidth,
       showcaseLeadingIcon,
@@ -27,7 +27,7 @@ class CustomListTile extends ConsumerStatefulWidget {
       isDisabled;
   final Color? backgroundColor, textColor, shadowColor, surfaceTintColor;
   final double? cornerRadius, elevation;
-  final EdgeInsets? contentPadding, subtitlePadding;
+  final EdgeInsets? contentPadding, subtitlePadding, explanationPadding;
 
   const CustomListTile({
     super.key,
@@ -42,6 +42,7 @@ class CustomListTile extends ConsumerStatefulWidget {
     this.leading,
     this.trailing,
     this.onTap,
+    this.onLongPress,
     this.trailingOnTap,
     this.leadingOnTap,
     this.backgroundColor,
@@ -61,6 +62,7 @@ class CustomListTile extends ConsumerStatefulWidget {
     this.elevation,
     this.contentPadding,
     this.subtitlePadding,
+    this.explanationPadding,
     this.showShadow = false,
     this.shadowColor,
   }) : assert(
@@ -83,6 +85,9 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
       onTap: widget.isDisabled! || widget.onTap == null
           ? null
           : () => VibrateController().run(widget.onTap!),
+      onLongPress: widget.isDisabled! || widget.onLongPress == null
+          ? null
+          : () => VibrateController().run(widget.onLongPress!),
       child: AnimatedContainer(
         duration: standardDuration,
         curve: standardCurve,
@@ -325,7 +330,8 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
   }
 
   EdgeInsets get explanationPadding =>
-      widget.padExplanation! ? padding : EdgeInsets.zero;
+      widget.explanationPadding ??
+      (widget.padExplanation! ? padding : EdgeInsets.zero);
 
   EdgeInsets get subtitlePadding => widget.padSubtitle!
       ? hasExplanation
