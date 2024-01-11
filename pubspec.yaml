@@ -78,6 +78,7 @@ flutter:
     - assets/images/onboarding/insights.svg
     - assets/images/onboarding/begin.svg
     - assets/rive/emotional_echo.riv
+    - assets/icon/brain-2x.png
   uses-material-design: true
 
 flutter_launcher_icons:
