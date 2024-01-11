@@ -7,6 +7,8 @@ import '../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../extensions/date_time_extensions.dart';
 import '../../../../../extensions/double_extensions.dart';
+import '../../../../../models/analysis/analysis_model.dart';
+import '../../../../../models/note_tile_model.dart';
 import '../../../../../utils/constants.dart';
 import '../../../../../utils/helper_functions.dart';
 import '../../../../../widgets/custom_dialog.dart';
@@ -28,10 +30,8 @@ class DateDialog extends ConsumerWidget {
               start: date.startOfDay(),
               end: date.endOfDay(),
             );
-    final dayAverageScore = analysisModelList.averageScore();
-    final textColor = getShapeColorOnSentiment(context.theme, dayAverageScore);
     final List<Widget> noteTileList = analysisModelList
-        .map((e) => NoteTile(analysisModel: e))
+        .map((AnalysisModel e) => NoteTile(NoteTileModel(e)))
         .toList()
         .animate(interval: slightlyShortStandardDuration)
         .fade(
@@ -44,6 +44,7 @@ class DateDialog extends ConsumerWidget {
           begin: -0.6,
           end: 0,
         );
+    final dayAverageScore = analysisModelList.averageScore();
     final dialogTitle =
         '${date.toEEEEMMMd()} - ${sentimentLabels.elementAt(getClosestSentimentIndex(dayAverageScore.withDecimalPlaces(2)))}';
     return CustomDialog(
