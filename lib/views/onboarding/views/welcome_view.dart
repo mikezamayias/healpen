@@ -21,7 +21,7 @@ class OnboardingWelcomeView extends ConsumerWidget {
         ),
         title: 'Welcome',
         description:
-            'Healpen is your personal space for expressive writing and self-discovery. Begin your journey towards better mental health and deeper self-awareness.',
+            'Healpen is your personal space for expressive writing and self-discovery. Begin your journey towards better mental health and deeper self-awareness.', 
         actionText: 'Next',
         actionCallback: () {
           pushWithAnimation(
