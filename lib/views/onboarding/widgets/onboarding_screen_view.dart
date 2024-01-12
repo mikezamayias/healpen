@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-import '../../../extensions/widget_extensions.dart';
 import '../../../models/onboarding/onboarding_model.dart';
 import '../../../utils/constants.dart';
 import '../../blueprint/blueprint_view.dart';
@@ -26,11 +24,12 @@ class OnboardingScreenView extends ConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            SizedBox(height: 21.h),
             Expanded(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -40,52 +39,29 @@ class OnboardingScreenView extends ConsumerWidget {
                     alignment: Alignment.bottomLeft,
                     child: onboardingScreenModel.hero,
                   ),
+                  SizedBox(height: gap),
                   Text(
                     onboardingScreenModel.title,
                     textAlign: TextAlign.start,
-                    style: context.theme.textTheme.headlineMedium!.copyWith(
+                    style: context.theme.textTheme.headlineSmall!.copyWith(
                       color: context.theme.colorScheme.secondary,
                       fontWeight: FontWeight.bold,
                     ),
-                  )
-                      .animate(delay: longEmphasizedDuration)
-                      .fade(
-                        duration: emphasizedDuration,
-                        curve: emphasizedCurve,
-                      )
-                      .slideY(
-                        duration: emphasizedDuration,
-                        curve: emphasizedCurve,
-                        begin: -0.5,
-                        end: 0,
-                      ),
+                  ),
                   Text(
                     onboardingScreenModel.description,
                     textAlign: TextAlign.start,
-                    style: context.theme.textTheme.bodyLarge,
-                  )
-                      .animate(delay: slightlyLongEmphasizedDuration * 2)
-                      .fade(
-                        duration: emphasizedDuration,
-                        curve: emphasizedCurve,
-                      )
-                      .slideY(
-                        duration: emphasizedDuration,
-                        curve: emphasizedCurve,
-                        begin: -0.1,
-                        end: 0,
-                      ),
-                ].addSpacer(
-                  SizedBox(height: radius),
-                  spacerAtEnd: false,
-                  spacerAtStart: false,
-                ),
+                    style: context.theme.textTheme.bodyLarge!.copyWith(
+                      color: context.theme.colorScheme.onBackground,
+                    ),
+                  ),
+                ],
               ),
             ),
             OnboardingButton(
               titleString: onboardingScreenModel.actionText,
               onTap: onboardingScreenModel.actionCallback,
-            )
+            ),
           ],
         ),
       ),

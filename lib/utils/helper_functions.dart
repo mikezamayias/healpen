@@ -219,15 +219,9 @@ void pushWithAnimation({
         curve: emphasizedCurve,
         reverseCurve: emphasizedCurve.flipped,
       );
-      return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(1, 0),
-          end: Offset.zero,
-        ).animate(curvedAnimation),
-        child: FadeTransition(
-          opacity: animation,
-          child: child,
-        ),
+      return FadeTransition(
+        opacity: curvedAnimation,
+        child: child,
       );
     },
   );

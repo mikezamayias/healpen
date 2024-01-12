@@ -4,10 +4,10 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../models/onboarding/onboarding_model.dart';
 import '../../../utils/helper_functions.dart';
 import '../widgets/onboarding_screen_view.dart';
-import 'welcome_view.dart';
 
 class OnboardingExpressiveWritingView extends ConsumerWidget {
   const OnboardingExpressiveWritingView({super.key});
@@ -17,7 +17,7 @@ class OnboardingExpressiveWritingView extends ConsumerWidget {
       onboardingScreenModel: OnboardingModel(
         hero: FaIcon(
           FontAwesomeIcons.pencil,
-          color: context.theme.colorScheme.secondary,
+          color: context.theme.colorScheme.outline,
           size: 21.w,
         ),
         title: 'Expressive Writing',
@@ -25,9 +25,15 @@ class OnboardingExpressiveWritingView extends ConsumerWidget {
             'Healpen harnesses the power of expressive writing. Pour your thoughts and feelings into words, and embark on a path to self-healing and emotional clarity.',
         actionText: 'Continue',
         actionCallback: () {
+          ref
+              .read(OnboardingController().currentPageIndexProvider.notifier)
+              .state++;
           pushWithAnimation(
             context: context,
-            widget: const OnboardingWelcomeView(),
+            widget: OnboardingController.views.elementAt(
+              ref.read(OnboardingController().currentPageIndexProvider),
+            ),
+            replacement: true,
             dataCallback: null,
           );
         },

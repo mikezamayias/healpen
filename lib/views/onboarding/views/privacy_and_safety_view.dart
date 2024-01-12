@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screwdriver/flutter_screwdriver.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
@@ -7,22 +9,21 @@ import '../../../models/onboarding/onboarding_model.dart';
 import '../../../utils/helper_functions.dart';
 import '../widgets/onboarding_screen_view.dart';
 
-class OnboardingWelcomeView extends ConsumerWidget {
-  const OnboardingWelcomeView({super.key});
+class OnboardingPivacyAndSafetyView extends ConsumerWidget {
+  const OnboardingPivacyAndSafetyView({super.key});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return OnboardingScreenView(
       onboardingScreenModel: OnboardingModel(
-        hero: Image.asset(
-          'assets/icon/brain-2x.png',
-          fit: BoxFit.contain,
-          height: 24.w,
-          width: 24.w,
+        hero: FaIcon(
+          FontAwesomeIcons.shieldHalved,
+          color: context.theme.colorScheme.outline,
+          size: 21.w,
         ),
-        title: 'Welcome',
+        title: 'Privacy and Safety',
         description:
-            'Healpen is your personal space for expressive writing and self-discovery. Begin your journey towards better mental health and deeper self-awareness.',
-        actionText: 'Next',
+            'Your privacy is our priority. Your entries are securely stored, and our sentiment analysis is done with utmost confidentiality. Feel safe to express yourself freely.',
+        actionText: 'Acknowledge',
         actionCallback: () {
           ref
               .read(OnboardingController().currentPageIndexProvider.notifier)
