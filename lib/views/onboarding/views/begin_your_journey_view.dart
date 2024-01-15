@@ -16,7 +16,7 @@ class OnboardingBeginYourJourneyView extends ConsumerWidget {
     return OnboardingScreenView(
       onboardingScreenModel: OnboardingModel(
         hero: FaIcon(
-          FontAwesomeIcons.chartSimple,
+          FontAwesomeIcons.chartLine,
           color: context.theme.colorScheme.outline,
           size: 21.w,
         ),
