@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -64,7 +65,21 @@ class OnboardingScreenView extends ConsumerWidget {
             ),
           ],
         ),
-      ),
+      )
+          .animate()
+          .slideX(
+            duration: emphasizedDuration,
+            curve: emphasizedCurve,
+            begin: 0.5.w,
+            end: 0,
+          )
+          .fade(duration: longEmphasizedDuration, curve: emphasizedCurve)
+          .scale(
+            duration: emphasizedDuration,
+            curve: emphasizedCurve,
+            begin: const Offset(2, 2),
+            end: const Offset(1, 1),
+          ),
     );
   }
 }
