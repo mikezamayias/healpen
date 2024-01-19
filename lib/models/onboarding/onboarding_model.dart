@@ -5,12 +5,14 @@ class OnboardingModel {
   final String title;
   final String description;
   final List<OnboardingActionModel> actions;
+  final List<OnboardingActionModel>? informativeActions;
 
   OnboardingModel({
     required this.hero,
     required this.title,
     required this.description,
     required this.actions,
+    this.informativeActions,
   });
 }
 
