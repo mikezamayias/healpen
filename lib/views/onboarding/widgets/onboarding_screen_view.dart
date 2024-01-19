@@ -29,20 +29,19 @@ class OnboardingScreenView extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            SizedBox(height: 21.h),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  SizedBox(height: 21.h),
                   Container(
                     height: 30.w,
                     width: 30.w,
                     alignment: Alignment.bottomLeft,
                     child: onboardingScreenModel.hero,
                   ),
-                  SizedBox(height: gap),
+                  SizedBox(height: radius),
                   Text(
                     onboardingScreenModel.title,
                     textAlign: TextAlign.start,
@@ -51,6 +50,7 @@ class OnboardingScreenView extends ConsumerWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  SizedBox(height: radius),
                   Text(
                     onboardingScreenModel.description,
                     textAlign: TextAlign.start,
