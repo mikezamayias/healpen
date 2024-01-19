@@ -10,6 +10,7 @@ import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'onboarding_action_button.dart';
+import 'onboarding_informative_button.dart';
 
 class OnboardingScreenView extends ConsumerWidget {
   final OnboardingModel onboardingScreenModel;
@@ -69,7 +70,8 @@ class OnboardingScreenView extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: onboardingScreenModel.informativeActions!
                           .map(
-                            (OnboardingActionModel action) => OnboardingActionButton(
+                            (OnboardingActionModel action) =>
+                                OnboardingInformativeButton(
                               titleString: action.title,
                               onTap: action.actionCallback!,
                             ),
@@ -95,6 +97,10 @@ class OnboardingScreenView extends ConsumerWidget {
                         int viewsLength = OnboardingController.views.length;
                         int nextIndex = currentIndex + 1;
                         if (nextIndex > viewsLength - 1) {
+                          // clear navigation stack without animation
+                          Navigator.of(context).popUntil(
+                            (Route<dynamic> route) => route.isFirst,
+                          );
                           nextIndex = 0;
                         }
                         ref
@@ -106,7 +112,7 @@ class OnboardingScreenView extends ConsumerWidget {
                           context: context,
                           widget:
                               OnboardingController.views.elementAt(nextIndex),
-                          replacement: true,
+                          replacement: false,
                           dataCallback: null,
                         );
                       },
