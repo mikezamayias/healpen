@@ -58,6 +58,25 @@ class OnboardingScreenView extends ConsumerWidget {
                       color: context.theme.colorScheme.onBackground,
                     ),
                   ),
+                  if (onboardingScreenModel.informativeActions != null &&
+                      onboardingScreenModel.informativeActions!.isNotEmpty) ...[
+                    SizedBox(height: radius),
+                    Row(
+                      mainAxisSize:
+                          onboardingScreenModel.informativeActions!.length == 1
+                              ? MainAxisSize.min
+                              : MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: onboardingScreenModel.informativeActions!
+                          .map(
+                            (OnboardingActionModel action) => OnboardingButton(
+                              titleString: action.title,
+                              onTap: action.actionCallback!,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ],
                 ],
               ),
             ),
