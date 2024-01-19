@@ -16,26 +16,18 @@ class OnboardingActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(radius),
-      child: AnimatedSize(
-        duration: emphasizedDuration,
-        reverseDuration: emphasizedDuration,
-        curve: emphasizedCurve,
-        child: CustomListTile(
-          responsiveWidth: true,
-          onTap: onTap,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: gap * 2,
-            vertical: gap,
-          ),
-          title: Text(
-            titleString,
-            style: context.theme.textTheme.titleLarge!.copyWith(
-              color: context.theme.colorScheme.onPrimary,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+    return CustomListTile(
+      responsiveWidth: true,
+      onTap: onTap,
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: gap * 2,
+        vertical: gap,
+      ),
+      title: Text(
+        titleString,
+        style: context.theme.textTheme.titleLarge!.copyWith(
+          color: context.theme.colorScheme.onPrimary,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
