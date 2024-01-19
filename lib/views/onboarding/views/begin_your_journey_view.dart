@@ -22,21 +22,26 @@ class OnboardingBeginYourJourneyView extends ConsumerWidget {
         ),
         title: 'Begin Your Journey',
         description:
-            'You\'re all set! Start your journey with Healpen today. Reflect, write, and grow as you explore the landscape of your emotions and thoughts.',
-        actionText: 'Start Writing',
-        actionCallback: () {
-          ref
-              .read(OnboardingController().currentPageIndexProvider.notifier)
-              .state = 0;
-          pushWithAnimation(
-            context: context,
-            widget: OnboardingController.views.elementAt(
-              ref.read(OnboardingController().currentPageIndexProvider),
-            ),
-            replacement: true,
-            dataCallback: null,
-          );
-        },
+            'You\'re all set! Reflect, write, and grow as you explore the landscape of your emotions and thoughts.',
+        actions: <OnboardingActionModel>[
+          OnboardingActionModel(
+            title: 'Start Writing',
+            actionCallback: () {
+              ref
+                  .read(
+                      OnboardingController().currentPageIndexProvider.notifier)
+                  .state = 0;
+              pushWithAnimation(
+                context: context,
+                widget: OnboardingController.views.elementAt(
+                  ref.read(OnboardingController().currentPageIndexProvider),
+                ),
+                replacement: true,
+                dataCallback: null,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

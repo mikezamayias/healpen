@@ -21,21 +21,26 @@ class OnboardingWelcomeView extends ConsumerWidget {
         ),
         title: 'Welcome',
         description:
-            'Healpen is your personal space for expressive writing and self-discovery. Begin your journey towards better mental health and deeper self-awareness.',
-        actionText: 'Next',
-        actionCallback: () {
-          ref
-              .read(OnboardingController().currentPageIndexProvider.notifier)
-              .state++;
-          pushWithAnimation(
-            context: context,
-            widget: OnboardingController.views.elementAt(
-              ref.read(OnboardingController().currentPageIndexProvider),
-            ),
-            replacement: true,
-            dataCallback: null,
-          );
-        },
+            'Healpen is your personal space for expressive writing and self-exploration. It allows you to delve deeper into self-awareness and understanding.',
+        actions: <OnboardingActionModel>[
+          OnboardingActionModel(
+            title: 'Next',
+            actionCallback: () {
+              ref
+                  .read(
+                      OnboardingController().currentPageIndexProvider.notifier)
+                  .state++;
+              pushWithAnimation(
+                context: context,
+                widget: OnboardingController.views.elementAt(
+                  ref.read(OnboardingController().currentPageIndexProvider),
+                ),
+                replacement: true,
+                dataCallback: null,
+              );
+            },
+          )
+        ],
       ),
     );
   }

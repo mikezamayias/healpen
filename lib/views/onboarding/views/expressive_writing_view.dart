@@ -22,21 +22,26 @@ class OnboardingExpressiveWritingView extends ConsumerWidget {
         ),
         title: 'Expressive Writing',
         description:
-            'Healpen harnesses the power of expressive writing. Pour your thoughts and feelings into words, and embark on a path to self-healing and emotional clarity.',
-        actionText: 'Continue',
-        actionCallback: () {
-          ref
-              .read(OnboardingController().currentPageIndexProvider.notifier)
-              .state++;
-          pushWithAnimation(
-            context: context,
-            widget: OnboardingController.views.elementAt(
-              ref.read(OnboardingController().currentPageIndexProvider),
-            ),
-            replacement: true,
-            dataCallback: null,
-          );
-        },
+            'Pour your thoughts and feelings into words, and embark on a path to self-healing and emotional clarity.',
+        actions: <OnboardingActionModel>[
+          OnboardingActionModel(
+            title: 'Continue',
+            actionCallback: () {
+              ref
+                  .read(
+                      OnboardingController().currentPageIndexProvider.notifier)
+                  .state++;
+              pushWithAnimation(
+                context: context,
+                widget: OnboardingController.views.elementAt(
+                  ref.read(OnboardingController().currentPageIndexProvider),
+                ),
+                replacement: true,
+                dataCallback: null,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

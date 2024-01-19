@@ -22,21 +22,26 @@ class OnboardingPivacyAndSafetyView extends ConsumerWidget {
         ),
         title: 'Privacy and Safety',
         description:
-            'Your privacy is our priority. Your entries are securely stored, and our sentiment analysis is done with utmost confidentiality. Feel safe to express yourself freely.',
-        actionText: 'Acknowledge',
-        actionCallback: () {
-          ref
-              .read(OnboardingController().currentPageIndexProvider.notifier)
-              .state++;
-          pushWithAnimation(
-            context: context,
-            widget: OnboardingController.views.elementAt(
-              ref.read(OnboardingController().currentPageIndexProvider),
-            ),
-            replacement: true,
-            dataCallback: null,
-          );
-        },
+            'Your entries are securely stored, and our sentiment analysis is done with utmost confidentiality.',
+        actions: <OnboardingActionModel>[
+          OnboardingActionModel(
+            title: 'Acknowledge',
+            actionCallback: () {
+              ref
+                  .read(
+                      OnboardingController().currentPageIndexProvider.notifier)
+                  .state++;
+              pushWithAnimation(
+                context: context,
+                widget: OnboardingController.views.elementAt(
+                  ref.read(OnboardingController().currentPageIndexProvider),
+                ),
+                replacement: true,
+                dataCallback: null,
+              );
+            },
+          ),
+        ],
       ),
     );
   }

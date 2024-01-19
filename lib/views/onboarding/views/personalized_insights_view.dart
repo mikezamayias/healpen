@@ -22,21 +22,26 @@ class OnboardingPersonalizedInsightsView extends ConsumerWidget {
         ),
         title: 'Personalized Insights',
         description:
-            'Discover yourself through our advanced sentiment analysis. Healpen provides personalized insights into your emotional patterns, helping you understand your inner world better.',
-        actionText: 'Continue',
-        actionCallback: () {
-          ref
-              .read(OnboardingController().currentPageIndexProvider.notifier)
-              .state++;
-          pushWithAnimation(
-            context: context,
-            widget: OnboardingController.views.elementAt(
-              ref.read(OnboardingController().currentPageIndexProvider),
-            ),
-            replacement: true,
-            dataCallback: null,
-          );
-        },
+            'Healpen provides personalized insights into your emotional patterns, helping you understand your inner world better.',
+        actions: <OnboardingActionModel>[
+          OnboardingActionModel(
+            title: 'I understand',
+            actionCallback: () {
+              ref
+                  .read(
+                      OnboardingController().currentPageIndexProvider.notifier)
+                  .state++;
+              pushWithAnimation(
+                context: context,
+                widget: OnboardingController.views.elementAt(
+                  ref.read(OnboardingController().currentPageIndexProvider),
+                ),
+                replacement: true,
+                dataCallback: null,
+              );
+            },
+          ),
+        ],
       ),
     );
   }
