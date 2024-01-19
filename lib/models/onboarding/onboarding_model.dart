@@ -4,14 +4,22 @@ class OnboardingModel {
   final Widget hero;
   final String title;
   final String description;
-  final String actionText;
-  final VoidCallback actionCallback;
+  final List<OnboardingActionModel> actions;
 
   OnboardingModel({
     required this.hero,
     required this.title,
     required this.description,
-    required this.actionText,
-    required this.actionCallback,
+    required this.actions,
+  });
+}
+
+class OnboardingActionModel {
+  final String title;
+  final VoidCallback? actionCallback;
+
+  OnboardingActionModel({
+    required this.title,
+    this.actionCallback,
   });
 }
