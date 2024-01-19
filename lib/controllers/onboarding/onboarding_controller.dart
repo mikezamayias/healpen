@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../views/onboarding/views/crashlytics_view.dart';
 import '../../views/onboarding/views/begin_your_journey_view.dart';
 import '../../views/onboarding/views/expressive_writing_view.dart';
 import '../../views/onboarding/views/personalized_insights_view.dart';
@@ -23,6 +24,7 @@ class OnboardingController {
     OnboardingExpressiveWritingView(),
     OnboardingPersonalizedInsightsView(),
     OnboardingPivacyAndSafetyView(),
+    OnboardingCrashlyticsView(),
     OnboardingBeginYourJourneyView(),
   ];
 
