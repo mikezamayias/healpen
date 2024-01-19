@@ -4,11 +4,11 @@ import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
-class OnboardingButton extends StatelessWidget {
+class OnboardingActionButton extends StatelessWidget {
   final String titleString;
   final VoidCallback onTap;
 
-  const OnboardingButton({
+  const OnboardingActionButton({
     super.key,
     required this.titleString,
     required this.onTap,

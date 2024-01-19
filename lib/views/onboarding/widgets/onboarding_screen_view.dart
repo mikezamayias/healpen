@@ -9,7 +9,7 @@ import '../../../models/onboarding/onboarding_model.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/helper_functions.dart';
 import '../../blueprint/blueprint_view.dart';
-import 'onboarding_button.dart';
+import 'onboarding_action_button.dart';
 
 class OnboardingScreenView extends ConsumerWidget {
   final OnboardingModel onboardingScreenModel;
@@ -69,7 +69,7 @@ class OnboardingScreenView extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: onboardingScreenModel.informativeActions!
                           .map(
-                            (OnboardingActionModel action) => OnboardingButton(
+                            (OnboardingActionModel action) => OnboardingActionButton(
                               titleString: action.title,
                               onTap: action.actionCallback!,
                             ),
@@ -87,7 +87,7 @@ class OnboardingScreenView extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: onboardingScreenModel.actions
                   .map(
-                    (OnboardingActionModel action) => OnboardingButton(
+                    (OnboardingActionModel action) => OnboardingActionButton(
                       titleString: action.title,
                       onTap: () {
                         int currentIndex = ref.read(
