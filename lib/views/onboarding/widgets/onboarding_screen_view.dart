@@ -4,8 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
+import '../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../models/onboarding/onboarding_model.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/helper_functions.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'onboarding_button.dart';
 
@@ -59,9 +61,39 @@ class OnboardingScreenView extends ConsumerWidget {
                 ],
               ),
             ),
-            OnboardingButton(
-              titleString: onboardingScreenModel.actionText,
-              onTap: onboardingScreenModel.actionCallback,
+            Row(
+              mainAxisSize: onboardingScreenModel.actions.length == 1
+                  ? MainAxisSize.min
+                  : MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: onboardingScreenModel.actions
+                  .map(
+                    (OnboardingActionModel action) => OnboardingButton(
+                      titleString: action.title,
+                      onTap: () {
+                        int currentIndex = ref.read(
+                            OnboardingController().currentPageIndexProvider);
+                        int viewsLength = OnboardingController.views.length;
+                        int nextIndex = currentIndex + 1;
+                        if (nextIndex > viewsLength - 1) {
+                          nextIndex = 0;
+                        }
+                        ref
+                            .read(OnboardingController()
+                                .currentPageIndexProvider
+                                .notifier)
+                            .state = nextIndex;
+                        pushWithAnimation(
+                          context: context,
+                          widget:
+                              OnboardingController.views.elementAt(nextIndex),
+                          replacement: true,
+                          dataCallback: null,
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
             ),
           ],
         ),
