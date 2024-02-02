@@ -8,7 +8,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../../../../controllers/analysis_view_controller.dart';
 import '../../../../../../extensions/analysis_model_extensions.dart';
 import '../../../../../../extensions/date_time_extensions.dart';
-import '../../../../../../models/analysis/chart_data_model.dart';
 import '../../../../../../utils/constants.dart';
 import '../../../../../../utils/helper_functions.dart';
 import '../../../../../../utils/show_healpen_dialog.dart';
@@ -47,20 +46,18 @@ class MonthLineChart extends ConsumerWidget {
         name: 'Date',
         interval: 1,
         majorGridLines: const MajorGridLines(width: 0),
-        minorGridLines: const MinorGridLines(width: 0),
         rangePadding: ChartRangePadding.none,
         majorTickLines: const MajorTickLines(width: 0),
-        minorTickLines: const MinorTickLines(width: 0),
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       series: [
         // Renders spline chart
         ScatterSeries(
           dataSource: chartData,
-          xValueMapper: (ChartData data, _) => data.x,
-          yValueMapper: (ChartData data, _) => data.y,
-          sortFieldValueMapper: (ChartData data, _) => data.x,
-          pointColorMapper: (ChartData data, _) => data.y != null
+          xValueMapper: (data, _) => data.x,
+          yValueMapper: (data, _) => data.y,
+          sortFieldValueMapper: (data, _) => data.x,
+          pointColorMapper: (data, _) => data.y != null
               ? getShapeColorOnSentiment(
                   context.theme,
                   data.y,

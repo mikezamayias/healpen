@@ -53,8 +53,8 @@ dependencies:
   simple_gesture_detector: ^0.2.0
   smooth_page_indicator: ^1.1.0
   sprung: ^3.0.1
-  syncfusion_flutter_calendar: ^23.1.40
-  syncfusion_flutter_charts: ^23.1.36
+  syncfusion_flutter_calendar: ^24.2.3
+  syncfusion_flutter_charts: ^24.2.3
   url_launcher: ^6.2.1
   validated: ^2.0.0
 
@@ -68,7 +68,6 @@ dev_dependencies:
   freezed: ^2.3.2
   json_serializable: ^6.6.0
   lint: ^2.1.2
-  riverpod_lint: ^2.0.1
 
 flutter:
   assets:

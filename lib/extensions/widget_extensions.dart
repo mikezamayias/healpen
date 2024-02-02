@@ -17,7 +17,7 @@ extension WidgetListExtensions on List<Widget> {
       .scale(begin: const Offset(0, 0))
       .slideX(
         begin: -radius,
-        curve: standardEasing,
+        curve: Easing.legacy,
         duration: standardDuration,
       );
 
@@ -63,11 +63,11 @@ extension WidgetExtensions on Widget {
   Widget animateAppBar() => animate()
       .fade(
         duration: standardDuration,
-        curve: standardEasing,
+        curve: Easing.legacy,
       )
       .slideY(
         duration: standardDuration,
-        curve: standardEasing,
+        curve: Easing.legacy,
         begin: -.3,
         end: 0,
       );
