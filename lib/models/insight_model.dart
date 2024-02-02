@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+@Model()
 class InsightModel {
   final String title;
   final String explanation;
@@ -10,9 +11,4 @@ class InsightModel {
     required this.explanation,
     required this.widget,
   });
-
-  @override
-  String toString() {
-    return 'InsightModel{title: $title, explanation: $explanation}';
-  }
 }

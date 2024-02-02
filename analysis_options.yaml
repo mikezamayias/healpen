@@ -2,6 +2,7 @@ include: package:flutter_lints/flutter.yaml
 
 linter:
   rules:
+    - public_member_api_docs: false
     - always_declare_return_types
     - cancel_subscriptions
     - close_sinks
@@ -35,6 +36,8 @@ analyzer:
     unnecessary_statements: error
   plugins:
     - custom_lint
+  enable-experiment:
+    - macros
 
 custom_lint:
   enable_all_lint_rules: true
