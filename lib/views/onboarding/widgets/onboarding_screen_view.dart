@@ -118,7 +118,16 @@ class OnboardingScreenView extends ConsumerWidget {
                       },
                     ),
                   )
-                  .toList(),
+                  .toList()
+                  .animate()
+                  .then(delay: slightlyLongEmphasizedDuration)
+                  .fade()
+                  .slideY(
+                    duration: standardDuration,
+                    curve: standardCurve,
+                    begin: 0.1.h,
+                    end: 0,
+                  ),
             ),
           ],
         ),
