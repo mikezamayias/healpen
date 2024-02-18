@@ -72,8 +72,10 @@ class _EditEmailTileState extends ConsumerState<EditEmailTile> {
                         ),
                       )
                       .then(
-                        (value) =>
-                            currentUser.updateEmail(_emailController.text).then(
+                        (UserCredential authenticatedUserCredentials) =>
+                            authenticatedUserCredentials.user!
+                                .verifyBeforeUpdateEmail(_emailController.text)
+                                .then(
                           (_) {
                             logger.i(
                               '$currentUser',
