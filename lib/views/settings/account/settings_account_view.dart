@@ -26,11 +26,11 @@ class SettingsAccountView extends ConsumerWidget {
       ) {
         List<Widget> pageWidgets = [
           const EditNameTile(),
+          const EditEmailTile(),
           const EnableAnalyticsTile(),
 
           if (snapshot.hasData && snapshot.data!.isEmpty)
             const SaveSettingsToCloudTile(),
-          const EditEmailTile(),
           const SignOutTile(),
           // const DeleteAccountTile(),
         ].animateWidgetList();
