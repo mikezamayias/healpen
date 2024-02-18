@@ -7,6 +7,7 @@ import '../../../models/settings/preference_model.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
+import 'widgets/edit_email_tile.dart';
 import 'widgets/edit_name_tile.dart';
 import 'widgets/enable_analytics_tile.dart';
 import 'widgets/save_settings_to_cloud_tile.dart';
@@ -29,10 +30,7 @@ class SettingsAccountView extends ConsumerWidget {
 
           if (snapshot.hasData && snapshot.data!.isEmpty)
             const SaveSettingsToCloudTile(),
-
-          /// TODO: study and implement the re-authentication process required
-          ///  to change email
-          // const EditEmailTile(),
+          const EditEmailTile(),
           const SignOutTile(),
           // const DeleteAccountTile(),
         ].animateWidgetList();
