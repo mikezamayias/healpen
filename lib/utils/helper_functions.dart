@@ -254,3 +254,7 @@ void pushNamedWithAnimation({
     );
   }
 }
+
+bool canUpdateStringValue(String newString, String? currentString) {
+  return newString != currentString && newString.isNotEmpty;
+}

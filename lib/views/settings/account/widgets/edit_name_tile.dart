@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../extensions/widget_extensions.dart';
 import '../../../../providers/settings_providers.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/helper_functions.dart';
 import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_list_tile.dart';
 
@@ -27,6 +28,7 @@ class _EditNameTileState extends ConsumerState<EditNameTile> {
   @override
   Widget build(BuildContext context) {
     return CustomListTile(
+      showShadow: false,
       useSmallerNavigationSetting: !_useSmallerNavigationElements,
       enableExplanationWrapper: !_useSmallerNavigationElements,
       titleString: 'How should you be called?',
@@ -63,7 +65,7 @@ class _EditNameTileState extends ConsumerState<EditNameTile> {
                     icon: const FaIcon(
                       FontAwesomeIcons.check,
                     ),
-                    onPressed: canUpdateName(value.text, snapshot.data)
+                    onPressed: canUpdateStringValue(value.text, snapshot.data)
                         ? handlePressed
                         : null,
                   ).animateSlideInFromBottom();
@@ -81,31 +83,24 @@ class _EditNameTileState extends ConsumerState<EditNameTile> {
     logger.i(ref.read(EditNameTile.nameProvider));
   }
 
-  bool canUpdateName(String newName, String? currentName) {
-    return newName != currentName && newName.isNotEmpty;
-  }
-
   Future<void> handlePressed() async {
+    String msg = '';
     try {
-      logger.i(ref.read(EditNameTile.nameProvider));
+      msg = 'Display name updated successfully';
       await FirebaseAuth.instance.currentUser!
           .updateDisplayName(ref.read(EditNameTile.nameProvider));
       if (!mounted) return;
       FocusScope.of(context).unfocus();
       textController.clear();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Display name updated')),
-      );
+      logger.i(ref.read(EditNameTile.nameProvider));
     } on FirebaseException catch (e) {
-      logger.e('Failed to update display name: ${e.message}');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update display name: ${e.message}')),
-      );
+      msg = 'Failed to update display name with error: ${e.message}';
+      logger.e(msg);
     } catch (e) {
-      logger.e('An unexpected error occurred: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('An unexpected error occurred')),
-      );
+      msg = 'An unexpected error occurred: $e';
+      logger.e(msg);
+    } finally {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 
