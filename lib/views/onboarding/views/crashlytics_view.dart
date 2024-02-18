@@ -34,6 +34,7 @@ class OnboardingCrashlyticsView extends ConsumerWidget {
             ),
           ),
         ],
+        // TODO: Implement crashlytics permission
         actions: <OnboardingActionModel>[
           OnboardingActionModel(
             title: 'Allow',

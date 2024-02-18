@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../controllers/onboarding/onboarding_controller.dart';
-import '../../controllers/page_controller.dart' as page_controller;
-import '../../utils/helper_functions.dart';
 import 'views/welcome_view.dart';
 
 class OnboardingView extends ConsumerStatefulWidget {
@@ -73,18 +70,5 @@ class _OnboardingViewState extends ConsumerState<OnboardingView> {
     //     ),
     //   );
     return const OnboardingWelcomeView();
-  }
-
-  void goToAuth(BuildContext context, WidgetRef ref) async {
-    pushWithAnimation(
-      context: context,
-      widget: page_controller.PageController().authView.widget,
-      replacement: true,
-      dataCallback: () {
-        ref
-            .read(OnboardingController.onboardingCompletedProvider.notifier)
-            .state = true;
-      },
-    );
   }
 }

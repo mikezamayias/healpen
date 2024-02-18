@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide PageController;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
+import '../../../controllers/page_controller.dart';
 import '../../../models/onboarding/onboarding_model.dart';
 import '../../../utils/helper_functions.dart';
 import '../widgets/onboarding_screen_view.dart';
@@ -43,6 +44,19 @@ class OnboardingBeginYourJourneyView extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void goToAuth(BuildContext context, WidgetRef ref) async {
+    pushWithAnimation(
+      context: context,
+      widget: PageController().authView.widget,
+      replacement: true,
+      dataCallback: () {
+        ref
+            .read(OnboardingController.onboardingCompletedProvider.notifier)
+            .state = true;
+      },
     );
   }
 }
