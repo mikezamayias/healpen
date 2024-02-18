@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../utils/constants.dart';
 import '../../views/onboarding/views/crashlytics_view.dart';
 import '../../views/onboarding/views/begin_your_journey_view.dart';
 import '../../views/onboarding/views/expressive_writing_view.dart';
@@ -34,4 +35,12 @@ class OnboardingController {
   final pageControllerProvider =
       StateProvider<PageController>((ref) => PageController());
   final currentPageIndexProvider = StateProvider<int>((ref) => 0);
+
+  /// Methods
+  void nextPage(WidgetRef ref) async {
+    await ref.read(pageControllerProvider).nextPage(
+          duration: emphasizedDuration,
+          curve: emphasizedCurve,
+        );
+  }
 }

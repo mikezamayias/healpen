@@ -6,7 +6,6 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../models/onboarding/onboarding_model.dart';
-import '../../../utils/helper_functions.dart';
 import '../widgets/onboarding_screen_view.dart';
 
 class OnboardingPivacyAndSafetyView extends ConsumerWidget {
@@ -27,18 +26,7 @@ class OnboardingPivacyAndSafetyView extends ConsumerWidget {
           OnboardingActionModel(
             title: 'Acknowledge',
             actionCallback: () {
-              ref
-                  .read(
-                      OnboardingController().currentPageIndexProvider.notifier)
-                  .state++;
-              pushWithAnimation(
-                context: context,
-                widget: OnboardingController.views.elementAt(
-                  ref.read(OnboardingController().currentPageIndexProvider),
-                ),
-                replacement: true,
-                dataCallback: null,
-              );
+              OnboardingController().nextPage(ref);
             },
           ),
         ],
