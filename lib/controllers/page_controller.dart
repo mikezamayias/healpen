@@ -3,9 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../healpen.dart';
 import '../models/page_model.dart';
-import '../views/insights/insights_view.dart';
 import '../views/auth/auth_view.dart';
 import '../views/history/history_view.dart';
+import '../views/insights/insights_view.dart';
 import '../views/note/note_view.dart';
 import '../views/onboarding/onboarding_view.dart';
 import '../views/settings/licenses/settings_licenses_view.dart';

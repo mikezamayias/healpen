@@ -59,14 +59,14 @@ class _AuthViewState extends ConsumerState<AuthView> {
           },
           canPop: true,
           child: BlueprintView(
-            backgroundColor: context.theme.colorScheme.surfaceVariant,
+            padBodyHorizontally: false,
             appBar: AppBar(
               backgroundColor: context.theme.colorScheme.surface,
               pathNames: [
                 page_controller.PageController().authView.titleGenerator(
-                    FirebaseAuth.instance.currentUser?.displayName)
+                    FirebaseAuth.instance.currentUser?.displayName),
               ],
-              automaticallyImplyLeading: true,
+              automaticallyImplyLeading: false,
               onBackButtonPressed: goBack,
             ),
             body: switch (state.runtimeType) {
