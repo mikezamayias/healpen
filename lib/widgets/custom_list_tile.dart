@@ -281,7 +281,7 @@ class _CustomListTileState extends ConsumerState<CustomListTile> {
         borderRadius: BorderRadius.all(
           Radius.circular(widget.cornerRadius ?? radius),
         ),
-        boxShadow: (widget.showShadow! || widget.elevation != null) || isTapped
+        boxShadow: (widget.showShadow! || widget.elevation != null) && isTapped
             ? [
                 BoxShadow(
                   color: (widget.shadowColor ?? theme.colorScheme.surface)
