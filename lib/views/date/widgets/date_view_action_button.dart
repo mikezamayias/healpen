@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
 class DateViewActionButton extends ConsumerWidget {
@@ -20,6 +21,7 @@ class DateViewActionButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomListTile(
+      cornerRadius: radius - gap,
       responsiveWidth: true,
       titleString: titleString,
       onTap: onTap,

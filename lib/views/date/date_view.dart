@@ -28,52 +28,43 @@ class _DateViewState extends ConsumerState<DateView> {
   @override
   Widget build(BuildContext context) {
     return BlueprintView(
-      padBodyHorizontally: false,
-      bottomSafeArea: false,
-      appBar: Padding(
-        padding: EdgeInsets.symmetric(horizontal: gap),
-        child: AppBar(
-          automaticallyImplyLeading: true,
-          pathNames: [dialogTitle],
-          trailingWidget: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              if (ref
-                  .watch(DateViewController.noteSelectionEnabledProvider)) ...[
-                if (DateViewController.someNotesSelected(ref))
-                  const DeleteActionButton(),
-                const SelectAllNotesActionButton(),
-                const SelectNoneNotesActionButton()
-              ],
-              const SelectActionButton(),
-            ].addSpacer(
-              SizedBox(width: gap),
-              spacerAtEnd: false,
-              spacerAtStart: false,
-            ),
+      padBodyHorizontally: true,
+      bottomSafeArea: true,
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        pathNames: [dialogTitle],
+        trailingWidget: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            if (ref.watch(DateViewController.noteSelectionEnabledProvider)) ...[
+              if (DateViewController.someNotesSelected(ref))
+                const DeleteActionButton(),
+              const SelectAllNotesActionButton(),
+              const SelectNoneNotesActionButton()
+            ],
+            const SelectActionButton(),
+          ].addSpacer(
+            SizedBox(width: gap),
+            spacerAtEnd: false,
+            spacerAtStart: false,
           ),
-          onBackButtonPressed: () {
-            DateViewController.dispose(ref);
-          },
         ),
+        onBackButtonPressed: () {
+          DateViewController.dispose(ref);
+        },
       ),
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverSafeArea(
-            sliver: SliverList.separated(
-              itemCount: noteTileList.length,
-              itemBuilder: (_, int index) => noteTileList[index],
-              separatorBuilder: (_, __) => SizedBox(height: gap),
-            ),
-          )
-        ],
+      body: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: ListView.separated(
+          itemCount: noteTileList.length,
+          itemBuilder: (_, int index) => noteTileList[index],
+          separatorBuilder: (_, __) => SizedBox(height: gap),
+        ),
       ),
     );
   }
 
-  String get dialogTitle {
-    return widget.date.toEEEEMMMd();
-  }
+  String get dialogTitle => widget.date.toEEEEMMMd();
 
   List<Widget> get noteTileList => ref
       .watch(DateViewController.noteModelSetProvider)
