@@ -26,6 +26,7 @@ class OnboardingPivacyAndSafetyView extends ConsumerWidget {
           OnboardingActionModel(
             title: 'Acknowledge',
             actionCallback: () {
+              // ref.read(OnboardingController().pageControllerProvider);
               OnboardingController().nextPage(ref);
             },
           ),

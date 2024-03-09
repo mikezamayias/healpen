@@ -26,6 +26,9 @@ class OnboardingExpressiveWritingView extends ConsumerWidget {
           OnboardingActionModel(
             title: 'Continue',
             actionCallback: () {
+              // OnboardingController().nextPage(
+              //   ref.read(OnboardingController().pageControllerProvider),
+              // );
               OnboardingController().nextPage(ref);
             },
           ),

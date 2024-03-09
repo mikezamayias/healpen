@@ -25,6 +25,9 @@ class OnboardingWelcomeView extends ConsumerWidget {
           OnboardingActionModel(
             title: 'Next',
             actionCallback: () {
+              // OnboardingController().nextPage(
+              //   ref.read(OnboardingController().pageControllerProvider),
+              // );
               OnboardingController().nextPage(ref);
             },
           ),
