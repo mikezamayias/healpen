@@ -26,6 +26,9 @@ class OnboardingPersonalizedInsightsView extends ConsumerWidget {
           OnboardingActionModel(
             title: 'I understand',
             actionCallback: () {
+              // OnboardingController().nextPage(
+              //   ref.read(OnboardingController().pageControllerProvider),
+              // );
               OnboardingController().nextPage(ref);
             },
           ),

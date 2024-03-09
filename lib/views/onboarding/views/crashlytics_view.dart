@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../models/onboarding/onboarding_model.dart';
 import '../widgets/onboarding_screen_view.dart';
 
@@ -38,9 +39,21 @@ class OnboardingCrashlyticsView extends ConsumerWidget {
         actions: <OnboardingActionModel>[
           OnboardingActionModel(
             title: 'Allow',
+            actionCallback: () {
+              // OnboardingController().nextPage(
+              //   ref.read(OnboardingController().pageControllerProvider),
+              // );
+              OnboardingController().nextPage(ref);
+            },
           ),
           OnboardingActionModel(
             title: 'Don\'t Allow',
+            actionCallback: () {
+              // OnboardingController().nextPage(
+              //   ref.read(OnboardingController().pageControllerProvider),
+              // );
+              OnboardingController().nextPage(ref);
+            },
           ),
         ],
       ),

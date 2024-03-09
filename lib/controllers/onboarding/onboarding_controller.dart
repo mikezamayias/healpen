@@ -37,6 +37,13 @@ class OnboardingController {
   final currentPageIndexProvider = StateProvider<int>((ref) => 0);
 
   /// Methods
+  // void nextPage(PageController controller) {
+  //   controller.animateToPage(
+  //     controller.page!.toInt() + 1,
+  //     duration: emphasizedDuration,
+  //     curve: emphasizedCurve,
+  //   );
+  // }
   void nextPage(WidgetRef ref) async {
     await ref.read(pageControllerProvider).nextPage(
           duration: emphasizedDuration,

@@ -7,12 +7,12 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../models/onboarding/onboarding_model.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/helper_functions.dart';
 import 'onboarding_action_button.dart';
 import 'onboarding_informative_button.dart';
 
 class OnboardingScreenView extends ConsumerWidget {
   final OnboardingModel onboardingScreenModel;
+
   const OnboardingScreenView({
     super.key,
     required this.onboardingScreenModel,
@@ -87,8 +87,8 @@ class OnboardingScreenView extends ConsumerWidget {
                 (OnboardingActionModel action) => OnboardingActionButton(
                   titleString: action.title,
                   onTap: () {
-                    int currentIndex = ref.read(
-                        OnboardingController().currentPageIndexProvider);
+                    int currentIndex = ref
+                        .read(OnboardingController().currentPageIndexProvider);
                     int viewsLength = OnboardingController.views.length;
                     int nextIndex = currentIndex + 1;
                     if (nextIndex > viewsLength - 1) {
@@ -103,12 +103,12 @@ class OnboardingScreenView extends ConsumerWidget {
                             .currentPageIndexProvider
                             .notifier)
                         .state = nextIndex;
-                    pushWithAnimation(
-                      context: context,
-                      widget: OnboardingController.views.elementAt(nextIndex),
-                      replacement: false,
-                      dataCallback: null,
-                    );
+                    // pushWithAnimation(
+                    //   context: context,
+                    //   widget: OnboardingController.views.elementAt(nextIndex),
+                    //   replacement: false,
+                    //   dataCallback: null,
+                    // );
                   },
                 ),
               )
