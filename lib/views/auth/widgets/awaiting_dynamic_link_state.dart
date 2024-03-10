@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../../../route_controller.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_list_tile.dart';
 
@@ -25,7 +26,6 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
           explanationString:
               'Click the link to sign in! Please check your inbox and spam folders.',
           leadingIconData: FontAwesomeIcons.solidEnvelopeOpen,
-          backgroundColor: context.theme.colorScheme.surface,
           textColor: context.theme.colorScheme.onSurface,
         ),
         SizedBox(height: gap),
@@ -39,7 +39,8 @@ class AwaitingDynamicLinkState extends ConsumerWidget {
           titleString: 'Something not right?',
           explanationString: 'Start again.',
           onTap: () {
-            context.navigator.pushReplacementNamed('/auth');
+            context.navigator
+                .pushReplacementNamed(RouterController.authViewRoute.route);
           },
         ),
       ],

@@ -30,7 +30,7 @@ class UninitializedState extends ConsumerWidget {
               vertical: gap,
             ),
             leadingIconData: FontAwesomeIcons.solidEnvelope,
-            backgroundColor: context.theme.colorScheme.surface,
+            // backgroundColor: context.theme.colorScheme.surface,
             textColor: context.theme.colorScheme.onSurface,
             title: IntrinsicWidth(
               child: TextFormField(
