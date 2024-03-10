@@ -150,7 +150,7 @@ class _InsightsTileState extends ConsumerState<InsightsTile> {
                   },
                 ),
               ),
-              if (!ref.watch(navigationShowInfoProvider))
+              if (ref.watch(navigationShowInfoProvider))
                 Text(
                   insightsController.insightModelList
                       .elementAt(pageOffset.round())
