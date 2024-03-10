@@ -1,10 +1,9 @@
 # Uncomment this line to define a global platform for your project
-platform_version = '13'
+platform_version = '14'
 platform :ios, platform_version
 
 # https://github.com/FirebaseExtended/flutterfire/issues/2751
-# firestore_ios_sdk_frameworks_version = '10.20.0'
-# pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => firestore_ios_sdk_frameworks_version
+# pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -33,10 +32,8 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  # pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => firestore_ios_sdk_frameworks_version
-
   use_frameworks!
-  # use_modular_headers!
+  use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   target 'RunnerTests' do
@@ -45,15 +42,15 @@ target 'Runner' do
 end
 
 post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-        # Using the un-qualified names means you can swap in different implementations, for example ccache
-        config.build_settings["CC"] = "clang"
-        config.build_settings["LD"] = "clang"
-        config.build_settings["CXX"] = "clang++"
-        config.build_settings["LDPLUSPLUS"] = "clang++"
-    end
-  end
+  # installer.pods_project.targets.each do |target|
+  #   target.build_configurations.each do |config|
+  #       # Using the un-qualified names means you can swap in different implementations, for example ccache
+  #       config.build_settings["CC"] = "clang"
+  #       config.build_settings["LD"] = "clang"
+  #       config.build_settings["CXX"] = "clang++"
+  #       config.build_settings["LDPLUSPLUS"] = "clang++"
+  #   end
+  # end
 
   installer.aggregate_targets.each do |target|
     target.xcconfigs.each do |variant, xcconfig|
