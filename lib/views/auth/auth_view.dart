@@ -52,7 +52,6 @@ class _AuthViewState extends ConsumerState<AuthView> {
           '${FirebaseAuth.instance.currentUser}',
         );
         return BlueprintView(
-          padBodyHorizontally: false,
           appBar: AppBar(
             backgroundColor: context.theme.colorScheme.surface,
             pathNames: [

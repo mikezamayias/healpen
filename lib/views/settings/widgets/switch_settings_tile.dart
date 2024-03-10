@@ -1,9 +1,5 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
 import '../../../controllers/settings/firestore_preferences_controller.dart';
 import '../../../controllers/vibrate_controller.dart';
@@ -38,45 +34,23 @@ class SwitchSettingsTile extends ConsumerWidget {
       titleString: titleString,
       explanationString:
           ref.watch(navigationShowInfoProvider) ? explanationString : null,
-      trailing: Platform.isAndroid
-          ? Switch(
-              value: ref.watch(stateProvider),
-              onChanged: onChanged ??
-                  (bool value) {
-                    VibrateController().run(
-                      () async {
-                        ref.read(stateProvider.notifier).state = value;
-                        await FirestorePreferencesController.instance
-                            .savePreference(
-                          preferenceModel.withValue(value),
-                        );
-                        logger.i(
-                          '${ref.watch(stateProvider)}',
-                        );
-                      },
-                    );
-                  },
-            )
-          : CupertinoSwitch(
-              activeColor: context.theme.colorScheme.primary,
-              trackColor: context.theme.colorScheme.secondary.withOpacity(0.5),
-              value: ref.watch(stateProvider),
-              onChanged: onChanged ??
-                  (bool value) {
-                    VibrateController().run(
-                      () async {
-                        ref.read(stateProvider.notifier).state = value;
-                        await FirestorePreferencesController.instance
-                            .savePreference(
-                          preferenceModel.withValue(value),
-                        );
-                        logger.i(
-                          '${ref.watch(stateProvider)}',
-                        );
-                      },
-                    );
-                  },
-            ),
+      trailing: Switch(
+        value: ref.watch(stateProvider),
+        onChanged: onChanged ??
+            (bool value) {
+              VibrateController().run(
+                () async {
+                  ref.read(stateProvider.notifier).state = value;
+                  await FirestorePreferencesController.instance.savePreference(
+                    preferenceModel.withValue(value),
+                  );
+                  logger.i(
+                    '${ref.watch(stateProvider)}',
+                  );
+                },
+              );
+            },
+      ),
     );
   }
 }

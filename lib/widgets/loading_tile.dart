@@ -22,8 +22,7 @@ class LoadingTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomListTile(
       contentPadding: EdgeInsets.all(gap * 2),
-      backgroundColor:
-          backgroundColor ?? context.theme.colorScheme.surfaceVariant,
+      backgroundColor: context.theme.colorScheme.surfaceVariant,
       textColor: textColor ?? context.theme.colorScheme.onSurfaceVariant,
       cornerRadius: radius,
       titleString: durationTitle,
