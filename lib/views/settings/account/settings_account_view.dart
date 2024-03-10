@@ -9,7 +9,6 @@ import '../../../widgets/app_bar.dart';
 import '../../blueprint/blueprint_view.dart';
 import 'widgets/edit_email_tile.dart';
 import 'widgets/edit_name_tile.dart';
-import 'widgets/enable_analytics_tile.dart';
 import 'widgets/save_settings_to_cloud_tile.dart';
 import 'widgets/sign_out_tile.dart';
 
@@ -27,7 +26,7 @@ class SettingsAccountView extends ConsumerWidget {
         List<Widget> pageWidgets = [
           const EditNameTile(),
           const EditEmailTile(),
-          const EnableAnalyticsTile(),
+          // const EnableAnalyticsTile(),
 
           if (snapshot.hasData && snapshot.data!.isEmpty)
             const SaveSettingsToCloudTile(),
