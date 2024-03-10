@@ -12,10 +12,6 @@ class RouterController {
 
   RouterController._internal();
 
-  static ({String route, PageModel pageModel}) onboardingRoute = (
-    route: '/onboarding',
-    pageModel: PageController().onboarding,
-  );
   static ({String route, PageModel pageModel}) authWrapperRoute = (
     route: '/auth-wrapper',
     pageModel: PageController().authWrapper,
@@ -34,15 +30,12 @@ class RouterController {
   );
 
   List<({String route, PageModel pageModel})> routeList = [
-    onboardingRoute,
     authWrapperRoute,
     authViewRoute,
     noteViewRoute,
     healpen,
   ];
 
-  //   create a method that will return a map of string and widget based on the
-  //   above routes
   Map<String, Widget Function(BuildContext)> get routes => {
         for (var route in routeList)
           route.route: (context) => route.pageModel.widget,

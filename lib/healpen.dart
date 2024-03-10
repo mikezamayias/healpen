@@ -39,7 +39,6 @@ class _HealpenState extends ConsumerState<Healpen> {
         ref.watch(HealpenController().pageControllerProvider);
     final pages = HealpenController().pages;
 
-    // Move the logic that updates the state of your providers to didChangeDependencies
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _updateData(ref);
     });
@@ -148,7 +147,6 @@ class _HealpenState extends ConsumerState<Healpen> {
   }
 
   void _handlePageChange(WidgetRef ref, int value) {
-    // Moved this logic to a separate function
     VibrateController().run(() {
       ref.watch(HealpenController().currentPageIndexProvider.notifier).state =
           value;

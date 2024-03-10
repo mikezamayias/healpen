@@ -5,7 +5,6 @@ import '../../models/insight_model.dart';
 import '../../models/settings/preference_model.dart';
 import '../../providers/settings_providers.dart';
 import '../insights_controller.dart';
-import '../onboarding/onboarding_controller.dart';
 
 class PreferencesController {
   /// Singleton instance
@@ -134,11 +133,6 @@ class PreferencesController {
     (
       preferenceModel: themeAppearance,
       provider: themeAppearanceProvider,
-      log: false,
-    ),
-    (
-      preferenceModel: onboardingCompleted,
-      provider: OnboardingController.onboardingCompletedProvider,
       log: false,
     ),
     (

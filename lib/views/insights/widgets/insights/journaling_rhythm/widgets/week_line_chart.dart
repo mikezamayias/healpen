@@ -56,13 +56,11 @@ class WeekLineChart extends ConsumerWidget {
         name: 'Date',
         interval: 1,
         majorGridLines: const MajorGridLines(width: 0),
-        minorGridLines: const MinorGridLines(width: 0),
         rangePadding: ChartRangePadding.none,
         majorTickLines: const MajorTickLines(width: 0),
-        minorTickLines: const MinorTickLines(width: 0),
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
-      series: [
+      series: <CartesianSeries<ChartData, DateTime>>[
         // Renders spline chart
         ScatterSeries(
           markerSettings: MarkerSettings(

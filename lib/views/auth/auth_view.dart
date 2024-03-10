@@ -4,14 +4,12 @@ import 'package:flutter/material.dart' hide AppBar, Divider;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screwdriver/flutter_screwdriver.dart';
 
-import '../../controllers/onboarding/onboarding_controller.dart';
 import '../../controllers/page_controller.dart' as page_controller;
 import '../../providers/custom_auth_provider.dart';
 import '../../utils/helper_functions.dart';
 import '../../utils/logger.dart';
 import '../../widgets/app_bar.dart';
 import '../blueprint/blueprint_view.dart';
-import '../onboarding/onboarding_view.dart';
 import 'widgets/auth_failed_state.dart';
 import 'widgets/awaiting_dynamic_link_state.dart';
 import 'widgets/sending_link_state.dart';
@@ -53,52 +51,30 @@ class _AuthViewState extends ConsumerState<AuthView> {
         logger.i(
           '${FirebaseAuth.instance.currentUser}',
         );
-        return PopScope(
-          onPopInvoked: (_) {
-            goBack();
-          },
-          canPop: true,
-          child: BlueprintView(
-            padBodyHorizontally: false,
-            appBar: AppBar(
-              backgroundColor: context.theme.colorScheme.surface,
-              pathNames: [
-                page_controller.PageController().authView.titleGenerator(
-                    FirebaseAuth.instance.currentUser?.displayName),
-              ],
-              automaticallyImplyLeading: false,
-              onBackButtonPressed: goBack,
-            ),
-            body: switch (state.runtimeType) {
-              const (Uninitialized) => const UninitializedState(),
-              const (SendingLink) => const SendingLinkState(),
-              const (AwaitingDynamicLink) => const AwaitingDynamicLinkState(),
-              const (SignedIn) ||
-              const (SigningIn) ||
-              const (UserCreated) ||
-              const (CredentialLinked) ||
-              const (CredentialReceived) =>
-                const SigningInState(),
-              const (AuthFailed) => AuthFailedState(state: state),
-              _ => UnknownState(state: state)
-            },
+        return BlueprintView(
+          padBodyHorizontally: false,
+          appBar: AppBar(
+            backgroundColor: context.theme.colorScheme.surface,
+            pathNames: [
+              page_controller.PageController().authView.titleGenerator(
+                  FirebaseAuth.instance.currentUser?.displayName),
+            ],
+            automaticallyImplyLeading: false,
           ),
+          body: switch (state.runtimeType) {
+            const (Uninitialized) => const UninitializedState(),
+            const (SendingLink) => const SendingLinkState(),
+            const (AwaitingDynamicLink) => const AwaitingDynamicLinkState(),
+            const (SignedIn) ||
+            const (SigningIn) ||
+            const (UserCreated) ||
+            const (CredentialLinked) ||
+            const (CredentialReceived) =>
+              const SigningInState(),
+            const (AuthFailed) => AuthFailedState(state: state),
+            _ => UnknownState(state: state)
+          },
         );
-      },
-    );
-  }
-
-  void goBack() {
-    pushWithAnimation(
-      context: context,
-      widget: const OnboardingView(),
-      replacement: true,
-      dataCallback: () {
-        ref.read(OnboardingController().pageControllerProvider.notifier).state =
-            PageController();
-        ref
-            .read(OnboardingController().currentPageIndexProvider.notifier)
-            .state = 0;
       },
     );
   }

@@ -23,7 +23,6 @@ class _WritingViewState extends ConsumerState<WritingView> {
   Widget build(BuildContext context) {
     WritingController.writingAutomaticStopwatch =
         ref.watch(writingAutomaticStopwatchProvider);
-    // WritingController().updateAllUserNotes();
     final pathNames = page_controller.PageController()
         .writing
         .titleGenerator(FirebaseAuth.instance.currentUser?.displayName)

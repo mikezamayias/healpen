@@ -7,7 +7,6 @@ import '../views/auth/auth_view.dart';
 import '../views/history/history_view.dart';
 import '../views/insights/insights_view.dart';
 import '../views/note/note_view.dart';
-import '../views/onboarding/onboarding_view.dart';
 import '../views/settings/licenses/settings_licenses_view.dart';
 import '../views/settings/settings_view.dart';
 import '../views/writing/writing_view.dart';
@@ -70,13 +69,6 @@ class PageController {
     label: 'settings',
     icon: FontAwesomeIcons.sliders,
     widget: const SettingsView(),
-  );
-
-  final onboarding = PageModel(
-    titleGenerator: (userName) => 'Onboarding',
-    label: 'onboarding',
-    icon: FontAwesomeIcons.circleInfo,
-    widget: const OnboardingView(),
   );
 
   final authWrapper = PageModel(

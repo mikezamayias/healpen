@@ -8,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../controllers/healpen/healpen_controller.dart';
 import '../../../../controllers/insights_controller.dart';
-import '../../../../controllers/onboarding/onboarding_controller.dart';
 import '../../../../controllers/settings/preferences_controller.dart';
 import '../../../../models/insight_model.dart';
 import '../../../../models/settings/preference_model.dart';
@@ -72,8 +71,6 @@ class _SignOutTileState extends ConsumerState<SignOutTile> {
 
   void resetState() {
     ref.read(HealpenController().currentPageIndexProvider.notifier).state = 0;
-    ref.read(OnboardingController.onboardingCompletedProvider.notifier).state =
-        false;
     for (({
       PreferenceModel preferenceModel,
       StateProvider provider,
